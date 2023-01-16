@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 </script>
-
+<style scoped>
+  .nav-item:hover{
+    background-color: #cfffb7;
+    border-radius: 25px;
+  }
+</style>
 <template>
   <header>
-    <nav class="navbar navbar-light navbar-expand-md bg-light text-secondary" style="border-bottom: 1px solid #FF7E00;">
+    <nav class="navbar navbar-expand-md text-secondary" style="background-color: #ececec; border-bottom: 2px solid red;">
       <div class="container-fluid">
         <router-link to="/" class="navbar-brand">
           <img src="/img/logo-blue.png" class="img-fluid" style="max-height: 35px;">

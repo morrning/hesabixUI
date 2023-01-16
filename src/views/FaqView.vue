@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="col-sm-12 col-lg-8 mx-auto">
     <main>
       <div id="plans-notes" class="text-right card" style="">
         <div class="card-header text-white bg-success"><i class="bi bi-question-circle-fill"></i> <strong>سوالات متداول</strong></div>
