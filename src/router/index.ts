@@ -22,6 +22,22 @@ const router = createRouter({
       meta:{
         'title':'درباره ما'
       }
+    },
+    {
+      path: '/contact-us',
+      name: 'contact-us',
+      component: () => import('../views/ConnectView.vue'),
+      meta:{
+        'title':'تماس با ما'
+      }
+    },
+    {
+      path: '/faq',
+      name: 'faq',
+      component: () => import('../views/FaqView.vue'),
+      meta:{
+        'title':'سوالات متداول'
+      }
     }
   ]
 })

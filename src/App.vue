@@ -15,24 +15,24 @@ import { RouterLink, RouterView } from 'vue-router'
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
             <li class="nav-item"><router-link to="/" class="nav-link px-2">صفحه نخست</router-link></li>
-            <li class="nav-item"><a href="{{ path('homeFaq') }}" class="nav-link px-2">سوالات متداول</a></li>
+            <li class="nav-item"><router-link to="/faq" class="nav-link px-2">سوالات متداول</router-link></li>
             <li class="nav-item"><a href="{{ path('app_help',{'id':'home'})}}" class="nav-link px-2">راهنما و خود آموزها</a></li>
             <li class="nav-item"><a href="{{ path('stack') }}" class="nav-link px-2">پرسش‌و‌پاسخ</a></li>
             <li class="nav-item"><router-link to="/about" class="nav-link px-2">درباره حسابیکس</router-link></li>
             <li class="nav-item"><a href="http://blog.hesabix.ir" class="nav-link px-2">وبلاگ</a></li>
-            <li class="nav-item"><a href="{{ path('homeContactus')}}" class="nav-link px-2">تماس با ما</a></li>
+            <li class="nav-item"><router-link to="/contact-us" class="nav-link px-2">تماس با ما</router-link></li>
           </ul>
         </div>
       </div>
     </nav>
   </header>
 
-  <div class="container-fluid pt-3">
+  <div class="container-fluid pt-3 pb-5">
     <div class="row">
       <RouterView />
     </div>
   </div>
-  <footer class="d-flex flex-wrap justify-content-between align-items-center bg-white py-2 border-top fixed-bottom">
+  <footer class="d-flex flex-wrap justify-content-between align-items-center bg-white py-0 mt-2 border-top fixed-bottom">
     <div class="col-md-4 d-flex align-items-center ms-3">
       <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
         <img src="/img/logo-blue.png" class="" style="max-height: 24px;">
