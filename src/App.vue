@@ -1,85 +1,56 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
+    <nav class="navbar navbar-light navbar-expand-md bg-light text-secondary" style="border-bottom: 1px solid #FF7E00;">
+      <div class="container-fluid">
+        <router-link to="/" class="navbar-brand">
+          <img src="/img/logo-blue.png" class="img-fluid" style="max-height: 35px;">
+        </router-link>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="nav-item"><router-link to="/" class="nav-link px-2">صفحه نخست</router-link></li>
+            <li class="nav-item"><a href="{{ path('homeFaq') }}" class="nav-link px-2">سوالات متداول</a></li>
+            <li class="nav-item"><a href="{{ path('app_help',{'id':'home'})}}" class="nav-link px-2">راهنما و خود آموزها</a></li>
+            <li class="nav-item"><a href="{{ path('stack') }}" class="nav-link px-2">پرسش‌و‌پاسخ</a></li>
+            <li class="nav-item"><router-link to="/about" class="nav-link px-2">درباره حسابیکس</router-link></li>
+            <li class="nav-item"><a href="http://blog.hesabix.ir" class="nav-link px-2">وبلاگ</a></li>
+            <li class="nav-item"><a href="{{ path('homeContactus')}}" class="nav-link px-2">تماس با ما</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   </header>
 
-  <RouterView />
+  <div class="container-fluid pt-3">
+    <div class="row">
+      <RouterView />
+    </div>
+  </div>
+  <footer class="d-flex flex-wrap justify-content-between align-items-center bg-white py-2 border-top fixed-bottom">
+    <div class="col-md-4 d-flex align-items-center ms-3">
+      <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+        <img src="/img/logo-blue.png" class="" style="max-height: 24px;">
+      </a>
+      <span class="mb-3 mb-md-0 text-muted">
+                    حسابیکس تحت
+                    <a class="btn btn-link mx-0 px-0" href="https://fa.wikipedia.org/wiki/%D9%BE%D8%B1%D9%88%D8%A7%D9%86%D9%87_%D8%AC%D8%A7%D9%85%D8%B9_%D9%87%D9%85%DA%AF%D8%A7%D9%86%DB%8C_%DA%AF%D9%86%D9%88" target="_blank">
+                        GNU GPL 3
+                    </a>
+                    منتشر می‌شود.
+                </span>
+    </div>
+
+    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex me-3">
+      <li class="ms-3"><a class="text-muted" target="_blank" href="https://github.com/morrning/hesabix"><i class="bi bi-github"></i></a></li>
+      <li class="ms-3"><a class="text-muted" target="_blank" href="https://instagram.com/hesabix.acc"><i class="bi bi-instagram"></i></a></li>
+      <li class="ms-3"><a class="text-muted" target="_blank" href="https://www.aparat.com/hesabix.ir"><i class="bi bi-youtube"></i></a></li>
+    </ul>
+  </footer>
+
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
