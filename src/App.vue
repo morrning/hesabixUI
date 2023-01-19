@@ -6,7 +6,7 @@ import { RouterLink, RouterView } from 'vue-router'
 </style>
 <template>
   <!-- Header -->
-  <header id="page-header">
+  <header id="page-header" class="">
     <!-- Header Content -->
     <div class="content-header">
       <!-- Left Section -->
@@ -56,31 +56,37 @@ import { RouterLink, RouterView } from 'vue-router'
           <ul class="nav-main nav-main-horizontal nav-main-hover nav-main-dark">
             <li class="nav-main-item">
               <router-link class="nav-main-link" to="/">
-                <i class="nav-main-link-icon fa fa-compass"></i>
+                <i class="nav-main-link-icon fa fa-home"></i>
                 <span class="nav-main-link-name"> حسابیکس </span>
               </router-link>
             </li>
             <li class="nav-main-item">
               <router-link class="nav-main-link" to="/faq">
-                <i class="nav-main-link-icon fa fa-undo"></i>
+                <i class="nav-main-link-icon fa fa-book-atlas"></i>
                 <span class="nav-main-link-name">  سوالات متداول  </span>
               </router-link>
             </li>
             <li class="nav-main-item">
               <a class="nav-main-link" href="bd_search.html">
-                <i class="nav-main-link-icon fa fa-search"></i>
+                <i class="nav-main-link-icon fa fa-book-bookmark"></i>
                 <span class="nav-main-link-name">راهنما و خودآموزها</span>
               </a>
             </li>
             <li class="nav-main-item">
               <a class="nav-main-link" href="be_pages_dashboard.html">
-                <i class="nav-main-link-icon fa fa-undo"></i>
+                <i class="nav-main-link-icon fa fa-question"></i>
                 <span class="nav-main-link-name"> پرسش و پاسخ </span>
               </a>
             </li>
             <li class="nav-main-item">
+              <a class="nav-main-link" href="http://blog.hesabix.ir">
+                <i class="nav-main-link-icon fa fa-blog"></i>
+                <span class="nav-main-link-name"> وبلاگ </span>
+              </a>
+            </li>
+            <li class="nav-main-item">
               <a aria-expanded="true" aria-haspopup="true" class="nav-main-link active nav-main-link-submenu" data-toggle="submenu" href="#">
-                <i class="nav-main-link-icon fa fa-puzzle-piece"></i>
+                <i class="nav-main-link-icon fa fa-percentage"></i>
                 <span class="nav-main-link-name">درباره حسابیکس</span>
               </a>
               <ul class="nav-main-submenu">
@@ -92,6 +98,16 @@ import { RouterLink, RouterView } from 'vue-router'
                 <li class="nav-main-item">
                   <router-link class="nav-main-link" to="/contact-us">
                     <span class="nav-main-link-name">تماس با ما</span>
+                  </router-link>
+                </li>
+                <li class="nav-main-item">
+                  <router-link class="nav-main-link" to="/contact-us">
+                    <span class="nav-main-link-name">قوانین ارائه خدمات</span>
+                  </router-link>
+                </li>
+                <li class="nav-main-item">
+                  <router-link class="nav-main-link" to="/contact-us">
+                    <span class="nav-main-link-name">حریم خصوصی</span>
                   </router-link>
                 </li>
                 <li class="nav-main-item">
@@ -173,6 +189,21 @@ import { RouterLink, RouterView } from 'vue-router'
     <div class="content mt-0 pt-2">
       <router-view />
     </div>
+    <!-- Footer -->
+    <footer class="bg-body-light fixed-bottom" id="page-footer">
+      <div class="content py-0">
+        <div class="row fs-sm">
+          <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-end">
+            حسابیکس با <i class="fa fa-heart text-danger"></i>
+            متن باز است.
+          </div>
+          <div class="col-sm-6 order-sm-1 text-center text-sm-start">
+            <a class="fw-semibold" href="https://github.com/morrning/hesabixUI" target="_blank">Hesabix v 0.1.1</a> © <span data-toggle="year-copy"></span>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- END Footer -->
     <!-- END Page Content -->
   </main>
   <!-- END Main Container -->
