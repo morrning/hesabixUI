@@ -6,13 +6,16 @@ import { RouterLink, RouterView } from 'vue-router'
 </style>
 <template>
   <!-- Header -->
-  <header id="page-header" class="">
+  <header id="page-header" class="app-header" style="background-color: #cbe0ff">
     <!-- Header Content -->
     <div class="content-header">
       <!-- Left Section -->
       <div class="d-flex align-items-center">
         <!-- Logo -->
-        <router-link class="fw-semibold text-dual tracking-wide" to="/"><span class="opacity-75">حسابیکس</span>
+        <img class="" src="/img/logo-blue.png" alt="" width="32" height="32">
+
+        <router-link class="fw-semibold text-dual tracking-wide" to="/"><span class="opacity-75">حسابیکس | </span>
+
           <small class="fw-lighter"> حسابداری ابری و رایگان</small>
         </router-link>
         <!-- END Logo -->
@@ -21,8 +24,8 @@ import { RouterLink, RouterView } from 'vue-router'
 
       <!-- Right Section -->
       <div>
-        <router-link to="/login" class="btn btn-sm btn-alt-primary me-1">ورود</router-link>
-        <a class="btn btn-sm btn-alt-success">عضویت</a>
+        <router-link to="/login" class="btn btn-sm btn-primary me-1">ورود</router-link>
+        <a class="btn btn-sm btn-success">عضویت</a>
       </div>
       <!-- END Right Section -->
       <!-- Toggle Main Navigation -->
@@ -186,7 +189,7 @@ import { RouterLink, RouterView } from 'vue-router'
     </div>
     <!-- END Navigation -->
     <!-- Page Content -->
-    <div class="content mt-0 pt-2">
+    <div class="content m-0 p-0">
       <router-view />
     </div>
     <!-- Footer -->
