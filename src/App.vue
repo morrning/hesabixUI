@@ -2,60 +2,178 @@
 import { RouterLink, RouterView } from 'vue-router'
 </script>
 <style scoped>
-  .nav-item:hover{
-    background-color: #cfffb7;
-    border-radius: 25px;
-  }
+
 </style>
 <template>
-  <header>
-    <nav class="navbar navbar-expand-md text-secondary" style="background-color: #ececec; border-bottom: 2px solid red;">
-      <div class="container-fluid">
-        <router-link to="/" class="navbar-brand">
-          <img src="/img/logo-blue.png" class="img-fluid" style="max-height: 35px;">
+  <!-- Header -->
+  <header id="page-header">
+    <!-- Header Content -->
+    <div class="content-header">
+      <!-- Left Section -->
+      <div class="d-flex align-items-center">
+        <!-- Logo -->
+        <router-link class="fw-semibold text-dual tracking-wide" to="/"><span class="opacity-75">حسابیکس</span>
+          <small class="fw-lighter"> حسابداری ابری و رایگان</small>
         </router-link>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <!-- END Logo -->
+      </div>
+      <!-- END Left Section -->
+
+      <!-- Right Section -->
+      <div>
+        <router-link to="/login" class="btn btn-sm btn-alt-primary me-1">ورود</router-link>
+        <a class="btn btn-sm btn-alt-success">عضویت</a>
+      </div>
+      <!-- END Right Section -->
+      <!-- Toggle Main Navigation -->
+      <div class="d-lg-none push mx-0 px-0">
+        <!-- Class Toggle, functionality initialized in Helpers.dmToggleClass() -->
+        <button class="btn btn-primary d-flex justify-content-between align-items-center" data-class="d-none" data-target="#main-navigation" data-toggle="class-toggle" type="button"> <i class="fa fa-bars"></i>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-          <ul class="navbar-nav me-auto mb-2 mb-md-0">
-            <li class="nav-item"><router-link to="/" class="nav-link px-2">صفحه نخست</router-link></li>
-            <li class="nav-item"><router-link to="/faq" class="nav-link px-2">سوالات متداول</router-link></li>
-            <li class="nav-item"><a href="{{ path('app_help',{'id':'home'})}}" class="nav-link px-2">راهنما و خود آموزها</a></li>
-            <li class="nav-item"><a href="{{ path('stack') }}" class="nav-link px-2">پرسش‌و‌پاسخ</a></li>
-            <li class="nav-item"><router-link to="/about" class="nav-link px-2">درباره حسابیکس</router-link></li>
-            <li class="nav-item"><a href="http://blog.hesabix.ir" class="nav-link px-2">وبلاگ</a></li>
-            <li class="nav-item"><router-link to="/contact-us" class="nav-link px-2">تماس با ما</router-link></li>
-          </ul>
+      </div>
+      <!-- END Toggle Main Navigation -->
+    </div>
+    <!-- END Header Content -->
+    <!-- Header Loader -->
+    <!-- Please check out the Loaders page under Components category to see examples of showing/hiding it -->
+    <div class="overlay-header bg-sidebar-dark" id="page-header-loader">
+      <div class="content-header">
+        <div class="w-100 text-center">
+          <i class="fa fa-fw fa-2x fa-spinner fa-spin text-primary"></i>
         </div>
       </div>
-    </nav>
+    </div>
+    <!-- END Header Loader -->
   </header>
 
-  <div class="container-fluid pt-3 pb-5">
-    <div class="row">
-      <RouterView />
+  <!-- Main Container -->
+  <main id="main-container">
+    <!-- Navigation -->
+    <div class="bg-sidebar-dark">
+      <div class="content py-1">
+        <!-- Main Navigation -->
+        <div class="d-none d-lg-block push my-1" id="main-navigation">
+          <ul class="nav-main nav-main-horizontal nav-main-hover nav-main-dark">
+            <li class="nav-main-item">
+              <router-link class="nav-main-link" to="/">
+                <i class="nav-main-link-icon fa fa-compass"></i>
+                <span class="nav-main-link-name"> حسابیکس </span>
+              </router-link>
+            </li>
+            <li class="nav-main-item">
+              <router-link class="nav-main-link" to="/faq">
+                <i class="nav-main-link-icon fa fa-undo"></i>
+                <span class="nav-main-link-name">  سوالات متداول  </span>
+              </router-link>
+            </li>
+            <li class="nav-main-item">
+              <a class="nav-main-link" href="bd_search.html">
+                <i class="nav-main-link-icon fa fa-search"></i>
+                <span class="nav-main-link-name">راهنما و خودآموزها</span>
+              </a>
+            </li>
+            <li class="nav-main-item">
+              <a class="nav-main-link" href="be_pages_dashboard.html">
+                <i class="nav-main-link-icon fa fa-undo"></i>
+                <span class="nav-main-link-name"> پرسش و پاسخ </span>
+              </a>
+            </li>
+            <li class="nav-main-item">
+              <a aria-expanded="true" aria-haspopup="true" class="nav-main-link active nav-main-link-submenu" data-toggle="submenu" href="#">
+                <i class="nav-main-link-icon fa fa-puzzle-piece"></i>
+                <span class="nav-main-link-name">درباره حسابیکس</span>
+              </a>
+              <ul class="nav-main-submenu">
+                <li class="nav-main-item">
+                  <router-link class="nav-main-link active" to="/about">
+                    <span class="nav-main-link-name">داستان حسابیکس</span>
+                  </router-link>
+                </li>
+                <li class="nav-main-item">
+                  <router-link class="nav-main-link" to="/contact-us">
+                    <span class="nav-main-link-name">تماس با ما</span>
+                  </router-link>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link" href="bd_image_1.html">
+                    <span class="nav-main-link-name">متن باز</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-main-item ms-lg-auto">
+              <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
+                <i class="nav-main-link-icon fa fa-brush"></i>
+                <span class="nav-main-link-name d-lg-none">تم ها</span>
+              </a>
+              <ul class="nav-main-submenu nav-main-submenu-right">
+                <li class="nav-main-item">
+                  <a class="nav-main-link" data-theme="default" data-toggle="theme" href="#">
+                    <i class="nav-main-link-icon fa fa-circle text-default"></i>
+                    <span class="nav-main-link-name"> پیش فرض </span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link" data-theme="assets/css/themes/xwork.min.css" data-toggle="theme" href="#">
+                    <i class="nav-main-link-icon fa fa-circle text-xwork"></i>
+                    <span class="nav-main-link-name">xWork</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link" data-theme="assets/css/themes/xmodern.min.css" data-toggle="theme" href="#">
+                    <i class="nav-main-link-icon fa fa-circle text-xmodern"></i>
+                    <span class="nav-main-link-name">xModern</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link" data-theme="assets/css/themes/xeco.min.css" data-toggle="theme" href="#">
+                    <i class="nav-main-link-icon fa fa-circle text-xeco"></i>
+                    <span class="nav-main-link-name">xEco</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link" data-theme="assets/css/themes/xsmooth.min.css" data-toggle="theme" href="#">
+                    <i class="nav-main-link-icon fa fa-circle text-xsmooth"></i>
+                    <span class="nav-main-link-name">xSmooth</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link" data-theme="assets/css/themes/xinspire.min.css" data-toggle="theme" href="#">
+                    <i class="nav-main-link-icon fa fa-circle text-xinspire"></i>
+                    <span class="nav-main-link-name">xInspire</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link" data-theme="assets/css/themes/xdream.min.css" data-toggle="theme" href="#">
+                    <i class="nav-main-link-icon fa fa-circle text-xdream"></i>
+                    <span class="nav-main-link-name">xDream</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link" data-theme="assets/css/themes/xpro.min.css" data-toggle="theme" href="#">
+                    <i class="nav-main-link-icon fa fa-circle text-xpro"></i>
+                    <span class="nav-main-link-name">x Pro</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link" data-theme="assets/css/themes/xplay.min.css" data-toggle="theme" href="#">
+                    <i class="nav-main-link-icon fa fa-circle text-xplay"></i>
+                    <span class="nav-main-link-name">xPlay</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <!-- END Main Navigation -->
+      </div>
     </div>
-  </div>
-  <footer class="d-flex flex-wrap justify-content-between align-items-center bg-white py-0 mt-2 border-top fixed-bottom">
-    <div class="col-md-4 d-flex align-items-center ms-3">
-      <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
-        <img src="/img/logo-blue.png" class="" style="max-height: 24px;">
-      </a>
-      <span class="mb-3 mb-md-0 text-muted">
-                    حسابیکس تحت
-                    <a class="btn btn-link mx-0 px-0" href="https://fa.wikipedia.org/wiki/%D9%BE%D8%B1%D9%88%D8%A7%D9%86%D9%87_%D8%AC%D8%A7%D9%85%D8%B9_%D9%87%D9%85%DA%AF%D8%A7%D9%86%DB%8C_%DA%AF%D9%86%D9%88" target="_blank">
-                        GNU GPL 3
-                    </a>
-                    منتشر می‌شود.
-                </span>
+    <!-- END Navigation -->
+    <!-- Page Content -->
+    <div class="content mt-0 pt-2">
+      <router-view />
     </div>
-
-    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex me-3">
-      <li class="ms-3"><a class="text-muted" target="_blank" href="https://github.com/morrning/hesabix"><i class="bi bi-github"></i></a></li>
-      <li class="ms-3"><a class="text-muted" target="_blank" href="https://instagram.com/hesabix.acc"><i class="bi bi-instagram"></i></a></li>
-      <li class="ms-3"><a class="text-muted" target="_blank" href="https://www.aparat.com/hesabix.ir"><i class="bi bi-youtube"></i></a></li>
-    </ul>
-  </footer>
-
+    <!-- END Page Content -->
+  </main>
+  <!-- END Main Container -->
 </template>

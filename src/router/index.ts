@@ -38,6 +38,14 @@ const router = createRouter({
       meta:{
         'title':'سوالات متداول'
       }
+    },
+    {
+      path: '/login',
+      name: 'user_login',
+      component: () => import('../views/user/login.vue'),
+      meta:{
+        'title':'ورود به حسابیکس'
+      }
     }
   ]
 })
