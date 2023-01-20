@@ -19,18 +19,20 @@
                 <!-- END Header -->
 
                 <!-- Sign In Form -->
-                <!-- jQuery Validation (.js-validation-signin class is initialized in js/pages/op_auth_signin.min.js which was auto compiled from _js/pages/op_auth_signin.js) -->
-                <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
-                <form action="be_pages_auth_all.html" class="js-validation-signin" method="POST">
+                <form @submit.prevent="onSubmit">
                   <div class="mb-4">
-                    <input class="form-control form-control-alt" id="login-username" name="login-username" placeholder="پست الکترونیکی" type="email"/>
+                    <input v-model="email" class="form-control form-control-alt" placeholder="پست الکترونیکی" type="email">
+                    <div v-if="v$.email.$error">الزامی است</div>
                   </div>
                   <div class="mb-4">
-                    <input class="form-control form-control-alt" id="login-password" name="login-password" placeholder="کلمه عبور" type="password"/>
+                    <input v-model="password" class="form-control form-control-alt" placeholder="کلمه عبور" type="password">
+                    <div v-if="v$.password.$error">الزامی است</div>
                   </div>
                   <div class="mb-4">
-                    <button class="btn w-100 btn-hero btn-primary" type="submit">
-                      <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> ورود </button>
+                    <!-- Submit Button -->
+                    <div class="buttons-w">
+                      <button type="submit" class="btn w-100 btn-primary"><i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> ورود</button>
+                    </div>
                   </div>
                 </form>
                 <!-- END Sign In Form -->
@@ -60,8 +62,38 @@
 </template>
 
 <script>
+import { useVuelidate } from '@vuelidate/core'
+import { required , email} from '@vuelidate/validators'
+
 export default {
-  name: "login"
+  name: "login",
+  setup () {
+    return {
+      v$: useVuelidate()
+    }
+  },
+  data () {
+    return {
+      email: '',
+      password: ''
+    }
+  },
+  validations () {
+    return {
+      email: { required,email },
+      password: {required}
+    }
+  },
+  methods: {
+    async onSubmit () {
+      const result = await this.v$.$validate()
+      if (!result) {
+        // notify user form is invalid
+        alert();
+      }
+      // perform async actions
+    }
+  }
 }
 </script>
 
