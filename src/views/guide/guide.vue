@@ -12,23 +12,58 @@
         <!-- Side Content -->
         <div class="d-none d-md-block push" id="side-content">
           <div class="block block-rounded">
-            <div class="block-content block-content-full bg-primary-darker text-center">
-              <p class="text-white fs-3 fw-light mt-3 mb-0"> فهرست راهنما </p>
+            <div class="block-header block-header-default">
+              <h3 class="block-title">فهرست خودآموزها</h3>
             </div>
             <div class="block-content block-content-full">
-              <table class="table table-borderless table-striped table-hover">
-                <tbody>
-                <tr>
-                  <td class="text-center" style="width: 40px;">01</td>
-                  <td>
-                    <strong>نیمه عمر 2</strong>
-                  </td>
-                  <td class="text-center" style="width: 40px;">
-                    <strong class="text-success">9.6</strong>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
+              <div class="js-nestable-icons dd">
+                <ol class="dd-list">
+                  <li class="dd-item" data-id="1"><button class="dd-collapse" data-action="collapse" type="button">Collapse</button><button class="dd-expand" data-action="expand" type="button">Expand</button>
+                    <div class="dd-handle">
+                      <i class="fa fa-bold text-muted me-1"></i> بوت استرپ </div>
+                    <ol class="dd-list">
+                      <li class="dd-item" data-id="2">
+                        <div class="dd-handle">
+                          <i class="fa fa-brush text-muted me-1"></i>تم ها</div>
+                      </li>
+                      <li class="dd-item" data-id="3">
+                        <div class="dd-handle">
+                          <i class="fa fa-file text-muted me-1"></i> مستندات </div>
+                      </li>
+                    </ol>
+                  </li>
+                  <li class="dd-item" data-id="4"><button class="dd-collapse" data-action="collapse" type="button">Collapse</button><button class="dd-expand" data-action="expand" type="button">Expand</button>
+                    <div class="dd-handle">
+                      <i class="fa fa-graduation-cap text-muted me-1"></i>یادگیری</div>
+                    <ol class="dd-list">
+                      <li class="dd-item" data-id="5">
+                        <div class="dd-handle">
+                          <i class="fa fa-code text-muted me-1"></i>کد</div>
+                      </li>
+                      <li class="dd-item" data-id="6">
+                        <div class="dd-handle">
+                          <i class="fa fa-pencil-alt text-muted me-1"></i> آموزش ها </div>
+                      </li>
+                      <li class="dd-item" data-id="7">
+                        <div class="dd-handle">
+                          <i class="fa fa-file-alt text-muted me-1"></i>مقاله</div>
+                      </li>
+                    </ol>
+                  </li>
+                  <li class="dd-item" data-id="8">
+                    <div class="dd-handle">
+                      <i class="fa fa-bezier-curve text-muted me-1"></i>طرح</div>
+                  </li>
+                  <li class="dd-item" data-id="9">
+                    <div class="dd-handle">
+                      <i class="fa fa-terminal text-muted me-1"></i> کد نویسی </div>
+                  </li>
+                  <li class="dd-item" data-id="10">
+                    <div class="dd-handle">
+                      <i class="fa fa-burn text-muted me-1"></i>بازاریابی</div>
+                  </li>
+                </ol>
+              </div>
             </div>
           </div>
         </div>
@@ -43,7 +78,7 @@
             <p>
               این راهنما است
               {{ $route.params.id}}
-              <button class="btn btn-dark" @click="test">fffff</button>
+              <button class="btn btn-primary" @click="test">fffff</button>
             </p>
           </div>
         </div>
@@ -58,7 +93,7 @@ export default {
   name: "index",
   methods:{
     test(){
-      Dashmix.helpers('jq-notify', {type: 'success', icon: 'fa fa-check me-1', message: 'Your message!'});
+      Dashmix.helpers('jq-notify', {type: 'danger', icon: 'fa fa-check me-1', message: 'عملیات با موفقیت انجام شد.'});
       alert();
     }
   },
@@ -66,7 +101,7 @@ export default {
 
   },
   unmounted() {
-    Dashmix.layout(('header_loader_off'))
+
   }
 
 }

@@ -1,5 +1,10 @@
-<script setup lang="ts">
+<script>
 import { RouterLink, RouterView } from 'vue-router'
+export default{
+  setup(){
+    alert('checking user is loged in before...');
+  }
+}
 </script>
 <style scoped>
 
