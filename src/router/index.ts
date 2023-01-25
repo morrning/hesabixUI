@@ -46,6 +46,17 @@ const router = createRouter({
       meta:{
         'title':'ورود به حسابیکس'
       }
+    },
+    {
+      path: '/guide/:id',
+      name: 'guide',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/guide/guide.vue'),
+      meta:{
+        'title':'راهنما و خودآموزها'
+      }
     }
   ]
 })

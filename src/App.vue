@@ -69,12 +69,20 @@ import { RouterLink, RouterView } from 'vue-router'
                 <span class="nav-main-link-name">  سوالات متداول  </span>
               </router-link>
             </li>
+
             <li class="nav-main-item">
-              <a class="nav-main-link" href="bd_search.html">
-                <i class="nav-main-link-icon fa fa-book-bookmark"></i>
+              <router-link class="nav-main-link"
+                :to="{
+                  name: 'guide',
+                  params: {
+                    id: 'home'
+                  }
+                }">
+              <i class="nav-main-link-icon fa fa-book-bookmark"></i>
                 <span class="nav-main-link-name">راهنما و خودآموزها</span>
-              </a>
+              </router-link>
             </li>
+          
             <li class="nav-main-item">
               <a class="nav-main-link" href="be_pages_dashboard.html">
                 <i class="nav-main-link-icon fa fa-question"></i>
