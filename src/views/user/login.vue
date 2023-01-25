@@ -22,11 +22,11 @@
                 <form @submit.prevent="onSubmit">
                   <div class="mb-4">
                     <input v-model="email" class="form-control form-control-alt" placeholder="پست الکترونیکی" type="email">
-                    <div v-if="v$.email.$error">الزامی است</div>
+                    <small class="form-text text-danger" v-if="v$.email.$error">الزامی است</small>
                   </div>
                   <div class="mb-4">
                     <input v-model="password" class="form-control form-control-alt" placeholder="کلمه عبور" type="password">
-                    <div v-if="v$.password.$error">الزامی است</div>
+                    <small class="form-text text-danger" v-if="v$.password.$error">الزامی است</small>
                   </div>
                   <div class="mb-4">
                     <!-- Submit Button -->
@@ -44,7 +44,7 @@
                   <div class="flex-grow-1">
                     <p class="d-none d-sm-none d-md-block push text-white fw-semibold mb-1"> بهترین نرم افزار حسابداری ابری و کاملا رایگان </p>
                     <div class="text-center">
-                      <a class="btn btn-alt-success me-1" href="javascript:void(0)">عضویت</a>
+                      <router-link class="btn btn-alt-success me-1" to="/register">عضویت</router-link>
                       <a class="btn btn-alt-info" href="javascript:void(0)">فراموشی کلمه عبور</a>
                     </div>
                   </div>
@@ -64,6 +64,8 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required , email} from '@vuelidate/validators'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
   name: "login",
@@ -89,9 +91,26 @@ export default {
       const result = await this.v$.$validate()
       if (!result) {
         // notify user form is invalid
-        alert();
+
       }
       // perform async actions
+
+      axios.post( 'api/user/login', {
+        email: this.email,
+        password: this.password
+      })
+          .then(function (response) {
+            alert(response.data.token)
+            localStorage.setItem('AUTH-TOKEN',response.data.token)
+          })
+          .catch(function (error) {
+            Swal.fire({
+              title: 'خطا',
+              text: 'نام کاربری یا کلمه عبور اشتباه است.',
+              icon: 'error',
+              confirmButtonText: 'Cool'
+            })
+          });
     }
   }
 }

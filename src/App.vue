@@ -25,7 +25,7 @@ import { RouterLink, RouterView } from 'vue-router'
       <!-- Right Section -->
       <div>
         <router-link to="/login" class="btn btn-sm btn-primary me-1">ورود</router-link>
-        <a class="btn btn-sm btn-success">عضویت</a>
+        <router-link to="/register" class="btn btn-sm btn-success">عضویت</router-link>
       </div>
       <!-- END Right Section -->
       <!-- Toggle Main Navigation -->
@@ -189,11 +189,11 @@ import { RouterLink, RouterView } from 'vue-router'
     </div>
     <!-- END Navigation -->
     <!-- Page Content -->
-    <div class="content m-0 p-0">
+    <div class="content mb-3 pt-1 m-0 p-0">
       <router-view />
     </div>
     <!-- Footer -->
-    <footer class="bg-body-light fixed-bottom" id="page-footer">
+    <footer class="bg-body-light" id="page-footer">
       <div class="content py-0">
         <div class="row fs-sm">
           <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-end">

@@ -18,10 +18,7 @@
       </div>
     </div>
     <div class="block-content">
-      <p>
-        {{ app_api_url()}}
-
-        فهرست اشخاص</p>
+      <p>فهرست اشخاص</p>
     </div>
   </div>
   <!-- END Your Block -->

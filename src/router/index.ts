@@ -46,6 +46,14 @@ const router = createRouter({
       meta:{
         'title':'ورود به حسابیکس'
       }
+    },
+    {
+      path: '/register',
+      name: 'user_register',
+      component: () => import('../views/user/register.vue'),
+      meta:{
+        'title':'عضویت در حسابیکس'
+      }
     }
   ]
 })

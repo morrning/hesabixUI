@@ -1,11 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import config from "/config/config.js"
+import axios from "axios";
 
 const app = createApp(App)
-
+axios.defaults.headers.common['AUTH-TOKEN'] = localStorage.getItem('AUTH-TOKEN');
 app.use(router)
-app.config.globalProperties.app_api_url = config.api_url
 app.mount('#page-container')
-import "bootstrap/dist/js/bootstrap.js"

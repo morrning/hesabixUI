@@ -18,7 +18,6 @@ export default {
           برای کار با حسابیکس فقط به یک دستگاه متصل به اینترنت نیاز دارید، فرقی نمی‌کند که این دستگاه تبلت یا موبایل باشد یا اینکه رایانه و لپ تاپ.
           نیاز نیست که هیچگونه نرم افزاری را نصب کنید. کافیست در سایت ثبت نام کرده و بلافاصله کسب و کار خود را مدیریت کنید.
         </p>
-        {{ this.app_api_url() }}
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
           <a href="/acc/" class="btn btn-primary btn-lg px-4 gap-3">
             <i class="bi bi-list-task"></i>
