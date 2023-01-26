@@ -54,7 +54,22 @@ const router = createRouter({
       meta:{
         'title':'عضویت در حسابیکس'
       }
-    }
+    },
+    {
+      path: '/user/profile/',
+      component: () => import('../views/user/profile/base.vue'),
+      children: [
+        {
+          // UserProfile will be rendered inside User's <router-view>
+          // when /user/:id/profile is matched
+          path: 'dashboard',
+          component: () => import('../views/user/profile/dashboard.vue'),
+          meta:{
+            'title':'پروفایل کاربری'
+          }
+        }
+      ],
+    },
   ]
 })
 router.beforeEach((to, from, next) => {

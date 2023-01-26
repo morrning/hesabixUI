@@ -45,7 +45,7 @@
                     <p class="d-none d-sm-none d-md-block push text-white fw-semibold mb-1"> بهترین نرم افزار حسابداری ابری و کاملا رایگان </p>
                     <div class="text-center">
                       <router-link class="btn btn-alt-success me-1" to="/register">عضویت</router-link>
-                      <a class="btn btn-alt-info" href="javascript:void(0)">فراموشی کلمه عبور</a>
+                      <button @click="test" class="btn btn-alt-info" href="javascript:void(0)">فراموشی کلمه عبور</button>
                     </div>
                   </div>
                 </div>
@@ -87,21 +87,13 @@ export default {
     }
   },
   methods: {
-    async onSubmit () {
-      const result = await this.v$.$validate()
-      if (!result) {
-        // notify user form is invalid
-
-      }
-      // perform async actions
-
-      axios.post( 'api/user/login', {
+    async test(){
+      axios.post( 'api/acc/dd', {
         email: this.email,
         password: this.password
       })
           .then(function (response) {
-            alert(response.data.token)
-            localStorage.setItem('AUTH-TOKEN',response.data.token)
+            alert(response.data)
           })
           .catch(function (error) {
             Swal.fire({
@@ -109,6 +101,32 @@ export default {
               text: 'نام کاربری یا کلمه عبور اشتباه است.',
               icon: 'error',
               confirmButtonText: 'Cool'
+            })
+          });
+    },
+    async onSubmit () {
+      const result = await this.v$.$validate()
+      if (!result) {
+        // notify user form is invalid
+
+      }
+      // perform async actions
+      localStorage.removeItem('X-AUTH-TOKEN');
+      axios.post( 'api/user/login', {
+        email: this.email,
+        password: this.password
+      })
+          .then(function (response) {
+            localStorage.setItem('X-AUTH-TOKEN',response.data.token);
+            axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
+            document.location.replace('/');
+          })
+          .catch(function (error) {
+            Swal.fire({
+              title: 'خطا',
+              text: 'نام کاربری یا کلمه عبور اشتباه است.',
+              icon: 'error',
+              confirmButtonText: 'قبول'
             })
           });
     }

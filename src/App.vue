@@ -1,5 +1,39 @@
-<script setup lang="ts">
+<script>
 import { RouterLink, RouterView } from 'vue-router'
+import axios from "axios";
+import Swal from "sweetalert2";
+import {inject} from "vue";
+export default {
+  data(){
+    return {
+      userFullName: '',
+      userEmail: '',
+      isLogedIn: false
+    }
+  },
+  methods:{
+      logout(){
+        axios.post( '/api/user/logout')
+            .then((response) =>{
+              localStorage.removeItem('X-AUTH-TOKEN');
+              document.location.reload();
+              delete  axios.defaults.headers.common['X-AUTH-TOKEN'];
+            });
+      }
+  },
+  mounted(){
+    axios.post( '/api/user/check/login')
+        .then((response) =>{
+         this.isLogedIn = response.data.result;
+          axios.post( '/api/user/current/info')
+              .then((res) =>{
+                this.userEmail = res.data.email;
+                this.userFullName = res.data.fullname;
+                this.$isLogedIn = true;
+              });
+        });
+  }
+}
 </script>
 <style scoped>
 
@@ -23,10 +57,45 @@ import { RouterLink, RouterView } from 'vue-router'
       <!-- END Left Section -->
 
       <!-- Right Section -->
-      <div>
+      <div v-if="this.isLogedIn != true">
         <router-link to="/login" class="btn btn-sm btn-primary me-1">ورود</router-link>
         <router-link to="/register" class="btn btn-sm btn-success">عضویت</router-link>
       </div>
+      <div v-else>
+        <div class="dropdown d-inline-block">
+          <button aria-expanded="false" aria-haspopup="true" class="btn btn-primary" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
+            <i class="fa fa-lg fa-user-circle"></i>
+            <i class="fa fa-angle-down opacity-50 ms-1"></i>
+          </button>
+          <div aria-labelledby="page-header-user-dropdown" class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+            <div class="rounded-top fw-semibold text-white bg-primary-op">
+              <div class="p-3 bg-black-50 rounded-top">
+                <div class="d-flex align-items-center">
+                  <vue-gravatar class="img-avatar img-avatar48 img-avatar-thumb" :email="this.userEmail" :size="150" />
+                  <div class="ms-3">
+                    <router-link class="text-white fw-semibold" to="/user/profile/dashboard">{{ userFullName }}</router-link>
+                    <div class="fs-sm text-white-75">{{ userEmail }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-2">
+              <a class="dropdown-item d-flex justify-content-between align-items-center" href="javascript:void(0)">
+                <div>
+                  <i class="fa fa-fw fa-globe opacity-50 me-1"></i>کسب‌و‌کارها  </div>
+                <span class="badge rounded-pill bg-primary">3</span>
+              </a>
+              <div class="dropdown-divider" role="separator"></div>
+              <router-link class="dropdown-item d-flex align-items-center" to="/user/profile/dashboard">
+                <i class="fa fa-fw fa-user-circle opacity-50 me-1"></i> پروفایل </router-link>
+              <div class="dropdown-divider" role="separator"></div>
+              <button class="dropdown-item d-flex align-items-center mb-0" @click="logout">
+                <i class="fa fa-fw fa-sign-out-alt text-danger me-1"></i> خروج </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- END Right Section -->
       <!-- Toggle Main Navigation -->
       <div class="d-lg-none push mx-0 px-0">

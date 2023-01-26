@@ -10,6 +10,9 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@formkit/themes": "^1.0.0-beta.14",
+    "@formkit/utils": "^1.0.0-beta.14",
+    "@formkit/vue": "^1.0.0-beta.14",
     "@popperjs/core": "^2.11.6",
     "@vuelidate/core": "^2.0.0",
     "@vuelidate/validators": "^2.0.0",
@@ -18,7 +21,8 @@
     "bootstrap-icons": "^1.10.3",
     "sweetalert2": "^11.7.1",
     "vue": "^3.2.45",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vue3-gravatar": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.12",
