@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-    <div class="px-4 pt-5 mt-5 text-center">
+    <div class="px-4 pt-5 text-center">
       <img class="d-block mx-auto mb-4" src="/img/logo-blue.png" alt="" width="72" height="72">
       <h1 class="display-5 fw-bold">نرم‌افزار حسابداری آنلاین حسابیکس</h1>
       <div class="col-lg-6 mx-auto">

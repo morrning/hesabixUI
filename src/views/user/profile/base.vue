@@ -28,9 +28,9 @@
               <i class="fa fa-person-circle-exclamation"></i>
               پروفایل کاربری
             </router-link>
-            <a href="/app/user/change-password" class="list-group-item list-group-item-action">
+            <router-link to="/user/profile/change-password" class="list-group-item list-group-item-action">
               <i class="fa fa-lock-open"></i>
-              تغییر کلمه عبور</a>
+              تغییر کلمه عبور</router-link>
           </div>
         </div>
         <div class="col-sm-12 col-md-8">

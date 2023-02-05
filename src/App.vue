@@ -139,22 +139,22 @@ export default {
               </router-link>
             </li>
             <li class="nav-main-item">
-              <a class="nav-main-link" href="bd_search.html">
+              <router-link class="nav-main-link" to="/guide/content/home">
                 <i class="nav-main-link-icon fa fa-book-bookmark"></i>
                 <span class="nav-main-link-name">راهنما و خودآموزها</span>
-              </a>
+              </router-link>
             </li>
             <li class="nav-main-item">
-              <a class="nav-main-link" href="be_pages_dashboard.html">
+              <router-link class="nav-main-link" to="/stack/home/1">
                 <i class="nav-main-link-icon fa fa-question"></i>
                 <span class="nav-main-link-name"> پرسش و پاسخ </span>
-              </a>
+              </router-link>
             </li>
             <li class="nav-main-item">
-              <a class="nav-main-link" href="http://blog.hesabix.ir">
+              <router-link class="nav-main-link" to="/blog/home/1">
                 <i class="nav-main-link-icon fa fa-blog"></i>
                 <span class="nav-main-link-name"> وبلاگ </span>
-              </a>
+              </router-link>
             </li>
             <li class="nav-main-item">
               <a aria-expanded="true" aria-haspopup="true" class="nav-main-link active nav-main-link-submenu" data-toggle="submenu" href="#">
@@ -163,7 +163,7 @@ export default {
               </a>
               <ul class="nav-main-submenu">
                 <li class="nav-main-item">
-                  <router-link class="nav-main-link active" to="/about">
+                  <router-link class="nav-main-link" to="/about">
                     <span class="nav-main-link-name">داستان حسابیکس</span>
                   </router-link>
                 </li>
@@ -173,19 +173,19 @@ export default {
                   </router-link>
                 </li>
                 <li class="nav-main-item">
-                  <router-link class="nav-main-link" to="/contact-us">
+                  <router-link class="nav-main-link" to="/terms">
                     <span class="nav-main-link-name">قوانین ارائه خدمات</span>
                   </router-link>
                 </li>
                 <li class="nav-main-item">
-                  <router-link class="nav-main-link" to="/contact-us">
+                  <router-link class="nav-main-link" to="/privacy-policy">
                     <span class="nav-main-link-name">حریم خصوصی</span>
                   </router-link>
                 </li>
                 <li class="nav-main-item">
-                  <a class="nav-main-link" href="bd_image_1.html">
+                  <router-link to="/open-source" class="nav-main-link">
                     <span class="nav-main-link-name">متن باز</span>
-                  </a>
+                  </router-link>
                 </li>
               </ul>
             </li>
@@ -258,10 +258,104 @@ export default {
     </div>
     <!-- END Navigation -->
     <!-- Page Content -->
-    <div class="content mb-3 pt-1 m-0 p-0">
+    <div class="content m-sm-3 pt-1 m-0 p-0">
       <router-view />
     </div>
     <!-- Footer -->
+    <div class="container-fluid bg-white mt-2">
+      <div class="row items-push fs-sm border-bottom border-top pt-4">
+        <div class="col-sm-12 col-md-8">
+          <div class="row">
+            <div class="col-sm-6 col-md-4">
+              <div class="ms-2">
+                <h3 class="fw-light">امکانات و ویژگی ها</h3>
+                <ul class="list list-simple-mini">
+                  <li>
+                    <a class="fw-semibold" href="javascript:void(0)">
+                      <i class="fa fa-fw fa-arrow-left text-primary-lighter"></i>
+                      نصب، نگهداری و پشتیبانی
+                    </a>
+                  </li>
+                  <li>
+                    <a class="fw-semibold" href="javascript:void(0)">
+                      <i class="fa fa-fw fa-arrow-left text-primary-lighter"></i>
+                      مدیریت پیشرفته کاربران
+                    </a>
+                  </li>
+                  <li>
+                    <a class="fw-semibold" href="javascript:void(0)">
+                      <i class="fa fa-fw fa-arrow-left text-primary-lighter"></i>
+                      خرید و فروش
+                    </a>
+                  </li>
+                  <li>
+                    <a class="fw-semibold" href="javascript:void(0)">
+                      <i class="fa fa-fw fa-arrow-left text-primary-lighter"></i>
+                      هزینه و درآمد
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <h3 class="fw-light">راهنما و خودآموزها</h3>
+              <ul class="list list-simple-mini">
+                <li>
+                  <a class="fw-semibold" href="javascript:void(0)">
+                    <i class="fa fa-fw fa-book-open-reader text-primary-lighter me-1"></i> راهنمای جامع </a>
+                </li>
+                <li>
+                  <a class="fw-semibold" href="javascript:void(0)">
+                    <i class="fa fa-fw fa-question-circle text-primary-lighter me-1"></i> سوالات متداول </a>
+                </li>
+                <li>
+                  <a class="fw-semibold" href="javascript:void(0)">
+                    <i class="fa fa-fw fa-server text-primary-lighter me-1"></i> مستندات API  </a>
+                </li>
+                <li>
+                  <a class="fw-semibold" href="javascript:void(0)">
+                    <i class="fa fa-fw fa-history text-primary-lighter me-1"></i>لیست تغییرات و بروزرسانی ها</a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <ul class="list list-simple-mini">
+                <li>
+                  <router-link class="fw-semibold" to="/blog/home/1">
+                    <i class="fa fa-fw fa-blog text-primary-lighter me-1"></i> وبلاگ </router-link>
+                </li>
+                <li>
+                  <router-link class="fw-semibold" to="/contact-us">
+                    <i class="fa fa-fw fa-paper-plane text-primary-lighter me-1"></i> تماس و پشتیبانی </router-link>
+                </li>
+                <li>
+                  <router-link class="fw-semibold" to="/about">
+                    <i class="fa fa-fw fa-hand-paper text-primary-lighter me-1"></i> درباره حسابیکس </router-link>
+                </li>
+                <li>
+                  <router-link class="fw-semibold" to="/terms">
+                    <i class="fa fa-fw fa-wand-magic text-primary-lighter me-1"></i> قوانین ارائه خدمات </router-link>
+                </li>
+                <li>
+                  <router-link class="fw-semibold" to="/privacy-policy">
+                    <i class="fa fa-fw fa-globe text-primary-lighter me-1"></i> حریم خصوصی </router-link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4 text-center mt-2">
+            <div class="row">
+              <div class="col">
+                <img src="/img/zarinpal-logo-min.png" class="img-thumbnail mb-5" style="max-height: 120px;">
+              </div>
+              <div class="col">
+                <img src="/img/enamad-logo.png" class="img-thumbnail" style="max-height: 120px;">
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
     <footer class="bg-body-light" id="page-footer">
       <div class="content py-0">
         <div class="row fs-sm">

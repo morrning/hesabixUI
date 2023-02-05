@@ -1,0 +1,86 @@
+<template>
+  <div class="block block-rounded">
+    <div class="block-header block-header-default">
+      <h3 class="block-title">پرسش‌و‌پاسخ</h3>
+    </div>
+    <div class="block-content p-0 pb-1">
+      <!-- Topics -->
+      <table class="table table-striped table-borderless table-vcenter">
+        <thead>
+        <tr class="bg-body-dark">
+          <th colspan="2">موضوع</th>
+          <th class="d-none d-md-table-cell text-center" style="width: 100px;">پاسخ ها</th>
+          <th class="d-none d-md-table-cell text-center" style="width: 100px;">بازدیدها</th>
+          <th class="d-none d-md-table-cell" style="width: 200px;">آخرین پست</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="content in contents">
+          <td colspan="2">
+            <router-link class="fw-semibold" :to="'/stack/content/' + content.url">{{ content.title}}</router-link>
+            <div class="fs-sm text-muted mt-1">
+              <router-link to="/">{{ content.submitter}}</router-link> حدود <span> {{ content.dateSubmit}} </span>
+            </div>
+          </td>
+          <td class="d-none d-md-table-cell text-center">
+            <a class="fw-semibold" href="javascript:void(0)">224</a>
+          </td>
+          <td class="d-none d-md-table-cell text-center">
+            <a class="fw-semibold" href="javascript:void(0)">{{ content.views}}</a>
+          </td>
+          <td class="d-none d-md-table-cell">
+            <span class="fs-sm"> توسط <a href="be_pages_generic_profile.html">روز سوزان</a><br> در <span> خرداد 1397</span></span>
+          </td>
+        </tr>
+
+        </tbody>
+      </table>
+      <!-- END Topics -->
+
+      <!-- Pagination -->
+      <nav aria-label="Topics navigation">
+        <ul class="pagination justify-content-end my-2 mx-4">
+          <li class="page-item">
+            <a aria-label="Previous" class="page-link" href="javascript:void(0)">
+                      <span aria-hidden="true">
+                        <i class="fa fa-angle-right"></i>
+                      </span>
+              <span class="visually-hidden">قبلی</span>
+            </a>
+          </li>
+          <li class="page-item active">
+            <a class="page-link" href="javascript:void(0)">1</a>
+          </li>
+          <li class="page-item">
+            <a aria-label="Next" class="page-link" href="javascript:void(0)">
+                      <span aria-hidden="true">
+                        <i class="fa fa-angle-left"></i>
+                      </span>
+              <span class="visually-hidden">بعد</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- END Pagination -->
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+  name: "home",
+  data: ()=>{ return {
+    contents: []
+  }},
+  async beforeMount(){
+    let data = await axios.post('/api/stack/contents/search');
+    this.contents = data.data;
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

@@ -93,7 +93,7 @@ export default {
         password: this.password
       })
           .then(function (response) {
-            alert(response.data)
+            alert(response.data.message)
           })
           .catch(function (error) {
             Swal.fire({
@@ -127,7 +127,8 @@ export default {
               text: 'نام کاربری یا کلمه عبور اشتباه است.',
               icon: 'error',
               confirmButtonText: 'قبول'
-            })
+            });
+            this.password = '';
           });
     }
   }

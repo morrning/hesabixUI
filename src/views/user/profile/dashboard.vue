@@ -3,20 +3,24 @@
       <div class="block-header block-header-default">
         <h3 class="block-title">پروفایل کاربری</h3>
       </div>
-      <FormKit type="form" :submit-attrs="{
-                              inputClass: 'btn btn-sm btn-primary rounded-0'
-                            }"
-                            submit-label="ثبت"
-               @submit="updateProfile"
-      >
-      <div class="block-content">
-        <div class="row justify-content-center py-sm-3 py-md-5">
+      <div class="block-content mt-0">
+        <div class="row pb-sm-3 pb-md-5">
+          <div class="col-sm-12 justify-content-center text-center">
+            <vue-gravatar class="img-avatar img-avatar128 img-avatar-thumb" :email="this.user_email" :size="150" />
+
+          </div>
           <div class="col-sm-10 col-md-8">
               <div class="my-2">
                 <label class="form-label">پست الکترونیکی</label>
                 <input type="text" class="form-control" v-model="user_email" disabled="disabled">
                 <div class="form-text text-danger">تغییر پست الکترونیکی هم اکنون امکانپذیر نیست.</div>
               </div>
+            <FormKit type="form" :submit-attrs="{
+                              inputClass: 'btn btn-alt-primary mt-4'
+                            }"
+                     submit-label="ثبت"
+                     @submit="updateProfile"
+            >
               <FormKit
                   type="text"
                   name="fullname"
@@ -27,11 +31,10 @@
                   label="نام و نام خانوادگی:"
                   placeholder="بابک علی زاده"
               />
-
+            </FormKit>
           </div>
         </div>
       </div>
-      </FormKit>
     </div>
 </template>
 
@@ -58,7 +61,6 @@ export default {
               confirmButtonText: 'قبول',
             }).then((result) => {
               if (result.isConfirmed) {
-                document.location.reload()
               }
             })
           })
