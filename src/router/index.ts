@@ -179,6 +179,20 @@ const router = createRouter({
           meta:{
             'title':'مشاهده پرسش'
           }
+        },{
+          path: 'edit/:id',
+          name: 'stack_edit_content',
+          component: () => import('../views/stack/components/edit.vue'),
+          meta:{
+            'title':'ویرایش محتوا'
+          }
+        },{
+          path: 'editreplay/:id',
+          name: 'stack_edit_replay',
+          component: () => import('../views/stack/components/editReplay.vue'),
+          meta:{
+            'title':'ویرایش پاسخ'
+          }
         },
         {
           path: 'insert',

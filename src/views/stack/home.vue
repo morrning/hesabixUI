@@ -23,13 +23,14 @@
             </div>
           </td>
           <td class="d-none d-md-table-cell text-center">
-            <a class="fw-semibold" href="javascript:void(0)">224</a>
+            <router-link class="fw-semibold" :to="'/stack/content/' + content.url"> {{ content.replaysCount }}</router-link>
           </td>
           <td class="d-none d-md-table-cell text-center">
-            <a class="fw-semibold" href="javascript:void(0)">{{ content.views}}</a>
+            <router-link class="fw-semibold" :to="'/stack/content/' + content.url">{{ content.views}}</router-link>
           </td>
-          <td class="d-none d-md-table-cell">
-            <span class="fs-sm"> توسط <a href="be_pages_generic_profile.html">روز سوزان</a><br> در <span> خرداد 1397</span></span>
+          <td class="d-none d-md-table-cell ">
+            <span v-if="content.replaysCount != 0" class="fs-sm"> توسط <a href="be_pages_generic_profile.html">{{ content.lastReplayPerson}}</a><br> در <span> {{ content.lastReplayDate}}</span></span>
+            <span v-else class="fs-sm"> --- </span>
           </td>
         </tr>
 
