@@ -1,5 +1,4 @@
 <template>
-  <pulse-loader :loading="loading"></pulse-loader>
   <div class="block block-rounded">
     <div class="block-header block-header-default">
       <h3 class="block-title">{{ content.title }}</h3>
@@ -54,7 +53,7 @@
             <p v-html="replay.body"></p>
             <p class="text-muted">{{ replay.dateSubmit }}</p>
             <p class="text-end" v-if="currentUser.hash_email == replay.gravatar_hash">
-              <edit-replay v-bind:id="replay.id"></edit-replay>
+              <edit-replay v-bind:id="replay.id" v-bind:body="replay.body"></edit-replay>
               <button type="button" @click="deleteReplay(replay.id)" class="btn btn-sm btn-alt-danger">
                 <i class="fa fa-trash"></i>
                 حذف
@@ -117,7 +116,6 @@ import editReplay from "./components/editReplay.vue";
 export default {
   name: "show-content",
   components:{
-    PulseLoader: PulseLoader,
     editReplay: editReplay
   },
   methods:{

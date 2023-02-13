@@ -41,24 +41,24 @@
       <!-- Pagination -->
       <nav aria-label="Topics navigation">
         <ul class="pagination justify-content-end my-2 mx-4">
-          <li class="page-item">
-            <a aria-label="Previous" class="page-link" href="javascript:void(0)">
+          <li class="page-item" v-if="hasPrevPage">
+            <router-link aria-label="Previous" class="page-link" :to="'/stack/home/' + (this.$route.params.id - 1)">
                       <span aria-hidden="true">
                         <i class="fa fa-angle-right"></i>
                       </span>
               <span class="visually-hidden">قبلی</span>
-            </a>
+            </router-link>
           </li>
           <li class="page-item active">
             <a class="page-link" href="javascript:void(0)">1</a>
           </li>
-          <li class="page-item">
-            <a aria-label="Next" class="page-link" href="javascript:void(0)">
+          <li class="page-item" v-if="hasNextPage">
+            <router-link aria-label="Next" class="page-link" :to="'/stack/home/' + (parseInt(this.$route.params.id)  + 1)">
                       <span aria-hidden="true">
                         <i class="fa fa-angle-left"></i>
                       </span>
               <span class="visually-hidden">بعد</span>
-            </a>
+            </router-link>
           </li>
         </ul>
       </nav>
@@ -73,11 +73,31 @@ import axios from "axios";
 export default {
   name: "home",
   data: ()=>{ return {
-    contents: []
+    contents: [],
+    hasPrevPage: false,
+    hasNextPage: true
   }},
+  methods:{
+    async getData(pageNum){
+      if(pageNum > 1){
+        this.hasPrevPage = true;
+      }
+      else{
+        this.hasPrevPage = false;
+      }
+      let data = await axios.post('/api/stack/contents/search',{
+        page: pageNum
+      });
+      this.contents = data.data.data;
+      this.hasNextPage = data.data.nextPage;
+    }
+  },
   async beforeMount(){
-    let data = await axios.post('/api/stack/contents/search');
-    this.contents = data.data;
+    await this.getData(this.$route.params.id);
+  },
+  beforeRouteUpdate(to,from,next){
+    this.getData(to.params.id);
+    next();
   }
 }
 </script>
