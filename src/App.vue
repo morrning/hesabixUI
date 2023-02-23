@@ -3,13 +3,46 @@ import { RouterLink, RouterView } from 'vue-router'
 import axios from "axios";
 import Swal from "sweetalert2";
 import {inject} from "vue";
+import NProgress from "nprogress/nprogress.js";
+import "nprogress/nprogress.css"
 export default {
   data(){
     return {
       userFullName: '',
       userEmail: '',
-      isLogedIn: false
+      isLogedIn: false,
+      business_count: 0
     }
+  },
+  created() {
+    NProgress.configure({ showSpinner: false });
+    //axios.defaults.baseURL = "http://raddata.ir/hesabix/public/index.php";
+    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+    axios.interceptors.request.use(function(config) {
+      // Do something before request is sent
+      NProgress.start()
+      return config;
+    }, function(error) {
+      // Do something with request error
+      console.log('Error');
+      return Promise.reject(error);
+    });
+
+    axios.interceptors.response.use(function(response) {
+      // Do something with response data
+      NProgress.done()
+      return response;
+    }, function(error) {
+      if(error.code == 404){
+        // Do something with response error
+        Swal.fire({
+          text: 'اتصال با سرویس دهنده حسابیکس برقرار نشد. لطفا اتصال اینترنت خود را چک نمایید.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      return Promise.reject(error);
+    });
   },
   methods:{
       logout(){
@@ -32,6 +65,11 @@ export default {
                 this.$isLogedIn = true;
               });
         });
+
+    axios.post( '/api/business/list/count')
+        .then((response) =>{
+          this.business_count = response.data.count;
+        });
   }
 }
 </script>
@@ -40,7 +78,7 @@ export default {
 </style>
 <template>
   <!-- Header -->
-  <header id="page-header" class="app-header" style="background-color: #cbe0ff">
+  <header id="page-header" class="app-header" style="background-color: #f3f9ff">
     <!-- Header Content -->
     <div class="content-header">
       <!-- Left Section -->
@@ -80,11 +118,11 @@ export default {
               </div>
             </div>
             <div class="p-2">
-              <a class="dropdown-item d-flex justify-content-between align-items-center" href="javascript:void(0)">
+              <router-link class="dropdown-item d-flex justify-content-between align-items-center" to="/business/list">
                 <div>
                   <i class="fa fa-fw fa-globe opacity-50 me-1"></i>کسب‌و‌کارها  </div>
-                <span class="badge rounded-pill bg-primary">3</span>
-              </a>
+                <span class="badge rounded-pill bg-primary">{{ this.business_count}}</span>
+              </router-link>
               <div class="dropdown-divider" role="separator"></div>
               <router-link class="dropdown-item d-flex align-items-center" to="/user/profile/dashboard">
                 <i class="fa fa-fw fa-user-circle opacity-50 me-1"></i> پروفایل </router-link>
@@ -145,7 +183,7 @@ export default {
               </router-link>
             </li>
             <li class="nav-main-item">
-              <router-link class="nav-main-link" to="/stack/home/1">
+              <router-link class="nav-main-link" to="/stack/home/non/1">
                 <i class="nav-main-link-icon fa fa-question"></i>
                 <span class="nav-main-link-name"> پرسش و پاسخ </span>
               </router-link>
@@ -186,68 +224,6 @@ export default {
                   <router-link to="/open-source" class="nav-main-link">
                     <span class="nav-main-link-name">متن باز</span>
                   </router-link>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-main-item ms-lg-auto">
-              <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
-                <i class="nav-main-link-icon fa fa-brush"></i>
-                <span class="nav-main-link-name d-lg-none">تم ها</span>
-              </a>
-              <ul class="nav-main-submenu nav-main-submenu-right">
-                <li class="nav-main-item">
-                  <a class="nav-main-link" data-theme="default" data-toggle="theme" href="#">
-                    <i class="nav-main-link-icon fa fa-circle text-default"></i>
-                    <span class="nav-main-link-name"> پیش فرض </span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link" data-theme="assets/css/themes/xwork.min.css" data-toggle="theme" href="#">
-                    <i class="nav-main-link-icon fa fa-circle text-xwork"></i>
-                    <span class="nav-main-link-name">xWork</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link" data-theme="assets/css/themes/xmodern.min.css" data-toggle="theme" href="#">
-                    <i class="nav-main-link-icon fa fa-circle text-xmodern"></i>
-                    <span class="nav-main-link-name">xModern</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link" data-theme="assets/css/themes/xeco.min.css" data-toggle="theme" href="#">
-                    <i class="nav-main-link-icon fa fa-circle text-xeco"></i>
-                    <span class="nav-main-link-name">xEco</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link" data-theme="assets/css/themes/xsmooth.min.css" data-toggle="theme" href="#">
-                    <i class="nav-main-link-icon fa fa-circle text-xsmooth"></i>
-                    <span class="nav-main-link-name">xSmooth</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link" data-theme="assets/css/themes/xinspire.min.css" data-toggle="theme" href="#">
-                    <i class="nav-main-link-icon fa fa-circle text-xinspire"></i>
-                    <span class="nav-main-link-name">xInspire</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link" data-theme="assets/css/themes/xdream.min.css" data-toggle="theme" href="#">
-                    <i class="nav-main-link-icon fa fa-circle text-xdream"></i>
-                    <span class="nav-main-link-name">xDream</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link" data-theme="assets/css/themes/xpro.min.css" data-toggle="theme" href="#">
-                    <i class="nav-main-link-icon fa fa-circle text-xpro"></i>
-                    <span class="nav-main-link-name">x Pro</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link" data-theme="assets/css/themes/xplay.min.css" data-toggle="theme" href="#">
-                    <i class="nav-main-link-icon fa fa-circle text-xplay"></i>
-                    <span class="nav-main-link-name">xPlay</span>
-                  </a>
                 </li>
               </ul>
             </li>
@@ -301,12 +277,12 @@ export default {
               <h3 class="fw-light">راهنما و خودآموزها</h3>
               <ul class="list list-simple-mini">
                 <li>
-                  <a class="fw-semibold" href="javascript:void(0)">
-                    <i class="fa fa-fw fa-book-open-reader text-primary-lighter me-1"></i> راهنمای جامع </a>
+                  <router-link class="fw-semibold" to="/guide/content/home">
+                    <i class="fa fa-fw fa-book-open-reader text-primary-lighter me-1"></i> راهنمای جامع </router-link>
                 </li>
                 <li>
-                  <a class="fw-semibold" href="javascript:void(0)">
-                    <i class="fa fa-fw fa-question-circle text-primary-lighter me-1"></i> سوالات متداول </a>
+                  <router-link class="fw-semibold" to="/faq">
+                    <i class="fa fa-fw fa-question-circle text-primary-lighter me-1"></i> سوالات متداول </router-link>
                 </li>
                 <li>
                   <a class="fw-semibold" href="javascript:void(0)">

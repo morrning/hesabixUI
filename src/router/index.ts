@@ -128,6 +128,28 @@ const router = createRouter({
       ],
     },
     {
+      path: '/business/list',
+      name: 'business_list',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/business/list.vue'),
+      meta:{
+        'title':'فهرست کسب و کارها'
+      }
+    },
+    {
+      path: '/business/new',
+      name: 'business_new',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/business/insert.vue'),
+      meta:{
+        'title':'ایجاد کسب و کار جدید'
+      }
+    },
+    {
       path: '/guide/',
       component: () => import('../views/guide/base-part.vue'),
       children: [
@@ -166,7 +188,7 @@ const router = createRouter({
       component: () => import('../views/stack/base-part.vue'),
       children: [
         {
-          path: 'home/:id',
+          path: 'home/:cat?/:id',
           name: 'stack_home',
           component: () => import('../views/stack/home.vue'),
           meta:{
@@ -209,11 +231,18 @@ const router = createRouter({
       component: () => import('../views/blog/base-part.vue'),
       children: [
         {
-          path: 'home/:page',
+          path: 'home/:id',
           name: 'blog_home',
           component: () => import('../views/blog/home.vue'),
           meta:{
             'title':'وبلاگ حسابیکس'
+          }
+        },{
+          path: 'post/:id',
+          name: 'blog_post',
+          component: () => import('../views/blog/post.vue'),
+          meta:{
+            'title':'مشاهده موضوع وبلاگ'
           }
         },
       ],

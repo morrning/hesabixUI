@@ -5,7 +5,9 @@
     </div>
     <div class="block-content p-0">
       <div class="list-group m-0 p-0 rounded-0">
-        <button type="button" v-for="item in cats" class="list-group-item list-group-item-action">{{ item.name }}</button>
+        <router-link :to="'/stack/home/' + item.id + '/1'" type="button" v-for="item in cats" class="list-group-item list-group-item-action">
+          <i class="fa fa-dot-circle text-danger"></i>
+          {{ item.name }}</router-link>
       </div>
     </div>
   </div>

@@ -1,4 +1,5 @@
 <template>
+
   <div class="block block-rounded">
     <div class="block-header block-header-default">
       <h3 class="block-title">{{ content.title }}</h3>
@@ -120,9 +121,9 @@ export default {
   },
   methods:{
     async submitReplay(){
-      if(this.replayBody === ''){
-        Swal.fire({
-          text: 'هیچ متنی وارد نشده است.',
+      if(this.replayBody === '' || this.replayBody.length < 14){
+        await Swal.fire({
+          text: 'حداقل ۸ کاراکتر به عنوان متن وارد کنید.',
           icon: 'error',
           confirmButtonText: 'قبول'
         });
@@ -182,7 +183,7 @@ export default {
 
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    this.$router.push({name: 'stack_home',params :{id:1}});
+                    this.$router.push({name: 'stack_home',params :{id:1,cat:'non'}});
                   }
                 });
               })

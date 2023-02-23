@@ -2,14 +2,7 @@
   <div class="container-fluid mt-3">
     <div class="row">
       <div class="col-sm-12 col-md-3">
-        <div class="block block-rounded mb-2">
-          <div class="block-header">
-            <h3 class="block-title"> <i class="fa fa-folder-tree"></i> <small> دسته‌بندی مطالب </small></h3>
-          </div>
-          <div class="block-content">
-            <p>بلوک ساده</p>
-          </div>
-        </div>
+        <insert v-if="superadmin"></insert>
         <div class="block block-rounded">
           <div class="block-header">
             <h3 class="block-title"> <i class="fa fa-eye"></i> <small> پربازدیدترین مطالب </small></h3>
@@ -27,8 +20,23 @@
 </template>
 
 <script>
+import insert from "/src/views/blog/components/insert.vue"
+import axios from "axios";
 export default {
-  name: "base-part"
+  name: "base-part",
+  data: ()=>{return{
+    superadmin: false
+  }},
+  components:{
+    insert: insert
+  }
+  ,beforeMount() {
+    axios.post('/api/user/is_superadmin').then((response) =>{
+      if(response.data.result == 1){
+        this.superadmin = true;
+      }
+    });
+  }
 }
 </script>
 

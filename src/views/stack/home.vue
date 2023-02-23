@@ -50,7 +50,7 @@
             </router-link>
           </li>
           <li class="page-item active">
-            <a class="page-link" href="javascript:void(0)">1</a>
+            <a class="page-link" href="javascript:void(0)">{{ this.$route.params.id}}</a>
           </li>
           <li class="page-item" v-if="hasNextPage">
             <router-link aria-label="Next" class="page-link" :to="'/stack/home/' + (parseInt(this.$route.params.id)  + 1)">
@@ -78,7 +78,7 @@ export default {
     hasNextPage: true
   }},
   methods:{
-    async getData(pageNum){
+    async getData(pageNum,cat){
       if(pageNum > 1){
         this.hasPrevPage = true;
       }
@@ -86,6 +86,7 @@ export default {
         this.hasPrevPage = false;
       }
       let data = await axios.post('/api/stack/contents/search',{
+        cat: cat,
         page: pageNum
       });
       this.contents = data.data.data;
@@ -93,10 +94,10 @@ export default {
     }
   },
   async beforeMount(){
-    await this.getData(this.$route.params.id);
+    await this.getData(this.$route.params.id,this.$route.params.cat);
   },
   beforeRouteUpdate(to,from,next){
-    this.getData(to.params.id);
+    this.getData(to.params.id,to.params.cat);
     next();
   }
 }

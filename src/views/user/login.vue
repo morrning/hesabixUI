@@ -66,6 +66,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required , email} from '@vuelidate/validators'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import arcaptchaVue3 from "arcaptcha-vue3";
 
 export default {
   name: "login",
@@ -80,6 +81,9 @@ export default {
       password: ''
     }
   },
+  components:{
+    arcaptchaVue3: arcaptchaVue3
+  },
   validations () {
     return {
       email: { required,email },
@@ -87,22 +91,11 @@ export default {
     }
   },
   methods: {
-    async test(){
-      axios.post( 'api/acc/dd', {
-        email: this.email,
-        password: this.password
-      })
-          .then(function (response) {
-            alert(response.data.message)
-          })
-          .catch(function (error) {
-            Swal.fire({
-              title: 'خطا',
-              text: 'نام کاربری یا کلمه عبور اشتباه است.',
-              icon: 'error',
-              confirmButtonText: 'Cool'
-            })
-          });
+    onCaptchaSolved(){
+      alert()
+    },
+    onCaptchaExpired(){
+
     },
     async onSubmit () {
       const result = await this.v$.$validate()

@@ -1,82 +1,90 @@
 <template>
   <div class="row mx-2">
-    <div class="col-lg-4">
-      <!-- Story #15 -->
-      <a class="block block-rounded block-link-pop h-100 mb-0" href="javascript:void(0)">
-        <img alt="" class="img-fluid" src="/assets/media/photos/photo21@2x.jpg">
-        <div class="block-content">
-          <h4 class="mb-1">ترتیب کارا رو دادن</h4>
-          <p class="fs-sm">
-            <span class="text-primary">سارا فیلدز</span> در   30،  اسفند 1398 ·<span class="text-muted">9 دقیقه</span>
-          </p>
-          <p> لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و </p>
+    <div class="col-12" v-for="item in contents">
+      <div class="block block-rounded">
+        <div class="block-content p-0 overflow-hidden">
+          <div class="row g-0">
+            <div class="col-md-4 col-lg-5 overflow-hidden d-flex align-items-center">
+              <router-link :to="'/blog/post/' + item.url">
+                <img alt="" class="img-fluid img-link" :src="item.img">
+              </router-link>
+            </div>
+            <div class="col-md-8 col-lg-7 d-flex align-items-center">
+              <div class="px-4 py-3">
+                <h4 class="mb-1">
+                  <router-link class="text-dark" :to="'/blog/post/' + item.url"> {{ item.title }} </router-link>
+                </h4>
+                <div class="fs-sm mb-2">
+                  <router-link :to="'/blog/post/' + item.url">{{item.submitter}}</router-link> {{item.dateSubmit}} ·
+                </div>
+                <p class="mb-0"> {{ item.intero }} <router-link :to="'/blog/post/' + item.url">ادامه مطلب</router-link>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-      </a>
-      <!-- END Story #15 -->
-    </div>
-    <div class="col-lg-4">
-      <!-- Story #15 -->
-      <a class="block block-rounded block-link-pop h-100 mb-0" href="javascript:void(0)">
-        <img alt="" class="img-fluid" src="/assets/media/photos/photo21@2x.jpg">
-        <div class="block-content">
-          <h4 class="mb-1">ترتیب کارا رو دادن</h4>
-          <p class="fs-sm">
-            <span class="text-primary">سارا فیلدز</span> در   30،  اسفند 1398 ·<span class="text-muted">9 دقیقه</span>
-          </p>
-          <p> لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و </p>
-        </div>
-      </a>
-      <!-- END Story #15 -->
-    </div>
-    <div class="col-lg-4">
-      <!-- Story #15 -->
-      <a class="block block-rounded block-link-pop h-100 mb-0" href="javascript:void(0)">
-        <img alt="" class="img-fluid" src="/assets/media/photos/photo21@2x.jpg">
-        <div class="block-content">
-          <h4 class="mb-1">ترتیب کارا رو دادن</h4>
-          <p class="fs-sm">
-            <span class="text-primary">سارا فیلدز</span> در   30،  اسفند 1398 ·<span class="text-muted">9 دقیقه</span>
-          </p>
-          <p> لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و </p>
-        </div>
-      </a>
-      <!-- END Story #15 -->
+      </div>
     </div>
   </div>
-  <div class="row mt-3">
-    <nav aria-label="Page navigation mt-3">
-      <ul class="pagination justify-content-center push">
-        <li class="page-item active">
-          <a class="page-link" href="javascript:void(0)">1</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="javascript:void(0)">2</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="javascript:void(0)">3</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="javascript:void(0)">4</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="javascript:void(0)">5</a>
-        </li>
-        <li class="page-item">
-          <a aria-label="Next" class="page-link" href="javascript:void(0)">
-                  <span aria-hidden="true">
-                    <i class="fa fa-angle-left"></i>
-                  </span>
-            <span class="visually-hidden">بعد</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+  <!-- Pagination -->
+  <nav aria-label="Topics navigation">
+    <ul class="pagination justify-content-end my-2 mx-4">
+      <li class="page-item" v-if="hasPrevPage">
+        <router-link aria-label="Previous" class="page-link" :to="'/blog/home/' + (this.$route.params.id - 1)">
+                      <span aria-hidden="true">
+                        <i class="fa fa-angle-right"></i>
+                      </span>
+          <span class="visually-hidden">قبلی</span>
+        </router-link>
+      </li>
+      <li class="page-item active">
+        <a class="page-link" href="javascript:void(0)">{{  this.$route.params.id  }}</a>
+      </li>
+      <li class="page-item" v-if="hasNextPage">
+        <router-link aria-label="Next" class="page-link" :to="'/blog/home/' + (parseInt(this.$route.params.id)  + 1)">
+                      <span aria-hidden="true">
+                        <i class="fa fa-angle-left"></i>
+                      </span>
+          <span class="visually-hidden">بعد</span>
+        </router-link>
+      </li>
+    </ul>
+  </nav>
+  <!-- END Pagination -->
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  name: "home"
+  name: "home",
+  data: ()=>{ return {
+    contents: [],
+    hasPrevPage: false,
+    hasNextPage: true
+  }},
+  methods:{
+    async getData(pageNum){
+      if(pageNum > 1){
+        this.hasPrevPage = true;
+      }
+      else{
+        this.hasPrevPage = false;
+      }
+      let data = await axios.post('/api/blog/contents/search',{
+        page: pageNum,
+        count: 9
+      });
+      this.contents = data.data.data;
+      this.hasNextPage = data.data.nextPage;
+    }
+  },
+  async beforeMount(){
+    await this.getData(this.$route.params.id);
+  },
+  beforeRouteUpdate(to,from,next){
+    this.getData(to.params.id);
+    next();
+  }
 }
 </script>
 
