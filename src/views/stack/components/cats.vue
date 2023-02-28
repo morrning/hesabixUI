@@ -8,6 +8,9 @@
         <router-link :to="'/stack/home/' + item.id + '/1'" type="button" v-for="item in cats" class="list-group-item list-group-item-action">
           <i class="fa fa-dot-circle text-danger"></i>
           {{ item.name }}</router-link>
+        <router-link to="/stack/home/non/1" type="button" class="list-group-item list-group-item-action">
+          <i class="fa fa-dot-circle text-danger"></i>
+          همه‌ی موضوعات</router-link>
       </div>
     </div>
   </div>

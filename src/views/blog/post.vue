@@ -22,6 +22,10 @@
               <!-- Magnific Popup (.js-gallery class is initialized in Helpers.jqMagnific()) -->
               <!-- For more info and examples you can check out http://dimsemenov.com/plugins/magnific-popup/ -->
               <article class="js-gallery story js-gallery-enabled">
+                <span class="text-muted">
+                  دسته‌بندی:
+                  <span class="text-primary">{{ content.cat }}</span>
+                </span>
                 <p v-html="content.body"></p>
               </article>
               <!-- END Story -->

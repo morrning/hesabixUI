@@ -222,7 +222,10 @@ const router = createRouter({
           component: () => import('../views/stack/insert.vue'),
           meta:{
             'title':'موضوع جدید'
-          }
+          },
+          beforeEnter: (to, from,next) => {
+            if(app_permissions.isLogedIn !== false){ next(); } else { next({ name: 'user_login' }) }
+          },
         }
       ],
     },
@@ -252,11 +255,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = <string>to.meta.title;
-  if(to.path.includes('/user/') && app_permissions.isLogedIn == false){
-    next({ name: 'user_login' })
-  }
-  else {
-    next()
-  }
+  next();
 })
 export default router

@@ -91,12 +91,6 @@ export default {
     }
   },
   methods: {
-    onCaptchaSolved(){
-      alert()
-    },
-    onCaptchaExpired(){
-
-    },
     async onSubmit () {
       const result = await this.v$.$validate()
       if (!result) {

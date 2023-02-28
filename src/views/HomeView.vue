@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-    <div class="px-4 pt-5 text-center">
+    <div class="px-4 py-5 text-center">
       <img class="d-block mx-auto mb-4" src="/img/logo-blue.png" alt="" width="72" height="72">
       <h1 class="display-5 fw-bold">نرم‌افزار حسابداری آنلاین حسابیکس</h1>
       <div class="col-lg-6 mx-auto">
@@ -42,4 +42,72 @@ export default {
         </div>
       </div>
     </div>
+  <div class="row items-push py-5">
+    <div class="col-sm-6 col-xl-3">
+      <a class="block block-rounded block-fx-pop text-center h-100 mb-0" href="javascript:void(0)">
+        <div class="block-content block-content-full">
+          <div class="item item-circle bg-primary-lighter mx-auto my-3">
+            <i class="fa fa-users text-primary"></i>
+          </div>
+          <div class="display-4 fw-bold">35.8 هزار </div>
+          <div class="text-muted mt-1">کاربران</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <a class="block block-rounded block-fx-pop text-center h-100 mb-0" href="javascript:void(0)">
+        <div class="block-content block-content-full">
+          <div class="item item-circle bg-xinspire-lighter mx-auto my-3">
+            <i class="fa fa-home-user text-xinspire-dark"></i>
+          </div>
+          <div class="display-4 fw-bold">98.5 هزار </div>
+          <div class="text-muted mt-1">کسب‌و‌کارها</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <a class="block block-rounded block-fx-pop text-center h-100 mb-0" href="javascript:void(0)">
+        <div class="block-content block-content-full">
+          <div class="item item-circle bg-xsmooth-lighter mx-auto my-3">
+            <i class="fa fa-paperclip text-xsmooth"></i>
+          </div>
+          <div class="display-4 fw-bold">25</div>
+          <div class="text-muted mt-1">اسناد</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <a class="block block-rounded block-fx-pop text-center h-100 mb-0" href="javascript:void(0)">
+        <div class="block-content block-content-full">
+          <div class="item item-circle bg-xplay-lighter mx-auto my-3">
+            <i class="fa fa-box text-xplay"></i>
+          </div>
+          <div class="display-4 fw-bold">12.5٪</div>
+          <div class="text-muted mt-1">کالاها‌و‌خدمات</div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="py-3 py-sm-5 px-md-7">
+    <div class="block block-rounded block-transparent bg-white">
+      <div class="block-content block-content-full">
+        <div class="row justify-content-sm-between align-items-center p-md-3">
+          <div class="col-sm-6">
+            <h4 class="mb-2"> جدیدترین عضو خانواده بزرگ حسابیکس... </h4>
+            <p class="text-muted mb-sm-0">
+              به جدیدترین عضو حسابیکس
+
+              که کسب‌و‌کار خود را با نام
+
+              ایجاد کرده‌اند خوش‌آمد می‌گوییم.
+            </p>
+          </div>
+          <div class="col-sm- text-sm-end">
+            <a class="btn btn-primary px-4 py-2" href="be_widgets_tiles.html"> همه آنها را کاوش کنید <i class="fa fa-fw fa-arrow-left opacity-50 ms-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>

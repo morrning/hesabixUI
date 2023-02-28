@@ -1,8 +1,8 @@
 <template>
   <div class="mb-5">
-    <div class="container-fluid">
+    <div class="container mx-auto">
       <div class="row justify-content-center">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-12">
           <div class="card">
             <div class="card-header bg-primary-dark border text-light">
               <i class="bi bi-list-task"></i>
@@ -16,7 +16,7 @@
             </div>
             <div class="card-body app-body">
               <div class="list-group">
-                <a v-for="item in contents" :href="'/acc/'+item.id+'/dashboard'" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                <a v-for="item in contents" href="'/acc/dashboard'" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
                   <img src="/img/icons/business.png" alt="twbs" class="rounded-circle flex-shrink-0" width="50" height="50">
                   <div class="d-flex gap-2 w-100 justify-content-between">
                     <div>
