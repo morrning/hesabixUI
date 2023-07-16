@@ -1,46 +1,39 @@
 <template>
-    <div class="block block-rounded">
-      <div class="block-header block-header-default">
-        <h3 class="block-title">پروفایل کاربری</h3>
-      </div>
-      <div class="block-content mt-0">
-        <div class="row pb-sm-3 pb-md-5">
-          <div class="col-sm-12 justify-content-center text-center">
-            <vue-gravatar class="img-avatar img-avatar128 img-avatar-thumb" :email="this.user_email" :size="150" />
-
+  <div class="block block-rounded mb-5">
+    <div class="block-header block-header-default">
+      <h3 class="block-title">پروفایل کاربری</h3>
+    </div>
+    <div class="block-content">
+      <div class="row pb-sm-3 pb-md-5 justify-content-center">
+        <div class="col-sm-12 col-md-4 my-5 text-center">
+          <vue-gravatar class="img-avatar img-avatar128 img-avatar-thumb" :email="this.user_email" :size="150" />
+        </div>
+        <div class="col-sm-10 col-md-8">
+          <div class="form-floating mb-3">
+            <input disabled="disabled" class="form-control" type="text" v-model="user_email">
+            <label>پست الکترونیکی</label>
+            <small class="form-text text-danger">تغییر پست الکترونیکی هم‌اکنون امکان‌پذیر نیست.</small>
           </div>
-          <div class="col-sm-10 col-md-8">
-              <div class="my-2">
-                <label class="form-label">پست الکترونیکی</label>
-                <input type="text" class="form-control" v-model="user_email" disabled="disabled">
-                <div class="form-text text-danger">تغییر پست الکترونیکی هم اکنون امکانپذیر نیست.</div>
-              </div>
-            <FormKit type="form" :submit-attrs="{
-                              inputClass: 'btn btn-alt-primary mt-4'
-                            }"
-                     submit-label="ثبت"
-                     @submit="updateProfile"
-            >
-              <FormKit
-                  type="text"
-                  name="fullname"
-                  id="fullname"
-                  input-class="form-control"
-                  v-model="user_fullname"
-                  validation="required"
-                  label="نام و نام خانوادگی:"
-                  placeholder="بابک علی زاده"
-              />
-            </FormKit>
+          <div class="form-floating mb-3">
+            <input class="form-control" type="text" v-model="user_fullname">
+            <label>نام و نام خانوادگی</label>
+            <small class="form-text text-danger" v-if="v$.user_fullname.$error">الزامی است.</small>
           </div>
+          <button class="btn btn-primary mb-2" @click="this.updateProfile()">
+            <i class="fa fa-save"></i>
+            ثبت
+          </button>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
+import {required} from "@vuelidate/validators";
+import {useVuelidate} from "@vuelidate/core";
 
 export default {
   name: "dashboard",
@@ -51,19 +44,30 @@ export default {
     }
   },
   methods:{
-    updateProfile(values){
-      axios.post( '/api/user/update/info', values)
-          .then(function (response) {
-            Swal.fire({
-              title: 'پیام',
-              text: 'با موفقیت ثبت شد.',
-              icon: 'success',
-              confirmButtonText: 'قبول',
-            }).then((result) => {
-              if (result.isConfirmed) {
-              }
+    async updateProfile(){
+      const result = await this.v$.$validate()
+      if (!result) {
+        // notify user form is invalid
+
+      }
+      else {
+        axios.post( '/api/user/update/info', {
+            fullname: this.user_fullname
+        })
+            .then(function (response) {
+              Swal.fire({
+                title: 'پیام',
+                text: 'با موفقیت ثبت شد.',
+                icon: 'success',
+                confirmButtonText: 'قبول',
+              }).then((result) => {
+                if (result.isConfirmed) {
+
+                }
+              })
             })
-          })
+      }
+
     }
   },
   mounted(){
@@ -72,7 +76,17 @@ export default {
           this.user_email = res.data.email;
           this.user_fullname = res.data.fullname;
         });
-  }
+  },
+  validations () {
+    return {
+      user_fullname: { required },
+    }
+  },
+  setup () {
+    return {
+      v$: useVuelidate()
+    }
+  },
 }
 </script>
 

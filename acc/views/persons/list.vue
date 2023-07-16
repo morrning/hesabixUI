@@ -1,32 +1,123 @@
 <template>
-  <!-- Your Block -->
-  <div class="block block-content-full">
-    <div class="block-header block-header-default" style="background-color: #0E2231">
-      <h3 class="block-title text-white"> فهرست اشخاص </h3>
+  <div class="block block-content-full ">
+    <div class="block-header block-header-default bg-gray-light">
+      <h3 class="block-title text-primary-dark">
+        <i class="mx-2 fa fa-list"></i>
+        اشخاص </h3>
       <div class="block-options">
-        <button class="btn-block-option" data-action="fullscreen_toggle" data-toggle="block-option" type="button"></button>
-        <button class="btn-block-option" data-action="pinned_toggle" data-toggle="block-option" type="button">
-          <i class="si si-pin"></i>
-        </button>
-        <button class="btn-block-option" data-action="state_toggle" data-action-mode="demo" data-toggle="block-option" type="button">
-          <i class="si si-refresh"></i>
-        </button>
-        <button class="btn-block-option" data-action="content_toggle" data-toggle="block-option" type="button"></button>
-        <button class="btn-block-option" data-action="close" data-toggle="block-option" type="button">
-          <i class="si si-close"></i>
-        </button>
+        <router-link to="/acc/persons/mod/" class="block-options-item">
+          <span class="fa fa-plus fw-bolder"></span>
+        </router-link>
       </div>
     </div>
-    <div class="block-content">
-      <p>فهرست اشخاص</p>
+    <div class="block-content pt-1 pb-3">
+      <div class="row">
+        <div class="col-sm-12 col-md-12 m-0 p-0">
+          <div class="mb-1">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text"><i class="fa fa-search"></i></span>
+              <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
+            </div>
+          </div>
+          <EasyDataTable
+              :sort-type="sortType"
+              multi-sort
+              show-index
+              alternating
+              :search-value="searchValue"
+              :headers="headers"
+              :items="items"
+              theme-color="#1d90ff"
+              header-text-direction="center"
+              body-text-direction="center"
+              rowsPerPageMessage="تعداد سطر"
+              emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+              rowsOfPageSeparatorMessage="از"
+              :loading="loading"
+          >
+            <template #item-operation="{ code }">
+              <router-link :to="'/acc/persons/mod/' + code">
+                <i class="fa fa-edit px-2"></i>
+              </router-link>
+              <span class="text-danger d-none" @click="deleteItem(code)">
+                <i class="fa fa-trash"></i>
+              </span>
+            </template>
+            <template #item-nikename="{ nikename,code }">
+              <router-link :to="'/acc/persons/card/view/' + code">
+                {{ nikename }}
+              </router-link>
+            </template>
+          </EasyDataTable>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- END Your Block -->
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
+import {ref} from "vue";
+
 export default {
-  name: "list"
+  name: "list",
+  data: ()=>{return {
+    searchValue: '',
+    SortType : ["desc", "asc"],
+    loading : ref(true),
+    items:[],
+    headers: [
+      { text: "کد", value: "code" },
+      { text: "نام مستعار", value: "nikename", sortable: true},
+      { text: "نام و نام خانوادگی", value: "name", sortable: true},
+      { text: "تلفن", value: "tel"},
+      { text: "تلفن همراه", value: "mobile"},
+      { text: "عملیات", value: "operation"},
+    ]
+  }},
+  methods: {
+    loadData(){
+      axios.get('/api/person/list')
+          .then((response)=>{
+            this.items = response.data;
+            this.loading = false;
+          })
+    },
+    deleteItem(code){
+      Swal.fire({
+        text: 'آیا برای حذف شخص مطمئن هستید؟',
+        showCancelButton: true,
+        confirmButtonText: 'بله',
+        cancelButtonText: `خیر`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          axios.post('/api/business/delete/user',{
+            'code': code}
+          ).then((response)=>{
+            if(response.data.result == 1){
+              let index = 0;
+              for(let z=0; z<this.items.length; z++){
+                index ++;
+                if(this.items[z]['code'] == code){
+                  this.items.splice(index -1 ,1);
+                }
+              }
+              Swal.fire({
+                text: 'شخص با موفقیت حذف شد.',
+                icon: 'success',
+                confirmButtonText: 'قبول'
+              });
+            }
+          })
+        }
+      })
+    }
+  },
+  beforeMount() {
+    this.loadData();
+  }
 }
 </script>
 

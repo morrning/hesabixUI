@@ -9,8 +9,14 @@ import VueGravatar from "vue3-gravatar";
 // @ts-ignore
 import CKEditor from '@ckeditor/ckeditor5-vue';
 
-const app = createApp(App)
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
+//axios.defaults.baseURL = "https://hesabix.ir/";
+axios.defaults.baseURL = "http://localhost:8000";
+
+const app = createApp(App)
+
+
 app.use(router)
 app.use(VueGravatar)
 app.use( CKEditor )
@@ -19,5 +25,14 @@ app.use(plugin, defaultConfig({
     locales: { fa },
     locale: 'fa',
 }))
+
+//global methods
+app.config.globalProperties.$filters = {
+    formatNumber(value: string) {
+        let result = parseFloat(value).toFixed(0).toString();
+        result = result.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        return result;
+    }
+}
 app.mount('#page-container')
 

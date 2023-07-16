@@ -5,77 +5,98 @@ import Swal from "sweetalert2";
 import {inject} from "vue";
 import NProgress from "nprogress/nprogress.js";
 import "nprogress/nprogress.css"
+import "/public/assets/css/dashmix.min.css"
+import Year from "./views/component/Year.vue"
 export default {
   data(){
     return {
       userFullName: '',
       userEmail: '',
       isLogedIn: false,
-      business_count: 0
+      business_count: 0,
+      permissions:{
+        persons: null,
+        getpay: null,
+        commodity: null,
+        banks: null,
+        bankTransfer: null,
+        buy: null,
+        sell: null,
+        cost: null,
+        income: null,
+        accounting: null,
+        settings: null,
+        report: null,
+        permission:null,
+        log: null
+      }
     }
   },
-  created() {
-    NProgress.configure({ showSpinner: false });
-    //axios.defaults.baseURL = "http://raddata.ir/hesabix/public/index.php";
-    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-    axios.interceptors.request.use(function(config) {
-      // Do something before request is sent
-      NProgress.start()
-      return config;
-    }, function(error) {
-      // Do something with request error
-      console.log('Error');
-      return Promise.reject(error);
-    });
-
-    axios.interceptors.response.use(function(response) {
-      // Do something with response data
-      NProgress.done()
-      return response;
-    }, function(error) {
-      if(error.code == 404){
-        // Do something with response error
-        Swal.fire({
-          text: 'اتصال با سرویس دهنده حسابیکس برقرار نشد. لطفا اتصال اینترنت خود را چک نمایید.',
-          icon: 'error',
-          confirmButtonText: 'قبول'
-        });
+  async beforeMount() {
+    await axios.get('/api/user/check/login').then((response)=>{
+      if(response.data.result == 1){
+        axios.post('/api/business/get/user/permissions',
+            {'bid':localStorage.getItem('activeBid'),
+              'email': response.data.email
+            }
+        ).then((response)=>{
+          this.permissions.email = response.data.email;
+          this.permissions.settings = response.data.settings;
+          this.permissions.user = response.data.user;
+          this.permissions.persons = response.data.persons;
+          this.permissions.commodity = response.data.commodity;
+          this.permissions.getpay = response.data.getpay;
+          this.permissions.banks = response.data.banks;
+          this.permissions.bankTransfer = response.data.bankTransfer;
+          this.permissions.cost = response.data.cost;
+          this.permissions.income = response.data.income;
+          this.permissions.buy = response.data.buy;
+          this.permissions.sell = response.data.sell;
+          this.permissions.accounting = response.data.accounting;
+          this.permissions.report = response.data.report;
+          this.permissions.log = response.data.log;
+          this.permissions.permission = response.data.permission;
+        })
       }
-      return Promise.reject(error);
-    });
+    })
+  },
+  created() {
+
   },
   methods:{
     logout(){
       axios.post( '/api/user/logout')
           .then((response) =>{
             localStorage.removeItem('X-AUTH-TOKEN');
-            document.location.reload();
+            window.location.href = "/";
             delete  axios.defaults.headers.common['X-AUTH-TOKEN'];
           });
     }
   },
-  mounted(){
-    axios.post( '/api/user/check/login')
-        .then((response) =>{
+  async mounted() {
+    axios.post('/api/user/check/login')
+        .then((response) => {
           this.isLogedIn = response.data.result;
-          axios.post( '/api/user/current/info')
-              .then((res) =>{
+          axios.post('/api/user/current/info')
+              .then((res) => {
                 this.userEmail = res.data.email;
                 this.userFullName = res.data.fullname;
                 this.$isLogedIn = true;
               });
         });
 
-    axios.post( '/api/business/list/count')
-        .then((response) =>{
+    axios.post('/api/business/list/count')
+        .then((response) => {
           this.business_count = response.data.count;
         });
+  },
+  components:{
+    Year: Year
   }
 }
 </script>
 
 <template>
-
 
   <!-- Sidebar -->
   <!--
@@ -97,28 +118,16 @@ export default {
         <a class="fw-semibold text-white tracking-wide" href="/">
               <span class="smini-visible"> Hesab<span class="opacity-75">ix</span>
               </span>
-          <span class="smini-hidden">Hesa<span class="opacity-75">bix</span>
+          <span class="smini-hidden"><span class="text-light">
+            <img style="max-height:25px" src="/assets/media/favicons/favw.png"/>
+            حسابیکس
+          </span>
               </span>
         </a>
         <!-- END Logo -->
 
         <!-- Options -->
         <div>
-          <!-- Toggle Sidebar Style -->
-          <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-          <!-- Class Toggle, functionality initialized in Helpers.dmToggleClass() -->
-          <button class="me-1 btn btn-sm btn-alt-secondary" data-class="fa-toggle-off fa-toggle-on" data-target="#sidebar-style-toggler" data-toggle="class-toggle" onclick="Dashmix.layout('sidebar_style_toggle');Dashmix.layout('header_style_toggle');" type="button">
-            <i class="fa fa-toggle-off" id="sidebar-style-toggler"></i>
-          </button>
-          <!-- END Toggle Sidebar Style -->
-
-          <!-- Dark Mode -->
-          <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-          <button class="me-1 btn btn-sm btn-alt-secondary" data-class="far fa" data-target="#dark-mode-toggler" data-toggle="class-toggle" onclick="Dashmix.layout('dark_mode_toggle');" type="button">
-            <i class="far fa-moon" id="dark-mode-toggler"></i>
-          </button>
-          <!-- END Dark Mode -->
-
           <!-- Close Sidebar, Visible only on mobile screens -->
           <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
           <button class="me-1 btn btn-sm btn-alt-secondary d-lg-none" data-action="sidebar_close" data-toggle="layout" type="button">
@@ -137,7 +146,7 @@ export default {
       <div class="content-side">
         <ul class="nav-main">
           <li class="nav-main-item">
-            <RouterLink class="nav-main-link active" to="/acc/">
+            <RouterLink class="nav-main-link" to="/">
               <i class="nav-main-link-icon fa fa-rocket"></i>
               <span class="nav-main-link-name"> پیشخوان </span>
             </RouterLink>
@@ -149,23 +158,32 @@ export default {
               <span class="nav-main-link-name">اشخاص</span>
             </a>
             <ul class="nav-main-submenu">
-              <li class="nav-main-item">
+              <li v-if="permissions.persons" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/persons/list">
-                  <span class="nav-main-link-name"> فهرست اشخاص</span>
-                  <RouterLink to="/acc/" class="nav-main-link-badge badge rounded-pill bg-primary">+</RouterLink>
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list"></i>
+                    فهرست اشخاص
+                  </span>
+                  <RouterLink to="/acc/persons/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</RouterLink>
                 </RouterLink>
               </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
-                  <span class="nav-main-link-name">دریافت‌ها</span>
-                  <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
-                </a>
+              <li v-if="permissions.getpay" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/persons/receive/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-arrow-alt-circle-down"></i>
+                    دریافت‌ها
+                  </span>
+                  <RouterLink to="/acc/persons/receive/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</RouterLink>
+                </RouterLink>
               </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
-                  <span class="nav-main-link-name">پرداخت‌ها</span>
-                  <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
-                </a>
+              <li v-if="permissions.getpay" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/persons/send/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-arrow-alt-circle-up"></i>
+                    پرداخت‌ها
+                  </span>
+                  <router-link to="/acc/persons/send/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </RouterLink>
               </li>
             </ul>
           </li>
@@ -175,11 +193,11 @@ export default {
               <span class="nav-main-link-name">کالا و خدمات</span>
             </a>
             <ul class="nav-main-submenu">
-              <li class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
-                  <span class="nav-main-link-name"> فهرست کالاها</span>
-                  <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
-                </a>
+              <li v-if="permissions.commodity" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/commodity/list">
+                  <span class="nav-main-link-name">فهرست کالاها</span>
+                  <router-link to="/acc/commodity/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </router-link>
               </li>
             </ul>
           </li>
@@ -189,13 +207,13 @@ export default {
               <span class="nav-main-link-name">بانکداری</span>
             </a>
             <ul class="nav-main-submenu">
-              <li class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
+              <li v-if="permissions.banks" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/banks/list">
                   <span class="nav-main-link-name"> فهرست حساب‌ها</span>
-                  <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
-                </a>
+                  <router-link to="/acc/banks/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </RouterLink>
               </li>
-              <li class="nav-main-item">
+              <li v-if="permissions.bankTransfer" class="nav-main-item">
                 <a class="nav-main-link" href="javascript:void(0)">
                   <span class="nav-main-link-name"> انتقال </span>
                   <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
@@ -209,17 +227,19 @@ export default {
               <span class="nav-main-link-name">خرید و هزینه</span>
             </a>
             <ul class="nav-main-submenu">
-              <li class="nav-main-item">
+              <li v-if="permissions.buy" class="nav-main-item">
                 <a class="nav-main-link" href="javascript:void(0)">
                   <span class="nav-main-link-name"> فاکتورهای خرید</span>
                   <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
                 </a>
               </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
-                  <span class="nav-main-link-name">فهرست هزینه‌ها</span>
-                  <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
-                </a>
+              <li v-if="permissions.cost" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/costs/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-money-bill-wheat"></i>
+                    هزینه‌ها</span>
+                  <router-link to="/acc/costs/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </router-link>
               </li>
             </ul>
           </li>
@@ -229,13 +249,13 @@ export default {
               <span class="nav-main-link-name">فروش و درآمد</span>
             </a>
             <ul class="nav-main-submenu">
-              <li class="nav-main-item">
+              <li v-if="permissions.sell" class="nav-main-item">
                 <a class="nav-main-link" href="javascript:void(0)">
                   <span class="nav-main-link-name"> فاکتورهای فروش </span>
                   <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
                 </a>
               </li>
-              <li class="nav-main-item">
+              <li v-if="permissions.income" class="nav-main-item">
                 <a class="nav-main-link" href="javascript:void(0)">
                   <span class="nav-main-link-name">فهرست درآمدها </span>
                   <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
@@ -244,7 +264,31 @@ export default {
             </ul>
           </li>
           <li class="nav-main-item">
-            <RouterLink class="nav-main-link" to="/">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
+              <i class="nav-main-link-icon fa fa-book-open-reader"></i>
+              <span class="nav-main-link-name">حسابداری</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li v-if="permissions.accounting" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/accounting/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-book-open"></i>
+                    اسناد حسابداری
+                  </span>
+                </router-link>
+              </li>
+              <li v-if="permissions.accounting" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/accounting/table">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-table"></i>
+                    جدول حساب‌ها
+                  </span>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          <li v-if="permissions.report" class="nav-main-item">
+            <RouterLink class="nav-main-link" to="/acc/reports/list">
               <i class="nav-main-link-icon fa fa-chart-simple"></i>
               <span class="nav-main-link-name">گزارشات</span>
             </RouterLink>
@@ -255,22 +299,32 @@ export default {
               <span class="nav-main-link-name">تنظیمات</span>
             </a>
             <ul class="nav-main-submenu">
-              <li class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
-                  <span class="nav-main-link-name">  اطلاعات کسب‌و‌کار </span>
-                </a>
+              <li v-if="permissions.settings" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/business/settings">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-cog"></i>
+                    اطلاعات کسب‌و‌کار </span>
+                </router-link>
               </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
-                  <span class="nav-main-link-name"> کاربران و دسترسی‌ها </span>
-                </a>
+              <li v-if="permissions.log" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/business/logs">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-history"></i>
+                    تاریخچه رویدادها  </span>
+                </router-link>
               </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
-                  <span class="nav-main-link-name">  تاریخچه رویدادها  </span>
-                </a>
+              <li v-if="permissions.permission" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/business/users">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-users-gear"></i>
+                    کاربران و دسترسی‌ها
+                  </span>
+                </router-link>
               </li>
             </ul>
+          </li>
+          <li class="nav-main-item border rounded-3 border-white p-2 mt-4">
+            <Year></Year>
           </li>
         </ul>
       </div>
@@ -308,20 +362,9 @@ export default {
           <div aria-labelledby="page-header-user-dropdown" class="dropdown-menu dropdown-menu-end p-0">
             <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3"> گزینه های کاربر </div>
             <div class="p-2">
-              <a class="dropdown-item" href="javascript:void(0)">
-                <i class="far fa-fw fa-user me-1"></i> پروفایل </a>
-              <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">
-                <span><i class="far fa-fw fa-envelope me-1"></i>صندوق ورودی </span>
-                <span class="badge bg-primary rounded-pill">3</span>
-              </a>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <i class="far fa-fw fa-file-alt me-1"></i> فاکتورها </a>
-              <div class="dropdown-divider" role="separator"></div>
-
-              <!-- Toggle Side Overlay -->
               <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-              <a class="dropdown-item" data-action="side_overlay_toggle" data-toggle="layout" href="/user/profile/dashboard">
-                <i class="far fa-fw fa-building me-1"></i> تنظیمات </a>
+              <a class="dropdown-item" data-action="side_overlay_toggle" data-toggle="layout" href="/profile/dashboard">
+                <i class="far fa-fw fa-building me-1"></i> پروفایل کاربر </a>
               <!-- END Side Overlay -->
 
               <div class="dropdown-divider" role="separator"></div>
@@ -331,78 +374,6 @@ export default {
           </div>
         </div>
         <!-- END User Dropdown -->
-
-        <!-- Notifications Dropdown -->
-        <div class="dropdown d-inline-block">
-          <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-alt-secondary" data-bs-toggle="dropdown" id="page-header-notifications-dropdown" type="button">
-            <i class="fa fa-fw fa-bell"></i>
-          </button>
-          <div aria-labelledby="page-header-notifications-dropdown" class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
-            <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3"> اعلان ها </div>
-            <ul class="nav-items my-2">
-              <li>
-                <a class="d-flex text-dark py-2" href="javascript:void(0)">
-                  <div class="flex-shrink-0 mx-3">
-                    <i class="fa fa-fw fa-check-circle text-success"></i>
-                  </div>
-                  <div class="flex-grow-1 fs-sm pe-2">
-                    <div class="fw-semibold">برنامه به نسخه 5.6 آپدیت شد!</div>
-                    <div class="text-muted">3 دقیقه قبل</div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a class="d-flex text-dark py-2" href="javascript:void(0)">
-                  <div class="flex-shrink-0 mx-3">
-                    <i class="fa fa-fw fa-user-plus text-info"></i>
-                  </div>
-                  <div class="flex-grow-1 fs-sm pe-2">
-                    <div class="fw-semibold">مشترک جدید اضافه شد! شما اکنون 2580 دارید!</div>
-                    <div class="text-muted">10 دقیقه قبل</div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a class="d-flex text-dark py-2" href="javascript:void(0)">
-                  <div class="flex-shrink-0 mx-3">
-                    <i class="fa fa-fw fa-times-circle text-danger"></i>
-                  </div>
-                  <div class="flex-grow-1 fs-sm pe-2">
-                    <div class="fw-semibold">پشتیبان گیری سرور تکمیل نشد!</div>
-                    <div class="text-muted">30 دقیقه قبل</div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a class="d-flex text-dark py-2" href="javascript:void(0)">
-                  <div class="flex-shrink-0 mx-3">
-                    <i class="fa fa-fw fa-exclamation-circle text-warning"></i>
-                  </div>
-                  <div class="flex-grow-1 fs-sm pe-2">
-                    <div class="fw-semibold">فضای شما در حال اتمام است. لطفاً برنامه خود را ارتقا دهید.</div>
-                    <div class="text-muted">1 ساعت قبل</div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a class="d-flex text-dark py-2" href="javascript:void(0)">
-                  <div class="flex-shrink-0 mx-3">
-                    <i class="fa fa-fw fa-plus-circle text-primary"></i>
-                  </div>
-                  <div class="flex-grow-1 fs-sm pe-2">
-                    <div class="fw-semibold">فروش جدید! 3,000  ریال</div>
-                    <div class="text-muted">2 ساعت قبل</div>
-                  </div>
-                </a>
-              </li>
-            </ul>
-            <div class="p-2 border-top">
-              <a class="btn btn-sm btn-alt-primary w-100 text-center" href="javascript:void(0)">
-                <i class="fa fa-fw fa-eye opacity-50 me-1"></i> مشاهده همه </a>
-            </div>
-          </div>
-        </div>
-        <!-- END Notifications Dropdown -->
       </div>
       <!-- END Right Section -->
     </div>
@@ -431,3 +402,14 @@ export default {
   </main>
   <!-- END Main Container -->
 </template>
+
+<style>
+
+.customize-table {
+  --easy-table-header-font-color: #e1e1e1;
+  --easy-table-header-background-color: #055bbb;
+}
+.form-control ,.form-select{
+  font-family: 'vazir', sans-serif;
+}
+</style>

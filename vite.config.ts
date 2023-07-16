@@ -10,27 +10,24 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [vue(), vueJsx()],
   resolve: {
+    mainFields: [
+      'browser',
+      'module',
+      'main',
+      'jsnext:main',
+      'jsnext'
+    ],
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8000/',
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, 'api')
-      },
-      cors: false
-    },
-  },
   build: {
+    chunkSizeWarningLimit: 1600,
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
         acc: resolve(__dirname, 'acc/index.html'),
-      },
+      }
     },
   },
 })

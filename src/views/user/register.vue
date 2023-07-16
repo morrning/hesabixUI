@@ -54,26 +54,23 @@
                     <input class="form-control" v-model="password" placeholder="کلمه عبور" type="password"/>
                   </div>
                 </div>
-                <div class="mb-4">
-                  <div class="input-group input-group-lg">
-                    <span class="input-group-text">
-                          <i class="fa fa-asterisk"></i>
-                        </span>
-                    <input class="form-control" v-model="repassword" placeholder="تایید گذرواژه" type="password"/>
-                  </div>
-                </div>
                 <div class="d-sm-flex justify-content-sm-between align-items-sm-center mb-4 bg-body rounded py-2 px-3">
                   <div class="form-check">
                     <input class="form-check-input" v-model="term" type="checkbox"/>
                     <label class="form-check-label" for="signup-terms">موافقم</label>
                   </div>
                   <div class="fw-semibold fs-sm py-1">
-                    <a class="fw-semibold fs-sm" data-bs-target="#modal-terms" data-bs-toggle="modal" href="#">شرایط و ضوابط</a>
+                    <RouterLink class="fw-semibold fs-sm" to="/terms">شرایط و ضوابط</RouterLink>
                   </div>
                 </div>
                 <div class="text-center mb-4">
                   <button class="btn btn-hero btn-primary w-100" type="submit">
                     <i class="fa fa-fw fa-plus opacity-50 me-1"></i> ثبت نام </button>
+                </div>
+                <div class="text-center mb-0">
+                  <RouterLink to="/user/login">
+                    قبلا عضو شده اید؟ وارد شوید
+                  </RouterLink>
                 </div>
               </form>
               <!-- END Sign Up Form -->
@@ -92,6 +89,8 @@
 import { useVuelidate } from '@vuelidate/core'
 import {email, required} from "@vuelidate/validators";
 import axios from "axios";
+import Swal from "sweetalert2";
+import router from "@/router";
 
 export default {
   name: "register",
@@ -104,7 +103,6 @@ export default {
     return {
       email: '',
       password: '',
-      repassword: '',
       name: '',
       mobile: '',
       term: false
@@ -114,9 +112,13 @@ export default {
     return {
       email: { required,email },
       password: {required},
-      repassword: {required},
       mobile: {required},
       name: {required}
+    }
+  },
+  async beforeMount() {
+    if(await this.app_isLogin() === true){
+      this.$router.push({ name: 'home' });
     }
   },
   methods: {
@@ -124,20 +126,52 @@ export default {
       const result = await this.v$.$validate()
       if (!result) {
         // notify user form is invalid
-        alert(this.app_api_url + '/user/register');
+        Swal.fire({
+          text: 'لطفا تمام موارد را به صورت صحیح وارد کنید.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
       }
-      // perform async actions
-      axios.post(this.app_api_url() + '/user/login', {
-        email: this.email,
-        password: this.password
-      })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
+      else{
+        if(this.term == false){
+          Swal.fire({
+            text: 'موافقت با قوانین ارائه خدمات جهت ثبت نام ضروری است.',
+            icon: 'error',
+            confirmButtonText: 'قبول'
           });
-    }
+        }
+        else{
+          // perform async actions
+          axios.post( '/api/user/register', {
+            name: this.name,
+            email: this.email,
+            mobile: this.mobile,
+            password: this.password
+          })
+              .then(function (response) {
+                if(response.data.error === 0){
+                  //go to success page
+                  router.push('/user/register-success')
+                }
+                if(response.data.error === 1){
+                  Swal.fire({
+                    text: 'این پست الکترونیکی قبلا ثبت شده است.',
+                    icon: 'error',
+                    confirmButtonText: 'قبول'
+                  });
+                }
+              })
+
+        }
+        }
+      }
+  },
+  async created() {
+    await axios.post('/api/user/check/login').then((response)=>{
+      if(response.data.result == true){
+        this.$router.push('/profile/business')
+      }
+    })
   }
 }
 </script>
