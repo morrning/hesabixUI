@@ -228,10 +228,10 @@ export default {
             </a>
             <ul class="nav-main-submenu">
               <li v-if="permissions.buy" class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
+                <router-link class="nav-main-link" to="/acc/buy/list/">
                   <span class="nav-main-link-name"> فاکتورهای خرید</span>
-                  <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
-                </a>
+                  <router-link to="/acc/buy/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </router-link>
               </li>
               <li v-if="permissions.cost" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/costs/list">
@@ -411,5 +411,8 @@ export default {
 }
 .form-control ,.form-select{
   font-family: 'vazir', sans-serif;
+}
+input[type=input]{
+  direction:ltr;
 }
 </style>

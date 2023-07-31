@@ -114,6 +114,16 @@ const router = createRouter({
       name: 'commodity_mod',
       component: () => import('../views/commodity/mod.vue'),
     },
+    {
+      path: '/acc/buy/mod/:id?',
+      name: 'buy_mod',
+      component: () => import('../views/buy/mod.vue'),
+    },
+    {
+      path: '/acc/buy/list',
+      name: 'buy_list',
+      component: import('../views/buy/list.vue'),
+    }
   ]
 })
 

@@ -11,8 +11,8 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
-//axios.defaults.baseURL = "https://hesabix.ir/";
-axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.baseURL = "https://hesabix.ir";
+//axios.defaults.baseURL = "http://localhost:8000";
 
 const app = createApp(App)
 

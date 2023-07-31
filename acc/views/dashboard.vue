@@ -40,6 +40,18 @@
             </router-link>
           </div>
           <div class="col-6 col-lg-3">
+            <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0" to="/acc/commodity/list">
+              <div class="block-content py-5">
+                <div class="fs-3 fw-semibold text-primary mb-1">{{stat.commodity}}</div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  <i class="fa fa-users"></i>
+                  <br>
+                  کالا و خدمات
+                </p>
+              </div>
+            </router-link>
+          </div>
+          <div class="col-6 col-lg-3">
             <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0" to="/acc/reports/list">
               <div class="block-content py-5">
                 <div class="fs-3 fw-semibold mb-1 text-primary">{{ this.$filters.formatNumber(stat.income) }}</div>
