@@ -32,7 +32,7 @@
                 <div class="d-sm-flex justify-content-sm-between align-items-sm-center text-center text-sm-start">
 
                   <div class="fw-semibold fs-sm py-1">
-                    <a href="javascript:void(0)">رمز عبور را فراموش کرده اید؟</a>
+                    <RouterLink to="/user/forget-password">کلمه عبور را فراموش کرده اید؟</RouterLink>
                   </div>
                 </div>
                 <div class="text-center mt-3">

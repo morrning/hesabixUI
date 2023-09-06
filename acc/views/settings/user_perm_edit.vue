@@ -43,8 +43,14 @@
               </div>
               <div class="space-y-2">
                 <div class="form-check form-switch">
-                  <input v-model="info.banks" @change="savePerms()" class="form-check-input" type="checkbox">
+                  <input v-model="info.bank" @change="savePerms()" class="form-check-input" type="checkbox">
                   <label class="form-check-label">حساب‌های بانکی</label>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div class="form-check form-switch">
+                  <input v-model="info.salary" @change="savePerms()" class="form-check-input" type="checkbox">
+                  <label class="form-check-label">تنخواه گردان‌ها</label>
                 </div>
               </div>
               <div class="space-y-2">
@@ -87,7 +93,12 @@
                 <label class="form-check-label">گزارشات</label>
               </div>
             </div>
-
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.cashdesk" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">صندوق‌ها</label>
+              </div>
+            </div>
           </div>
           <div class="col-sm-12 col-md-4">
             <div class="space-y-2">
@@ -116,6 +127,32 @@
             </div>
           </div>
         </div>
+        <div class="row mt-2">
+          <div v-show="this.isPluginActive('noghre')" class="col-sm-12 col-md-4">
+            <b>افزونه کارگاه نقره سازی</b>
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.plugNoghreAdmin" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">مدیر</label>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.plugNoghreSell" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">صندوق / فروش</label>
+              </div>
+            </div>
+          </div>
+          <div v-show="this.isPluginActive('cc')" class="col-sm-12 col-md-4">
+            <b>افزونه باشگاه مشتریان</b>
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.plugCCAdmin" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">مدیر</label>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -129,69 +166,29 @@ import axios from "axios";
 export default {
   name: "user_perm_edit",
   data:()=>{return{
-    info:{
-      user: '',
-      email: '',
-      persons: null,
-      getpay: null,
-      commodity: null,
-      banks: null,
-      bankTransfer: null,
-      buy: null,
-      sell: null,
-      cost: null,
-      income: null,
-      accounting: null,
-      settings: null,
-      report: null,
-      log: null,
-      permission: null
-    }
+    info:{},
+    plugins:{}
   }},
   methods:{
+    isPluginActive(plugName){
+      return this.plugins[plugName] !== undefined;
+    },
     getData(id){
       axios.post('/api/business/get/user/permissions',
           {'bid':localStorage.getItem('activeBid'),
             'email':id
           }
       ).then((response)=>{
-        this.info.email = id;
-        this.info.settings = response.data.settings;
-        this.info.user = response.data.user;
-        this.info.persons = response.data.persons;
-        this.info.commodity = response.data.commodity;
-        this.info.getpay = response.data.getpay;
-        this.info.banks = response.data.banks;
-        this.info.bankTransfer = response.data.bankTransfer;
-        this.info.cost = response.data.cost;
-        this.info.income = response.data.income;
-        this.info.buy = response.data.buy;
-        this.info.sell = response.data.sell;
-        this.info.accounting = response.data.accounting;
-        this.info.report = response.data.report;
-        this.info.log = response.data.log;
-        this.info.permission = response.data.permission;
-      })
+        this.info = response.data;
+        this.info.bid = localStorage.getItem('activeBid');
+      });
+      //get active plugins
+      axios.post('/api/plugin/get/actives',).then((response)=>{
+        this.plugins = response.data;
+      });
     },
     savePerms(){
-      axios.post('/api/business/save/user/permissions',{
-        'bid': localStorage.getItem('activeBid'),
-        'email': this.info.email,
-        'persons':this.info.persons,
-        'getpay':this.info.getpay,
-        'commodity': this.info.commodity,
-        'buy': this.info.buy,
-        'sell': this.info.sell,
-        'cost': this.info.cost,
-        'income': this.info.income,
-        'accounting': this.info.accounting,
-        'settings': this.info.settings,
-        'bank': this.info.banks,
-        'bankTransfer': this.info.bankTransfer,
-        'report': this.info.report,
-        'log': this.info.log,
-        'permission': this.info.permission,
-      })
+      axios.post('/api/business/save/user/permissions',this.info)
     }
   },
   beforeRouteEnter(to,from,next) {

@@ -18,7 +18,6 @@
             </div>
           </div>
           <EasyDataTable
-              :sort-type="sortType"
               show-index
               alternating
               :search-value="searchValue"
@@ -62,7 +61,6 @@ export default {
   name: "list",
   data: ()=>{return {
     searchValue: '',
-    SortType : ["desc", "asc"],
     loading: ref(true),
     items:[],
     headers: [

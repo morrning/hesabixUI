@@ -21,7 +21,6 @@
           </div>
           <EasyDataTable
               show-index
-              :sort-type="sortType"
               alternating
               :search-value="searchValue"
               :headers="headers"
@@ -60,7 +59,6 @@ export default {
   name: "list",
   data: ()=>{return {
     searchValue: '',
-    SortType : ["desc", "asc"],
     loading: ref(true),
     items:[],
     headers: [

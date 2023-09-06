@@ -2,8 +2,8 @@
   <!-- Main Container -->
   <main id="main-container">
     <!-- Page Content -->
-    <div class="bg-image">
-      <div class="row g-0 justify-content-center">
+    <div class="bg-image" style="background-image: url('/assets/media/photos/photo21.jpg');">
+      <div class="row g-0 justify-content-center bg-primary-dark-op">
         <div class="hero-static col-sm-8 col-md-6 col-xl-4 d-flex align-items-center p-2 px-sm-0">
           <!-- Sign Up Block -->
           <div class="block block-transparent block-rounded w-100 mb-0 overflow-hidden">
@@ -18,8 +18,6 @@
               <!-- END Header -->
 
               <!-- Sign Up Form -->
-              <!-- jQuery Validation (.js-validation-signup class is initialized in js/pages/op_auth_signup.min.js which was auto compiled from _js/pages/op_auth_signup.js) -->
-              <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
               <form @submit.prevent="onSubmit">
                 <div class="mb-4">
                   <div class="input-group input-group-lg">

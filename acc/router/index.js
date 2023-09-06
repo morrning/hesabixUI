@@ -25,6 +25,16 @@ const router = createRouter({
       component: () => import('../views/costs/mod.vue'),
     },
     {
+      path: '/acc/incomes/list',
+      name: 'incomes_list',
+      component: () => import('../views/incomes/list.vue'),
+    },
+    {
+      path: '/acc/incomes/mod/:id?',
+      name: 'incomes_mod',
+      component: () => import('../views/incomes/mod.vue'),
+    },
+    {
       path: '/acc/accounting/list',
       name: 'accounting_list_doc',
       component: () => import('../views/accounting/list.vue'),
@@ -48,6 +58,36 @@ const router = createRouter({
       path: '/acc/banks/mod/:id?',
       name: 'bank_mod',
       component: () => import('../views/bank/mod.vue'),
+    },
+    {
+      path: '/acc/salary/list',
+      name: 'salary_list',
+      component: ()=> import('../views/salary/list.vue')
+    },
+    {
+      path: '/acc/salary/mod/:id?',
+      name: 'salary_mod',
+      component: () => import('../views/salary/mod.vue'),
+    },
+    {
+      path: '/acc/cashdesk/list',
+      name: 'cashdesk_list',
+      component: ()=> import('../views/cashdesk/list.vue')
+    },
+    {
+      path: '/acc/cashdesk/mod/:id?',
+      name: 'cashdesk_mod',
+      component: () => import('../views/cashdesk/mod.vue'),
+    },
+    {
+      path: '/acc/transfer/list',
+      name: 'transfer_list',
+      component: ()=> import('../views/transfer/list.vue')
+    },
+    {
+      path: '/acc/transfer/mod/:id?',
+      name: 'transfer_mod',
+      component: () => import('../views/transfer/mod.vue'),
     },
     {
       path: '/acc/persons/receive/list',
@@ -107,7 +147,7 @@ const router = createRouter({
     {
       path: '/acc/commodity/list',
       name: 'commodity_list',
-      component: import('../views/commodity/list.vue'),
+      component: () => import('../views/commodity/list.vue'),
     },
     {
       path: '/acc/commodity/mod/:id?',
@@ -122,7 +162,72 @@ const router = createRouter({
     {
       path: '/acc/buy/list',
       name: 'buy_list',
-      component: import('../views/buy/list.vue'),
+      component: () => import('../views/buy/list.vue'),
+    },
+    {
+      path: '/acc/plugin-center/list',
+      name: 'plugin_center_list',
+      component: () => import('../views/store/plugin-world.vue'),
+    },
+    {
+      path: '/acc/plugin-center/my',
+      name: 'plugin_center_my',
+      component: () => import('../views/store/plugin-my.vue'),
+    },
+    {
+      path: '/acc/plugin-center/invoice',
+      name: 'plugin_center_invoice',
+      component: () => import('../views/store/plugin-invoice.vue'),
+    },
+    {
+      path: '/acc/plugin-center/view-end/:id?',
+      name: 'plugin_center_view_prodect',
+      component: () => import('../views/store/viewProdect.vue'),
+    },
+    {
+      path: '/acc/plugins/restamap/intro',
+      name: 'plugin_restamap_intro',
+      component: () => import('../views/plugins/resamap/intro.vue'),
+    },
+    {
+      path: '/acc/plugins/noghre/intro',
+      name: 'plugin_noghre_intro',
+      component: () => import('../views/plugins/noghre/intro.vue'),
+    },
+    {
+      path: '/acc/plugins/cc/intro',
+      name: 'plugin_cc_intro',
+      component: () => import('../views/plugins/cc/intro.vue'),
+    },
+    {
+      path: '/acc/notifications/list',
+      name: 'notification_list',
+      component: () => import('../views/notifications/notifications.vue'),
+    },
+    {
+      path: '/acc/plugin/noghre/employees/list',
+      name: 'plugin_noghre_employees_list',
+      component: () => import('../views/plugins/noghre/employess/list.vue'),
+    },
+    {
+      path: '/acc/plugin/noghre/employees/mod/:id?',
+      name: 'plugin_noghre_employees_mod',
+      component: () => import('../views/plugins/noghre/employess/mod.vue'),
+    },
+    {
+      path: '/acc/plugin/noghre/order/list',
+      name: 'plugin_noghre_order_list',
+      component: () => import('../views/plugins/noghre/order/list.vue'),
+    },
+    {
+      path: '/acc/plugin/noghre/order/mod/:id?',
+      name: 'plugin_noghre_order_mod',
+      component: () => import('../views/plugins/noghre/order/mod.vue'),
+    },
+    {
+      path: '/acc/plugin/noghre/order/view/:id?',
+      name: 'plugin_noghre_order_view',
+      component: () => import('../views/plugins/noghre/order/view.vue'),
     }
   ]
 })

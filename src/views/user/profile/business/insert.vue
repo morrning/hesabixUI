@@ -254,5 +254,8 @@ export default {
 </script>
 
 <style scoped>
-
+.required label:before {
+  content:"*";
+  color:red;
+}
 </style>
