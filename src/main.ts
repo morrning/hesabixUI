@@ -6,20 +6,17 @@ import { plugin, defaultConfig } from '@formkit/vue'
 import { fa } from '@formkit/i18n'
 // @ts-ignore
 import VueGravatar from "vue3-gravatar";
-// @ts-ignore
-import CKEditor from '@ckeditor/ckeditor5-vue';
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
-axios.defaults.baseURL = "https://hesabix.ir";
-//axios.defaults.baseURL = "http://localhost:8000";
+//axios.defaults.baseURL = "https://hesabix.ir";
+axios.defaults.baseURL = "http://localhost";
 
 const app = createApp(App)
 
 
 app.use(router)
 app.use(VueGravatar)
-app.use( CKEditor )
 app.use(plugin, defaultConfig({
     theme: 'genesis',
     locales: { fa },
@@ -35,4 +32,3 @@ app.config.globalProperties.$filters = {
     }
 }
 app.mount('#page-container')
-

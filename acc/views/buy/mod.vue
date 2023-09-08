@@ -65,7 +65,6 @@
                 label="name"
                 v-model="itemData.commodity"
                 class=""
-                input="changeItem()"
             >
               <template #no-options="{ search, searching, loading }">
                 وردی یافت نشد!
@@ -233,6 +232,13 @@ export default {
           confirmButtonText: 'قبول'
         });
       }
+      else if(this.itemData.commodity == '' || this.itemData.commodity == undefined){
+        Swal.fire({
+          text: 'کالایی انتخاب نشده است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
       else{
         this.itemData.price = this.$filters.formatNumber(this.itemData.price);
         this.itemData.count = this.$filters.formatNumber(this.itemData.count);
@@ -295,7 +301,20 @@ export default {
       //load commodities
       axios.get('/api/commodity/list').then((response)=>{
         this.commodity = response.data;
-        this.itemData.commodity = response.data[0];
+        if(response.data.length != 0){
+          this.itemData.commodity = response.data[0];
+        }
+        else{
+          Swal.fire({
+            text: 'برای ثبت فاکتور خرید ابتدا یک کالای جدید تعریف کنید.',
+            icon: 'warning',
+            confirmButtonText: 'تعریف کالای جدید'
+          }).then((result)=>{
+            if(result.isConfirmed){
+              this.$router.push('/acc/commodity/mod/');
+            }
+          });
+        }
       });
       //load commodity units
       axios.get('/api/commodity/units').then((response)=>{

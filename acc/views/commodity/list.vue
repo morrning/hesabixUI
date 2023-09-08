@@ -20,7 +20,6 @@
             </div>
           </div>
           <EasyDataTable
-              :sort-type="sortType"
               multi-sort
               show-index
               alternating
@@ -64,7 +63,6 @@ export default {
   name: "list",
   data: ()=>{return {
     searchValue: '',
-    SortType : ["desc", "asc"],
     loading : ref(true),
     items:[],
     headers: [

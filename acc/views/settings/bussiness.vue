@@ -9,134 +9,145 @@
     </div>
     <div class="block-content pb-3">
       <div class="row">
-        <div class="col-sm-12 col-md-12">
-          <h3 class="text-primary">اطلاعات کسب و کار</h3>
-          <div class="row">
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_name" class="form-label required">نام کسب و کار</label>
-                <input v-model="content.name" type="text" id="business_new_name" name="business_new[name]" required="required" maxlength="255" class="form-control form-control-sm">
+        <div class="col-12">
+          <form @submit.prevent="submit">
+            <h3 class="text-primary">اطلاعات کسب و کار</h3>
+            <div class="row">
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="form-floating required">
+                  <input class="form-control" type="text" v-model="content.name">
+                  <label class="form-label">نام کسب و کار</label>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="business_new_field" class="form-label">زمینه فعالیت</label>
-                <input v-model="content.field" type="text" id="business_new_field" name="business_new[field]" maxlength="255" class="form-control form-control-sm">
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="form-floating required">
+                  <input class="form-control" type="text" v-model="content.legal_name">
+                  <label class="form-label">نام قانونی کسب و کار</label>
+                </div>
               </div>
-            </div>
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_legalName" class="form-label required">نام قانونی کسب و کار</label>
-                <input v-model="content.legal_name" type="text" id="business_new_legalName" name="business_new[legalName]" required="required" maxlength="255" class="form-control form-control-sm">        </div>
-              <div class="mb-3">
-                <label class="form-label required" for="business_new_type">نوع فعالیت</label>
-                <select v-model="content.typeb" id="business_new_type" class="form-select form-select-sm">
-                  <option value="شرکت">شرکت</option>
-                  <option value="مغازه">مغازه</option>
-                  <option value="فروشگاه">فروشگاه</option>
-                  <option value="اتحادیه">اتحادیه</option>
-                  <option value="باشگاه">باشگاه</option>
-                  <option value="موسسه">موسسه</option>
-                  <option value="شخصی">شخصی</option>
-                </select>
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="form-floating">
+                  <input class="form-control" type="text" v-model="content.field">
+                  <label>زمینه فعالیت</label>
+                </div>
               </div>
-            </div>
-          </div>
-          <h3 class="text-primary">اطلاعات اقتصادی</h3>
-          <div class="row">
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_shenasemeli" class="form-label">شناسه ملی</label>
-                <input v-model="content.shenasemeli" type="number" id="business_new_shenasemeli" name="business_new[shenasemeli]" maxlength="10" class="form-control form-control-sm">
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="form-floating">
+                  <select v-model="content.type" class="form-select">
+                    <option value="شرکت">شرکت</option>
+                    <option value="مغازه">مغازه</option>
+                    <option value="فروشگاه">فروشگاه</option>
+                    <option value="اتحادیه">اتحادیه</option>
+                    <option value="باشگاه">باشگاه</option>
+                    <option value="موسسه">موسسه</option>
+                    <option value="شخصی">شخصی</option>
+                  </select>
+                  <label>نوع فعالیت</label>
+                </div>
               </div>
             </div>
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_codeeghtesadi" class="form-label">کد اقتصادی</label>
-                <input v-model="content.codeeqtesadi" type="number" id="business_new_codeeghtesadi" name="business_new[codeeghtesadi]" maxlength="15" class="form-control form-control-sm">
+            <h3 class="text-primary">اطلاعات اقتصادی</h3>
+            <div class="row">
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="form-floating">
+                  <input v-model="content.shenasemeli" type="number" class="form-control">
+                  <label class="form-label">شناسه ملی</label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="form-floating">
+                  <input v-model="content.codeeqtesadi" type="number" class="form-control">
+                  <label class="form-label">کد اقتصادی</label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="form-floating">
+                  <input v-model="content.shomaresabt" type="number" class="form-control">
+                  <label class="form-label">شماره ثبت</label>
+                </div>
               </div>
             </div>
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_shomaresabt" class="form-label">شماره ثبت</label>
-                <input v-model="content.shomaresabt" type="number" id="business_new_shomaresabt" name="business_new[shomaresabt]" maxlength="255" class="form-control form-control-sm">
+            <h3 class="text-primary">اطلاعات تماس</h3>
+            <div class="row">
+              <div class="col-sm-12 col-md-4 mb-2">
+                <div class="form-floating">
+                  <input v-model="content.country" type="text" class="form-control">
+                  <label class="form-label">کشور</label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4 mb-2">
+                <div class="form-floating">
+                  <input v-model="content.ostan" type="text" id="business_new_ostan" name="business_new[ostan]" maxlength="50" class="form-control form-control-sm">
+                  <label class="form-label">استان</label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4 mb-2">
+                <div class="form-floating">
+                  <input v-model="content.shahrestan" type="text" id="business_new_shahr" name="business_new[shahr]" maxlength="50" class="form-control form-control-sm">
+                  <label class="form-label">شهر</label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4 mb-2">
+                <div class="form-floating">
+                  <input v-model="content.postalcode" type="text" id="business_new_codeposti" name="business_new[codeposti]" maxlength="10" class="form-control form-control-sm">
+                  <label  class="form-label">کد پستی</label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4 mb-2">
+                <div class="form-floating">
+                  <input v-model="content.tel" type="text" id="business_new_tel" name="business_new[tel]" maxlength="15" class="form-control form-control-sm">
+                  <label  class="form-label">تلفن</label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4 mb-2">
+                <div class="form-floating">
+                  <input v-model="content.mobile" type="tel" id="business_new_fax" name="business_new[fax]" maxlength="15" class="form-control form-control-sm">
+                  <label  class="form-label">موبایل</label>
+                </div>
               </div>
             </div>
-          </div>
-          <h3 class="text-primary">اطلاعات تماس</h3>
-          <div class="row">
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_keshvar" class="form-label">کشور</label>
-                <input v-model="content.country" type="text" id="business_new_keshvar" name="business_new[keshvar]" maxlength="50" class="form-control form-control-sm">
-              </div>
-              <div class="mb-3">
-                <label for="business_new_codeposti" class="form-label">کد پستی</label>
-                <input v-model="content.postalcode" type="text" id="business_new_codeposti" name="business_new[codeposti]" maxlength="10" class="form-control form-control-sm">
+            <div class="row">
+              <div class="col-sm-12 col-md-12 mb-2">
+                <div class="form-floating">
+                  <input type="text" v-model="content.address" id="business_new_address" name="business_new[address]" maxlength="255" class="form-control form-control-sm">
+                  <label class="form-label">آدرس</label>
+                </div>
               </div>
             </div>
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_ostan" class="form-label">استان</label>
-                <input v-model="content.ostan" type="text" id="business_new_ostan" name="business_new[ostan]" maxlength="50" class="form-control form-control-sm">
+            <div class="row">
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="form-floating">
+                  <input v-model="content.website" type="url" id="business_new_website" name="business_new[website]" inputmode="url" class="form-control form-control-sm">
+                  <label class="form-label">وب‌سایت</label>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="business_new_tel" class="form-label">تلفن</label>
-                <input v-model="content.tel" type="text" id="business_new_tel" name="business_new[tel]" maxlength="15" class="form-control form-control-sm">
-              </div>
-            </div>
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_shahr" class="form-label">شهر</label>
-                <input v-model="content.shahrestan" type="text" id="business_new_shahr" name="business_new[shahr]" maxlength="50" class="form-control form-control-sm">
-              </div>
-              <div class="mb-3">
-                <label for="business_new_fax" class="form-label">تلفن همراه</label>
-                <input v-model="content.mobile" type="tel" id="business_new_fax" name="business_new[fax]" maxlength="15" class="form-control form-control-sm">
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="form-floating">
+                  <input v-model="content.email" type="email" id="business_new_email" name="business_new[email]" maxlength="255" class="form-control form-control-sm">
+                  <label class="form-label">پست الکترونیکی</label>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_address" class="form-label">آدرس</label>
-                <input type="text" v-model="content.address" id="business_new_address" name="business_new[address]" maxlength="255" class="form-control form-control-sm">
+            <h3 class="text-primary">اطلاعات مالی</h3>
+            <div class="row">
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="form-floating">
+                  <select v-model="content.arzmain" class="form-select" >
+                    <option v-for="item in content.moneys" :value="item.name">{{ item.label }}</option>
+                  </select>
+                  <label class="form-label required">نوع ارز اصلی</label>
+
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="form-floating required">
+                  <input v-model="content.maliyatafzode" type="number" id="business_new_maliyatafzode" name="business_new[maliyatafzode]" required="required" class="form-control form-control-sm">
+                  <label class="form-label">مالیات بر ارزش افزوده</label>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_website" class="form-label">وب‌سایت</label>
-                <input v-model="content.website" type="url" id="business_new_website" name="business_new[website]" inputmode="url" class="form-control form-control-sm">
-              </div>
-            </div>
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_email" class="form-label">پست الکترونیکی</label>
-                <input v-model="content.email" type="email" id="business_new_email" name="business_new[email]" maxlength="255" class="form-control form-control-sm">
-              </div>
-            </div>
-          </div>
-          <h3 class="text-primary">اطلاعات مالی</h3>
-          <div class="row">
-            <div class="col">
-              <div class="mb-3">
-                <label class="form-label required" for="business_new_arzMain">نوع ارز اصلی</label>
-                <select v-model="content.arzmain" class="form-select" >
-                  <option v-for="item in content.moneys" :value="item.name">{{ item.label }}</option>
-                </select>
-              </div>
-            </div>
-            <div class="col">
-              <div class="mb-3">
-                <label for="business_new_maliyatafzode" class="form-label required">مالیات بر ارزش افزوده</label>
-                <input v-model="content.maliyatafzode" type="number" id="business_new_maliyatafzode" name="business_new[maliyatafzode]" required="required" class="form-control form-control-sm">
-              </div>
-            </div>
-          </div>
-          <button type="button" @click="submit()" class="btn-alt-primary btn">
-            <i class="fa fa-save"></i>
-            ثبت
-          </button>
+            <button type="submit" class="btn-alt-primary btn">ثبت</button>
+          </form>
         </div>
       </div>
     </div>
@@ -256,5 +267,8 @@ export default {
 </script>
 
 <style scoped>
-
+.required label:before {
+  content:"*";
+  color:red;
+}
 </style>

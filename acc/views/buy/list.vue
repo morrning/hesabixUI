@@ -18,7 +18,6 @@
             </div>
           </div>
           <EasyDataTable
-              :sort-type="sortType"
               show-index
               alternating
               :search-value="searchValue"
@@ -39,7 +38,7 @@
               <router-link v-if="type == 'accounting'" :to="'/acc/banks/mod/' + code">
                 <i class="fa fa-edit px-1"></i>
               </router-link>
-              <span v-if="type == 'accounting'" class="text-danger px-1" @click="deleteItem(code)">
+              <span class="text-danger px-1" @click="deleteItem(code)">
                 <i class="fa fa-trash"></i>
               </span>
             </template>
@@ -58,7 +57,6 @@ export default {
   name: "list",
   data: ()=>{return {
     searchValue: '',
-    SortType : ["desc", "asc"],
     loading: ref(true),
     items:[],
     headers: [
@@ -83,6 +81,36 @@ export default {
             })
             this.loading = false;
           })
+    },
+    deleteItem(code){
+      Swal.fire({
+        text: 'آیا برای حذف این مورد مطمئن هستید؟',
+        showCancelButton: true,
+        confirmButtonText: 'بله',
+        cancelButtonText: `خیر`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          axios.post('/api/accounting/remove',{
+            'code': code}
+          ).then((response)=>{
+            if(response.data.result == 1){
+              let index = 0;
+              for(let z=0; z<this.items.length; z++){
+                index ++;
+                if(this.items[z]['code'] == code){
+                  this.items.splice(index -1 ,1);
+                }
+              }
+              Swal.fire({
+                text: 'فاکتور خرید با موفقیت حذف شد.',
+                icon: 'success',
+                confirmButtonText: 'قبول'
+              });
+            }
+          })
+        }
+      })
     }
   },
   beforeMount() {

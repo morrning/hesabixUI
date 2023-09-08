@@ -48,8 +48,8 @@
         </div>
       </div>
     </div>
-  </div></template>
-
+  </div>
+</template>
 <script>
 import {ref} from "vue";
 import axios from "axios";

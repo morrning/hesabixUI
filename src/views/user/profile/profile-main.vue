@@ -78,6 +78,11 @@
               </router-link>
             </li>
             <li class="nav-item">
+              <RouterLink class="nav-link text-body-color py-4" to="/profile/support-list">
+                <i class="fa fa-ticket fa-fw opacity-50"></i> <span class="d-none d-md-inline ms-1">پشتیبانی</span>
+              </RouterLink>
+            </li>
+            <li class="nav-item">
               <RouterLink class="nav-link text-body-color py-4" to="/profile/change-password">
                 <i class="fa fa-unlock fa-fw opacity-50"></i> <span class="d-none d-md-inline ms-1">تغییر کلمه عبور</span>
               </RouterLink>

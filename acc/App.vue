@@ -7,6 +7,7 @@ import NProgress from "nprogress/nprogress.js";
 import "nprogress/nprogress.css"
 import "/public/assets/css/dashmix.min.css"
 import Year from "./views/component/Year.vue"
+import Icon from "./views/component/notifications/icon.vue";
 export default {
   data(){
     return {
@@ -14,22 +15,9 @@ export default {
       userEmail: '',
       isLogedIn: false,
       business_count: 0,
-      permissions:{
-        persons: null,
-        getpay: null,
-        commodity: null,
-        banks: null,
-        bankTransfer: null,
-        buy: null,
-        sell: null,
-        cost: null,
-        income: null,
-        accounting: null,
-        settings: null,
-        report: null,
-        permission:null,
-        log: null
-      }
+      permissions:{},
+      plugins: {},
+      business:{}
     }
   },
   async beforeMount() {
@@ -40,23 +28,12 @@ export default {
               'email': response.data.email
             }
         ).then((response)=>{
-          this.permissions.email = response.data.email;
-          this.permissions.settings = response.data.settings;
-          this.permissions.user = response.data.user;
-          this.permissions.persons = response.data.persons;
-          this.permissions.commodity = response.data.commodity;
-          this.permissions.getpay = response.data.getpay;
-          this.permissions.banks = response.data.banks;
-          this.permissions.bankTransfer = response.data.bankTransfer;
-          this.permissions.cost = response.data.cost;
-          this.permissions.income = response.data.income;
-          this.permissions.buy = response.data.buy;
-          this.permissions.sell = response.data.sell;
-          this.permissions.accounting = response.data.accounting;
-          this.permissions.report = response.data.report;
-          this.permissions.log = response.data.log;
-          this.permissions.permission = response.data.permission;
-        })
+          this.permissions = response.data;
+        });
+        //get active plugins
+        axios.post('/api/plugin/get/actives',).then((response)=>{
+          this.plugins = response.data;
+        });
       }
     })
   },
@@ -89,9 +66,13 @@ export default {
         .then((response) => {
           this.business_count = response.data.count;
         });
+    axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
+          this.business = response.data;
+        });
   },
   components:{
-    Year: Year
+    Year: Year,
+    notification: Icon
   }
 }
 </script>
@@ -151,8 +132,67 @@ export default {
               <span class="nav-main-link-name"> پیشخوان </span>
             </RouterLink>
           </li>
+          <li v-show="this.plugins.length !== 0" class="nav-main-heading">افزونه‌ها</li>
+          <li v-show="(permissions.plugNoghreSell || permissions.plugNoghreAdmin) && (plugins.noghre !== undefined)" class="nav-main-item">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
+              <i class="nav-main-link-icon fa fa-star-half-stroke"></i>
+              <span class="nav-main-link-name">کارگاه نقره سازی</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/plugin/noghre/order/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list"></i>
+                    سفارشات
+                  </span>
+                  <RouterLink to="/acc/plugin/noghre/order/mod/0" class="nav-main-link-badge badge rounded-pill bg-primary">+</RouterLink>
+                </RouterLink>
+                <RouterLink class="nav-main-link" to="/acc/plugin/noghre/employees/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list"></i>
+                    کارکنان
+                  </span>
+                  <RouterLink to="/acc/plugin/noghre/employees/mod" class="nav-main-link-badge badge rounded-pill bg-primary">+</RouterLink>
+                </RouterLink>
+              </li>
+            </ul>
+          </li>
+          <li v-show="permissions.plugRestamap" class="nav-main-item">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
+              <i class="nav-main-link-icon fa fa-bowl-food"></i>
+              <span class="nav-main-link-name">رستوران و فست‌فود</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li v-if="permissions.persons" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/persons/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list"></i>
+                    فهرست اشخاص
+                  </span>
+                  <RouterLink to="/acc/persons/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</RouterLink>
+                </RouterLink>
+              </li>
+            </ul>
+          </li>
+          <li v-show="permissions.plugCC" class="nav-main-item">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
+              <i class="nav-main-link-icon fa fa-group-arrows-rotate"></i>
+              <span class="nav-main-link-name">باشگاه مشتریان</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li v-if="permissions.persons" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/persons/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list"></i>
+                    فهرست اشخاص
+                  </span>
+                  <RouterLink to="/acc/persons/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</RouterLink>
+                </RouterLink>
+              </li>
+            </ul>
+          </li>
           <li class="nav-main-heading">حسابداری</li>
-          <li class="nav-main-item">
+          <li v-show="permissions.getpay || permissions.persons" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-person"></i>
               <span class="nav-main-link-name">اشخاص</span>
@@ -187,13 +227,13 @@ export default {
               </li>
             </ul>
           </li>
-          <li class="nav-main-item">
+          <li v-show="permissions.commodity" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-box-open"></i>
               <span class="nav-main-link-name">کالا و خدمات</span>
             </a>
             <ul class="nav-main-submenu">
-              <li v-if="permissions.commodity" class="nav-main-item">
+              <li class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/commodity/list">
                   <span class="nav-main-link-name">فهرست کالاها</span>
                   <router-link to="/acc/commodity/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
@@ -201,7 +241,7 @@ export default {
               </li>
             </ul>
           </li>
-          <li class="nav-main-item">
+          <li v-show="permissions.banks || permissions.cashdesk || permissions.salary || permissions.bankTransfer" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-bank"></i>
               <span class="nav-main-link-name">بانکداری</span>
@@ -209,19 +249,31 @@ export default {
             <ul class="nav-main-submenu">
               <li v-if="permissions.banks" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/banks/list">
-                  <span class="nav-main-link-name"> فهرست حساب‌ها</span>
+                  <span class="nav-main-link-name"> حساب‌های بانکی</span>
                   <router-link to="/acc/banks/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </RouterLink>
               </li>
+              <li v-if="permissions.cashdesk" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/cashdesk/list">
+                  <span class="nav-main-link-name"> صندوق‌ها</span>
+                  <router-link to="/acc/cashdesk/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </RouterLink>
+              </li>
+              <li v-if="permissions.salary" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/salary/list">
+                  <span class="nav-main-link-name"> تنخواه‌گردان‌ها</span>
+                  <router-link to="/acc/salary/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </RouterLink>
+              </li>
               <li v-if="permissions.bankTransfer" class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
+                <RouterLink class="nav-main-link" to="/acc/transfer/list">
                   <span class="nav-main-link-name"> انتقال </span>
-                  <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
-                </a>
+                  <RouterLink to="/acc/transfer/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</RouterLink>
+                </RouterLink>
               </li>
             </ul>
           </li>
-          <li class="nav-main-item">
+          <li v-show="permissions.buy || permissions.cost" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-money-bill"></i>
               <span class="nav-main-link-name">خرید و هزینه</span>
@@ -243,7 +295,7 @@ export default {
               </li>
             </ul>
           </li>
-          <li class="nav-main-item">
+          <li v-show="permissions.sell || permissions.income" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-basket-shopping"></i>
               <span class="nav-main-link-name">فروش و درآمد</span>
@@ -256,20 +308,22 @@ export default {
                 </a>
               </li>
               <li v-if="permissions.income" class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
-                  <span class="nav-main-link-name">فهرست درآمدها </span>
-                  <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
-                </a>
+                <RouterLink class="nav-main-link" to="/acc/incomes/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-cash-register"></i>
+                    فهرست درآمدها </span>
+                  <router-link to="/acc/incomes/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </RouterLink>
               </li>
             </ul>
           </li>
-          <li class="nav-main-item">
+          <li v-show="permissions.accounting" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-book-open-reader"></i>
               <span class="nav-main-link-name">حسابداری</span>
             </a>
             <ul class="nav-main-submenu">
-              <li v-if="permissions.accounting" class="nav-main-item">
+              <li class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/accounting/list">
                   <span class="nav-main-link-name">
                     <i class="fa fa-book-open"></i>
@@ -277,7 +331,7 @@ export default {
                   </span>
                 </router-link>
               </li>
-              <li v-if="permissions.accounting" class="nav-main-item">
+              <li class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/accounting/table">
                   <span class="nav-main-link-name">
                     <i class="fa fa-table"></i>
@@ -293,7 +347,7 @@ export default {
               <span class="nav-main-link-name">گزارشات</span>
             </RouterLink>
           </li>
-          <li class="nav-main-item">
+          <li v-show="permissions.settings || permissions.log || permissions.permission" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-cogs"></i>
               <span class="nav-main-link-name">تنظیمات</span>
@@ -321,6 +375,43 @@ export default {
                   </span>
                 </router-link>
               </li>
+              <li v-if="permissions.owner" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/business/apis">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-plug-circle-xmark"></i>
+                    دسترسی توسعه دهندگان
+                  </span>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-main-item" v-show="permissions.owner">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu bg-success text-white" data-toggle="submenu" href="#">
+              <i class="text-white nav-main-link-icon fa fa-shopping-cart"></i>
+              <span class="nav-main-link-name">بازار</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/plugin-center/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list-alt"></i>
+                    فهرست افزونه‌ها </span>
+                </router-link>
+              </li>
+              <li class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/plugin-center/my">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list-check"></i>
+                    افزونه‌های من </span>
+                </router-link>
+              </li>
+              <li class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/plugin-center/invoice">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-ticket"></i>
+                    صورت حساب‌ها </span>
+                </router-link>
+              </li>
             </ul>
           </li>
           <li class="nav-main-item border rounded-3 border-white p-2 mt-4">
@@ -346,12 +437,17 @@ export default {
           <i class="fa fa-fw fa-bars"></i>
         </button>
         <!-- END Toggle Sidebar -->
-
+        <b class="ms-3 text-primary-darker">
+          <i class="fa fa-shop"></i>
+          {{this.business.name}}
+        </b>
       </div>
       <!-- END Left Section -->
 
       <!-- Right Section -->
       <div>
+        <notification />
+
         <!-- User Dropdown -->
         <div class="dropdown d-inline-block">
           <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm me-1 btn-alt-secondary" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">

@@ -6,8 +6,6 @@ import { plugin, defaultConfig } from '@formkit/vue'
 import { fa } from '@formkit/i18n'
 // @ts-ignore
 import VueGravatar from "vue3-gravatar";
-// @ts-ignore
-import CKEditor from '@ckeditor/ckeditor5-vue';
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 import {LoadingPlugin} from 'vue-loading-overlay';
@@ -25,14 +23,15 @@ app.component('DatePicker', Vue3PersianDatetimePicker)
 
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
 NProgress.configure({ showSpinner: false });
-axios.defaults.baseURL = "https://hesabix.ir";
-//axios.defaults.baseURL = "http://localhost:8000";
+//axios.defaults.baseURL = "https://hesabix.ir";
+axios.defaults.baseURL = "http://localhost";
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['activeBid'] = localStorage.getItem('activeBid');
 axios.defaults.headers.common['activeYear'] = localStorage.getItem('activeYear');
 axios.interceptors.request.use(function(config) {
     // Do something before request is sent
-    NProgress.start()
+    NProgress.start();
+
     return config;
 }, function(error) {
     // Do something with request error
@@ -45,10 +44,10 @@ axios.interceptors.response.use(function(response) {
     NProgress.done()
     return response;
 }, function(error) {
-    if(error.code == 404){
+    if(error.code === 404){
         // Do something with response error
         Swal.fire({
-            text: 'اتصال با سرویس دهنده حسابیکس برقرار نشد. لطفا اتصال اینترنت خود را چک نمایید.',
+            text: 'اتصال با سرویس دهنده حسابیکس برقرار نشد. لطفا اتصال اینترنت خود را بررسی نمایید.',
             icon: 'error',
             confirmButtonText: 'قبول'
         });
@@ -57,7 +56,6 @@ axios.interceptors.response.use(function(response) {
 });
 app.use(router)
 app.use(VueGravatar)
-app.use( CKEditor )
 app.use(money)
 app.use(LoadingPlugin)
 app.use(plugin, defaultConfig({
@@ -99,4 +97,3 @@ app.config.globalProperties.app_isLogin =  async () => {
     }
 }
 app.mount('#page-container')
-
