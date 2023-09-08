@@ -414,6 +414,35 @@ export default {
               </li>
             </ul>
           </li>
+          <li class="nav-main-item" v-show="permissions.owner">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu bg-success text-white" data-toggle="submenu" href="#">
+              <i class="text-white nav-main-link-icon fa fa-shopping-cart"></i>
+              <span class="nav-main-link-name">بازار</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/plugin-center/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list-alt"></i>
+                    فهرست افزونه‌ها </span>
+                </router-link>
+              </li>
+              <li class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/plugin-center/my">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list-check"></i>
+                    افزونه‌های من </span>
+                </router-link>
+              </li>
+              <li class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/plugin-center/invoice">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-ticket"></i>
+                    صورت حساب‌ها </span>
+                </router-link>
+              </li>
+            </ul>
+          </li>
           <li class="nav-main-item border rounded-3 border-white p-2 mt-4">
             <Year></Year>
           </li>

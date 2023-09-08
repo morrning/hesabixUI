@@ -116,9 +116,12 @@ export default defineComponent({
               <router-link :to="'/acc/plugin/noghre/order/view/' + id">
                 <i class="fa fa-file px-2 text-success"></i>
               </router-link>
+<<<<<<< HEAD
               <router-link :to="'/acc/plugin/noghre/pays/view/' + id">
                 <i class="fa fa-money-bill-1-wave px-2 text-warning"></i>
               </router-link>
+=======
+>>>>>>> 8f67887f0fcc0d4875bff1ff8284c6116eba3c16
             </template>
           </EasyDataTable>
         </div>
