@@ -91,6 +91,7 @@ export default {
         showCancelButton: true,
         confirmButtonText: 'بله',
         cancelButtonText: `خیر`,
+        icon:'warning'
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {

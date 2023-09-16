@@ -233,6 +233,11 @@ const router = createRouter({
       path: '/acc/plugin/noghre/order/view/:id?',
       name: 'plugin_noghre_order_view',
       component: () => import('../views/plugins/noghre/order/view.vue'),
+    },
+    {
+      path: '/acc/plugin/noghre/pays/view/:id?',
+      name: 'plugin_noghre_pays_view',
+      component: () => import('../views/plugins/noghre/pays.vue'),
     }
   ]
 })

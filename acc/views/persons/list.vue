@@ -8,6 +8,9 @@
         <router-link to="/acc/persons/mod/" class="block-options-item">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
+        <a href="#" class="block-options-item" @click.prevent="print()">
+          <i class="fa fa-print"></i>
+        </a>
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
@@ -110,6 +113,12 @@ export default {
             }
           })
         }
+      })
+    },
+    print(){
+      axios.post('/api/person/list/print').then((response)=>{
+        this.printID = response.data.id;
+        window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
       })
     }
   },

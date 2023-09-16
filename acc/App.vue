@@ -23,17 +23,30 @@ export default {
   async beforeMount() {
     await axios.get('/api/user/check/login').then((response)=>{
       if(response.data.result == 1){
-        axios.post('/api/business/get/user/permissions',
-            {'bid':localStorage.getItem('activeBid'),
-              'email': response.data.email
-            }
-        ).then((response)=>{
-          this.permissions = response.data;
-        });
-        //get active plugins
-        axios.post('/api/plugin/get/actives',).then((response)=>{
-          this.plugins = response.data;
-        });
+        if(response.data.active == 1){
+          axios.post('/api/business/get/user/permissions',
+              {'bid':localStorage.getItem('activeBid'),
+                'email': response.data.email
+              }
+          ).then((response)=>{
+            this.permissions = response.data;
+          });
+          //get active plugins
+          axios.post('/api/plugin/get/actives',).then((response)=>{
+            this.plugins = response.data;
+          });
+        }
+        else{
+          // jump user to active page
+          Swal.fire({
+            title: 'خطا',
+            text: 'حساب کاربری شما فعال نیست.لطفا ابتدا حساب کاربری خود را تایید نمایید.',
+            icon: 'error',
+            confirmButtonText: 'انجام احراز هویت'
+          }).then((result)=>{
+            window.location.href = ('https://app.hesabix.ir/user/active/' + response.data.email)
+          });
+        }
       }
     })
   },
@@ -241,13 +254,13 @@ export default {
               </li>
             </ul>
           </li>
-          <li v-show="permissions.banks || permissions.cashdesk || permissions.salary || permissions.bankTransfer" class="nav-main-item">
+          <li v-show="permissions.bank || permissions.cashdesk || permissions.salary || permissions.bankTransfer" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-bank"></i>
               <span class="nav-main-link-name">بانکداری</span>
             </a>
             <ul class="nav-main-submenu">
-              <li v-if="permissions.banks" class="nav-main-item">
+              <li v-if="permissions.bank" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/banks/list">
                   <span class="nav-main-link-name"> حساب‌های بانکی</span>
                   <router-link to="/acc/banks/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
@@ -381,35 +394,6 @@ export default {
                     <i class="fa fa-plug-circle-xmark"></i>
                     دسترسی توسعه دهندگان
                   </span>
-                </router-link>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-main-item" v-show="permissions.owner">
-            <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu bg-success text-white" data-toggle="submenu" href="#">
-              <i class="text-white nav-main-link-icon fa fa-shopping-cart"></i>
-              <span class="nav-main-link-name">بازار</span>
-            </a>
-            <ul class="nav-main-submenu">
-              <li class="nav-main-item">
-                <router-link class="nav-main-link" to="/acc/plugin-center/list">
-                  <span class="nav-main-link-name">
-                    <i class="fa fa-list-alt"></i>
-                    فهرست افزونه‌ها </span>
-                </router-link>
-              </li>
-              <li class="nav-main-item">
-                <router-link class="nav-main-link" to="/acc/plugin-center/my">
-                  <span class="nav-main-link-name">
-                    <i class="fa fa-list-check"></i>
-                    افزونه‌های من </span>
-                </router-link>
-              </li>
-              <li class="nav-main-item">
-                <router-link class="nav-main-link" to="/acc/plugin-center/invoice">
-                  <span class="nav-main-link-name">
-                    <i class="fa fa-ticket"></i>
-                    صورت حساب‌ها </span>
                 </router-link>
               </li>
             </ul>

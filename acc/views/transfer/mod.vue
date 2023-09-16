@@ -309,7 +309,7 @@ export default {
           (this.sideOne.content == 'cashdesk' && this.sideOne.cashdesk == undefined)
       ){
         Swal.fire({
-          text: 'انتقال دهنده انخاب نشده است.',
+          text: 'انتقال دهنده انتخاب نشده است.',
           icon: 'error',
           confirmButtonText: 'قبول'
         });

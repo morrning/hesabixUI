@@ -58,7 +58,7 @@
                     <label class="form-check-label" for="signup-terms">موافقم</label>
                   </div>
                   <div class="fw-semibold fs-sm py-1">
-                    <RouterLink class="fw-semibold fs-sm" to="/terms">شرایط و ضوابط</RouterLink>
+                    <a class="fw-semibold fs-sm" target="_blank" href="http://hesabix.ir/front/terms">شرایط و ضوابط</a>
                   </div>
                 </div>
                 <div class="text-center mb-4">
@@ -154,6 +154,13 @@ export default {
                 if(response.data.error === 1){
                   Swal.fire({
                     text: 'این پست الکترونیکی قبلا ثبت شده است.',
+                    icon: 'error',
+                    confirmButtonText: 'قبول'
+                  });
+                }
+                else if(response.data.error === 2){
+                  Swal.fire({
+                    text: 'این شماره تلفن قبلا ثبت شده است.',
                     icon: 'error',
                     confirmButtonText: 'قبول'
                   });

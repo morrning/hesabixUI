@@ -81,6 +81,14 @@ const router = createRouter({
             }
         },
         {
+            path: '/user/active/:email?',
+            name:'user_active_account',
+            component: () => import('../views/user/active-account.vue'),
+            meta: {
+                'title': 'فعال سازی حساب کاربری',
+            }
+        },
+        {
             path: '/user/register',
             name:'user_register',
             component: () => import('../views/user/register.vue'),
