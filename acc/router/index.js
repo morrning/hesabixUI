@@ -238,7 +238,15 @@ const router = createRouter({
       path: '/acc/plugin/noghre/pays/view/:id?',
       name: 'plugin_noghre_pays_view',
       component: () => import('../views/plugins/noghre/pays.vue'),
-    }
+    },
+    {
+      path: "/:catchAll(.*)",
+      name: "not-found",
+      component: () => import("../views/NotFound.vue"),
+      meta: {
+        'title': 'صفحه یافت نشد',
+      }
+    },
   ]
 })
 

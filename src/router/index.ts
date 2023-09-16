@@ -111,7 +111,15 @@ const router = createRouter({
             meta: {
                 'title': 'بازیابی گذرواژه',
             }
-        }
+        },
+        {
+            path: "/:catchAll(.*)",
+            name: "not-found",
+            component: () => import("../views/NotFound.vue"),
+            meta: {
+                'title': 'صفحه یافت نشد',
+            }
+        },
     ]
 })
 
