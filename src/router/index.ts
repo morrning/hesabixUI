@@ -81,7 +81,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/user/active/:email?',
+            path: '/user/active/:email',
             name:'user_active_account',
             component: () => import('../views/user/active-account.vue'),
             meta: {

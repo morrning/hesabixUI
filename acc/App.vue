@@ -23,30 +23,28 @@ export default {
   async beforeMount() {
     await axios.get('/api/user/check/login').then((response)=>{
       if(response.data.result == 1){
-        if(response.data.active == 1){
-          axios.post('/api/business/get/user/permissions',
-              {'bid':localStorage.getItem('activeBid'),
-                'email': response.data.email
-              }
-          ).then((response)=>{
-            this.permissions = response.data;
-          });
-          //get active plugins
-          axios.post('/api/plugin/get/actives',).then((response)=>{
-            this.plugins = response.data;
-          });
-        }
-        else{
-          // jump user to active page
-          Swal.fire({
-            title: 'خطا',
-            text: 'حساب کاربری شما فعال نیست.لطفا ابتدا حساب کاربری خود را تایید نمایید.',
-            icon: 'error',
-            confirmButtonText: 'انجام احراز هویت'
-          }).then((result)=>{
-            window.location.href = ('https://app.hesabix.ir/user/active/' + response.data.email)
-          });
-        }
+        axios.post('/api/business/get/user/permissions',
+            {'bid':localStorage.getItem('activeBid'),
+              'email': response.data.email
+            }
+        ).then((response)=>{
+          this.permissions = response.data;
+          if(response.data.active != 1) {
+            // jump user to active page
+            Swal.fire({
+              title: 'خطا',
+              text: 'حساب کاربری شما فعال نیست.لطفا ابتدا حساب کاربری خود را تایید نمایید.',
+              icon: 'error',
+              confirmButtonText: 'انجام احراز هویت'
+            }).then((result)=>{
+              window.location.href = window.location.origin + '/user/active/' + this.permissions.id;
+            });
+          }
+        });
+        //get active plugins
+        axios.post('/api/plugin/get/actives',).then((response)=>{
+          this.plugins = response.data;
+        });
       }
     })
   },

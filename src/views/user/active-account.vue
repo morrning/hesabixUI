@@ -22,7 +22,7 @@ export default defineComponent({
   mounted() {
     this.email = this.$route.params.email;
     axios.post('/api/user/active/code/info/' + this.email).then((response)=>{
-        this.timer = parseInt(response.data.cutDown) - parseInt(response.data.time)
+        this.timer = (parseInt(response.data.cutDown) - parseInt(response.data.time)) * 1000
     })
   }
 })
