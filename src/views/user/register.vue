@@ -149,7 +149,7 @@ export default {
               .then(function (response) {
                 if(response.data.error === 0){
                   //go to success page
-                  router.push('/user/register-success')
+                  router.push('/user/active/' + response.data.id)
                 }
                 if(response.data.error === 1){
                   Swal.fire({
@@ -174,7 +174,7 @@ export default {
   async created() {
     await axios.post('/api/user/check/login').then((response)=>{
       if(response.data.result == true){
-        this.$router.push('/profile/business')
+        this.$router.push('/profile/business');
       }
     })
   }

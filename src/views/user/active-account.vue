@@ -1,6 +1,7 @@
 <script lang="ts">
 import axios from 'axios';
 import {defineComponent} from 'vue'
+import Swal from "sweetalert2";
 
 export default defineComponent({
   name: "active-account",
@@ -11,19 +12,55 @@ export default defineComponent({
     timer: 10000,
   }},
   methods:{
+    loadData(){
+      this.isCoutDown = false;
+      this.email = this.$route.params.email;
+      axios.post('/api/user/active/code/info/' + this.email).then((response)=>{
+        this.timer = (parseInt(response.data.cutDown) - parseInt(response.data.time)) * 1000
+      });
+    },
     changeCutdown(){
       this.isCoutDown = true;
     },
-    sendAgain(){
-      this.isCoutDown = false;
+    sendActive(){
+      if(this.code.length < 6){
+        Swal.fire({
+          title: 'خطا',
+          text: 'کد وارد شده اشتباه است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        }).then((res)=>{
+          this.code = '';
+        });
+      }
+      else{
+        axios.post('/api/user/active/account/' + this.email,{code:this.code}).then((response)=>{
+          if(response.data.result == 'ok'){
+            Swal.fire({
+              text: 'حساب کاربری شما تایید شد.',
+              icon: 'success',
+              confirmButtonText: 'رفتن به پروفایل کاربری'
+            }).then((res)=>{
+              this.$router.push('/user/register-success');
+            });
+          }
+          else{
+            Swal.fire({
+              title: 'خطا',
+              text: 'کد وارد شده اشتباه است.',
+              icon: 'error',
+              confirmButtonText: 'قبول'
+            }).then((res)=>{
+              this.code = '';
+            });
+          }
+        })
+      }
 
     }
   },
   mounted() {
-    this.email = this.$route.params.email;
-    axios.post('/api/user/active/code/info/' + this.email).then((response)=>{
-        this.timer = (parseInt(response.data.cutDown) - parseInt(response.data.time)) * 1000
-    })
+    this.loadData();
   }
 })
 </script>
@@ -54,12 +91,12 @@ export default defineComponent({
                   <input class="form-control" type="number" v-model="code">
                   <label>کد ارسالی به ایمیل و موبایل</label>
                 </div>
-                <button type="button" class="btn btn-secondary float-end" :disabled="!isCoutDown" @click="sendAgain">
+                <button type="button" class="btn btn-secondary float-end" :disabled="!isCoutDown" @click="loadData()">
                   <vue-countdown v-if="!isCoutDown" :time="this.timer" @end="changeCutdown" v-slot="{ totalSeconds }">ارسال مجدد تا {{ totalSeconds }} ثانیه دیگر</vue-countdown>
                   <span v-else>ارسال مجدد</span>
                 </button>
                 <div class="float-start">
-                  <button type="submit" class="btn btn-primary">
+                  <button type="submit" class="btn btn-primary" @click="sendActive()">
                     <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> تایید  </button>
                 </div>
               </form>
