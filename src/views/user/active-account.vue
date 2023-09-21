@@ -10,11 +10,14 @@ export default defineComponent({
     code: '',
     isCoutDown: false,
     timer: 10000,
+    user:{
+      mobile: ''
+    },
   }},
   methods:{
     loadData(){
       this.isCoutDown = false;
-      this.email = this.$route.params.email;
+      this.email = this.$route.params.email.toString();
       axios.post('/api/user/active/code/info/' + this.email).then((response)=>{
         this.timer = (parseInt(response.data.cutDown) - parseInt(response.data.time)) * 1000
       });
@@ -23,7 +26,7 @@ export default defineComponent({
       this.isCoutDown = true;
     },
     sendActive(){
-      if(this.code.length < 6){
+      if(this.code.toString().length !== 6){
         Swal.fire({
           title: 'خطا',
           text: 'کد وارد شده اشتباه است.',
@@ -34,7 +37,7 @@ export default defineComponent({
         });
       }
       else{
-        axios.post('/api/user/active/account/' + this.email,{code:this.code}).then((response)=>{
+        axios.post('/api/user/active/account/' + this.email,{code:this.code.toString()}).then((response)=>{
           if(response.data.result == 'ok'){
             Swal.fire({
               text: 'حساب کاربری شما تایید شد.',
@@ -60,6 +63,22 @@ export default defineComponent({
     }
   },
   mounted() {
+    axios.post('/api/user/current/info')
+        .then((res) => {
+          if(res.data.active){
+            this.$router.push('/profile/business');
+          }
+          else if(!res.data.mobile){
+            Swal.fire({
+              title: 'خطا',
+              text: 'شماره موبایل شما ثبت نشده است. لطفا ابتدا شماره موبایل خود را ذخیره نمایید.',
+              icon: 'error',
+              confirmButtonText: 'قبول'
+            }).then((res)=>{
+              this.$router.push('/profile/add-mobile-number');
+            });
+          }
+        });
     this.loadData();
   }
 })
@@ -86,13 +105,13 @@ export default defineComponent({
                 کد ارسالی به شماره موبایل و یا پست الکترونیکی خود را وارد کنید.
               </div>
               <!-- END Header -->
-              <form @submit.prevent="submit">
+              <form @submit.prevent="sendActive">
                 <div class="form-floating mb-3">
-                  <input class="form-control" type="number" v-model="code">
+                  <input class="form-control" type="text" v-model="code">
                   <label>کد ارسالی به ایمیل و موبایل</label>
                 </div>
                 <button type="button" class="btn btn-secondary float-end" :disabled="!isCoutDown" @click="loadData()">
-                  <vue-countdown v-if="!isCoutDown" :time="this.timer" @end="changeCutdown" v-slot="{ totalSeconds }">ارسال مجدد تا {{ totalSeconds }} ثانیه دیگر</vue-countdown>
+                  <vue-countdown v-if="!isCoutDown" :time="timer" @end="changeCutdown" v-slot="{ totalSeconds }">ارسال مجدد تا {{ totalSeconds }} ثانیه دیگر</vue-countdown>
                   <span v-else>ارسال مجدد</span>
                 </button>
                 <div class="float-start">

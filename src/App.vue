@@ -1,5 +1,6 @@
 <script>
 import { RouterView } from 'vue-router'
+
 export default {
   data: ()=> {
     return {}

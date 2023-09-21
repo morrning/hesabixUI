@@ -15,6 +15,10 @@
             <small class="form-text text-danger">تغییر پست الکترونیکی هم‌اکنون امکان‌پذیر نیست.</small>
           </div>
           <div class="form-floating mb-3">
+            <input disabled="disabled" class="form-control" type="text" v-model="user_mobile">
+            <label>تلفن همراه</label>
+          </div>
+          <div class="form-floating mb-3">
             <input class="form-control" type="text" v-model="user_fullname">
             <label>نام و نام خانوادگی</label>
             <small class="form-text text-danger" v-if="v$.user_fullname.$error">الزامی است.</small>
@@ -40,7 +44,8 @@ export default {
   data() {
     return{
       user_fullname: '',
-      user_email: ''
+      user_email: '',
+      user_mobile: ''
     }
   },
   methods:{
@@ -52,7 +57,8 @@ export default {
       }
       else {
         axios.post( '/api/user/update/info', {
-            fullname: this.user_fullname
+            fullname: this.user_fullname,
+            mobile: this.mobile
         })
             .then(function (response) {
               Swal.fire({
@@ -75,6 +81,7 @@ export default {
         .then((res) =>{
           this.user_email = res.data.email;
           this.user_fullname = res.data.fullname;
+          this.user_mobile = res.data.mobile;
         });
   },
   validations () {

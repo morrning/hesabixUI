@@ -94,6 +94,12 @@
 
       <!-- Page Content -->
       <div class="content">
+        <RouterLink v-show="!this.user.mobile" to="/profile/add-mobile-number">
+          <div class="alert alert-warning">
+            <i class="fa fa-warning"></i>
+            به نظر می رسد شماره تلفن خود را ثبت نکرده اید.برای ثبت شماره تلفن خود اینجا کلیک کنید.
+          </div>
+        </RouterLink>
         <router-view></router-view>
       </div>
       <!-- END Page Content -->
@@ -123,7 +129,9 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
   name: "profile-main",
   data: ()=>{return{
-    user: {},
+    user: {
+      mobile:'1'
+    },
     business_count: 0
   }},
   methods:{

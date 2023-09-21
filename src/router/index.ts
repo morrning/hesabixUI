@@ -47,6 +47,14 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: 'add-mobile-number',
+                    component: () => import('../views/user/profile/add-mobile.vue'),
+                    meta: {
+                        'title': 'افزودن شماره تلفن همراه',
+                        'login': true
+                    }
+                },
+                {
                     path: 'support-list',
                     component: () => import('../views/user/profile/support/list.vue'),
                     meta: {
