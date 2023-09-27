@@ -121,6 +121,14 @@ const router = createRouter({
             }
         },
         {
+            path: '/user/forget-password-submit-code',
+            name:'user_forget_password_submit_code',
+            component: () => import('../views/user/profile/forget-password-submit-code.vue'),
+            meta: {
+                'title': 'بازیابی گذرواژه',
+            }
+        },
+        {
             path: "/:catchAll(.*)",
             name: "not-found",
             component: () => import("../views/NotFound.vue"),

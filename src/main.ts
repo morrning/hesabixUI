@@ -14,8 +14,10 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
 const app = createApp(App)
 
-app.config.globalProperties.$API_URL = 'http://localhost';
+//app.config.globalProperties.$API_URL = 'http://localhost';
 //app.config.globalProperties.$API_URL = 'https://hesabix.ir';
+app.config.globalProperties.$API_URL = 'http://hesabix.local';
+
 axios.defaults.baseURL = app.config.globalProperties.$API_URL;
 
 app.use(router)

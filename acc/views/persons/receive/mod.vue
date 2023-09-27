@@ -2,9 +2,9 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light">
       <h3 class="block-title text-primary-dark">
-        <router-link class="text-warning mx-2 px-2" to="/acc/persons/receive/list">
+        <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
-        </router-link>
+        </button>
         دریافت از اشخاص </h3>
       <div class="block-options">
         <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-alt-primary">

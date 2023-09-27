@@ -27,11 +27,11 @@
           </div>
           <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
-            <input v-model="data.priceBuy" class="form-control" type="number">
+              <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceBuy" />
             <label class="form-label">قیمت خرید</label>
           </div>
             <div class="form-floating mb-4">
-              <input v-model="data.priceSell" class="form-control" type="number">
+              <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceSell" />
               <label class="form-label">قیمت فروش</label>
             </div>
           </div>
@@ -53,11 +53,13 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
+import {Money3} from "v-money3";
 
 export default {
   name: "mod",
   components: {
-    Loading
+    Loading,
+    Money3
   },
   data: ()=>{return{
     isLoading: false,
@@ -69,7 +71,23 @@ export default {
       des: '',
       unit: 'عدد',
       code: 0,
-    }
+    },
+    currencyConfig:{
+      masked: false,
+      prefix: '',
+      suffix: 'ریال',
+      thousands: ',',
+      decimal: '.',
+      precision: 0,
+      disableNegative: false,
+      disabled: false,
+      min: 0,
+      max: null,
+      allowBlank: false,
+      minimumNumberOfCharacters: 0,
+      shouldRound: true,
+      focusOnRight: false,
+    },
   }},
   mounted() {
     this.loadData(this.$route.params.id);

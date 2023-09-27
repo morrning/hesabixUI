@@ -2,10 +2,15 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light">
       <h3 class="block-title text-primary-dark">
-        <router-link class="text-warning mx-2 px-2" to="/acc/persons/list">
+        <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
-        </router-link>
+        </button>
         مشخصات شخص </h3>
+      <div class="block-options">
+        <button @click="save()" type="button" class="btn btn-alt-primary">
+          <i class="fa fa-floppy-disk"></i>
+          ثبت</button>
+      </div>
     </div>
     <div class="block-content py-3 vl-parent">
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
@@ -16,14 +21,50 @@
               <input v-model="person.nikename" class="form-control" type="text">
               <label class="form-label"><span class="text-danger">(لازم)</span> نام مستعار</label>
             </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
+              <input v-model="person.company" class="form-control" type="text">
+              <label class="form-label"> شرکت </label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
               <input v-model="person.name" class="form-control" type="text">
               <label class="form-label">نام / نام خانوادگی</label>
             </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
-              <input v-model="person.tel" class="form-control" type="text">
-              <label class="form-label">تلفن</label>
+              <input v-model="person.des" class="form-control" type="text">
+              <label class="form-label">توضیحات</label>
             </div>
+          </div>
+        </div>
+        <h3>اطلاعات پایه</h3>
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
+              <input v-model="person.shenasemeli" class="form-control" type="text">
+              <label class="form-label">شناسه ملی</label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
+              <input v-model="person.sabt" class="form-control" type="text">
+              <label class="form-label">شماره ثبت</label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
+              <input v-model="person.codeeghtesadi" class="form-control" type="text">
+              <label class="form-label">کد اقتصادی</label>
+            </div>
+          </div>
+        </div>
+        <h3>اطلاعات تماس</h3>
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
               <input v-model="person.mobile" class="form-control" type="text">
               <label class="form-label">تلفن همراه</label>
@@ -31,16 +72,63 @@
           </div>
           <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
-              <input v-model="person.address" class="form-control" type="text">
-              <label class="form-label">آدرس</label>
+              <input v-model="person.tel" class="form-control" type="text">
+              <label class="form-label">تلفن</label>
             </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
-              <input v-model="person.des" class="form-control" type="text">
-              <label class="form-label">توضیحات</label>
+              <input v-model="person.fax" class="form-control" type="text">
+              <label class="form-label">فکس</label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
+              <input v-model="person.email" class="form-control" type="text">
+              <label class="form-label">پست الکترونیکی</label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
+              <input v-model="person.website" class="form-control" type="text">
+              <label class="form-label">وب سایت</label>
             </div>
           </div>
         </div>
-        <button @click="save()" type="button" class="btn btn-alt-primary">ثبت</button>
+
+        <h3>اطلاعات آدرس</h3>
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
+              <input v-model="person.keshvar" class="form-control" type="text">
+              <label class="form-label">کشور</label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
+              <input v-model="person.ostan" class="form-control" type="text">
+              <label class="form-label">استان</label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
+              <input v-model="person.shahr" class="form-control" type="text">
+              <label class="form-label">شهر</label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
+              <input v-model="person.postalcode" class="form-control" type="text">
+              <label class="form-label">کد پستی</label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12">
+            <div class="form-floating mb-4">
+              <input v-model="person.address" class="form-control" type="text">
+              <label class="form-label">آدرس</label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -65,6 +153,17 @@ export default {
       tel: '',
       mobile: '',
       address: '',
+      company: '',
+      shenasemeli: '',
+      codeeghtesadi:'',
+      sabt:'',
+      keshvar:'',
+      ostan:'',
+      shahr:'',
+      postalcode:'',
+      email:'',
+      website:'',
+      fax:'',
       code: 0,
     }
   }},
@@ -80,13 +179,7 @@ export default {
         //load user info
         this.isLoading = true;
         axios.post('/api/person/info/' + id).then((response)=>{
-          this.person.nikename = response.data.nikename;
-          this.person.name = response.data.name;
-          this.person.tel = response.data.tel;
-          this.person.mobile = response.data.mobile;
-          this.person.address = response.data.address;
-          this.person.des  = response.data.des;
-          this.person.code = response.data.code;
+          this.person = response.data;
           this.isLoading = false;
         });
       }
@@ -111,15 +204,7 @@ export default {
         });
       else{
         this.isLoading = true;
-        axios.post('/api/person/mod/' + this.person.code,{
-          'nikename':this.person.nikename,
-          'name': this.person.name,
-          'tel': this.person.tel,
-          'mobile': this.person.mobile,
-          'address': this.person.address,
-          'des': this.person.des,
-          'code': this.person.code,
-        }).then((response)=>{
+        axios.post('/api/person/mod/' + this.person.code,this.person).then((response)=>{
           this.isLoading = false;
           if(response.data.result == 2){
             Swal.fire({

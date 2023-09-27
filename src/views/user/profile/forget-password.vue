@@ -8,42 +8,56 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "login",
   data: ()=>{return{
-    'email':'',
+    email:'',
+    loading:  false
   }},
   methods: {
     async submit () {
-      const result = await this.v$.$validate()
-      if (!result) {
+      if (this.email.length === 0) {
         // notify user form is invalid
-
+        Swal.fire({
+          title: 'خطا',
+          text: 'کاربری با این مشخصات یافت نشد.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
       }
       else {
-        axios.post( 'api/user/reset-password', {
+        this.loading = true;
+        axios.post( '/api/user/forget/password/send-code', {
           email: this.email,
         })
-            .then(function (response) {
-
-            })
-            .catch(function (error) {
+            .then((response)=>{
+              this.loading = false
+              if(response.data.result == true){
+                Swal.fire({
+                  title: 'ارسال کد بازیابی کلمه عبور',
+                  text: 'کد بازیابی کلمه عبور به پست الکترونیکی و تلفن همراه شما ارسال شد.',
+                  icon: 'success',
+                  confirmButtonText: 'قبول'
+                });
+                localStorage.setItem('forget-password-id', response.data.id)
+              }
+              else if(response.data.result == 'send before'){
+                Swal.fire({
+                  title: 'خطا',
+                  text: 'کد فعال سازی قبلا ارسال شده است لطفا چند دقیقه دیگر مجددا سعی نمایید.',
+                  icon: 'error',
+                  confirmButtonText: 'قبول'
+                });
+              }
+              this.$router.push('/user/forget-password-submit-code');
+            }).catch(function (error) {
+              this.loading = false
               Swal.fire({
-                title: 'خطا',
-                text: 'کاربر یافت نشد.',
-                icon: 'error',
-                confirmButtonText: 'قبول'
-              });
+                    title: 'خطا',
+                    text: 'کاربری با این مشخصات یافت نشد.',
+                    icon: 'error',
+                    confirmButtonText: 'قبول'
+                  });
               this.email = '';
             });
       }
-    }
-  },
-  validations () {
-    return {
-      email: { required,email },
-    }
-  },
-  setup () {
-    return {
-      v$: useVuelidate()
     }
   },
   created() {
@@ -77,12 +91,16 @@ export default {
               <form @submit.prevent="submit">
                 <div class="form-floating mb-3">
                   <input class="form-control" type="text" v-model="email">
-                  <label>پست الکترونیکی</label>
-                  <small class="form-text text-danger" v-if="v$.email.$error">پست الکترونیکی اشتباه است و یا وارد نشده.</small>
+                  <label>پست الکترونیکی یا شماره تلفن</label>
                 </div>
                 <div class="text-center mt-3">
-                  <button type="submit" class="btn btn-hero btn-primary">
-                    <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> بازیابی کلمه عبور </button>
+                  <button :disabled="loading" type="submit" class="btn btn-hero btn-primary">
+                    <div v-show="loading" class="spinner-border spinner-border-sm text-white" role="status">
+                      <span class="visually-hidden">صبر کنید ...</span>
+                    </div>
+                    <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i>
+                    ارسال کد بازیابی
+                  </button>
                 </div>
                 <div class="text-center mt-4">
                   <RouterLink to="/user/register">
