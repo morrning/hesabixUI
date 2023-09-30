@@ -14,7 +14,6 @@
         <div class="dropdown">
           <a class="btn btn-danger ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-file-pdf"></i>
-            PDF
           </a>
           <ul class="dropdown-menu">
             <li><a @click.prevent="print(false)" class="dropdown-item" href="#">انتخاب شده‌ها</a></li>
@@ -24,11 +23,10 @@
         <div class="dropdown">
           <a class="btn btn-success ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-file-excel"></i>
-            اکسل
           </a>
           <ul class="dropdown-menu">
-            <li><a @click.prevent="print()" class="dropdown-item" href="#">انتخاب شده‌ها</a></li>
-            <li><a @click.prevent="print()" class="dropdown-item" href="#">همه موارد</a></li>
+            <li><a @click.prevent="excellOutput(false)" class="dropdown-item" href="#">انتخاب شده‌ها</a></li>
+            <li><a @click.prevent="excellOutput(true)" class="dropdown-item" href="#">همه موارد</a></li>
           </ul>
         </div>
       </div>
@@ -43,8 +41,8 @@
             </div>
           </div>
           <EasyDataTable
+              :table-class-name="tableClassName"
               v-model:items-selected="itemsSelected"
-              @click-row="showRow"
               border-cell
               multi-sort
               show-index
@@ -61,12 +59,12 @@
               :loading="loading"
           >
             <template #item-operation="{ code }">
+              <router-link :to="'/acc/persons/card/view/' + code">
+                <i class="fa fa-eye text-success"></i>
+              </router-link>
               <router-link :to="'/acc/persons/mod/' + code">
                 <i class="fa fa-edit px-2"></i>
               </router-link>
-              <span class="text-danger d-none" @click="deleteItem(code)">
-                <i class="fa fa-trash"></i>
-              </span>
             </template>
             <template #item-nikename="{ nikename,code }">
               <router-link :to="'/acc/persons/card/view/' + code">
@@ -84,15 +82,28 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import {ref} from "vue";
+import download from 'downloadjs';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
+/* load 'fs' for readFile and writeFile support */
+import * as fs from 'fs';
+XLSX.set_fs(fs);
+
+/* load the codepage support library for extended support with older formats  */
+import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs';
+XLSX.set_cptable(cpexcel);
 
 export default {
   name: "list",
   data: ()=>{return {
+    tableClassName:'extable',
     searchValue: '',
     loading : ref(true),
     items:[],
     itemsSelected: [],
     headers: [
+      { text: "عملیات", value: "operation",fixed: true, width:80},
       { text: "کد", value: "code",fixed: true,width:50 },
       { text: "نام مستعار", value: "nikename", sortable: true},
       { text: "نام و نام خانوادگی", value: "name", sortable: true},
@@ -109,7 +120,6 @@ export default {
       { text: "ایمیل", value: "email", sortable: true},
       { text: "وب سایت", value: "website", sortable: true},
       { text: "فکس", value: "fax", sortable: true},
-      { text: "عملیات", value: "operation"},
     ]
   }},
   methods: {
@@ -150,6 +160,50 @@ export default {
         }
       })
     },
+    excellOutput(AllItems = true){
+      if(AllItems){
+        axios({
+          method: 'get',
+          url:'/api/person/list/excel',
+          responseType: 'arraybuffer',
+        }).then((response)=>{
+          var FILE = window.URL.createObjectURL(new Blob([response.data]));
+          var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+          var fileLink = document.createElement('a');
+
+          fileLink.href = fileURL;
+          fileLink.setAttribute('download', 'hesabix-persons-list.xlsx');
+          document.body.appendChild(fileLink);
+          fileLink.click();
+        })
+      }
+      else{
+        if(this.itemsSelected.length === 0){
+          Swal.fire({
+            text: 'هیچ آیتمی انتخاب نشده است.',
+            icon: 'info',
+            confirmButtonText: 'قبول'
+          });
+        }
+        else{
+          axios({
+            method: 'post',
+            url:'/api/person/list/excel',
+            responseType: 'arraybuffer',
+            data:{items:this.itemsSelected}
+          }).then((response)=>{
+            var FILE = window.URL.createObjectURL(new Blob([response.data]));
+            var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+            var fileLink = document.createElement('a');
+
+            fileLink.href = fileURL;
+            fileLink.setAttribute('download', 'hesabix-persons-list.xlsx');
+            document.body.appendChild(fileLink);
+            fileLink.click();
+          })
+        }
+      }
+    },
     print(AllItems = true){
       if(AllItems){
         axios.post('/api/person/list/print').then((response)=>{
@@ -171,7 +225,6 @@ export default {
             window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
           })
         }
-
       }
     }
   },

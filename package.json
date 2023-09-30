@@ -29,6 +29,8 @@
     "bootstrap-icons": "^1.10.3",
     "datatables.net-dt": "^1.13.4",
     "datatables.net-vue3": "^2.1.0",
+    "downloadjs": "^1.4.7",
+    "file-saver": "^2.0.5",
     "jquery": "^3.7.0",
     "libphonenumber-js": "^1.10.44",
     "maz-ui": "^3.11.4",
@@ -51,9 +53,11 @@
     "vue3-persian-datetime-picker": "^1.2.2",
     "vue3-tel-input": "^1.0.4",
     "vue3-treeselect": "^0.1.10",
-    "vue3-treeview": "^0.4.1"
+    "vue3-treeview": "^0.4.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.5",
     "@types/node": "^18.11.12",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
