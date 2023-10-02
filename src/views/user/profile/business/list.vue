@@ -44,7 +44,18 @@ export default {
   methods:{
     runBid(id){
       localStorage.setItem('activeBid',id);
-      window.location.href="/acc/"
+      axios.post('/api/year/list',{}, {
+        headers: {
+          activeBid: id
+        }
+      }).then((response)=>{
+        response.data.forEach((item)=>{
+          if(item.head == '1') {
+            localStorage.setItem('activeYear',item.id);
+          }
+        });
+        window.location.href="/acc/"
+      })
     }
   },
   async beforeMount() {

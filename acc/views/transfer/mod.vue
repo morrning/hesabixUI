@@ -117,13 +117,13 @@
             <h3>به:</h3>
             <div class="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
               <input  @change="this.changeDes('bank')" type="radio" class="btn-check" name="btnradio1" id="btnradio4" autocomplete="off" checked>
-              <label class="btn btn-outline-primary" for="btnradio4">بانک</label>
+              <label class="btn btn-outline-warning" for="btnradio4">بانک</label>
 
               <input @change="this.changeDes('cashdesk')" type="radio" class="btn-check" name="btnradio1" id="btnradio5" autocomplete="off">
-              <label class="btn btn-outline-primary" for="btnradio5">صندوق</label>
+              <label class="btn btn-outline-warning" for="btnradio5">صندوق</label>
 
               <input @change="this.changeDes('salary')" type="radio" class="btn-check" name="btnradio1" id="btnradio6" autocomplete="off">
-              <label class="btn btn-outline-primary" for="btnradio6">تنخواه</label>
+              <label class="btn btn-outline-warning" for="btnradio6">تنخواه</label>
             </div>
             <div class="row mt-2">
               <div class="col-12">

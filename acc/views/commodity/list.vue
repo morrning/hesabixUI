@@ -2,13 +2,16 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light">
       <h3 class="block-title text-primary-dark">
+        <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
+          <i class="fa fw-bold fa-arrow-right"></i>
+        </button>
         <i class="mx-2 fa fa-list"></i>
         کالا و خدمات </h3>
       <div class="block-options">
-        <router-link to="/acc/commodity/mod/" class="block-options-item">
+        <router-link to="/acc/commodity/mod/" class="btn btn-primary ms-1">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
-        <a href="#" class="block-options-item" @click.prevent="print()">
+        <a href="#" class="btn btn-danger ms-2" @click.prevent="print()">
           <i class="fa fa-print"></i>
         </a>
       </div>

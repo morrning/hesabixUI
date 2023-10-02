@@ -313,10 +313,10 @@ export default {
             </a>
             <ul class="nav-main-submenu">
               <li v-if="permissions.sell" class="nav-main-item">
-                <a class="nav-main-link" href="javascript:void(0)">
-                  <span class="nav-main-link-name"> فاکتورهای فروش </span>
-                  <span class="nav-main-link-badge badge rounded-pill bg-primary">+</span>
-                </a>
+                <router-link class="nav-main-link" to="/acc/sell/list/">
+                  <span class="nav-main-link-name"> فاکتورهای فروش</span>
+                  <router-link to="/acc/sell/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </router-link>
               </li>
               <li v-if="permissions.income" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/incomes/list">

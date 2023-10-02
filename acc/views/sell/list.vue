@@ -6,9 +6,9 @@
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fa fa-book"></i>
-        فاکتورهای خرید</h3>
+        فاکتورهای فروش</h3>
       <div class="block-options">
-        <router-link to="/acc/buy/mod/" class="block-options-item">
+        <router-link to="/acc/sell/mod/" class="block-options-item">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
       </div>
@@ -77,7 +77,7 @@ export default {
   methods: {
     loadData(){
       axios.post('/api/accounting/search',{
-        type: 'buy'
+        type: 'sell'
       })
           .then((response)=>{
             this.items = response.data;
@@ -108,7 +108,7 @@ export default {
                 }
               }
               Swal.fire({
-                text: 'فاکتور خرید با موفقیت حذف شد.',
+                text: 'فاکتور فروش با موفقیت حذف شد.',
                 icon: 'success',
                 confirmButtonText: 'قبول'
               });

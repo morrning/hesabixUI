@@ -170,6 +170,16 @@ const router = createRouter({
       component: () => import('../views/buy/list.vue'),
     },
     {
+      path: '/acc/sell/mod/:id?',
+      name: 'sell_mod',
+      component: () => import('../views/sell/mod.vue'),
+    },
+    {
+      path: '/acc/sell/list',
+      name: 'sell_list',
+      component: () => import('../views/sell/list.vue'),
+    },
+    {
       path: '/acc/plugin-center/list',
       name: 'plugin_center_list',
       component: () => import('../views/store/plugin-world.vue'),
@@ -249,5 +259,14 @@ const router = createRouter({
     },
   ]
 })
-
+router.beforeEach((to, from) => {
+  const width = Math.max(
+      document.documentElement.clientWidth,
+      window.innerWidth || 0
+  )
+  if (width <= 992){
+    Dashmix.layout('sidebar_close');
+  }
+  return true
+})
 export default router
