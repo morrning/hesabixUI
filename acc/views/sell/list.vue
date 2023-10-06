@@ -40,8 +40,8 @@
               <router-link class="text-success" :to="'/acc/accounting/view/' + code">
                 <i class="fa fa-eye px-1"></i>
               </router-link>
-              <router-link v-if="type == 'accounting'" :to="'/acc/banks/mod/' + code">
-                <i class="fa fa-edit px-1"></i>
+              <router-link class="text-secondary" :to="'/acc/sell/view/' + code">
+                <i class="fa fa-print px-1"></i>
               </router-link>
               <span class="text-danger px-1" @click="deleteItem(code)">
                 <i class="fa fa-trash"></i>

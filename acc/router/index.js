@@ -55,6 +55,11 @@ const router = createRouter({
       component: ()=> import('../views/bank/list.vue')
     },
     {
+      path: '/acc/banks/card/view/:id?',
+      name: 'bank_card_view',
+      component: () => import('../views/bank/card.vue'),
+    },
+    {
       path: '/acc/banks/mod/:id?',
       name: 'bank_mod',
       component: () => import('../views/bank/mod.vue'),
@@ -178,6 +183,11 @@ const router = createRouter({
       path: '/acc/sell/list',
       name: 'sell_list',
       component: () => import('../views/sell/list.vue'),
+    },
+    {
+      path: '/acc/sell/view/:id?',
+      name: 'sell_view',
+      component: () => import('../views/sell/view.vue'),
     },
     {
       path: '/acc/plugin-center/list',

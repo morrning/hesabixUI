@@ -2,6 +2,9 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light">
       <h3 class="block-title text-primary-dark">
+        <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
+          <i class="fa fw-bold fa-arrow-right"></i>
+        </button>
         <i class="fa fa-bank px-2"></i>
         صندوق ها </h3>
       <div class="block-options">
@@ -38,6 +41,10 @@
                 <i class="fa fa-edit px-2"></i>
               </router-link>
             </template>
+            <template #item-balance="{ balance }">
+              <label class="text-success" v-if="balance >= 0">{{this.$filters.formatNumber(balance)}}</label>
+              <label class="text-danger" v-else>{{this.$filters.formatNumber( -1 * balance ) }} منفی</label>
+            </template>
           </EasyDataTable>
         </div>
       </div>
@@ -57,10 +64,11 @@ export default {
     loading: ref(true),
     items:[],
     headers: [
+      { text: "عملیات", value: "operation"},
       { text: "کد", value: "code" },
       { text: "نام صندوق", value: "name"},
+      { text: "موجودی(ریال)", value: "balance"},
       { text: "توضیحات", value: "owner"},
-      { text: "عملیات", value: "operation"},
     ]
   }},
   methods: {

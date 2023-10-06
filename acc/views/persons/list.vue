@@ -59,12 +59,14 @@
               :loading="loading"
           >
             <template #item-operation="{ code }">
-              <router-link :to="'/acc/persons/card/view/' + code">
-                <i class="fa fa-eye text-success"></i>
-              </router-link>
-              <router-link :to="'/acc/persons/mod/' + code">
-                <i class="fa fa-edit px-2"></i>
-              </router-link>
+              <div class="d-flex">
+                <router-link :to="'/acc/persons/card/view/' + code">
+                  <i class="fa fa-eye text-success"></i>
+                </router-link>
+                <router-link :to="'/acc/persons/mod/' + code">
+                  <i class="fa fa-edit px-2"></i>
+                </router-link>
+              </div>
             </template>
             <template #item-nikename="{ nikename,code }">
               <router-link :to="'/acc/persons/card/view/' + code">
@@ -103,8 +105,8 @@ export default {
     items:[],
     itemsSelected: [],
     headers: [
-      { text: "عملیات", value: "operation",fixed: true, width:80},
-      { text: "کد", value: "code",fixed: true,width:50 },
+      { text: "عملیات", value: "operation"},
+      { text: "کد", value: "code" },
       { text: "نام مستعار", value: "nikename", sortable: true},
       { text: "نام و نام خانوادگی", value: "name", sortable: true},
       { text: "شرکت", value: "company", sortable: true},

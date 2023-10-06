@@ -54,6 +54,10 @@
             <template #item-priceSell="{ priceSell }">
               {{this.$filters.formatNumber(priceSell)}}
             </template>
+            <template #item-khadamat="{ khadamat }">
+              <label v-if="khadamat == false">کالا و اقلام فیزیکی</label>
+              <label v-else>خدمات</label>
+            </template>
           </EasyDataTable>
         </div>
       </div>
@@ -75,6 +79,7 @@ export default {
     items:[],
     headers: [
       { text: "کد", value: "code" },
+      { text: "کالا / خدمات", value: "khadamat", sortable: true},
       { text: "نام کالا و خدمات", value: "name", sortable: true},
       { text: "واحد شمارش", value: "unit", sortable: true},
       { text: "قیمت خرید", value: "priceBuy"},

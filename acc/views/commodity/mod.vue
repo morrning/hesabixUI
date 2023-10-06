@@ -10,6 +10,21 @@
     <div class="block-content py-3 vl-parent">
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
       <div class="container">
+        <div class="row py-3">
+          <div class="col-sm-12 col-md-12">
+            <div>
+              <label class="me-4 text-primary">نوع کالا یا خدمات</label>
+              <div class="form-check form-check-inline">
+                <input v-model="this.data.khadamat" class="form-check-input" type="radio" value="true">
+                <label class="form-check-label" for="inlineCheckbox1">خدمات</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input v-model="this.data.khadamat" class="form-check-input" type="radio" value="false">
+                <label class="form-check-label" for="inlineCheckbox2">کالا و اقلام فیزیکی</label>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
@@ -71,6 +86,7 @@ export default {
       des: '',
       unit: 'عدد',
       code: 0,
+      khadamat: false
     },
     currencyConfig:{
       masked: false,

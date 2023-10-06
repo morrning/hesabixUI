@@ -33,6 +33,31 @@
             <div class="block block-rounded border border-secondary border-opacity-25">
               <div class="block-header block-header-default border border-bottom">
                 <h3 class="block-title">
+                  <i class="fa fa-bank"></i>
+                  بانکداری
+                </h3>
+              </div>
+              <div class="block-content">
+                <ul>
+                  <li>
+                    <router-link to="/acc/banks/card/view/">گردش حساب بانک</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/acc/cashdesks/card/view/">گردش حساب صندوق</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/acc/salarys/card/view/">گردش حساب تنخواه گردان</router-link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- END Bold -->
+          </div>
+          <div class="col-sm-12 col-md-6 mb-2">
+            <!-- Bold -->
+            <div class="block block-rounded border border-secondary border-opacity-25">
+              <div class="block-header block-header-default border border-bottom">
+                <h3 class="block-title">
                   <i class="fa fa-cogs"></i>
                   گزارشات پایه
                 </h3>
