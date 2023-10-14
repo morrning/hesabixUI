@@ -6,6 +6,9 @@
           <i class="fa fw-bold fa-arrow-right"></i>
         </router-link>
         مشخصات تنخواه‌گردان </h3>
+      <div class="block-options">
+        <button @click="save()" type="button" class="btn btn-alt-primary"><i class="fa fa-save"></i> ثبت</button>
+      </div>
     </div>
     <div class="block-content py-3 vl-parent">
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
@@ -22,7 +25,6 @@
             </div>
           </div>
         </div>
-        <button @click="save()" type="button" class="btn btn-alt-primary">ثبت</button>
       </div>
     </div>
   </div>

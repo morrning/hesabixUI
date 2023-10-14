@@ -7,7 +7,7 @@
         </button>
         انتقال </h3>
       <div class="block-options">
-        <button @click="save()" type="button" class="btn btn-alt-primary">ثبت</button>
+        <button @click="save()" type="button" class="btn btn-alt-primary"><i class="fa fa-save"></i> ثبت</button>
       </div>
     </div>
     <div class="block-content py-3 vl-parent">

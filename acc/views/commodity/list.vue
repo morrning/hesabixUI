@@ -82,6 +82,7 @@ export default {
       { text: "کالا / خدمات", value: "khadamat", sortable: true},
       { text: "نام کالا و خدمات", value: "name", sortable: true},
       { text: "واحد شمارش", value: "unit", sortable: true},
+      { text: "دسته‌بندی", value: "cat", sortable: true},
       { text: "قیمت خرید", value: "priceBuy"},
       { text: "قیمت فروش", value: "priceSell"},
       { text: "عملیات", value: "operation"},

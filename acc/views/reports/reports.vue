@@ -43,10 +43,10 @@
                     <router-link to="/acc/banks/card/view/">گردش حساب بانک</router-link>
                   </li>
                   <li>
-                    <router-link to="/acc/cashdesks/card/view/">گردش حساب صندوق</router-link>
+                    <router-link to="/acc/cashdesk/card/view/">گردش حساب صندوق</router-link>
                   </li>
                   <li>
-                    <router-link to="/acc/salarys/card/view/">گردش حساب تنخواه گردان</router-link>
+                    <router-link to="/acc/salary/card/view/">گردش حساب تنخواه گردان</router-link>
                   </li>
                 </ul>
               </div>

@@ -8,16 +8,25 @@ import "nprogress/nprogress.css"
 import "/public/assets/css/dashmix.min.css"
 import Year from "./views/component/Year.vue"
 import Icon from "./views/component/notifications/icon.vue";
+import Loading from "vue-loading-overlay";
+import smsPanel from "./views/component/smsPanel.vue";
+import 'vue-loading-overlay/dist/css/index.css';
 export default {
+
   data(){
     return {
+      isLoading: false,
       userFullName: '',
       userEmail: '',
       isLogedIn: false,
       business_count: 0,
       permissions:{},
       plugins: {},
-      business:{}
+      business:{},
+      ticket:{
+        title:'',
+        body:''
+      }
     }
   },
   async beforeMount() {
@@ -59,6 +68,28 @@ export default {
             window.location.href = "/";
             delete  axios.defaults.headers.common['X-AUTH-TOKEN'];
           });
+    },
+    saveTicket(){
+      if(this.ticket.title.trim() == '' || this.ticket.body.trim() == ''){
+        Swal.fire({
+          text: 'تکمیل موارد ستاره دار الزامی است.',
+          confirmButtonText: 'قبول',
+        })
+      }
+      else{
+        this.isLoading = true;
+        axios.post('/api/support/mod',this.ticket).then((response)=>{
+          this.isLoading = false;
+          Swal.fire({
+            text: 'درخواست با موفقیت ثبت شد.',
+            confirmButtonText: 'قبول',
+          }).then((result)=>{
+            this.ticket.title = '';
+            this.ticket.body='';
+            Dashmix.layout('side_overlay_close');
+          })
+        })
+      }
     }
   },
   async mounted() {
@@ -82,14 +113,129 @@ export default {
         });
   },
   components:{
+    Loading,
     Year: Year,
-    notification: Icon
+    notification: Icon,
+    smsPanel:smsPanel
   }
 }
 </script>
 
 <template>
 
+  <aside id="side-overlay" data-simplebar="init"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="left: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
+    <!-- Side Header -->
+    <div class="bg-image" style="background-image: url('/img/bg_side_overlay_header.jpg');">
+      <div class="bg-primary-op">
+        <div class="content-header">
+          <!-- User Avatar -->
+          <a class="img-link me-1" href="https://api.hesabix.ir/profile/dashboard">
+            <vue-gravatar class="img-avatar img-avatar32 img-avatar-thumb" :email="this.userEmail" :size="32" />
+          </a>
+          <!-- END User Avatar -->
+
+          <!-- User Info -->
+          <div class="ms-2">
+            <a class="text-white fw-semibold" href="https://api.hesabix.ir/profile/dashboard">{{userFullName}}</a>
+            <div class="text-white-75 fs-sm">{{userEmail}}</div>
+          </div>
+          <!-- END User Info -->
+
+          <!-- Close Side Overlay -->
+          <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+          <a class="ms-auto text-white" data-action="side_overlay_close" data-toggle="layout" href="javascript:void(0)">
+            <i class="fa fa-times-circle"></i>
+          </a>
+          <!-- END Close Side Overlay -->
+        </div>
+      </div>
+    </div>
+    <!-- END Side Header -->
+
+    <!-- Side Content -->
+    <div class="content-side">
+      <!-- Side Overlay Tabs -->
+      <div class="block block-transparent pull-x pull-t mb-0">
+        <ul class="nav nav-tabs nav-tabs-block nav-justified" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button aria-controls="so-profile" aria-selected="true" class="nav-link active" data-bs-target="#so-profile" data-bs-toggle="tab" id="so-profile-tab" role="tab">
+              <i class="fa fa-ticket"></i>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button aria-controls="so-settings" aria-selected="false" class="nav-link" data-bs-target="#so-settings" data-bs-toggle="tab" id="so-settings-tab" role="tab" tabindex="-1">
+              <i class="fa fa-fw fa-cog"></i>
+            </button>
+          </li>
+        </ul>
+        <div class="block-content tab-content overflow-hidden pt-1">
+          <!-- Settings Tab -->
+          <div aria-labelledby="so-settings-tab" class="tab-pane pull-x fade fade-up" id="so-settings" role="tabpanel" tabindex="0">
+            <div class="block mb-0">
+              <!-- Sidebar -->
+              <div class="block-content block-content-sm block-content-full bg-body">
+                <span class="text-uppercase fs-sm fw-bold">نوار کناری</span>
+              </div>
+              <div class="block-content block-content-full">
+                <div class="row g-sm text-center">
+                  <div class="col-6 mb-1">
+                    <a class="d-block py-3 bg-body-dark fw-semibold text-dark" data-action="sidebar_style_dark" data-toggle="layout" href="javascript:void(0)"> تاریک </a>
+                  </div>
+                  <div class="col-6 mb-1">
+                    <a class="d-block py-3 bg-body-dark fw-semibold text-dark" data-action="sidebar_style_light" data-toggle="layout" href="javascript:void(0)">روشن</a>
+                  </div>
+                </div>
+              </div>
+              <!-- END Sidebar -->
+
+              <!-- Header -->
+              <div class="block-content block-content-sm block-content-full bg-body">
+                <span class="text-uppercase fs-sm fw-bold">هدر</span>
+              </div>
+              <div class="block-content block-content-full">
+                <div class="row g-sm text-center mb-2">
+                  <div class="col-6 mb-1">
+                    <a class="d-block py-3 bg-body-dark fw-semibold text-dark" data-action="header_style_dark" data-toggle="layout" href="javascript:void(0)"> تاریک </a>
+                  </div>
+                  <div class="col-6 mb-1">
+                    <a class="d-block py-3 bg-body-dark fw-semibold text-dark" data-action="header_style_light" data-toggle="layout" href="javascript:void(0)">روشن</a>
+                  </div>
+                </div>
+              </div>
+              <!-- END Header -->
+            </div>
+          </div>
+          <!-- END Settings Tab -->
+
+          <!-- Profile -->
+          <div aria-labelledby="so-profile-tab" class="tab-pane pull-x fade fade-up show active" id="so-profile" role="tabpanel" tabindex="0">
+            <form @submit.prevent="saveTicket()">
+              <div class="block mb-0 px-1">
+                <label class="mb-2 text-primary">درخواست پشتیبانی</label>
+                <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
+
+                <div class="form-floating mb-4">
+                  <input v-model="this.ticket.title" class="form-control" type="text">
+                  <label class="form-label"><span class="text-danger">  *  </span> عنوان درخواست </label>
+                </div>
+                <div class="form-floating mb-4">
+                  <textarea v-model="this.ticket.body" class="form-control" type="text" />
+                  <label class="form-label"><span class="text-danger">  *  </span>متن درخواست</label>
+                </div>
+                <button :disabled="isLoading" type="submit" class="btn btn-sm btn-alt-primary mb-4">
+                  <i class="fa fa-save"></i>
+                  ثبت درخواست
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- END Profile -->
+        </div>
+      </div>
+      <!-- END Side Overlay Tabs -->
+    </div>
+    <!-- END Side Content -->
+  </div></div></div></div><div class="simplebar-placeholder" style="width: auto; height: 1090px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 33px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div></aside>
   <!-- Sidebar -->
   <!--
     Sidebar Mini Mode - Display Helper classes
@@ -246,8 +392,25 @@ export default {
             <ul class="nav-main-submenu">
               <li class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/commodity/list">
-                  <span class="nav-main-link-name">فهرست کالاها</span>
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-boxes"></i>
+                    فهرست کالاها</span>
                   <router-link to="/acc/commodity/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </router-link>
+              </li>
+              <li class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/commodity/cat/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-tree"></i>
+                    دسته‌بندی‌ها</span>
+                </router-link>
+              </li>
+              <li class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/commodity/drop/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-droplet"></i>
+                    ویژگی‌های کالا</span>
+                  <router-link to="/acc/commodity/drop/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </router-link>
               </li>
             </ul>
@@ -281,6 +444,37 @@ export default {
                   <span class="nav-main-link-name"> انتقال </span>
                   <RouterLink to="/acc/transfer/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</RouterLink>
                 </RouterLink>
+              </li>
+            </ul>
+          </li>
+          <li v-show="permissions.store" class="nav-main-item">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
+              <i class="nav-main-link-icon fa fa-boxes-stacked"></i>
+              <span class="nav-main-link-name">انبارداری</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/storeroom/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-boxes"></i>
+                    انبارها</span>
+                  <router-link to="/acc/storeroom/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </router-link>
+              </li>
+              <li class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/storeroom/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-file-export"></i>
+                    حواله انبار</span>
+                  <router-link to="/acc/storeroom/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </router-link>
+              </li>
+              <li class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/storeroom/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-box-tissue"></i>
+                    موجودی کالا</span>
+                </router-link>
               </li>
             </ul>
           </li>
@@ -387,6 +581,14 @@ export default {
                 </router-link>
               </li>
               <li v-if="permissions.owner" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/sms/panel">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-message"></i>
+                    سرویس پیامک و شارژ
+                  </span>
+                </router-link>
+              </li>
+              <li v-if="permissions.owner" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/business/apis">
                   <span class="nav-main-link-name">
                     <i class="fa fa-plug-circle-xmark"></i>
@@ -458,7 +660,7 @@ export default {
       <!-- Right Section -->
       <div>
         <notification />
-
+        <smsPanel />
         <!-- User Dropdown -->
         <div class="dropdown d-inline-block">
           <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm me-1 btn-alt-secondary" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
@@ -481,6 +683,9 @@ export default {
           </div>
         </div>
         <!-- END User Dropdown -->
+        <button class="btn btn-sm btn-alt-secondary" data-action="side_overlay_toggle" data-toggle="layout" type="button">
+          <i class="far fa-fw fa-list-alt"></i>
+        </button>
       </div>
       <!-- END Right Section -->
     </div>
@@ -522,4 +727,9 @@ export default {
 input[type=input]{
   direction:ltr;
 }
+
+.node-wrapper{
+  border-radius: 12px;
+}
+
 </style>

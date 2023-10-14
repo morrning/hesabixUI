@@ -6,6 +6,12 @@
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         مشخصات کالا و خدمات </h3>
+      <div class="block-options">
+        <button @click="save()" type="button" class="btn btn-sm btn-alt-primary">
+          <i class="fa fa-save me-1"></i>
+          ثبت
+        </button>
+      </div>
     </div>
     <div class="block-content py-3 vl-parent">
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
@@ -50,14 +56,17 @@
               <label class="form-label">قیمت فروش</label>
             </div>
           </div>
+          <div class="col-sm-12 col-md-12 mb-4">
+            <small class="mb-2">دسته بندی</small>
+            <treeselect placeholder="دسته بندی مورد نظر را انتخاب کنید." v-model="data.cat" :multiple="false" :options="listCats" />
+          </div>
           <div class="col-sm-12 col-md-12">
             <div class="form-floating mb-4">
               <input v-model="data.des" class="form-control" type="text">
               <label class="form-label">توضیحات</label>
             </div>
           </div>
-          </div>
-        <button @click="save()" type="button" class="btn btn-alt-primary">ثبت</button>
+        </div>
       </div>
     </div>
   </div>
@@ -69,10 +78,14 @@ import Swal from "sweetalert2";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import {Money3} from "v-money3";
+import Treeselect from 'vue3-treeselect'
+// import the styles
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 
 export default {
   name: "mod",
   components: {
+    Treeselect:Treeselect,
     Loading,
     Money3
   },
@@ -86,8 +99,10 @@ export default {
       des: '',
       unit: 'عدد',
       code: 0,
-      khadamat: false
+      khadamat: false,
+      cat:null
     },
+    listCats:[],
     currencyConfig:{
       masked: false,
       prefix: '',
@@ -116,6 +131,10 @@ export default {
       this.isLoading = true;
       axios.post('/api/commodity/units').then((response) => {
         this.units = response.data;
+      });
+      axios.post('/api/commodity/cat/childs').then((response) => {
+        this.listCats = response.data;
+        this.data.cat = this.listCats[0].id;
       });
       if (id != '') {
         //load user info

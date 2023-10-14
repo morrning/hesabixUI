@@ -70,6 +70,11 @@ const router = createRouter({
       component: ()=> import('../views/salary/list.vue')
     },
     {
+      path: '/acc/salary/card/view/:id?',
+      name: 'salary_card_view',
+      component: () => import('../views/salary/card.vue'),
+    },
+    {
       path: '/acc/salary/mod/:id?',
       name: 'salary_mod',
       component: () => import('../views/salary/mod.vue'),
@@ -78,6 +83,11 @@ const router = createRouter({
       path: '/acc/cashdesk/list',
       name: 'cashdesk_list',
       component: ()=> import('../views/cashdesk/list.vue')
+    },
+    {
+      path: '/acc/cashdesk/card/view/:id?',
+      name: 'cashdesk_card_view',
+      component: () => import('../views/cashdesk/card.vue'),
     },
     {
       path: '/acc/cashdesk/mod/:id?',
@@ -155,6 +165,21 @@ const router = createRouter({
       component: () => import('../views/settings/user_perm_edit.vue'),
     },
     {
+      path: '/acc/commodity/cat/list',
+      name: 'commodity_cat_list',
+      component: () => import('../views/commodity/cat/list.vue'),
+    },
+    {
+      path: '/acc/commodity/drop/list',
+      name: 'commodity_drop_list',
+      component: () => import('../views/commodity/drop/list.vue'),
+    },
+    {
+      path: '/acc/commodity/drop/mod/:id?',
+      name: 'commodity_drop_mod',
+      component: () => import('../views/commodity/drop/mod.vue'),
+    },
+    {
       path: '/acc/commodity/list',
       name: 'commodity_list',
       component: () => import('../views/commodity/list.vue'),
@@ -230,6 +255,11 @@ const router = createRouter({
       component: () => import('../views/notifications/notifications.vue'),
     },
     {
+      path: '/acc/sms/panel',
+      name: 'sms_panel_dashboard',
+      component: () => import('../views/smspanel/smspanel.vue'),
+    },
+    {
       path: '/acc/plugin/noghre/employees/list',
       name: 'plugin_noghre_employees_list',
       component: () => import('../views/plugins/noghre/employess/list.vue'),
@@ -259,6 +289,17 @@ const router = createRouter({
       name: 'plugin_noghre_pays_view',
       component: () => import('../views/plugins/noghre/pays.vue'),
     },
+    {
+      path: '/acc/storeroom/list',
+      name: 'storeroom_list',
+      component: () => import('../views/storeroom/list.vue'),
+    },
+    {
+      path: '/acc/storeroom/mod/:id?',
+      name: 'storeroom_mod',
+      component: () => import('../views/storeroom/mod.vue'),
+    },
+
     {
       path: "/:catchAll(.*)",
       name: "not-found",

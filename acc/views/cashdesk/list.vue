@@ -40,6 +40,14 @@
               <router-link :to="'/acc/cashdesk/mod/' + code">
                 <i class="fa fa-edit px-2"></i>
               </router-link>
+              <router-link :to="'/acc/cashdesk/card/view/' + code">
+                <i class="fa fa-list-check text-warning"></i>
+              </router-link>
+            </template>
+            <template #item-name="{ name,code }">
+              <router-link :to="'/acc/cashdesk/card/view/' + code">
+                {{name}}
+              </router-link>
             </template>
             <template #item-balance="{ balance }">
               <label class="text-success" v-if="balance >= 0">{{this.$filters.formatNumber(balance)}}</label>

@@ -5,10 +5,10 @@
         <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
-        <i class="fa fa-book"></i>
-        لیست انتقال‌ها</h3>
+        <i class="mx-2 fa fa-droplet"></i>
+        ویژگی‌های کالا و خدمات </h3>
       <div class="block-options">
-        <router-link to="/acc/transfer/mod/" class="block-options-item">
+        <router-link to="/acc/commodity/drop/mod/" class="btn btn-primary ms-1">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
       </div>
@@ -23,6 +23,7 @@
             </div>
           </div>
           <EasyDataTable
+              multi-sort
               show-index
               alternating
               :search-value="searchValue"
@@ -34,32 +35,11 @@
               rowsPerPageMessage="تعداد سطر"
               emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
               rowsOfPageSeparatorMessage="از"
-              :loading = "loading"
+              :loading="loading"
           >
-            <template #item-operation="{ code,type }">
-              <router-link class="text-success" :to="'/acc/accounting/view/' + code">
-                <i class="fa fa-eye px-1"></i>
-              </router-link>
-              <router-link  :to="'/acc/transfer/mod/' + code">
-                <i class="fa fa-edit px-1"></i>
-              </router-link>
-              <span class="text-danger px-1" @click="deleteItem(code)">
-                <i class="fa fa-trash"></i>
-              </span>
-            </template>
-            <template #item-fromType="{fromType,fromObject }">
-              <label v-if="fromType == 'bank'">حساب بانکی: {{fromObject}}</label>
-              <label v-if="fromType == 'salary'">تنخواه گردان: {{fromObject}}</label>
-              <label v-if="fromType == 'cashDesk'">صندوق: {{fromObject}}</label>
-            </template>
-            <template #item-toType="{toType,toObject }">
-              <label v-if="toType == 'bank'">حساب بانکی: {{toObject}}</label>
-              <label v-if="toType == 'salary'">تنخواه گردان: {{toObject}}</label>
-              <label v-if="toType == 'cashDesk'">صندوق: {{toObject}}</label>
-            </template>
-            <template #item-code="{code}">
-              <router-link class="btn-link" :to="'/acc/accounting/view/' + code">
-                {{code}}
+            <template #item-operation="{ id,canEdit }">
+              <router-link v-if="canEdit" :to="'/acc/commodity/drop/mod/' + id">
+                <i class="fa fa-edit px-2"></i>
               </router-link>
             </template>
           </EasyDataTable>
@@ -73,31 +53,23 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import {ref} from "vue";
+
 export default {
   name: "list",
   data: ()=>{return {
+    loading : ref(true),
     searchValue: '',
-    loading: ref(true),
     items:[],
     headers: [
+      { text: "نام ویژگی", value: "name", sortable: true},
       { text: "عملیات", value: "operation"},
-      { text: "شماره سند", value: "code" , sortable: true},
-      { text: "تاریخ", value: "date", sortable: true},
-      { text: "از", value: "fromType", sortable: true},
-      { text: "به", value: "toType", sortable: true},
-      { text: "مبلغ", value: "amount", sortable: true},
-      { text: "شرح", value: "des", sortable: true},
-      { text: "ثبت کننده", value: "submitter", sortable: true},
     ]
   }},
   methods: {
     loadData(){
-      axios.post('/api/transfer/search',)
+      axios.get('/api/commodity/drop/list')
           .then((response)=>{
             this.items = response.data;
-            this.items.forEach((item)=>{
-              item.amount = this.$filters.formatNumber(item.amount)
-            })
             this.loading = false;
           })
     },
@@ -110,7 +82,7 @@ export default {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          axios.post('/api/accounting/remove',{
+          axios.post('/api/business/delete/user',{
             'code': code}
           ).then((response)=>{
             if(response.data.result == 1){
@@ -122,7 +94,7 @@ export default {
                 }
               }
               Swal.fire({
-                text: 'سند انتقال با موفقیت حذف شد.',
+                text: 'شخص با موفقیت حذف شد.',
                 icon: 'success',
                 confirmButtonText: 'قبول'
               });

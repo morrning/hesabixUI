@@ -5,10 +5,10 @@
         <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
-        <i class="fa fa-bank px-2"></i>
-        تنخواه‌گردان‌ها </h3>
+        <i class="mx-2 fa fa-boxes-stacked"></i>
+        انبارها </h3>
       <div class="block-options">
-        <router-link to="/acc/salary/mod/" class="block-options-item">
+        <router-link to="/acc/storeroom/mod/" class="btn btn-primary ms-1">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
       </div>
@@ -23,6 +23,7 @@
             </div>
           </div>
           <EasyDataTable
+              multi-sort
               show-index
               alternating
               :search-value="searchValue"
@@ -34,24 +35,16 @@
               rowsPerPageMessage="تعداد سطر"
               emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
               rowsOfPageSeparatorMessage="از"
-              :loading = "loading"
+              :loading="loading"
           >
-            <template #item-operation="{ code }">
-              <router-link :to="'/acc/salary/mod/' + code">
+            <template #item-operation="{ id }">
+              <router-link :to="'/acc/storeroom/mod/' + id">
                 <i class="fa fa-edit px-2"></i>
               </router-link>
-              <router-link :to="'/acc/salary/card/view/' + code">
-                <i class="fa fa-list-check text-warning"></i>
-              </router-link>
             </template>
-            <template #item-name="{ name,code }">
-              <router-link :to="'/acc/salary/card/view/' + code">
-                {{name}}
-              </router-link>
-            </template>
-            <template #item-balance="{ balance }">
-              <label class="text-success" v-if="balance >= 0">{{this.$filters.formatNumber(balance)}}</label>
-              <label class="text-danger" v-else>{{this.$filters.formatNumber( -1 * balance ) }} منفی</label>
+            <template #item-active="{ active }">
+              <label class="text-primary" v-if="active">فعال</label>
+              <label class="text-danger" v-else>غیرفعال</label>
             </template>
           </EasyDataTable>
         </div>
@@ -68,20 +61,23 @@ import {ref} from "vue";
 export default {
   name: "list",
   data: ()=>{return {
+    printID:'',
     searchValue: '',
-    loading: ref(true),
+    loading : ref(true),
     items:[],
     headers: [
+      { text: "کد", value: "id" },
+      { text: "نام انبار", value: "name", sortable: true},
+      { text: "انباردار", value: "manager", sortable: true},
+      { text: "تلفن", value: "tel", sortable: true},
+      { text: "آدرس", value: "adr"},
+      { text: "وضعیت", value: "active"},
       { text: "عملیات", value: "operation"},
-      { text: "کد", value: "code" },
-      { text: "نام تنخواه‌گردان", value: "name"},
-      { text: "موجودی(ریال)", value: "balance"},
-      { text: "توضیحات", value: "owner"},
     ]
   }},
   methods: {
     loadData(){
-      axios.get('/api/salary/list')
+      axios.get('/api/storeroom/list')
           .then((response)=>{
             this.items = response.data;
             this.loading = false;

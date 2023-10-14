@@ -34,11 +34,11 @@
               <span class="badge bg-primary">{{item.email}}</span>
             </td>
             <td class="text-center">
-              <div class="btn-group" v-if="item.owner != 1">
-                <router-link :to="{'name':'business_user_roll_edit','params':{'email':item.email}}"  class="btn btn-sm btn-alt-secondary js-bs-tooltip-enabled" data-bs-toggle="tooltip" type="button" aria-label=" ویرایش ">
+              <div class="btn-group btn-group-sm" v-if="item.owner != 1">
+                <router-link :to="{'name':'business_user_roll_edit','params':{'email':item.email}}"  class="btn btn-alt-primary" type="button" aria-label=" ویرایش ">
                   <i class="fa fa-pencil-alt"></i>
                 </router-link>
-                <button @click="deleteUser(item.email)"  class="btn btn-sm btn-alt-secondary js-bs-tooltip-enabled" data-bs-toggle="tooltip" type="button" aria-label=" حذف ">
+                <button @click="deleteUser(item.email)"  class="btn btn-alt-primary" type="button" aria-label=" حذف ">
                   <i class="fa fa-times"></i>
                 </button>
               </div>
