@@ -1,6 +1,6 @@
 # hesabixUI
 
-This template should help get you started developing with Vue 3 in Vite.
+Best Accounting software in persian language
 
 ## Recommended IDE Setup
 
@@ -37,4 +37,10 @@ npm run dev
 
 ```sh
 npm run build
+```
+
+### Configure API Url in /acc/main.js and /src/main.ts
+
+```js
+app.config.globalProperties.$API_URL = 'http://localhost';
 ```
