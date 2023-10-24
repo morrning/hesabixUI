@@ -16,12 +16,15 @@
                 <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">اطلاعات پایه</button>
               </li>
               <li class="nav-item" role="presentation">
+                <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">تنظیمات سراسری</button>
+              </li>
+              <li class="nav-item" role="presentation">
                 <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">درگاه پرداخت</button>
               </li>
             </ul>
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <div class="p-md-4 bg-light">
+                <div class="p-md-4">
                   <h3 class="text-primary">اطلاعات کسب و کار</h3>
                   <div class="row">
                     <div class="col-sm-12 col-md-6 mb-2">
@@ -159,8 +162,58 @@
                   </div>
                 </div>
               </div>
+              <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                <div class="p-md-4">
+                  <h3 class="text-primary">نمایش پیوند یکتا</h3>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-8 mb-2">
+                      <div class="space-y-2">
+                        <div class="form-check form-switch">
+                          <input v-model="content.shortlinks" class="form-check-input" type="checkbox">
+                          <label class="form-check-label">فعال‌سازی پیوند‌های یکتا</label>
+                          <label class="text-muted">این قابلیت برای تولید پیوند‌های یکتا برای ارسال به مشتری جهت مشاهده فاکتورها است.</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <h3 class="text-primary">دریافت مبلغ فاکتور از طریق کیف پول</h3>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-12 mb-2">
+                      <div class="space-y-2">
+                        <div class="form-check form-switch">
+                          <input @change="checkBanksExist()" v-model="content.walletEnabled" class="form-check-input" type="checkbox">
+                          <label class="form-check-label">فعال‌سازی دریافت آنلاین از طریق کیف پول</label>
+                          <label class="text-muted">با فعال سازی این قابلیت قادر خواهید بود مبالغ فاکتورهای ثبت شده را به صورت آنلاین از مشتریان خود دریافت کنید.</label>
+                        </div>
+                      </div>
+                      <div class="row" v-show="content.walletEnabled">
+                        <div class="col-sm-12 col-md-6">
+                          <label class="mb-2">حساب بانکی متصل به کیف پول</label>
+                          <div class="col">
+                            <v-select
+                                dir="rtl"
+                                :options="listBanks"
+                                label="name"
+                                v-model="content.walletMatchBank"
+                                @option:deselecting=""
+                                @search:focus=""
+                                @option:selecting=""
+                            >
+                              <template #no-options="{ search, searching, loading }">
+                                وردی یافت نشد!
+                              </template>
+                            </v-select>
+                          </div>
+                        </div>
+                        <label class="text-muted">برای تسویه اتوماتیک به حساب انتخاب شده حتما باید تمام موارد از جمله شماره شبا و شماره کارت و ... به درستی تکمیل شده باشد در غیر این صورت تراکنش با خطا مواجه خواهد شد.</label>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <div class="p-md-4 bg-light">
+                <div class="p-md-4">
                   <h3 class="text-primary">درگاه پرداخت زرین پال</h3>
                   <div class="row">
                     <div class="col-sm-12 col-md-8 mb-2">
@@ -193,7 +246,7 @@ export default {
       name:'',
       legal_name:'',
       field:'',
-      typeb:'مغازه',
+      type:'مغازه',
       shenasemeli:'',
       codeeqtesadi:'',
       shomaresabt:'',
@@ -209,14 +262,43 @@ export default {
       arzmain:[],
       maliyatafzode:9,
       moneys: '',
-      zarinpalCode:''
-    }
+      zarinpalCode:'',
+      shortlinks:false,
+      walletEnabled:false,
+      walletMatchBank:''
+    },
+    listBanks:[],
   }},
   methods:{
+    checkBanksExist(){
+      if(this.listBanks.length === 0){
+        Swal.fire({
+          text: 'هنوز هیچ حساب بانکی تعریف نشده است.',
+          icon: 'error',
+          confirmButtonText: 'تعریف حساب جدید',
+          cancelButtonText:'بازگشت',
+          showCancelButton: true
+        }).then((res)=>{
+          if(res.isConfirmed){
+            this.$router.push('/acc/banks/mod/');
+          }
+          else{
+            this.content.walletEnabled = false;
+          }
+        });
+      }
+    },
     submit(){
       if(this.content.name === '' || this.content.legal_name === '' || this.content.maliyatafzode === ''){
         Swal.fire({
           text: 'تکمیل موارد ستاره دار الزامی است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      if(this.content.walletEnabled && (this.content.walletMatchBank === undefined  || this.content.walletMatchBank === null) ){
+        Swal.fire({
+          text: 'حساب بانکی متصل به کیف پول انتخاب نشده است',
           icon: 'error',
           confirmButtonText: 'قبول'
         });
@@ -228,7 +310,7 @@ export default {
           'name':this.content.name,
           'legal_name':this.content.legal_name,
           'field':this.content.field,
-          'type':this.content.typeb,
+          'type':this.content.type,
           'shenasemeli':this.content.shenasemeli,
           'codeeqtesadi':this.content.codeeqtesadi,
           'shomaresabt':this.content.shomaresabt,
@@ -243,7 +325,10 @@ export default {
           'email':this.content.email,
           'arzmain':this.content.arzmain,
           'maliyatafzode':this.content.maliyatafzode,
-          'zarinpalCode':this.content.zarinpalCode
+          'zarinpalCode':this.content.zarinpalCode,
+          'shortlinks':this.content.shortlinks,
+          'walletEnabled':this.content.walletEnabled,
+          'walletMatchBank':this.content.walletMatchBank
         })
             .then((response)=>{
               if(response.data.result == 1){
@@ -272,26 +357,12 @@ export default {
     //get business info
     let data = axios.post('/api/business/get/info/' + localStorage.getItem('activeBid'))
         .then((response)=>{
-          this.content.name = response.data.name;
-          this.content.legal_name = response.data.legal_name;
-          this.content.field = response.data.field;
-          this.content.typeb = response.data.type;
-          this.content.shenasemeli = response.data.shenasemeli;
-          this.content.codeeqtesadi = response.data.codeeqtesadi;
-          this.content.shomaresabt = response.data.shomaresabt;
-          this.content.country = response.data.country;
-          this.content.ostan = response.data.ostan;
-          this.content.shahrestan = response.data.shahrestan;
-          this.content.postalcode = response.data.postalcode;
-          this.content.tel = response.data.tel;
-          this.content.mobile = response.data.mobile;
-          this.content.address = response.data.address;
-          this.content.website = response.data.website;
-          this.content.email = response.data.email;
-          this.content.arzmain = response.data.arzmain;
-          this.content.maliyatafzode = response.data.maliyatafzode;
-          this.content.zarinpalCode = response.data.zarinpalCode
-        })
+          this.content = response.data;
+        });
+    //get list of banks
+    axios.get('/api/bank/list').then((response)=>{
+      this.listBanks = response.data;
+    })
 
   }
 }

@@ -1,4 +1,29 @@
 <template>
+  <!-- Modal -->
+  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-primary-dark" id="updateModalLabel">
+            <i class="fa fa-paint-roller"></i>
+            به روز رسانی جدید</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"><i class="fa fa-close"></i> </span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <b>تغییران نسخه اخیر در تاریخ {{this.hesabix.lastUpdateDate}}</b>
+          <p v-html="this.hesabix.lastUpdateDes"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            <i class="fa fa-check-double me-2"></i>
+            متوجه شدم
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="page-container">
     <!-- Header -->
     <header id="page-header">
@@ -110,9 +135,12 @@
     <footer class="bg-body-extra-light" id="page-footer">
       <div class="content py-0">
         <div class="row fs-sm">
-          <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-end">تمام حقوق برای حسابیکس محفوظ است.</div>
+          <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-end">حسابیکس با
+          <i class="fa fa-heart text-danger"></i>
+            متن باز است.
+          </div>
           <div class="col-sm-6 order-sm-1 text-center text-sm-start">
-            <a class="fw-semibold" href="https://github.com/morrning" target="_blank">حسابیکس 0.0.041</a> © <span data-toggle="year-copy"></span>
+            <a class="fw-semibold" href="https://github.com/morrning/hesabixCore" target="_blank">حسابیکس {{this.hesabix.version}}</a>
           </div>
         </div>
       </div>
@@ -132,7 +160,12 @@ export default {
     user: {
       mobile:'1'
     },
-    business_count: 0
+    business_count: 0,
+    hesabix:{
+      version:'',
+      lastUpdateDate:'',
+      lastUpdateDes:'',
+    }
   }},
   methods:{
     logout(){
@@ -142,7 +175,23 @@ export default {
             document.location.reload();
             delete  axios.defaults.headers.common['X-AUTH-TOKEN'];
           });
+    },
+    gethesabix(){
+      axios.get( '/api/general/stat').then((response) =>{
+        this.hesabix = response.data;
+        let currentVersion = window.localStorage.getItem('hesabixVersion');
+        if(currentVersion == null || currentVersion != this.hesabix.version){
+          //set version Number
+          const updateModal = new bootstrap.Modal(document.getElementById('updateModal'), {backdrop: true})
+          updateModal.show();
+          window.localStorage.setItem('hesabixVersion',this.hesabix.version);
+        }
+
+      });
     }
+  },
+  mounted() {
+    this.gethesabix();
   },
   async beforeMount() {
     await axios.post('/api/user/check/login')

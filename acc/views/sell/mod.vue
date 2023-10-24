@@ -2,9 +2,9 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light">
       <h3 class="block-title text-primary-dark">
-        <router-link class="text-warning mx-2 px-2" to="/acc/buy/list">
+        <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
-        </router-link>
+        </button>
         فاکتور فروش </h3>
       <div class="block-options">
         <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-alt-primary">
@@ -56,7 +56,7 @@
       <div class="container mt-2 border p-3 border-primary">
         <h3 class="text-primary-lighter">افزودن اقلام فاکتور</h3>
         <div class="row">
-          <div class="col-sm-12 col-md-3 mb-2">
+          <div class="col-sm-12 col-md-5 mb-2">
             <label class="form-label">کالا و خدمات</label>
             <v-select
                 dir="rtl"
@@ -70,17 +70,21 @@
               </template>
             </v-select>
           </div>
-          <div class="col-sm-12 col-md-3 mb-2">
+          <div class="col-sm-12 col-md-2 mb-2">
             <label class="form-label">تعداد</label>
             <input class="form-control" type="number" min="1" v-model="this.itemData.count" />
           </div>
-          <div class="col-sm-12 col-md-3 mb-2">
+          <div class="col-sm-12 col-md-2 mb-2">
             <label class="form-label">قیمت واحد</label>
             <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
           </div>
           <div class="col-sm-12 col-md-3 mb-2">
             <label class="form-label">قیمت کل</label>
             <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bs" />
+          </div>
+          <div class="col-sm-12 col-md-12 mb-2">
+            <label class="form-label">شرح</label>
+            <input class="form-control" type="text" v-model="this.itemData.des" />
           </div>
         </div>
         <div class="row">
@@ -145,6 +149,7 @@ export default {
     headers: [
       { text: "کد کالا", value: "commodity.code" },
       { text: "کالا", value: "commodity.name" },
+      { text: "شرح", value: "des"},
       { text: "واحد", value: "commodity.unit"},
       { text: "تعداد", value: "count"},
       { text: "مبلغ واحد", value: "price"},
@@ -189,7 +194,7 @@ export default {
       bd:0,
       type:'commodity',
       id:0,
-      des:'کالا و خدمات',
+      des:'',
       table:53
     }
   }},
@@ -202,7 +207,7 @@ export default {
     },
     'itemData.commodity': function (newVal, oldVal){
       if(newVal != ''){
-        this.itemData.price = this.itemData.commodity.priceBuy.valueOf();
+        this.itemData.price = this.itemData.commodity.priceSell.valueOf();
       }
     },
   },
@@ -251,7 +256,7 @@ export default {
           bd:0,
           type:'commodity',
           id:this.commodity[0].id,
-          des:'کالا و خدمات',
+          des:'',
           table:53
         }
       }
@@ -338,10 +343,10 @@ export default {
         });
       }
       else{
-        // add tamin konanade
+        // add kharidar
         let bd = 0;
         this.items.forEach((item)=>{
-          bd = bd + item.bs.replace(/,(?=\d{3})/g, '');
+          bd = bd + parseInt(item.bs.replace(/,(?=\d{3})/g, ''));
         })
         this.items.push({
           commodity:this.commodity[0],

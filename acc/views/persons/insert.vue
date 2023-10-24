@@ -195,14 +195,29 @@ export default {
         this.person.code = 0;
       }
     },
-    save(){
-      if(this.person.nikename.length === 0)
+    save() {
+      let canSubmit = true;
+      if (this.person.mobile.length !== 0) {
+        const regex = new RegExp("^(\\+98|0)?9\\d{9}$");
+        if (!regex.test(this.person.mobile)) {
+          canSubmit = false;
+          Swal.fire({
+            text: 'شماره موبایل وارد شده نامعتبر است.',
+            icon: 'error',
+            confirmButtonText: 'قبول'
+          });
+        }
+      }
+      if (this.person.nikename.length === 0){
+        canSubmit = false;
         Swal.fire({
           text: 'نام مستعار الزامی است.',
           icon: 'error',
           confirmButtonText: 'قبول'
         });
-      else{
+      }
+
+      if(canSubmit){
         this.isLoading = true;
         axios.post('/api/person/mod/' + this.person.code,this.person).then((response)=>{
           this.isLoading = false;

@@ -89,7 +89,7 @@ export default defineComponent({
             </button>
             <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="pays-tab" data-bs-toggle="tab" data-bs-target="#pays" type="button" role="tab" aria-controls="pays" aria-selected="false">
               <i class="fa fa-list-dots me-2"></i>
-              سوابق تراکنش‌ها
+              سوابق خرید اعتبار
             </button>
             <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">
               <i class="fa fa-history me-2"></i>
@@ -151,16 +151,16 @@ export default defineComponent({
                         <label class="form-check-label">ارسال پیامک به مشتری بعد از صدور فاکتور فروش </label>
                       </div>
                       <div class="form-check form-switch">
-                        <input v-model="settings.sendAfterSellPayOnline" @change="saveSettings(settings)" class="form-check-input" type="checkbox">
+                        <input disabled="disabled" v-model="settings.sendAfterSellPayOnline" @change="saveSettings(settings)" class="form-check-input" type="checkbox">
                         <label class="form-check-label">ارسال پیامک به مشتری جهت پرداخت آنلاین فاکتور فروش </label>
                       </div>
                       <hr/>
                       <div class="form-check form-switch">
-                        <input v-model="settings.sendAfterBuy" @change="saveSettings(settings)" class="form-check-input" type="checkbox">
+                        <input disabled="disabled" v-model="settings.sendAfterBuy" @change="saveSettings(settings)" class="form-check-input" type="checkbox">
                         <label class="form-check-label">ارسال پیامک به تامین کننده بعد از صدور فاکتور خرید </label>
                       </div>
                       <div class="form-check form-switch">
-                        <input v-model="settings.sendAfterBuyToUser" @change="saveSettings(settings)" class="form-check-input" type="checkbox">
+                        <input disabled="disabled" v-model="settings.sendAfterBuyToUser" @change="saveSettings(settings)" class="form-check-input" type="checkbox">
                         <label class="form-check-label">ارسال پیامک به تامین کننده بعد از ثبت پرداخت فاکتور خرید </label>
                       </div>
                     </div>

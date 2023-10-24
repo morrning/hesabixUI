@@ -57,7 +57,7 @@
       <div class="container mt-2 border p-3 border-primary">
         <h3 class="text-primary-lighter">افزودن اقلام فاکتور</h3>
         <div class="row">
-          <div class="col-sm-12 col-md-3 mb-2">
+          <div class="col-sm-12 col-md-5 mb-2">
             <label class="form-label">کالا و خدمات</label>
             <v-select
                 dir="rtl"
@@ -71,11 +71,11 @@
               </template>
             </v-select>
           </div>
-          <div class="col-sm-12 col-md-3 mb-2">
+          <div class="col-sm-12 col-md-2 mb-2">
             <label class="form-label">تعداد</label>
             <input class="form-control" type="number" min="1" v-model="this.itemData.count" />
           </div>
-          <div class="col-sm-12 col-md-3 mb-2">
+          <div class="col-sm-12 col-md-2 mb-2">
             <label class="form-label">قیمت واحد</label>
             <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
           </div>

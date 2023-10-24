@@ -1,8 +1,32 @@
 <template>
   <div class="container-fluid mt-3">
+    <div class="row" v-show="this.statements.length != 0">
+      <div class="col-12">
+        <div class="alert alert-primary alert-dismissible" role="alert">
+          <h3 class="alert-heading fs-4 my-2">اعلانات</h3>
+          <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+          <p v-for="statment in this.statements" class="mb-0">
+            <b class="text-primary-dark">{{statment.dateSubmit}}: </b>
+            <span v-html="statment.body"></span>
+          </p>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-12">
         <div class="row items-push">
+          <div v-show="permissions.wallet" class="col-6 col-lg-3">
+            <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0 bg-info text-light" to="/acc/wallet/view">
+              <div class="block-content py-5">
+                <div class="fs-3 fw-semibold  mb-1">{{ this.$filters.formatNumber(wallet.deposit) }}  ریال</div>
+                <p class="fw-semibold fs-sm  text-uppercase mb-0">
+                  <i class="fa fa-wallet"></i>
+                  <br>
+                  کیف پول
+                </p>
+              </div>
+            </router-link>
+          </div>
           <div v-show="permissions.persons" class="col-6 col-lg-3">
             <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0" to="/acc/persons/list">
               <div class="block-content py-5">
@@ -76,8 +100,10 @@ export default {
   name: "dashboard",
   data:()=>{return {
     stat:{},
+    statements:[],
     permissions:{},
-    plugins:{}
+    plugins:{},
+    wallet:{}
   }},
   methods:{
     async loadData(){
@@ -93,6 +119,13 @@ export default {
           //get active plugins
           axios.post('/api/plugin/get/actives',).then((response)=>{
             this.plugins = response.data;
+          });
+          axios.post('/api/wallet/info',).then((response)=>{
+            this.wallet = response.data;
+          });
+          //get statments
+          axios.post('/api/general/statements',).then((response)=>{
+            this.statements = response.data;
           });
         }
       })

@@ -439,6 +439,13 @@ export default {
                   <router-link to="/acc/salary/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </RouterLink>
               </li>
+              <li v-if="permissions.wallet" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/wallet/view">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-wallet"></i>
+                    کیف پول</span>
+                </RouterLink>
+              </li>
               <li v-if="permissions.bankTransfer" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/transfer/list">
                   <span class="nav-main-link-name"> انتقال </span>
@@ -447,7 +454,7 @@ export default {
               </li>
             </ul>
           </li>
-          <li v-show="permissions.store" class="nav-main-item">
+          <li v-show="permissions.store1" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-boxes-stacked"></i>
               <span class="nav-main-link-name">انبارداری</span>

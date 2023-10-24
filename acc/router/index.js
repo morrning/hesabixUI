@@ -80,6 +80,11 @@ const router = createRouter({
       component: () => import('../views/salary/mod.vue'),
     },
     {
+      path: '/acc/wallet/view',
+      name: 'wallet_view',
+      component: ()=> import('../views/wallet/view.vue')
+    },
+    {
       path: '/acc/cashdesk/list',
       name: 'cashdesk_list',
       component: ()=> import('../views/cashdesk/list.vue')
@@ -212,7 +217,7 @@ const router = createRouter({
     {
       path: '/acc/sell/view/:id?',
       name: 'sell_view',
-      component: () => import('../views/sell/view.vue'),
+      component: () => import('../views/sell/viewInvoice.vue'),
     },
     {
       path: '/acc/plugin-center/list',

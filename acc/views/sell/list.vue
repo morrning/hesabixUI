@@ -47,6 +47,13 @@
                 <i class="fa fa-trash"></i>
               </span>
             </template>
+            <template #item-des="{ des }">
+              {{ des.replace("فاکتور فروش:","") }}
+            </template>
+            <template #item-status="{ status }">
+              <span v-if="status == 'تسویه شده'" class="text-success"><i class="fa fa-check me-2"></i>تسویه شده</span>
+              <span v-else class="text-danger"><i class="fa fa-info me-2"></i>تسویه نشده</span>
+            </template>
           </EasyDataTable>
         </div>
       </div>
@@ -66,9 +73,10 @@ export default {
     items:[],
     headers: [
       { text: "شماره سند", value: "code" , sortable: true},
+      { text: "وضعیت", value: "status", sortable: true},
       { text: "تاریخ", value: "date", sortable: true},
       { text: "شرح", value: "des", sortable: true},
-      { text: "تامین کننده", value: "person", sortable: true},
+      { text: "خریدار", value: "person", sortable: true},
       { text: "مبلغ", value: "amount", sortable: true},
       { text: "ثبت کننده", value: "submitter", sortable: true},
       { text: "عملیات", value: "operation"},

@@ -52,6 +52,7 @@ export default {
       { text: "کاربر", value: "user"},
       { text: "توضیحات", value: "des"},
       { text: "بخش", value: "part"},
+      { text: "آی پی آدرس", value: "ipaddress"},
     ]
   }},
   methods: {

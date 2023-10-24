@@ -131,6 +131,12 @@
                 <label class="form-check-label">انبارداری</label>
               </div>
             </div>
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.wallet" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">کیف پول حسابیکس</label>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row mt-2">
