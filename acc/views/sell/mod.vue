@@ -209,6 +209,7 @@ export default {
       if(newVal != ''){
         this.itemData.price = this.itemData.commodity.priceSell.valueOf();
       }
+      this.itemData.des = this.itemData.commodity.des;
     },
   },
   beforeMount() {

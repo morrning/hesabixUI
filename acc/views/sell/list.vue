@@ -97,10 +97,11 @@ export default {
     },
     deleteItem(code){
       Swal.fire({
-        text: 'آیا برای حذف این مورد مطمئن هستید؟',
+        text: 'آیا برای حذف این مورد مطمئن هستید؟ تمامی اسناد پرداخت همراه فاکتور نیز حذف خواهند شد.',
         showCancelButton: true,
         confirmButtonText: 'بله',
         cancelButtonText: `خیر`,
+        icon:'warning'
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {

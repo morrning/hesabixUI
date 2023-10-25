@@ -9,7 +9,26 @@ export default defineComponent({
   components:{
     rec:rec,
   },
+  watch:{
+    'PayWindowsState.submited'(newValue,oldValue) {
+      if(newValue){
+        this.item.relatedDocs.push({
+          code:0,
+          amount:this.$refs.submitPay.$data.totalPays,
+          des:'',
+          date:'',
+        });
+        this.$refs.submitPay.$data.items = [];
+        this.$refs.submitPay.$data.totalPays = 0;
+        this.recModal.hide()
+      }
+    }
+  },
   data:()=>{return{
+    PayWindowsState:{
+      submited:false
+    },
+    recModal:{},
     loading:ref(false),
     shortlink_url:'',
     copy_label:'کپی',
@@ -37,9 +56,6 @@ export default defineComponent({
     totalRec: 0,
   }},
   methods:{
-    submitPay(){
-      alert(this.$refs.submitPay.$data.item)
-    },
     copyToCliboard(){
       navigator.clipboard.writeText(this.shortlink_url);
       this.copy_label = 'کپی شد !';
@@ -109,6 +125,7 @@ export default defineComponent({
   },
   mounted() {
     this.loadData();
+    this.recModal =  new bootstrap.Modal(document.getElementById('rec-modal'))
   }
 })
 </script>
@@ -128,7 +145,7 @@ export default defineComponent({
           <i class="fas fa-check-double me-2"></i>
           <span class="">تسویه شده</span>
         </button>
-        <button v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec) " type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#rec-modal">
+        <button v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec) " type="button" class="btn btn-sm btn-danger" @click="this.recModal.show()">
           <i class="fas fa-money-bill-1-wave"></i>
           <span class="d-none d-sm-inline-block">دریافت وجه</span>
         </button>
@@ -146,7 +163,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="modal-body">
-                <rec ref="submitPay" :original-doc="this.item.doc.code" :total-amount="parseInt(this.item.doc.amount) - parseInt(this.totalRec)"></rec>
+                <rec ref="submitPay" :windowsState="this.PayWindowsState" :person="this.person.id" :original-doc="this.item.doc.code" :total-amount="parseInt(this.item.doc.amount) - parseInt(this.totalRec)"></rec>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
@@ -338,18 +355,17 @@ export default defineComponent({
           <td>{{ this.$filters.formatNumber(commodity.bs) }}</td>
         </tr>
         <tr class="bg-light border border-dark border-2">
-          <th colspan="2" class="text-right border-0">جمع دریافت‌ها</th>
-          <th class="text-center border-0">{{ this.$filters.formatNumber(this.totalRec) }} ریال</th>
-          <th colspan="1" class="text-right border-end-0">مانده فاکتور</th>
-          <th class="text-center border-0">
-            {{ this.$filters.formatNumber(parseInt(this.totalPrice) - parseInt(this.totalRec)) }} ریال
-            <div>
-              <span v-show="parseInt(this.item.doc.amount) <= parseInt(this.totalRec)">(تسویه شده)</span>
-              <span class="text-decoration-underline text-danger" v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec)">(تسویه نشده)</span>
-            </div>
+          <th colspan="2" class="text-right border-0">جمع دریافت‌ها:
+            {{ this.$filters.formatNumber(this.totalRec) }} ریال
           </th>
-          <th colspan="2" class="text-right border-end-0">جمع کل</th>
-          <th class="text-center border-0">{{ this.$filters.formatNumber(this.totalPrice) }} ریال</th>
+          <th colspan="1" class="text-right border-end-0">مانده فاکتور:
+            {{ this.$filters.formatNumber(parseInt(this.totalPrice) - parseInt(this.totalRec)) }} ریال
+            <span v-show="parseInt(this.item.doc.amount) <= parseInt(this.totalRec)">(تسویه شده)</span>
+            <span class="text-decoration-underline text-danger" v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec)">(تسویه نشده)</span>
+          </th>
+          <th colspan="5" class="text-right border-end-0">جمع کل:
+            {{ this.$filters.formatNumber(this.totalPrice) }} ریال
+          </th>
         </tr>
         <tr>
           <th colspan="3" class="text-right">
@@ -359,11 +375,14 @@ export default defineComponent({
                   <div class="text-center">لیست دریافت‌ها</div>
                 </div>
                 <div class="col-12">
-                  <div class="row">
-                    <div class="col-sm-12 col-md-3 text-center">کد</div>
+                  <div v-show="this.item.relatedDocs.length != 0" class="row">
+                    <div class="col-sm-12 col-md-3 text-center">شماره سند</div>
                     <div class="col-sm-12 col-md-3 text-center">تاریخ</div>
                     <div class="col-sm-12 col-md-3 text-center">مبلغ</div>
                     <div class="col-sm-12 col-md-3 text-center">نوع</div>
+                  </div>
+                  <div v-show="this.item.relatedDocs.length == 0" class="row">
+                    <b class="text-danger col-sm-12 col-md-12 text-center">هیچ سند دریافتی ثبت نشده است.</b>
                   </div>
                 </div>
                 <div class="col-12" v-for="rd in this.item.relatedDocs">

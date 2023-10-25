@@ -1,14 +1,18 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default defineComponent({
   name: "rec",
   props:{
     totalAmount:Number,
-    originalDoc:String
+    originalDoc:String,
+    person:[String, Number],
+    windowsState: Object,
   },
   data:()=>{return{
+    des:'',
     items:[],
     date:'',
     year:{},
@@ -34,45 +38,83 @@ export default defineComponent({
     },
   }},
   methods:{
+    fillWithTotal(pay){
+      pay.bd = this.$props.totalAmount;
+    },
     addItem(type){
       let obj = {};
+      let canAdd = true;
       if(type == 'bank'){
-        obj = {
-          type:'bank',
-          bank:{},
-          cashdesk:{},
-          salary:{},
-          bs:0,
-          bd:0,
-          tax:0,
-          referal:''
+        if(this.listBanks.length == 0){
+          Swal.fire({
+            text: 'ابتدا یک حساب بانکی ایجاد کنید.در حال حاضر هیچ بانکی تعریف نشده است.',
+            icon: 'error',
+            confirmButtonText: 'قبول'
+          });
+          canAdd = false;
+        }
+        else{
+          obj = {
+            id:'',
+            type:'bank',
+            bank:{},
+            cashdesk:{},
+            salary:{},
+            bs:0,
+            bd:0,
+            des:'',
+            table:5,
+            referral:''
+          }
         }
       }
       else if(type == 'cashdesk'){
+        if(this.listCashdesks.length == 0){
+          Swal.fire({
+            text: 'ابتدا یک صندوق ایجاد کنید.در حال حاضر هیچ صندوقی تعریف نشده است.',
+            icon: 'error',
+            confirmButtonText: 'قبول'
+          });
+          canAdd = false;
+        }
         obj = {
+          id:'',
           type:'cashdesk',
           bank:{},
           cashdesk:{},
           salary:{},
           bs:0,
           bd:0,
-          tax:0,
-          referal:''
+          des:'',
+          table:121,
+          referral:''
         }
       }
       else if(type == 'salary'){
+        if(this.listSalarys.length == 0){
+          Swal.fire({
+            text: 'ابتدا یک تخواه گردان ایجاد کنید.در حال حاضر هیچ تنخواه گردانی تعریف نشده است.',
+            icon: 'error',
+            confirmButtonText: 'قبول'
+          });
+          canAdd = false;
+        }
         obj = {
+          id:'',
           type:'salary',
           bank:{},
           cashdesk:{},
           salary:{},
           bs:0,
           bd:0,
-          tax:0,
-          referal:''
+          des:'',
+          table:122,
+          referral:''
         }
       }
-      this.items.push(obj);
+      if(canAdd){
+        this.items.push(obj);
+      }
     },
     deleteItem(key){
       this.items.splice(key,1);
@@ -102,6 +144,91 @@ export default defineComponent({
       this.items.forEach((value)=>{
         this.totalPays += parseInt(value.bd);
       })
+    },
+    async submit(){
+      let errors = [];
+      if(this.$props.totalAmount < this.totalPays){
+        errors.push('مبالغ وارد شده بیشتر از مبلغ فاکتور است.');
+      }
+      this.items.forEach((element,index)=>{
+        if(element.bd == 0){
+          errors.push('مبلغ صفر در ردیف ' + (index + 1) + ' نا معتبر است.');
+        }
+        //check type selected
+        if(element.type == 'bank'){
+          if(element.bank == null || Object.keys(element.bank).length == 0){
+            errors.push('بانک در ردیف  ' + (index + 1) + ' انتخاب نشده است.');
+          }
+        }
+        else if(element.type == 'salary'){
+          if(element.salary == null || Object.keys(element.salary).length == 0){
+            errors.push('تنخواه گردان در ردیف  ' + (index + 1) + ' انتخاب نشده است.');
+          }
+        }
+        else if(element.type == 'cashdesk'){
+          if(element.cashdesk == null || Object.keys(element.cashdesk).length == 0){
+            errors.push('صندوق در ردیف  ' + (index + 1) + ' انتخاب نشده است.');
+          }
+        }
+      })
+      if(this.items.length == 0){
+        Swal.fire({
+          text:'هیچ دریافتی ثبت نشده است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      else if(errors.length != 0){
+        //show errors
+        let errorHtml = '<ul class="justify-content-center">';
+        errors.forEach((element) => {
+          errorHtml += '<div class="">' + element + '</div>';
+        });
+        errorHtml += '</ul>';
+        Swal.fire({
+          html:errorHtml,
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      else{
+        let rows = [...this.items];
+        rows.forEach((element)=>{
+          if(element.type == 'bank'){
+            element.id = element.bank.id;
+          }
+          else if(element.type == 'salary'){
+            element.id = element.salary.id;
+          }
+          else if(element.type == 'cashdesk'){
+            element.id = element.cashdesk.id;
+          }
+        });
+        rows.push({
+          id:this.$props.person,
+          type:'person',
+          bd:0,
+          bs:this.totalPays,
+          table:3,
+          des:'دریافت وجه فاکتور شماره ' + this.$props.originalDoc
+        });
+        axios.post('/api/accounting/insert',{
+          date: this.date,
+          des: this.des,
+          type:'sell_receive',
+          update:null,
+          rows:rows,
+          related:this.$props.originalDoc
+        }).then((response)=>{
+          Swal.fire({
+            text:'سند با موفقیت ثبت شد.',
+            icon: 'success',
+            confirmButtonText: 'قبول'
+          }).then((result)=>{
+            this.$props.windowsState.submited = true;
+          });
+        })
+      }
     }
   },
   mounted() {
@@ -147,7 +274,7 @@ export default defineComponent({
         {{this.$filters.formatNumber(parseInt(this.$props.totalAmount) - parseInt(this.totalPays))}}
         ریال
       </span>
-      <button class="btn btn-primary" type="button" >
+      <button @click="submit()" class="btn btn-primary" type="button" >
         <i class="fa fa-save me-2"></i>
         ثبت
       </button>
@@ -157,7 +284,7 @@ export default defineComponent({
     <div class="col">
       <p class="mb-1">دریافت‌ها:</p>
       <div v-show="items.length === 0" class="alert alert-info mx-3"><i class="fa fa-info"></i>
-        دریافتی ثبت نشده است!
+        دریافتی افزوده نشده است!
       </div>
     </div>
   </div>
@@ -166,10 +293,11 @@ export default defineComponent({
       <div class="card-body p-1">
         <div class="row">
           <div class="col-2 text-center">
+            <h6 class="mb-1 text-start"><span class="badge bg-primary-light">{{key + 1}}</span></h6>
             <img v-show="pay.type == 'bank'" src="/img/icons/bank.jpg" class="img-fluid" />
             <img v-show="pay.type == 'cashdesk'" src="/img/icons/cashdesk.jpg" class="img-fluid" />
             <img v-show="pay.type == 'salary'" src="/img/icons/salary.jpg" class="img-fluid" />
-            <button @click="deleteItem(key)" type="button" class="btn btn-link text-danger mt-2">
+            <button @click="deleteItem(key)" type="button" class="btn text-danger mt-2">
               <i class="fa fa-trash"></i>
             </button>
           </div>
@@ -218,20 +346,23 @@ export default defineComponent({
               </div>
               <div class="col-sm-12 col-md-6">
                 <div class="mb-1">
-                  <label  class="form-label">مبلغ</label>
+                  <div class="block-options">
+                    <label  class="form-label">مبلغ</label>
+                    <button @click="fillWithTotal(pay)" class="btn btn-sm btn-link block-options-item float-end me-2">کل فاکتور</button>
+                  </div>
                   <money3 @change="calc()" class="form-control" v-model="pay.bd" v-bind="currencyConfig"></money3>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
                 <div class="mb-1">
                   <label  class="form-label">ارجاع</label>
-                  <input type="text" v-model="pay.referal" class="form-control">
+                  <input type="text" v-model="pay.referral" class="form-control">
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
                 <div class="mb-1">
-                  <label  class="form-label">کارمزد</label>
-                  <money3 @change="calc()" class="form-control" v-model="pay.tax" v-bind="currencyConfig"></money3>
+                  <label  class="form-label">شرح</label>
+                  <input class="form-control" v-model="pay.des">
                 </div>
               </div>
             </div>

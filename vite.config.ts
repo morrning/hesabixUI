@@ -27,6 +27,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         acc: resolve(__dirname, 'acc/index.html'),
+        manager: resolve(__dirname, 'manager/index.html'),
       }
     },
   },
