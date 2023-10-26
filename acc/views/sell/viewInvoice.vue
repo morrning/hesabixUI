@@ -3,24 +3,25 @@ import {defineComponent, ref} from 'vue'
 import axios from "axios";
 import Swal from "sweetalert2";
 import rec from "../component/rec.vue";
-
+import recList from "../component/recList.vue";
 export default defineComponent({
   name: "viewInvoice",
   components:{
     rec:rec,
+    recList:recList
   },
   watch:{
     'PayWindowsState.submited'(newValue,oldValue) {
+      this.PayWindowsState.submited = false;
       if(newValue){
-        this.item.relatedDocs.push({
-          code:0,
-          amount:this.$refs.submitPay.$data.totalPays,
-          des:'',
-          date:'',
-        });
-        this.$refs.submitPay.$data.items = [];
-        this.$refs.submitPay.$data.totalPays = 0;
+        this.loadData();
         this.recModal.hide()
+      }
+    },
+    'recListWindowsState.submited'(newValue,oldValue) {
+      this.recListWindowsState.submited = false;
+      if(newValue){
+        this.loadData();
       }
     }
   },
@@ -28,7 +29,11 @@ export default defineComponent({
     PayWindowsState:{
       submited:false
     },
+    recListWindowsState:{
+      submited:false
+    },
     recModal:{},
+    recListModal:{},
     loading:ref(false),
     shortlink_url:'',
     copy_label:'کپی',
@@ -126,6 +131,7 @@ export default defineComponent({
   mounted() {
     this.loadData();
     this.recModal =  new bootstrap.Modal(document.getElementById('rec-modal'))
+    this.recListModal =  new bootstrap.Modal(document.getElementById('rec-list-modal'))
   }
 })
 </script>
@@ -145,7 +151,7 @@ export default defineComponent({
           <i class="fas fa-check-double me-2"></i>
           <span class="">تسویه شده</span>
         </button>
-        <button v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec) " type="button" class="btn btn-sm btn-danger" @click="this.recModal.show()">
+        <button v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec)" type="button" class="btn btn-sm btn-danger" @click="this.recModal.show()">
           <i class="fas fa-money-bill-1-wave"></i>
           <span class="d-none d-sm-inline-block">دریافت وجه</span>
         </button>
@@ -171,7 +177,32 @@ export default defineComponent({
             </div>
           </div>
         </div>
-
+        <button type="button" class="btn btn-sm btn-info ms-2" @click="this.recListModal.show()">
+          <i class="fas fa-arrow-alt-circle-down"></i>
+          <span class="d-none d-sm-inline-block">دریافت‌ها</span>
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="rec-list-modal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel1">
+                  <i class="fas fa-arrow-alt-circle-down ms-2"></i>
+                  دریافت‌ها
+                </h1>
+                <div class="block-options">
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+              </div>
+              <div class="modal-body">
+                <rec-list ref="recListRef" :windowsState="this.recListWindowsState" :items="this.item.relatedDocs"></rec-list>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <button class="btn btn-sm btn-primary mx-2" onclick="document.getElementById('hide-on-print').classList.add('d-none');Dashmix.helpers('dm-print');" type="button">
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ فاکتور</span>

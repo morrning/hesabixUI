@@ -12,6 +12,7 @@ export default defineComponent({
     windowsState: Object,
   },
   data:()=>{return{
+    submitedDoc:{},
     des:'',
     items:[],
     date:'',
@@ -225,6 +226,7 @@ export default defineComponent({
             icon: 'success',
             confirmButtonText: 'قبول'
           }).then((result)=>{
+            this.submitedDoc = response.data.doc;
             this.$props.windowsState.submited = true;
           });
         })

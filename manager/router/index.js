@@ -7,6 +7,11 @@ const router = createRouter({
       path: '/',
       name: 'app_home',
       component: HomeView
+    },
+    {
+      path: '/manager/support/list',
+      name: 'support_list',
+      component: ()=> import('../views/support/list.vue')
     }
   ]
 })

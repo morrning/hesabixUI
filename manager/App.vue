@@ -10,7 +10,11 @@ export default {
 
   data(){
     return {
-
+      ROLE_ADMIN:true,
+      userInfo:{
+        fullName:'',
+        email:''
+      }
     }
   },
   beforeMount() {
@@ -31,7 +35,14 @@ export default {
 
   },
   async mounted() {
-
+    axios.post('/api/admin/has/role/' + 'ROLE_ADMIN').then((response)=>{
+      this.ROLE_ADMIN = response.data.result;
+      if(this.ROLE_ADMIN == false){
+        this.$router.push('/404');
+      }else{
+        axios.post('/api/user/current/info').then((res) => {this.userInfo = res.data;});
+      }
+    });
   },
   components:{
 
@@ -208,11 +219,10 @@ export default {
             </li>
 
             <li class="nav-main-item">
-              <a class="nav-main-link active" href="db_hosting.html">
+              <router-link class="nav-main-link active" to="/manager/support/list">
                 <i class="nav-main-link-icon fa fa-life-ring"></i>
                 <span class="nav-main-link-name">پشتیبانی</span>
-                <span class="nav-main-link-badge badge rounded-pill bg-success">+</span>
-              </a>
+              </router-link>
             </li>
 
 
@@ -239,7 +249,7 @@ export default {
               </ul>
             </li>
             <li class="nav-main-item">
-              <a class="nav-main-link" href="be_pages_dashboard_all.html">
+              <a @click="this.logout()" class="nav-main-link">
                 <i class="nav-main-link-icon si si-arrow-right"></i>
                 <span class="nav-main-link-name"> خروج </span>
               </a>
@@ -273,46 +283,22 @@ export default {
           <div class="dropdown d-inline-block">
             <button aria-expanded="false" aria-haspopup="true" class="btn btn-alt-secondary" data-bs-toggle="dropdown"
                     id="page-header-user-dropdown" type="button">
-              <span class="d-none d-lg-inline mx-1">support@site.ir</span>
-              <span class="badge rounded-pill bg-success">حرفه ای</span>
+              <span class="d-none d-lg-inline mx-1">{{userInfo.email}}</span>
+              <span class="badge rounded-pill bg-success">{{userInfo.fullname}}</span>
               <i class="fa fa-fw fa-angle-down ms-1"></i>
             </button>
             <div aria-labelledby="page-header-user-dropdown" class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0">
               <div class="bg-primary rounded-top fw-semibold text-white text-center p-3">
-                <img alt="" class="img-avatar img-avatar-thumb" src="assets/media/avatars/avatar16.jpg" />
+                <vue-gravatar class="img-avatar img-avatar-thumb" :email="this.userInfo.email" :size="128" />
+
                 <div class="pt-2">
-                  <a class="text-white fw-semibold" href="be_pages_generic_profile.html">مت دو</a>
+                  <a class="text-white fw-semibold" href="/">{{this.userInfo.fullname}}</a>
                 </div>
               </div>
               <div class="p-2">
-                <div class="row g-0">
-                  <div class="col-6 pe-2 border-end">
-                    <a class="dropdown-item d-flex justify-content-between align-items-center" href="javascript:void(0)">
-                      پروفایل <i class="fa fa-fw fa-user opacity-50 ms-1"></i>
-                    </a>
-                    <a class="dropdown-item d-flex justify-content-between align-items-center" href="javascript:void(0)">
-                      تنظیمات <i class="fa fa-fw fa-cog opacity-50 ms-1"></i>
-                    </a>
-                    <a class="dropdown-item d-flex justify-content-between align-items-center" href="javascript:void(0)">
-                      صورتحساب <i class="fa fa-fw fa-money-check-alt opacity-50 ms-1"></i>
-                    </a>
-                  </div>
-                  <div class="col-6 ps-2">
-                    <a class="dropdown-item d-flex justify-content-between align-items-center" href="javascript:void(0)">
-                      سرور <i class="fa fa-fw fa-server opacity-50 ms-1"></i>
-                    </a>
-                    <a class="dropdown-item d-flex justify-content-between align-items-center"
-                       href="javascript:void(0)">دامنه ها<i class="fa fa-fw fa-globe opacity-50 ms-1"></i>
-                    </a>
-                    <a class="dropdown-item d-flex justify-content-between align-items-center"
-                       href="javascript:void(0)">طرح ها<i class="fa fa-fw fa-chess-rook opacity-50 ms-1"></i>
-                    </a>
-                  </div>
-                </div>
-                <div class="dropdown-divider" role="separator"></div>
-                <a class="dropdown-item d-flex justify-content-between align-items-center" href="op_auth_signin.html">
+                <button @click="this.logout()" class="dropdown-item d-flex justify-content-between align-items-center">
                   خروج از سیستم <i class="fa fa-fw fa-sign-out-alt text-danger ms-1"></i>
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -355,7 +341,7 @@ export default {
     <!-- Main Container -->
     <main id="main-container">
       <!-- Page Content -->
-      <div class="content content-full">
+      <div class="content content-full p-0">
         <RouterView />
       </div>
       <!-- END Page Content -->

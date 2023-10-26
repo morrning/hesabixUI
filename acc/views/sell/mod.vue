@@ -338,7 +338,7 @@ export default {
       }
       else if(this.data.person == null || this.data.person == ''){
         Swal.fire({
-          text: 'تامین کننده انتخاب نشده است.',
+          text: 'مشتری انتخاب نشده است.',
           icon: 'warning',
           confirmButtonText: 'قبول'
         });

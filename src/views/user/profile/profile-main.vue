@@ -112,6 +112,11 @@
                 <i class="fa fa-unlock fa-fw opacity-50"></i> <span class="d-none d-md-inline ms-1">تغییر کلمه عبور</span>
               </RouterLink>
             </li>
+            <li v-show="ROLE_ADMIN" class="nav-item">
+              <a class="nav-link text-body-color py-4" href="/manager/#/">
+                <i class="fab fa-android fa-fw opacity-50"></i> <span class="d-none d-md-inline ms-1">مدیریت</span>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -157,6 +162,7 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
   name: "profile-main",
   data: ()=>{return{
+    ROLE_ADMIN:false,
     user: {
       mobile:'1'
     },
@@ -192,6 +198,9 @@ export default {
   },
   mounted() {
     this.gethesabix();
+    axios.post('/api/admin/has/role/' + 'ROLE_ADMIN').then((response)=>{
+      this.ROLE_ADMIN = response.data.result;
+    });
   },
   async beforeMount() {
     await axios.post('/api/user/check/login')
