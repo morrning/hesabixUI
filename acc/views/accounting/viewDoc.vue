@@ -6,8 +6,14 @@
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         سند حسابداری</h3>
+      <div class="block-options">
+        <button class="btn btn-sm btn-primary mx-2" onclick="Dashmix.helpers('dm-print');" type="button">
+          <i class="si si-printer me-1"></i>
+          <span class="d-none d-sm-inline-block">چاپ سند</span>
+        </button>
+      </div>
     </div>
-    <div class="block-content py-3 px-0 vl-parent">
+    <div id="dm-print" class="block-content py-3 px-0 vl-parent">
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
       <div class="container-fluid">
         <div class="row">

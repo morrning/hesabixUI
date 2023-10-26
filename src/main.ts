@@ -9,10 +9,14 @@ import 'maz-ui/css/main.css'
 // @ts-ignore
 import VueGravatar from "vue3-gravatar";
 import VueCountdown from '@chenfengyuan/vue-countdown';
+import Vue3EasyDataTable from "vue3-easy-data-table";
+import 'vue3-easy-data-table/dist/style.css';
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
 const app = createApp(App)
+app.component('EasyDataTable', Vue3EasyDataTable);
+
 
 app.config.globalProperties.$API_URL = 'http://localhost';
 //app.config.globalProperties.$API_URL = 'https://hesabix.ir';

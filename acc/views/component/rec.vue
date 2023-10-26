@@ -204,6 +204,9 @@ export default defineComponent({
           else if(element.type == 'cashdesk'){
             element.id = element.cashdesk.id;
           }
+          if(element.des == ''){
+            element.des = 'دریافت وجه فاکتور شماره ' + this.$props.originalDoc
+          }
         });
         rows.push({
           id:this.$props.person,
@@ -211,8 +214,11 @@ export default defineComponent({
           bd:0,
           bs:this.totalPays,
           table:3,
-          des:'دریافت وجه فاکتور شماره ' + this.$props.originalDoc
+          des:'پرداخت وجه فاکتور شماره ' + this.$filters.formatNumber(this.$props.originalDoc)
         });
+        if(this.des == ''){
+          this.des = 'پرداخت وجه فاکتور شماره ' + this.$filters.formatNumber(this.originalDoc) ;
+        }
         axios.post('/api/accounting/insert',{
           date: this.date,
           des: this.des,

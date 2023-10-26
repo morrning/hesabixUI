@@ -123,7 +123,7 @@
       <!-- END Hero -->
 
       <!-- Page Content -->
-      <div class="content">
+      <div class="m-1">
         <RouterLink v-show="!this.user.mobile" to="/profile/add-mobile-number">
           <div class="alert alert-warning">
             <i class="fa fa-warning"></i>

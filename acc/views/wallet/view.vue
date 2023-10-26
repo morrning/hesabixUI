@@ -103,13 +103,9 @@ export default defineComponent({
       <div class="row">
         <div class="col-sm-12 col-md-12 m-0 p-0">
           <ul class="nav nav-pills flex-column flex-sm-row border border-secondary" id="myTab" role="tablist">
-            <button class="flex-sm-fill text-sm-center nav-link active rounded-0" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
-              <i class="fa fa-plus-circle me-2"></i>
-              افزایش اعتبار
-            </button>
             <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
               <i class="fa fa-cogs me-2"></i>
-              تنظیمات
+              سوابق تسویه پایا/ساتنا
             </button>
             <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="pays-tab" data-bs-toggle="tab" data-bs-target="#pays" type="button" role="tab" aria-controls="pays" aria-selected="false">
               <i class="fa fa-list-dots me-2"></i>
@@ -121,11 +117,8 @@ export default defineComponent({
             </button>
           </ul>
           <div class="tab-content px-3" id="myTabContent">
-            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-
-            </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
+              <span class="text-info">فعلا سوابقی ثبت نشده است</span>
             </div>
             <div class="tab-pane fade" id="pays" role="tabpanel" aria-labelledby="pays-tab">
               <div class="my-2">

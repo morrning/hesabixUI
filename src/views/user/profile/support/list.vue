@@ -11,38 +11,40 @@
         </router-link>
       </div>
     </div>
-    <div class="block-content mt-0">
+    <div class="block-content mt-0 p-1">
       <div class="row pb-sm-3 pb-md-5">
         <div class="col-sm-12 col-md-12">
-          <div v-if="items.length != 0" class="table-responsive">
-            <table class="table text-center table-striped">
-              <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">تاریخ</th>
-                <th scope="col">عنوان درخواست</th>
-                <th scope="col">وضعیت</th>
-                <th scope="col">عملیات</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="(item, index) in items">
-                <th scope="row">{{index + 1}}</th>
-                <td>{{item.dateSubmit}}</td>
-                <td>{{item.title}}</td>
-                <td>{{item.state}}</td>
-                <td>
-                  <router-link :to="'/profile/support-view/' + item.id">
-                    <i class="fa fa-eye"></i>
-                  </router-link>
-                </td>
-              </tr>
-              </tbody>
-            </table>
+          <div class="mb-1">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text"><i class="fa fa-search"></i></span>
+              <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
+            </div>
           </div>
-          <div v-else class="container">
-            <h3 class="text-success">هیچ درخواست در حال پیگیری وجود ندارد.</h3>
-          </div>
+          <EasyDataTable
+              show-index
+              alternating
+              :search-value="searchValue"
+              :headers="headers"
+              :items="items"
+              theme-color="#1d90ff"
+              header-text-direction="center"
+              body-text-direction="center"
+              rowsPerPageMessage="تعداد سطر"
+              emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+              rowsOfPageSeparatorMessage="از"
+              :loading = "loading"
+          >
+            <template #item-operation="{ id }">
+              <router-link :to="'/profile/support-view/' + id">
+                <i class="fa fa-eye"></i>
+              </router-link>
+            </template>
+            <template #item-state="{ state }">
+              <span v-if="state == 'پاسخ داده شده'" class="text-success"><i class="fa fa-check-double"></i> پاسخ داده شده </span>
+              <span v-else class="text-danger"><i class="fa fa-question-circle"></i> در حال پیگیری </span>
+
+            </template>
+          </EasyDataTable>
         </div>
       </div>
     </div>
@@ -51,11 +53,20 @@
 
 <script>
 import axios from "axios";
+import {ref} from "vue";
 
 export default {
   name: "list",
   data(){return{
-    items:[]
+    searchValue: '',
+    loading: ref(true),
+    items:[],
+    headers: [
+      { text: "تاریخ", value: "dateSubmit", sortable: true},
+      { text: "عنوان", value: "title", sortable: true},
+      { text: "وضعیت", value: "state", sortable: true},
+      { text: "عملیات", value: "operation"},
+    ]
   }},
   mounted() {
     this.loadData();
@@ -64,6 +75,7 @@ export default {
     loadData(){
       axios.post('/api/support/list').then((response)=>{
         this.items = response.data;
+        this.loading = false;
       });
     }
   }
