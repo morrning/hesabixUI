@@ -15,7 +15,7 @@ export default {
 
   data(){
     return {
-      isLoading: true,
+      isLoading: false,
       userFullName: '',
       userEmail: '',
       isLogedIn: false,
