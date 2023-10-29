@@ -15,7 +15,7 @@ export default {
 
   data(){
     return {
-      isLoading: false,
+      isLoading: true,
       userFullName: '',
       userEmail: '',
       isLogedIn: false,
@@ -26,7 +26,8 @@ export default {
       ticket:{
         title:'',
         body:''
-      }
+      },
+      timeNow:''
     }
   },
   async beforeMount() {
@@ -111,6 +112,9 @@ export default {
     axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
           this.business = response.data;
         });
+    axios.post('/api/general/get/time').then((response) => {
+      this.timeNow = response.data.timeNow;
+    });
   },
   components:{
     Loading,
@@ -251,17 +255,17 @@ export default {
   <nav aria-label="Main Navigation" id="sidebar">
     <!-- Side Header -->
     <div class="bg-header-dark">
-      <div class="content-header bg-white-5">
+      <div class="content-header">
         <!-- Logo -->
-        <a class="fw-semibold text-white tracking-wide" href="/">
+        <router-link class="fw-semibold text-white tracking-wide" to="/">
               <span class="smini-visible"> Hesab<span class="opacity-75">ix</span>
               </span>
           <span class="smini-hidden"><span class="text-light">
-            <img style="max-height:25px" src="/assets/media/favicons/favw.png"/>
+            <img alt="hesabix" style="max-height:25px" src="/assets/media/favicons/favw.png"/>
             حسابیکس
           </span>
               </span>
-        </a>
+        </router-link>
         <!-- END Logo -->
 
         <!-- Options -->
@@ -454,7 +458,7 @@ export default {
               </li>
             </ul>
           </li>
-          <li v-show="permissions.store1" class="nav-main-item">
+          <li v-show="permissions.store" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-boxes-stacked"></i>
               <span class="nav-main-link-name">انبارداری</span>
@@ -469,11 +473,11 @@ export default {
                 </router-link>
               </li>
               <li class="nav-main-item">
-                <router-link class="nav-main-link" to="/acc/storeroom/list">
+                <router-link class="nav-main-link" to="/acc/storeroom/tickets/list">
                   <span class="nav-main-link-name">
                     <i class="fa fa-file-export"></i>
                     حواله انبار</span>
-                  <router-link to="/acc/storeroom/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                  <router-link to="/acc/storeroom/new/ticket/type" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </router-link>
               </li>
               <li class="nav-main-item">
@@ -648,16 +652,16 @@ export default {
   <!-- Header -->
   <header id="page-header">
     <!-- Header Content -->
-    <div class="content-header">
+    <div class="content-header bg-header-dark text-white">
       <!-- Left Section -->
       <div>
         <!-- Toggle Sidebar -->
         <!-- Layout API, functionality initialized in Template._uiApiLayout()-->
-        <button class="btn-sm btn btn-alt-secondary me-1" data-action="sidebar_toggle" data-toggle="layout" type="button">
+        <button class="btn-sm btn btn-alt-info me-1" data-action="sidebar_toggle" data-toggle="layout" type="button">
           <i class="fa fa-fw fa-bars"></i>
         </button>
         <!-- END Toggle Sidebar -->
-        <b class="ms-3 text-primary-darker">
+        <b class="ms-3 text-light">
           <i class="fa fa-shop"></i>
           {{this.business.name}}
         </b>
@@ -739,4 +743,10 @@ input[type=input]{
   border-radius: 12px;
 }
 
+.content-header{
+  height:2.8rem;
+}
+#page-container.page-header-fixed #main-container {
+  padding-top: 2.6rem;
+}
 </style>

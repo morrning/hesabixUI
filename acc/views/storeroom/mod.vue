@@ -6,6 +6,12 @@
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         مشخصات انبار </h3>
+      <div class="block-options">
+        <button @click="save()" type="button" class="btn btn-sm btn-alt-primary">
+          <i class="fa fa-save me-2"></i>
+          ثبت
+        </button>
+      </div>
     </div>
     <div class="block-content py-3 vl-parent">
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
@@ -49,7 +55,6 @@
             </div>
           </div>
         </div>
-        <button @click="save()" type="button" class="btn btn-alt-primary">ثبت</button>
       </div>
     </div>
   </div>

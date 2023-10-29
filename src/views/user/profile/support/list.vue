@@ -42,7 +42,6 @@
             <template #item-state="{ state }">
               <span v-if="state == 'پاسخ داده شده'" class="text-success"><i class="fa fa-check-double"></i> پاسخ داده شده </span>
               <span v-else class="text-danger"><i class="fa fa-question-circle"></i> در حال پیگیری </span>
-
             </template>
           </EasyDataTable>
         </div>

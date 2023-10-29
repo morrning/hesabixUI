@@ -122,6 +122,13 @@ export default {
                 confirmButtonText: 'قبول'
               });
             }
+            else if(response.data.result == 2){
+              Swal.fire({
+                text: response.data.message,
+                icon: 'warning',
+                confirmButtonText: 'قبول'
+              });
+            }
           })
         }
       })

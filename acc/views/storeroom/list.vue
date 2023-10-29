@@ -8,7 +8,7 @@
         <i class="mx-2 fa fa-boxes-stacked"></i>
         انبارها </h3>
       <div class="block-options">
-        <router-link to="/acc/storeroom/mod/" class="btn btn-primary ms-1">
+        <router-link to="/acc/storeroom/mod/" class="btn btn-sm btn-primary ms-1">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
       </div>

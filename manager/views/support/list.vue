@@ -41,9 +41,7 @@ export default defineComponent({
         <i class="fa fa-book"></i>
         درخواست‌های پشتیبانی</h3>
       <div class="block-options">
-        <router-link to="/acc/sell/mod/" class="block-options-item">
-          <span class="fa fa-plus fw-bolder"></span>
-        </router-link>
+
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
@@ -69,10 +67,14 @@ export default defineComponent({
               rowsOfPageSeparatorMessage="از"
               :loading = "loading"
           >
-            <template #item-operation="{ code,type }">
-              <router-link class="text-success" :to="'/acc/accounting/view/' + code">
+            <template #item-operation="{ id }">
+              <router-link class="text-success" :to="'/manager/support/view/' + id">
                 <i class="fa fa-eye px-1"></i>
               </router-link>
+            </template>
+            <template #item-state="{ state }">
+              <span v-if="state == 'پاسخ داده شده'" class="text-success"><i class="fa fa-check-double"></i> پاسخ داده شده </span>
+              <span v-else class="text-danger"><i class="fa fa-question-circle"></i> در حال پیگیری </span>
             </template>
           </EasyDataTable>
         </div>

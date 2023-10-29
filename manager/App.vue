@@ -296,6 +296,9 @@ export default {
                 </div>
               </div>
               <div class="p-2">
+                <a href="/" class="dropdown-item d-flex justify-content-between align-items-center">
+                  پروفایل کاربری <i class="fa fa-fw fa-user-cog text-success ms-1"></i>
+                </a>
                 <button @click="this.logout()" class="dropdown-item d-flex justify-content-between align-items-center">
                   خروج از سیستم <i class="fa fa-fw fa-sign-out-alt text-danger ms-1"></i>
                 </button>

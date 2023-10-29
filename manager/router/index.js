@@ -12,6 +12,14 @@ const router = createRouter({
       path: '/manager/support/list',
       name: 'support_list',
       component: ()=> import('../views/support/list.vue')
+    },
+    {
+      path: '/manager/support/view/:id',
+      component: () => import('../views/support/show.vue'),
+      meta: {
+        'title': 'مشاهده درخواست',
+        'login': true
+      }
     }
   ]
 })
