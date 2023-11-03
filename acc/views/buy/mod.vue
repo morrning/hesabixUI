@@ -101,6 +101,8 @@
             <EasyDataTable
                 show-index
                 alternating
+
+
                 :headers="headers"
                 :items="items"
                 theme-color="#1d90ff"

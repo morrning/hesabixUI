@@ -25,6 +25,7 @@
           <EasyDataTable
               show-index
               alternating
+
               :search-value="searchValue"
               :headers="headers"
               :items="items"
@@ -97,7 +98,7 @@ export default {
     },
     deleteItem(code){
       Swal.fire({
-        text: 'آیا برای حذف این مورد مطمئن هستید؟ تمامی اسناد پرداخت همراه فاکتور نیز حذف خواهند شد.',
+        text: 'آیا برای حذف این مورد مطمئن هستید؟ تمامی اسناد پرداخت و حواله های انبار همراه فاکتور نیز حذف خواهند شد.',
         showCancelButton: true,
         confirmButtonText: 'بله',
         cancelButtonText: `خیر`,

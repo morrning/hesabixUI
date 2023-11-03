@@ -8,11 +8,11 @@
         <i class="mx-2 fa fa-circle-up"></i>
         پرداخت‌ها </h3>
       <div class="block-options">
-        <router-link to="/acc/persons/send/mod/" class="btn btn-primary ms-2">
+        <router-link to="/acc/persons/send/mod/" class="btn btn-sm btn-primary ms-2">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
         <div class="dropdown">
-          <a class="btn btn-danger ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="btn btn-sm btn-danger ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-file-pdf"></i>
           </a>
           <ul class="dropdown-menu">
@@ -21,7 +21,7 @@
           </ul>
         </div>
         <div class="dropdown">
-          <a class="btn btn-success ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="btn btn-sm btn-success ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-file-excel"></i>
           </a>
           <ul class="dropdown-menu">
@@ -44,6 +44,7 @@
               v-model:items-selected="itemsSelected"
               show-index
               alternating
+
               :search-value="searchValue"
               :headers="headers"
               :items="items"

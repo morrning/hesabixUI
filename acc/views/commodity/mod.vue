@@ -58,12 +58,48 @@
           </div>
           <div class="col-sm-12 col-md-12 mb-4">
             <small class="mb-2">دسته بندی</small>
-            <treeselect placeholder="دسته بندی مورد نظر را انتخاب کنید." v-model="data.cat" :multiple="false" :options="listCats" />
+            <treeselect
+                placeholder="دسته بندی را انتخاب کنید"
+                v-model="data.cat"
+                :multiple="false"
+                :disable-branch-nodes="true"
+                :options="listCats"
+            />
           </div>
           <div class="col-sm-12 col-md-12">
             <div class="form-floating mb-4">
               <input v-model="data.des" class="form-control" type="text">
               <label class="form-label">توضیحات</label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12">
+            <b class="text-primary-dark me-3">موجودی کالا</b>
+            <label class="text-muted">تنظیمات بخش موجودی کالا تنها برای نوع کالا اعمال می‌شود و برای نوع خدمات نادیده گرفته می‌شود.</label>
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="data.commodityCountCheck" class="form-check-input" type="checkbox">
+                <label class="form-check-label">کنترل موجودی</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-4 mt-2">
+                <div class="form-floating mb-4">
+                  <input v-model="data.minOrderCount" @blur="(event)=>{if(this.data.minOrderCount==='' || this.data.minOrderCount===0){this.data.minOrderCount = 1}}" @keypress="this.$filters.onlyNumber($event)" class="form-control" type="number" min="1">
+                  <label class="form-label">حداقل سفارش</label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4 mt-2">
+                <div class="form-floating mb-4">
+                  <input v-model="data.orderPoint" @keypress="this.$filters.onlyNumber($event)" class="form-control" type="number" min="1">
+                  <label class="form-label">نقطه سفارش</label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4 mt-2">
+                <div class="form-floating mb-4">
+                  <input v-model="data.dayLoading" @keypress="this.$filters.onlyNumber($event)" class="form-control" type="number">
+                  <label class="form-label">زمان انتظار(روز)</label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -100,7 +136,11 @@ export default {
       unit: 'عدد',
       code: 0,
       khadamat: false,
-      cat:null
+      cat:null,
+      orderPoint:0,
+      commodityCountCheck:false,
+      minOrderCount:1,
+      dayLoading:0
     },
     listCats:[],
     currencyConfig:{
@@ -134,10 +174,10 @@ export default {
       });
       axios.post('/api/commodity/cat/childs').then((response) => {
         this.listCats = response.data;
-        this.data.cat = this.listCats[0].id;
+        this.data.cat = this.listCats[0];
       });
       if (id != '') {
-        //load user info
+        //load info
         this.isLoading = true;
         axios.post('/api/commodity/info/' + id).then((response) => {
           this.data = response.data;

@@ -25,6 +25,7 @@
           <EasyDataTable
               show-index
               alternating
+
               :search-value="searchValue"
               :headers="headers"
               :items="items"
@@ -94,7 +95,7 @@ export default {
     },
     deleteItem(code){
       Swal.fire({
-        text: 'آیا برای حذف این مورد مطمئن هستید؟',
+        text: 'آیا برای حذف این مورد مطمئن هستید؟تمامی رسید‌های دریافت و حواله‌های انبار مرتبط با این سند حذف خواهند شد.',
         showCancelButton: true,
         confirmButtonText: 'بله',
         cancelButtonText: `خیر`,

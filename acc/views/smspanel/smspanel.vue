@@ -182,6 +182,7 @@ export default defineComponent({
                         :headers="paysheaders"
                         :items="paysitems"
                         alternating
+
                         :search-value="payssearchValue"
                         theme-color="#1d90ff"
                         table-class-name="customize-table"
@@ -219,6 +220,7 @@ export default defineComponent({
                         :headers="headers"
                         :items="items"
                         alternating
+
                         :search-value="searchValue"
                         theme-color="#1d90ff"
                         table-class-name="customize-table"

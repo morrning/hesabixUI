@@ -1,4 +1,7 @@
 <template>
+  <form id="loginMainSite" method="post" target="https://ali.com">
+    <input type="hidden" :value="this.token" />
+  </form>
   <!-- Main Container -->
   <main id="main-container">
     <!-- Page Content -->
@@ -16,7 +19,7 @@
                 <p class="text-uppercase fw-bold fs-sm text-muted"> ورود </p>
               </div>
               <!-- END Header -->
-              <form @submit.prevent="submit">
+              <form v-show="!this.loading" @submit.prevent="submit">
                 <div class="form-floating mb-3">
                   <input class="form-control" type="text" v-model="email">
                   <label>پست الکترونیکی</label>
@@ -36,7 +39,7 @@
                   </div>
                 </div>
                 <div class="text-center mt-3">
-                  <button type="submit" class="btn btn-hero btn-primary">
+                  <button :disabled="this.loadingSubmit" type="submit" class="btn btn-hero btn-primary">
                     <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> ورود </button>
                 </div>
                 <div class="text-center mt-4">
@@ -64,15 +67,18 @@
 <script>
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { useVuelidate } from '@vuelidate/core'
 import { required , email} from '@vuelidate/validators'
+import {ref} from "vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "login",
   data: ()=>{return{
+    loading: ref(true),
+    loadingSubmit: ref(false),
     'email':'',
-    'password':''
+    'password':'',
+    token:''
   }},
   methods: {
     async submit () {
@@ -82,26 +88,29 @@ export default {
 
       }
       else {
+        this.loadingSubmit = true
         // perform async actions
         localStorage.removeItem('X-AUTH-TOKEN');
         axios.post( 'api/user/login', {
           email: this.email,
           password: this.password
-        })
-            .then(function (response) {
+        }).then(function (response) {
               localStorage.setItem('X-AUTH-TOKEN',response.data.token);
               axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
+              //login to mainSite
+              this.token = response.data.token;
+              document.getElementById('loginMainSite').submit();
               document.location.replace('/profile/business');
-            })
-            .catch(function (error) {
+        }).catch(function (error) {
               Swal.fire({
                 title: 'خطا',
                 text: 'نام کاربری یا کلمه عبور اشتباه است.',
                 icon: 'error',
-                confirmButtonText: 'قبول'
+                confirmButtonText: 'قبول'}).then((res)=>{
               });
-              this.password = '';
-            });
+        });
+        this.loadingSubmit = false;
+        this.password = '';
       }
     }
   },
@@ -119,7 +128,10 @@ export default {
   created() {
     axios.post('/api/user/check/login').then((response)=>{
       if(response.data.result == true){
-        this.$router.push('/profile/business')
+        this.$router.push('/profile/business');
+      }
+      else {
+        this.loading = false;
       }
     })
   }

@@ -8,11 +8,11 @@
         <i class="mx-2 fa fa-list"></i>
         اشخاص </h3>
       <div class="block-options">
-        <router-link to="/acc/persons/mod/" class="btn btn-primary ms-2">
+        <router-link to="/acc/persons/mod/" class="btn btn-sm btn-primary ms-2">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
         <div class="dropdown">
-          <a class="btn btn-danger ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="btn btn-sm btn-danger ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-file-pdf"></i>
           </a>
           <ul class="dropdown-menu">
@@ -21,7 +21,7 @@
           </ul>
         </div>
         <div class="dropdown">
-          <a class="btn btn-success ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="btn btn-sm btn-success ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-file-excel"></i>
           </a>
           <ul class="dropdown-menu">
@@ -43,10 +43,11 @@
           <EasyDataTable
               :table-class-name="tableClassName"
               v-model:items-selected="itemsSelected"
-              border-cell
+
               multi-sort
               show-index
               alternating
+
               :search-value="searchValue"
               :headers="headers"
               :items="items"
@@ -107,21 +108,21 @@ export default {
     headers: [
       { text: "عملیات", value: "operation"},
       { text: "کد", value: "code" },
-      { text: "نام مستعار", value: "nikename", sortable: true},
-      { text: "نام و نام خانوادگی", value: "name", sortable: true},
-      { text: "شرکت", value: "company", sortable: true},
-      { text: "شناسه ملی", value: "shenasemeli", sortable: true},
-      { text: "کد اقتصادی", value: "codeeghtesadi", sortable: true},
-      { text: "شماره ثبت", value: "sabt", sortable: true},
-      { text: "کشور", value: "keshvar", sortable: true},
-      { text: "استان", value: "ostan", sortable: true},
-      { text: "شهر", value: "shahr", sortable: true},
-      { text: "کد پستی", value: "postalcode", sortable: true},
-      { text: "تلفن", value: "tel"},
-      { text: "تلفن همراه", value: "mobile"},
-      { text: "ایمیل", value: "email", sortable: true},
-      { text: "وب سایت", value: "website", sortable: true},
-      { text: "فکس", value: "fax", sortable: true},
+      { text: "نام مستعار", value: "nikename", sortable: true, width: 150},
+      { text: "نام و نام خانوادگی", value: "name", sortable: true, width: 150},
+      { text: "شرکت", value: "company", sortable: true, width: 100},
+      { text: "شناسه ملی", value: "shenasemeli", sortable: true, width: 100},
+      { text: "کد اقتصادی", value: "codeeghtesadi", sortable: true, width: 100},
+      { text: "شماره ثبت", value: "sabt", sortable: true, width: 100},
+      { text: "کشور", value: "keshvar", sortable: true, width: 100},
+      { text: "استان", value: "ostan", sortable: true, width: 100},
+      { text: "شهر", value: "shahr", sortable: true, width: 100},
+      { text: "کد پستی", value: "postalcode", sortable: true, width: 100},
+      { text: "تلفن", value: "tel", width: 100},
+      { text: "تلفن همراه", value: "mobile", width: 100},
+      { text: "ایمیل", value: "email", sortable: true, width: 100},
+      { text: "وب سایت", value: "website", sortable: true, width: 100},
+      { text: "فکس", value: "fax", sortable: true, width: 100},
     ]
   }},
   methods: {

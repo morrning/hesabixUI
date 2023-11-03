@@ -8,10 +8,10 @@
         <i class="mx-2 fa fa-list"></i>
         کالا و خدمات </h3>
       <div class="block-options">
-        <router-link to="/acc/commodity/mod/" class="btn btn-primary ms-1">
+        <router-link to="/acc/commodity/mod/" class="btn btn-sm btn-primary ms-1">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
-        <a href="#" class="btn btn-danger ms-2" @click.prevent="print()">
+        <a href="#" class="btn btn-sm btn-danger ms-2" @click.prevent="print()">
           <i class="fa fa-print"></i>
         </a>
       </div>
@@ -58,6 +58,10 @@
               <label v-if="khadamat == false">کالا و اقلام فیزیکی</label>
               <label v-else>خدمات</label>
             </template>
+            <template #item-commodityCountCheck="{ commodityCountCheck }">
+              <i v-if="commodityCountCheck == true" class="fa fa-check text-success"></i>
+              <i v-else class="fa fa-close text-danger"></i>
+            </template>
           </EasyDataTable>
         </div>
       </div>
@@ -78,14 +82,18 @@ export default {
     loading : ref(true),
     items:[],
     headers: [
-      { text: "کد", value: "code" },
-      { text: "کالا / خدمات", value: "khadamat", sortable: true},
-      { text: "نام کالا و خدمات", value: "name", sortable: true},
-      { text: "واحد شمارش", value: "unit", sortable: true},
-      { text: "دسته‌بندی", value: "cat", sortable: true},
-      { text: "قیمت خرید", value: "priceBuy"},
-      { text: "قیمت فروش", value: "priceSell"},
       { text: "عملیات", value: "operation"},
+      { text: "کد", value: "code" },
+      { text: "کالا / خدمات", value: "khadamat", sortable: true, width: 150},
+      { text: "نام کالا و خدمات", value: "name", sortable: true, width: 150},
+      { text: "واحد شمارش", value: "unit", sortable: true, width: 100},
+      { text: "دسته‌بندی", value: "cat", sortable: true, width: 100},
+      { text: "قیمت خرید", value: "priceBuy", width: 100},
+      { text: "قیمت فروش", value: "priceSell", width: 100},
+      { text: "نقطه سفارش", value: "orderPoint", width: 100},
+      { text: "حداقل سفارش", value: "minOrderCount", width: 100},
+      { text: "زمان انتظار", value: "dayLoading", width: 100},
+      { text: "کنترل موجودی", value: "commodityCountCheck", width: 100},
     ]
   }},
   methods: {

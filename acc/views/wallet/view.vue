@@ -131,6 +131,7 @@ export default defineComponent({
                   :headers="walletHeaders"
                   :items="walletItems"
                   alternating
+
                   :search-value="walletSearchValue"
                   theme-color="#1d90ff"
                   table-class-name="customize-table"
@@ -170,6 +171,7 @@ export default defineComponent({
                   :headers="logHeaders"
                   :items="logItems"
                   alternating
+
                   :search-value="logSearchValue"
                   theme-color="#1d90ff"
                   table-class-name="customize-table"

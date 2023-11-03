@@ -295,6 +295,11 @@ const router = createRouter({
       component: () => import('../views/plugins/noghre/pays.vue'),
     },
     {
+      path: '/acc/storeroom/commodity/check/exist',
+      name: 'storeroom_commodity_check_exist',
+      component: () => import('../views/storeroom/commodityCheck/checkByStoreroom.vue'),
+    },
+    {
       path: '/acc/storeroom/new/ticket/type',
       name: 'storeroom_new_ticket_type',
       component: () => import('../views/storeroom/io/modalNew.vue'),
@@ -303,6 +308,11 @@ const router = createRouter({
       path: '/acc/storeroom/tickets/list',
       name: 'storeroom_tickets_list',
       component: () => import('../views/storeroom/io/ticketList.vue'),
+    },
+    {
+      path: '/acc/storeroom/ticket/view/:id',
+      name: 'storeroom_ticket_view',
+      component: () => import('../views/storeroom/io/view.vue'),
     },
     {
       path: '/acc/storeroom/new/ticket/buy/:doc/:storeID',

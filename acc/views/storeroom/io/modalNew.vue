@@ -33,6 +33,9 @@ export default defineComponent({
       axios.get('/api/storeroom/list')
           .then((response)=>{
             this.storerooms = response.data;
+            this.storerooms.forEach((element)=>{
+              element.name = element.name + ' انباردار : ' + element.manager
+            });
             this.loading = false;
           });
       axios.post('/api/storeroom/docs/get').then((response)=>{

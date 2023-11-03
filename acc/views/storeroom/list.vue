@@ -26,6 +26,7 @@
               multi-sort
               show-index
               alternating
+
               :search-value="searchValue"
               :headers="headers"
               :items="items"
@@ -77,7 +78,7 @@ export default {
   }},
   methods: {
     loadData(){
-      axios.get('/api/storeroom/list')
+      axios.get('/api/storeroom/list/all')
           .then((response)=>{
             this.items = response.data;
             this.loading = false;

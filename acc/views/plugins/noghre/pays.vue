@@ -363,6 +363,7 @@ export default defineComponent({
               multi-sort
               show-index
               alternating
+
               :search-value="searchValue"
               :headers="headers"
               :items="items"

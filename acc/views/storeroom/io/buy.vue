@@ -109,7 +109,6 @@ export default defineComponent({
       this.items.forEach((element,index)=>{
         this.items[index].ticketCount = this.items[index].docCount;
         this.items[index].des = 'تعداد ' + this.items[index].ticketCount + 'مورد تحویل شد. ';
-        this.items[index].type = 'output';
       })
     },
     isNumber (evt: KeyboardEvent): void {
@@ -129,6 +128,7 @@ export default defineComponent({
           this.items[index].ticketCount = 0;
           this.items[index].docCount = element.commdityCount;
           this.items[index].des = '';
+          this.items[index].type = 'input';
         })
       });
       axios.post('/api/storeroom/info/' + this.$route.params.storeID).then((res)=>{
@@ -227,6 +227,7 @@ export default defineComponent({
               multi-sort
               show-index
               alternating
+
               :headers="headers"
               :items="items"
               theme-color="#1d90ff"

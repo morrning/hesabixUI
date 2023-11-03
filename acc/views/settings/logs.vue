@@ -19,6 +19,7 @@
               :headers="headers"
               :items="items"
               alternating
+
               :search-value="searchValue"
               theme-color="#1d90ff"
               table-class-name="customize-table"

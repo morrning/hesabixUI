@@ -35,8 +35,9 @@ export default defineComponent({
       { text: "کد", value: "commodity.code" },
       { text: "کالا", value: "commodity.name", sortable: true},
       { text: "واحد", value: "commodity.unit", sortable: true},
-      { text: "موجودی انبار", value: "existCount"},
       { text: "مورد نیاز", value: "docCount"},
+      { text: "از قبل", value: "countBefore"},
+      { text: "باقی‌مانده", value: "remain"},
       { text: "تعداد", value: "commdityCount", sortable: true},
       { text: "ارجاع", value: "referal", sortable: true},
       { text: "توضیحات", value: "des"},
@@ -107,8 +108,8 @@ export default defineComponent({
     },
     autofill(){
       this.items.forEach((element,index)=>{
-        this.items[index].ticketCount = this.items[index].docCount;
-        this.items[index].des = 'تعداد ' + this.items[index].ticketCount + 'مورد تحویل شد. ';
+        this.items[index].ticketCount = this.items[index].remain;
+        this.items[index].des = 'تعداد ' + this.items[index].remain + 'مورد تحویل شد. ';
         this.items[index].type = 'output';
       })
     },
@@ -129,6 +130,7 @@ export default defineComponent({
           this.items[index].ticketCount = 0;
           this.items[index].docCount = element.commdityCount;
           this.items[index].des = '';
+          this.items[index].type = 'output';
         })
       });
       axios.post('/api/storeroom/info/' + this.$route.params.storeID).then((res)=>{
@@ -227,6 +229,7 @@ export default defineComponent({
               multi-sort
               show-index
               alternating
+
               :headers="headers"
               :items="items"
               theme-color="#1d90ff"
@@ -238,7 +241,7 @@ export default defineComponent({
               :loading="this.loading"
           >
             <template #item-commdityCount="{ index,commdityCount,ticketCount }">
-              <input @blur="(event)=>{if(this.items[index-1].ticketCount===''){this.items[index-1].ticketCount = 0}}" @keypress="isNumber($event)" class="form-control form-control-sm" type="number" min="0" :max="commdityCount" v-model="this.items[index-1].ticketCount" />
+              <input @blur="(event)=>{if(this.items[index-1].ticketCount===''){this.items[index-1].ticketCount = 0}}" @keypress="isNumber($event)" class="form-control form-control-sm" type="number" min="0" :max="this.items[index-1].remain" v-model="this.items[index-1].ticketCount" />
             </template>
             <template #item-des="{ index,des }">
               <input class="form-control form-control-sm" type="text" v-model="this.items[index-1].des" />

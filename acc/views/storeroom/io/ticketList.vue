@@ -1,6 +1,7 @@
 <script lang="ts">
 import {defineComponent,ref} from 'vue'
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default defineComponent({
   name: "ticketList",
@@ -39,6 +40,43 @@ export default defineComponent({
             this.loading = false;
           });
     },
+    deleteTicket(type,code){
+      Swal.fire({
+        text: 'آیا برای حذف این حواله مطمئن هستید؟',
+        icon: 'warning',
+        confirmButtonText: 'قبول',
+        showCancelButton:true,
+        cancelButtonText:'انصراف'
+      }).then((result)=>{
+        if (result.isConfirmed) {
+          this.loading = true;
+          axios.get('/api/storeroom/ticket/remove/' + code)
+              .then((response)=>{
+                this.loading = false;
+                Swal.fire({
+                  text: 'حواله انبار حذف شد.',
+                  icon: 'success',
+                  confirmButtonText: 'قبول'
+                }).then((result)=>{
+                 if(type == 'input'){
+                   for(let z=0; z<this.inputItems.length; z++){
+                     if(this.inputItems[z]['code'] == code){
+                       this.inputItems.splice(z ,1);
+                     }
+                   }
+                 }
+                 else if(type == 'output') {
+                   for (let z = 0; z < this.outputItems.length; z++) {
+                     if (this.outputItems[z]['code'] == code) {
+                       this.outputItems.splice(z, 1);
+                     }
+                   }
+                 }
+                });
+              });
+        }
+      });
+    }
   },
   beforeMount() {
     this.loadData();
@@ -64,7 +102,7 @@ export default defineComponent({
     <div class="block-content p-0">
       <div class="col-sm-12 col-md-12 m-0 p-0">
         <ul class="nav nav-pills flex-column flex-sm-row border border-secondary" id="myTab" role="tablist">
-          <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">
+          <button class="flex-sm-fill text-sm-center nav-link rounded-0 active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">
             <i class="fa fa-file-export me-2"></i>
             حواله‌های خروج
           </button>
@@ -74,7 +112,7 @@ export default defineComponent({
           </button>
         </ul>
         <div class="tab-content p-0" id="myTabContent">
-          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             <div class="m-1">
               <div class="input-group input-group-sm">
                 <span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -96,10 +134,13 @@ export default defineComponent({
                 rowsOfPageSeparatorMessage="از"
                 :loading="loading"
             >
-              <template #item-operation="{ id }">
-                <router-link :to="'/acc/storeroom/mod/' + id">
-                  <i class="fa fa-edit px-2"></i>
+              <template #item-operation="{ code }">
+                <router-link class="btn btn-sm" :to="'/acc/storeroom/ticket/view/' + code">
+                  <i class="fa fa-eye px-2"></i>
                 </router-link>
+                <button :disabled="this.loading" type="button" class="btn btn-sm text-danger" @click="deleteTicket('output',code)" >
+                  <i class="fa fa-trash px-2"></i>
+                </button>
               </template>
             </EasyDataTable>
           </div>
@@ -125,10 +166,13 @@ export default defineComponent({
                 rowsOfPageSeparatorMessage="از"
                 :loading="loading"
             >
-              <template #item-operation="{ id }">
-                <router-link :to="'/acc/storeroom/mod/' + id">
-                  <i class="fa fa-edit px-2"></i>
+              <template #item-operation="{ code }">
+                <router-link class="btn btn-sm" :to="'/acc/storeroom/ticket/view/' + code">
+                  <i class="fa fa-eye px-2"></i>
                 </router-link>
+                <button :disabled="this.loading" type="button" class="btn btn-sm text-danger" @click="deleteTicket('input',code)" >
+                  <i class="fa fa-trash px-2"></i>
+                </button>
               </template>
             </EasyDataTable>
           </div>

@@ -481,7 +481,7 @@ export default {
                 </router-link>
               </li>
               <li class="nav-main-item">
-                <router-link class="nav-main-link" to="/acc/storeroom/list">
+                <router-link class="nav-main-link" to="/acc/storeroom/commodity/check/exist">
                   <span class="nav-main-link-name">
                     <i class="fa fa-box-tissue"></i>
                     موجودی کالا</span>

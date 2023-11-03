@@ -178,10 +178,10 @@ export default {
               </a>
               <ul class="nav-main-submenu">
                 <li class="nav-main-item">
-                  <a class="nav-main-link" href="">
+                  <router-link class="nav-main-link" to="/manager/blog/list">
                     <span class="nav-main-link-name">پست‌ها</span>
                     <span class="nav-main-link-badge badge rounded-pill bg-success">3</span>
-                  </a>
+                  </router-link>
                 </li>
                 <li class="nav-main-item">
                   <a class="nav-main-link" href="">

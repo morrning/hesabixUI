@@ -63,6 +63,7 @@ export default defineComponent({
   <EasyDataTable
       show-index
       alternating
+
       :search-value="searchValue"
       :headers="headers"
       :items="this.$props.items"

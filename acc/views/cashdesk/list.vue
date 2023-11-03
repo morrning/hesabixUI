@@ -25,6 +25,8 @@
           <EasyDataTable
               show-index
               alternating
+
+
               :search-value="searchValue"
               :headers="headers"
               :items="items"
