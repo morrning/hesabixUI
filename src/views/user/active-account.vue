@@ -122,7 +122,7 @@ export default defineComponent({
             </div>
             <div class="block-content bg-body">
               <div class="d-flex justify-content-center text-center push">
-                <a class="btn btn-sm btn-alt-secondary" href="https://hesabix.ir">
+                <a class="btn btn-sm btn-alt-secondary" :href="this.$filters.getApiUrl()">
                   <i class="fa fa-home"></i>
                   صفحه نخست
                 </a>

@@ -20,13 +20,13 @@ const app = createApp(App)
 app.component('EasyDataTable', Vue3EasyDataTable);
 app.component('v-select', vSelect);
 app.component('DatePicker', Vue3PersianDatetimePicker)
+import {getApiUrl} from "../hesabixConfig"
 
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
 NProgress.configure({ showSpinner: false });
-app.config.globalProperties.$API_URL = 'http://localhost';
-//app.config.globalProperties.$API_URL = 'https://hesabix.ir';
-//app.config.globalProperties.$API_URL = 'http://hesabix.local';
+app.config.globalProperties.$API_URL = getApiUrl();
 axios.defaults.baseURL = app.config.globalProperties.$API_URL;
+
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['activeBid'] = localStorage.getItem('activeBid');
 axios.defaults.headers.common['activeYear'] = localStorage.getItem('activeYear');
@@ -93,6 +93,9 @@ app.config.globalProperties.$filters = {
         if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) { // 46 is dot
             $event.preventDefault();
         }
+    },
+    getApiUrl(){
+        return getApiUrl();
     }
 }
 

@@ -58,7 +58,7 @@
                     <label class="form-check-label" for="signup-terms">موافقم</label>
                   </div>
                   <div class="fw-semibold fs-sm py-1">
-                    <a class="fw-semibold fs-sm" target="_blank" href="http://hesabix.ir/front/terms">شرایط و ضوابط</a>
+                    <a class="fw-semibold fs-sm" target="_blank" :href="this.$filters.getApiUrl() + '/front/terms'">شرایط و ضوابط</a>
                   </div>
                 </div>
                 <div class="text-center mb-4">

@@ -1,6 +1,6 @@
 <template>
-  <form id="loginMainSite" method="post" target="https://ali.com">
-    <input type="hidden" :value="this.token" />
+  <form id="loginMainSite" method="post" action="http://localhost/login/by/token/profile/business">
+    <input id="loginTokenID" name="tokenID" type="hidden" value="" />
   </form>
   <!-- Main Container -->
   <main id="main-container">
@@ -21,37 +21,38 @@
               <!-- END Header -->
               <form v-show="!this.loading" @submit.prevent="submit">
                 <div class="form-floating mb-3">
-                  <input class="form-control" type="text" v-model="email">
+                  <input :disabled="this.loadingSubmit" class="form-control" type="text" v-model="email">
                   <label>پست الکترونیکی</label>
-                  <small class="form-text text-danger" v-if="v$.email.$error">پست الکترونیکی اشتباه است و یا وارد نشده.</small>
                 </div>
 
                 <div class="form-floating mb-3">
-                  <input class="form-control" type="password" v-model="password">
+                  <input :disabled="this.loadingSubmit" class="form-control" type="password" v-model="password">
                   <label>کلمه عبور</label>
-                  <small class="form-text text-danger" v-if="v$.password.$error">کلمه عبور الزامی است</small>
                 </div>
 
                 <div class="d-sm-flex justify-content-sm-between align-items-sm-center text-center text-sm-start">
-
-                  <div class="fw-semibold fs-sm py-1">
+                  <div class="fw-semibold fs-sm py-0">
                     <RouterLink to="/user/forget-password">کلمه عبور را فراموش کرده اید؟</RouterLink>
                   </div>
                 </div>
                 <div class="text-center mt-3">
-                  <button :disabled="this.loadingSubmit" type="submit" class="btn btn-hero btn-primary">
-                    <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> ورود </button>
+                  <button :disabled="this.loadingSubmit" type="submit" class="btn btn-primary">
+                    <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i>
+                    ورود به حسابیکس
+                  </button>
                 </div>
                 <div class="text-center mt-4">
-                  <RouterLink to="/user/register">
-                    حساب کاربری ندارید؟ عضو شوید
-                  </RouterLink>
+                  <div class="fw-semibold fs-sm py-0">
+                    <RouterLink to="/user/register">
+                      حساب کاربری ندارید؟ عضو شوید
+                    </RouterLink>
+                  </div>
                 </div>
               </form>
             </div>
             <div class="block-content bg-body">
               <div class="d-flex justify-content-center text-center push">
-                <a class="btn btn-sm btn-alt-secondary" href="https://hesabix.ir">
+                <a class="btn btn-sm btn-alt-secondary" :href="this.$filters.getApiUrl()">
                   <i class="fa fa-home"></i>
                   صفحه نخست
                 </a>
@@ -67,25 +68,38 @@
 <script>
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { required , email} from '@vuelidate/validators'
-import {ref} from "vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "login",
   data: ()=>{return{
-    loading: ref(true),
-    loadingSubmit: ref(false),
-    'email':'',
-    'password':'',
-    token:''
+    loading: true,
+    loadingSubmit: false,
+    email:'',
+    password:'',
+    tokenID:'123456'
   }},
   methods: {
-    async submit () {
-      const result = await this.v$.$validate()
-      if (!result) {
-        // notify user form is invalid
-
+    ValidateEmail(email) {
+      const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      return !!email.match(validRegex);
+    },
+    submit () {
+      if (this.email.trim().length === 0 || this.ValidateEmail(this.email) === false) {
+        Swal.fire({
+          title: 'خطا',
+          text: 'پست الکترونیکی نامعتبر است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'}).then((res)=>{
+        });
+      }
+      else if (this.email.trim().length < 6 ) {
+        Swal.fire({
+          title: 'خطا',
+          text: 'کلمه عبور نامعتبر است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'}).then((res)=>{
+        });
       }
       else {
         this.loadingSubmit = true
@@ -94,35 +108,26 @@ export default {
         axios.post( 'api/user/login', {
           email: this.email,
           password: this.password
-        }).then(function (response) {
+        }).then((response)=>{
               localStorage.setItem('X-AUTH-TOKEN',response.data.token);
               axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
               //login to mainSite
-              this.token = response.data.token;
+              this.tokenID = response.data.tokenID;
+              document.getElementById('loginTokenID').setAttribute('value' , response.data.tokenID);
               document.getElementById('loginMainSite').submit();
-              document.location.replace('/profile/business');
-        }).catch(function (error) {
+        }).catch((error)=>{
               Swal.fire({
                 title: 'خطا',
                 text: 'نام کاربری یا کلمه عبور اشتباه است.',
                 icon: 'error',
                 confirmButtonText: 'قبول'}).then((res)=>{
+              }).then((res)=>{
+                this.loadingSubmit = false;
+                this.password = '';
               });
         });
-        this.loadingSubmit = false;
-        this.password = '';
+
       }
-    }
-  },
-  validations () {
-    return {
-      email: { required,email },
-      password: {required}
-    }
-  },
-  setup () {
-    return {
-      v$: useVuelidate()
     }
   },
   created() {
