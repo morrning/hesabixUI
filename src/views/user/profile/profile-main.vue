@@ -180,6 +180,7 @@ export default {
             localStorage.removeItem('X-AUTH-TOKEN');
             document.location.reload();
             delete  axios.defaults.headers.common['X-AUTH-TOKEN'];
+            window.location.href = this.$filters.getApiUrl() + '/logout/by/token/user/login';
           });
     },
     gethesabix(){

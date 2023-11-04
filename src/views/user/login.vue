@@ -1,6 +1,7 @@
 <template>
-  <form id="loginMainSite" method="post" action="http://localhost/login/by/token/profile/business">
+  <form id="loginMainSite" method="post" :action="this.$filters.getApiUrl() + '/login/by/token/profile/business'">
     <input id="loginTokenID" name="tokenID" type="hidden" value="" />
+    <input type="hidden" name="_remember_me" value="true">
   </form>
   <!-- Main Container -->
   <main id="main-container">
@@ -133,7 +134,8 @@ export default {
   created() {
     axios.post('/api/user/check/login').then((response)=>{
       if(response.data.result == true){
-        this.$router.push('/profile/business');
+        document.getElementById('loginTokenID').setAttribute('value' , localStorage.getItem('X-AUTH-TOKEN'));
+        document.getElementById('loginMainSite').submit();
       }
       else {
         this.loading = false;
