@@ -120,7 +120,7 @@ export default defineComponent({
               <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel1">
                   <i class="fas fa-money-bill-1 ms-2"></i>
-                  پرداخت وجه
+                  ثبت پرداخت
                 </h1>
                 <div class="block-options">
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -307,7 +307,7 @@ export default defineComponent({
                     <div class="col-sm-12 col-md-3 text-center">نوع</div>
                   </div>
                   <div v-show="this.item.relatedDocs.length == 0" class="row">
-                    <b class="text-danger col-sm-12 col-md-12 text-center">هیچ سند دریافتی ثبت نشده است.</b>
+                    <b class="text-danger col-sm-12 col-md-12 text-center">هیچ سند پرداختی ثبت نشده است.</b>
                   </div>
                 </div>
                 <div class="col-12" v-for="rd in this.item.relatedDocs">

@@ -214,10 +214,10 @@ export default defineComponent({
           bd:0,
           bs:this.totalPays,
           table:3,
-          des:'پرداخت وجه فاکتور شماره ' + this.$filters.formatNumber(this.$props.originalDoc)
+          des:'دریافت وجه فاکتور شماره ' + this.$filters.formatNumber(this.$props.originalDoc)
         });
         if(this.des == ''){
-          this.des = 'پرداخت وجه فاکتور شماره ' + this.$filters.formatNumber(this.originalDoc) ;
+          this.des = 'دریافت وجه فاکتور شماره ' + this.$filters.formatNumber(this.originalDoc) ;
         }
         axios.post('/api/accounting/insert',{
           date: this.date,

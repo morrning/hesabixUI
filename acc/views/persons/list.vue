@@ -110,6 +110,7 @@ export default {
       { text: "کد", value: "code" },
       { text: "نام مستعار", value: "nikename", sortable: true, width: 150},
       { text: "نام و نام خانوادگی", value: "name", sortable: true, width: 150},
+      { text: "تاریخ تولد/ثبت", value: "birthday", sortable: true, width: 150},
       { text: "شرکت", value: "company", sortable: true, width: 100},
       { text: "شناسه ملی", value: "shenasemeli", sortable: true, width: 100},
       { text: "کد اقتصادی", value: "codeeghtesadi", sortable: true, width: 100},

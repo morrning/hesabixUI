@@ -73,14 +73,14 @@ export default {
     loading: ref(true),
     items:[],
     headers: [
-      { text: "شماره سند", value: "code" , sortable: true},
-      { text: "وضعیت", value: "status", sortable: true},
-      { text: "تاریخ", value: "date", sortable: true},
-      { text: "شرح", value: "des", sortable: true},
-      { text: "تامین کننده", value: "person", sortable: true},
+      { text: "عملیات", value: "operation", width:"100"},
+      { text: "شماره سند", value: "code" , sortable: true, width:"100"},
       { text: "مبلغ", value: "amount", sortable: true},
-      { text: "ثبت کننده", value: "submitter", sortable: true},
-      { text: "عملیات", value: "operation"},
+      { text: "وضعیت", value: "status", sortable: true, width:"100"},
+      { text: "تاریخ", value: "date", sortable: true, width:"80"},
+      { text: "شرح", value: "des", sortable: true, width:"200"},
+      { text: "تامین کننده", value: "person", sortable: true, width:"150"},
+      { text: "ثبت کننده", value: "submitter", sortable: true, width:"100"},
     ]
   }},
   methods: {
