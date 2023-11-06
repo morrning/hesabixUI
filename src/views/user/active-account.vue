@@ -2,7 +2,7 @@
 import axios from 'axios';
 import {defineComponent} from 'vue'
 import Swal from "sweetalert2";
-
+import {getApiUrl} from "../../../hesabixConfig"
 export default defineComponent({
   name: "active-account",
   data: ()=>{return {
@@ -15,6 +15,9 @@ export default defineComponent({
     },
   }},
   methods:{
+    goToMainSite(){
+      window.location.href = getApiUrl();
+    },
     loadData(){
       this.isCoutDown = false;
       this.email = this.$route.params.email.toString();
@@ -122,10 +125,10 @@ export default defineComponent({
             </div>
             <div class="block-content bg-body">
               <div class="d-flex justify-content-center text-center push">
-                <a class="btn btn-sm btn-alt-secondary" :href="this.$filters.getApiUrl()">
+                <button type="button" @click="goToMainSite()" class="btn btn-sm btn-alt-secondary">
                   <i class="fa fa-home"></i>
                   صفحه نخست
-                </a>
+                </button>
               </div>
             </div>
           </div>

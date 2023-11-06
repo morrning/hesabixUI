@@ -1,6 +1,7 @@
 <script lang="ts">
 import axios from 'axios';
 import Swal from "sweetalert2";
+import {getApiUrl} from "../../../../hesabixConfig"
 
 export default {
   name: "forget-password-submit-code",
@@ -18,6 +19,9 @@ export default {
     loading:false
   }},
   methods:{
+    goToMainSite(){
+      window.location.href = getApiUrl();
+    },
     loadData(){
       this.isCoutDown = false;
       if(localStorage.getItem('forget-password-id')){
@@ -126,10 +130,10 @@ export default {
             </div>
             <div class="block-content bg-body">
               <div class="d-flex justify-content-center text-center push">
-                <a class="btn btn-sm btn-alt-secondary" :href="this.$filters.getApiUrl()">
+                <button type="button" class="btn btn-sm btn-alt-secondary" @click="goToMainSite()">
                   <i class="fa fa-home"></i>
                   صفحه نخست
-                </a>
+                </button>
               </div>
             </div>
           </div>

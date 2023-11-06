@@ -73,6 +73,7 @@ export default {
     loading: ref(true),
     items:[],
     headers: [
+      { text: "عملیات", value: "operation"},
       { text: "شماره سند", value: "code" , sortable: true},
       { text: "وضعیت", value: "status", sortable: true},
       { text: "تاریخ", value: "date", sortable: true},
@@ -80,7 +81,6 @@ export default {
       { text: "خریدار", value: "person", sortable: true},
       { text: "مبلغ", value: "amount", sortable: true},
       { text: "ثبت کننده", value: "submitter", sortable: true},
-      { text: "عملیات", value: "operation"},
     ]
   }},
   methods: {
