@@ -7,5 +7,5 @@ export function getApiUrl() {
     If this be wrong user interface not functioning probably.
      */
     return 'http://localhost';
-    //return 'https://app.hesabix.ir';
+    //return 'https://hesabix.ir';
 }

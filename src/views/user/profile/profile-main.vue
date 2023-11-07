@@ -1,6 +1,6 @@
 <template>
   <!-- Modal -->
-  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+  <div class="modal fade" id="updateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -18,7 +18,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
             <i class="fa fa-check-double me-2"></i>
-            متوجه شدم
+            بارگزاری نسخه جدید
           </button>
         </div>
       </div>
@@ -189,7 +189,12 @@ export default {
         let currentVersion = window.localStorage.getItem('hesabixVersion');
         if(currentVersion == null || currentVersion != this.hesabix.version){
           //set version Number
-          const updateModal = new bootstrap.Modal(document.getElementById('updateModal'), {backdrop: true})
+          const updateModalEL = document.getElementById('updateModal')
+          const updateModal = new bootstrap.Modal(updateModalEL, {backdrop: true});
+          updateModalEL.addEventListener('hidden.bs.modal', () => {
+            window.location.reload(true);
+          })
+
           updateModal.show();
           window.localStorage.setItem('hesabixVersion',this.hesabix.version);
         }
