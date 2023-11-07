@@ -36,6 +36,12 @@
           </div>
           <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
+              <input v-model="person.birthday" class="form-control" type="text">
+              <label class="form-label">تاریخ تولد / ثبت</label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
               <input v-model="person.des" class="form-control" type="text">
               <label class="form-label">توضیحات</label>
             </div>

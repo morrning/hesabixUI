@@ -41,12 +41,15 @@
               <router-link class="text-success" :to="'/acc/accounting/view/' + code">
                 <i class="fa fa-eye px-1"></i>
               </router-link>
-              <router-link v-if="type == 'accounting'" :to="'/acc/banks/mod/' + code">
-                <i class="fa fa-edit px-1"></i>
+              <router-link class="text-secondary" :to="'/acc/buy/view/' + code">
+                <i class="fa fa-print px-1"></i>
               </router-link>
               <span class="text-danger px-1" @click="deleteItem(code)">
                 <i class="fa fa-trash"></i>
               </span>
+            </template>
+            <template #item-des="{ des }">
+              {{ des.replace("فاکتور خرید:","") }}
             </template>
             <template #item-status="{ status }">
               <span v-if="status == 'تسویه شده'" class="text-success"><i class="fa fa-check me-2"></i>تسویه شده</span>
@@ -70,14 +73,14 @@ export default {
     loading: ref(true),
     items:[],
     headers: [
-      { text: "شماره سند", value: "code" , sortable: true},
-      { text: "وضعیت", value: "status", sortable: true},
-      { text: "تاریخ", value: "date", sortable: true},
-      { text: "شرح", value: "des", sortable: true},
-      { text: "تامین کننده", value: "person", sortable: true},
+      { text: "عملیات", value: "operation", width:"100"},
+      { text: "شماره سند", value: "code" , sortable: true, width:"100"},
       { text: "مبلغ", value: "amount", sortable: true},
-      { text: "ثبت کننده", value: "submitter", sortable: true},
-      { text: "عملیات", value: "operation"},
+      { text: "وضعیت", value: "status", sortable: true, width:"100"},
+      { text: "تاریخ", value: "date", sortable: true, width:"80"},
+      { text: "شرح", value: "des", sortable: true, width:"200"},
+      { text: "تامین کننده", value: "person", sortable: true, width:"150"},
+      { text: "ثبت کننده", value: "submitter", sortable: true, width:"100"},
     ]
   }},
   methods: {
@@ -95,10 +98,11 @@ export default {
     },
     deleteItem(code){
       Swal.fire({
-        text: 'آیا برای حذف این مورد مطمئن هستید؟تمامی رسید‌های دریافت و حواله‌های انبار مرتبط با این سند حذف خواهند شد.',
+        text: 'آیا برای حذف این مورد مطمئن هستید؟ تمامی اسناد پرداخت و حواله های انبار همراه فاکتور نیز حذف خواهند شد.',
         showCancelButton: true,
         confirmButtonText: 'بله',
         cancelButtonText: `خیر`,
+        icon:'warning'
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
@@ -116,6 +120,13 @@ export default {
               Swal.fire({
                 text: 'فاکتور خرید با موفقیت حذف شد.',
                 icon: 'success',
+                confirmButtonText: 'قبول'
+              });
+            }
+            else if(response.data.result == 2){
+              Swal.fire({
+                text: response.data.message,
+                icon: 'warning',
                 confirmButtonText: 'قبول'
               });
             }

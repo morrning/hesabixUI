@@ -344,7 +344,7 @@ export default {
         // add tamin konanade
         let bs = 0;
         this.items.forEach((item)=>{
-          bs = bs + item.bd;
+          bs = bs +  parseInt(item.bd.replace(/,(?=\d{3})/g, ''));
         })
         this.items.push({
           commodity:this.commodity[0],

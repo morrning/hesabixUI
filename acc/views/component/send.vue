@@ -40,7 +40,7 @@ export default defineComponent({
   }},
   methods:{
     fillWithTotal(pay){
-      pay.bd = this.$props.totalAmount;
+      pay.bs = this.$props.totalAmount;
     },
     addItem(type){
       let obj = {};
@@ -143,7 +143,7 @@ export default defineComponent({
     calc(){
       this.totalPays = 0;
       this.items.forEach((value)=>{
-        this.totalPays += parseInt(value.bd);
+        this.totalPays += parseInt(value.bs);
       })
     },
     async submit(){
@@ -152,7 +152,7 @@ export default defineComponent({
         errors.push('مبالغ وارد شده بیشتر از مبلغ فاکتور است.');
       }
       this.items.forEach((element,index)=>{
-        if(element.bd == 0){
+        if(element.bs == 0){
           errors.push('مبلغ صفر در ردیف ' + (index + 1) + ' نا معتبر است.');
         }
         //check type selected
@@ -174,7 +174,7 @@ export default defineComponent({
       })
       if(this.items.length == 0){
         Swal.fire({
-          text:'هیچ دریافتی ثبت نشده است.',
+          text:'هیچ پرداختی ثبت نشده است.',
           icon: 'error',
           confirmButtonText: 'قبول'
         });
@@ -205,19 +205,19 @@ export default defineComponent({
             element.id = element.cashdesk.id;
           }
           if(element.des == ''){
-            element.des = 'دریافت وجه فاکتور شماره ' + this.$props.originalDoc
+            element.des = 'پرداخت وجه فاکتور شماره ' + this.$props.originalDoc
           }
         });
         rows.push({
           id:this.$props.person,
           type:'person',
-          bd:0,
-          bs:this.totalPays,
+          bd:this.totalPays,
+          bs:0,
           table:3,
-          des:'دریافت وجه فاکتور شماره ' + this.$filters.formatNumber(this.$props.originalDoc)
+          des:'پرداخت وجه فاکتور شماره ' + this.$filters.formatNumber(this.$props.originalDoc)
         });
         if(this.des == ''){
-          this.des = 'دریافت وجه فاکتور شماره ' + this.$filters.formatNumber(this.originalDoc) ;
+          this.des = 'پرداخت وجه فاکتور شماره ' + this.$filters.formatNumber(this.originalDoc) ;
         }
         axios.post('/api/accounting/insert',{
           date: this.date,
@@ -265,7 +265,7 @@ export default defineComponent({
   <div class="col-12 text-center">
     <div class="input-group text-center justify-content-center">
       <button class="btn btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        افزودن دریافت
+        افزودن پرداخت
       </button>
       <ul class="dropdown-menu">
         <li><button type="button" @click="addItem('bank')" class="dropdown-item"><i class="fa fa-dot-circle"></i> حساب بانکی</button></li>
@@ -290,9 +290,9 @@ export default defineComponent({
   </div>
   <div class="row">
     <div class="col">
-      <p class="mb-1">دریافت‌ها:</p>
+      <p class="mb-1">پرداخت‌ها:</p>
       <div v-show="items.length === 0" class="alert alert-info mx-3"><i class="fa fa-info"></i>
-        دریافتی افزوده نشده است!
+        پرداختی افزوده نشده است!
       </div>
     </div>
   </div>
@@ -358,7 +358,7 @@ export default defineComponent({
                     <label  class="form-label">مبلغ</label>
                     <button @click="fillWithTotal(pay)" class="btn btn-sm btn-link block-options-item float-end me-2">کل فاکتور</button>
                   </div>
-                  <money3 @change="calc()" class="form-control" v-model="pay.bd" v-bind="currencyConfig"></money3>
+                  <money3 @change="calc()" class="form-control" v-model="pay.bs" v-bind="currencyConfig"></money3>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">

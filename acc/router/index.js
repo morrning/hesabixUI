@@ -205,6 +205,11 @@ const router = createRouter({
       component: () => import('../views/buy/list.vue'),
     },
     {
+      path: '/acc/buy/view/:id?',
+      name: 'buy_view',
+      component: () => import('../views/buy/viewInvoice.vue'),
+    },
+    {
       path: '/acc/sell/mod/:id?',
       name: 'sell_mod',
       component: () => import('../views/sell/mod.vue'),

@@ -2,12 +2,12 @@
 import {defineComponent, ref} from 'vue'
 import axios from "axios";
 import Swal from "sweetalert2";
-import rec from "../component/rec.vue";
+import send from "../component/send.vue";
 import recList from "../component/recList.vue";
 export default defineComponent({
   name: "viewInvoice",
   components:{
-    rec:rec,
+    send:send,
     recList:recList
   },
   watch:{
@@ -58,7 +58,7 @@ export default defineComponent({
     },
     commoditys:[],
     totalPrice:0,
-    totalRec: 0,
+    totalSend: 0,
   }},
   methods:{
     copyToCliboard(){
@@ -68,65 +68,23 @@ export default defineComponent({
     loadData(){
       axios.post('/api/accounting/doc/get',{'code':this.$route.params.id}).then((response)=>{
           this.item = response.data;
-          if(this.item.doc.shortlink != null){
-            this.shortlink_url = 'https://hesabix.ir/sl/sell/' + localStorage.getItem("activeBid") + '/' + this.item.doc.shortlink;
-          }
-          else{
-            this.shortlink_url = 'https://hesabix.ir/sl/sell/' + localStorage.getItem("activeBid") + '/' + this.item.doc.id;
-          }
           response.data.rows.forEach(element => {
             if(element.person){
               this.person = element.person
             }
             else if(element.commodity){
               this.commoditys.push(element);
-              this.totalPrice += parseInt(element.bs)
+              this.totalPrice += parseInt(element.bd)
             }
           });
         response.data.relatedDocs.forEach(element => {
-          this.totalRec += parseInt(element.amount)
+          this.totalSend += parseInt(element.amount)
         });
       });
       axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
           this.bid = response.data;
         });
     },
-    sendSMS(){
-      this.loading = true;
-      const regex = new RegExp("^(\\+98|0)?9\\d{9}$");
-      if(!regex.test(this.person.mobile)){
-        Swal.fire({
-          text: 'شماره موبایل وارد شده نا معتبر است.',
-          icon: 'error',
-          confirmButtonText: 'قبول'
-        });
-        this.loading = false;
-      }
-      else{
-        this.send_message_label = 'در حال ارسال...';
-        axios.post('/api/sms/send/sell-invoice/' + this.item.doc.id + '/' + this.person.mobile).then((response)=>{
-          if(response.data.result == 2) {
-            Swal.fire({
-              text: 'اعتبار سرویس پیامک کافی نیست.',
-              icon: 'error',
-              confirmButtonText: 'قبول'
-            });
-            this.send_message_label = 'ارسال';
-          }
-          else if(response.data.result == 1) {
-            Swal.fire({
-              text: 'پیامک اطلاع رسانی ارسال شد.',
-              icon: 'success',
-              confirmButtonText: 'قبول'
-            });
-            this.send_message_label = 'ارسال شد!'
-          }
-          this.loading = false;
-        })
-      }
-
-
-    }
   },
   mounted() {
     this.loadData();
@@ -144,16 +102,16 @@ export default defineComponent({
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fas fa-file-invoice-dollar"></i>
-        مشاهده و چاپ فاکتور فروش</h3>
+        مشاهده و چاپ فاکتور خرید</h3>
       <div class="block-options">
         <!-- Button trigger modal -->
-        <button v-show="parseInt(this.item.doc.amount) <= parseInt(this.totalRec)" type="button" class="btn btn-sm btn-success" disabled="disabled">
+        <button v-show="parseInt(this.item.doc.amount) <= parseInt(this.totalSend)" type="button" class="btn btn-sm btn-success" disabled="disabled">
           <i class="fas fa-check-double me-2"></i>
           <span class="">تسویه شده</span>
         </button>
-        <button v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec)" type="button" class="btn btn-sm btn-danger" @click="this.recModal.show()">
+        <button v-show="parseInt(this.item.doc.amount) > parseInt(this.totalSend)" type="button" class="btn btn-sm btn-danger" @click="this.recModal.show()">
           <i class="fas fa-money-bill-1-wave"></i>
-          <span class="d-none d-sm-inline-block">ثبت دربافت</span>
+          <span class="d-none d-sm-inline-block">پرداخت وجه</span>
         </button>
         <!-- Modal -->
         <div class="modal fade" id="rec-modal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
@@ -162,14 +120,14 @@ export default defineComponent({
               <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel1">
                   <i class="fas fa-money-bill-1 ms-2"></i>
-                  ثبت دربافت
+                  ثبت پرداخت
                 </h1>
                 <div class="block-options">
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
               </div>
               <div class="modal-body">
-                <rec ref="submitPay" :windowsState="this.PayWindowsState" :person="this.person.id" :original-doc="this.item.doc.code" :total-amount="parseInt(this.item.doc.amount) - parseInt(this.totalRec)"></rec>
+                <send ref="submitPay" :windowsState="this.PayWindowsState" :person="this.person.id" :original-doc="this.item.doc.code" :total-amount="parseInt(this.item.doc.amount) - parseInt(this.totalSend)" />
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
@@ -179,7 +137,7 @@ export default defineComponent({
         </div>
         <button type="button" class="btn btn-sm btn-info ms-2" @click="this.recListModal.show()">
           <i class="fas fa-arrow-alt-circle-down"></i>
-          <span class="d-none d-sm-inline-block">دریافت‌ها</span>
+          <span class="d-none d-sm-inline-block">پرداخت‌ها</span>
         </button>
         <!-- Modal -->
         <div class="modal fade" id="rec-list-modal" tabindex="-1" aria-hidden="true">
@@ -187,8 +145,8 @@ export default defineComponent({
             <div class="modal-content">
               <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel1">
-                  <i class="fas fa-arrow-alt-circle-down ms-2"></i>
-                  دریافت‌ها
+                  <i class="fas fa-arrow-alt-circle-up ms-2"></i>
+                  پرداخت‌ها
                 </h1>
                 <div class="block-options">
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -207,70 +165,6 @@ export default defineComponent({
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ فاکتور</span>
         </button>
-
-        <!-- Button trigger modal -->
-        <button v-show="this.bid.shortlinks" type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <i class="fas fa-share-nodes"></i>
-          <span class="d-none d-sm-inline-block">اشتراک گذاری</span>
-        </button>
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">
-                  <i class="fas fa-share-nodes"></i>
-                  اشتراک گذاری
-                </h1>
-                <div class="block-options">
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-              </div>
-              <div class="modal-body">
-                <div class="container">
-                  <div class="row">
-                    <div class="input-group mb-2">
-                      <div class="input-group-text">
-                        <i class="fa fa-paperclip me-2"></i>
-                        پیوند فاکتور</div>
-                      <input Readonly="Readonly" type="text" class="form-control" v-model="shortlink_url">
-                      <button class="btn btn-outline-success" type="button" @click="copyToCliboard()">{{ this.copy_label }}</button>
-                    </div>
-                    <div class="input-group">
-                      <div class="input-group-text">
-                        <i class="fa fa-message me-2"></i>
-                        ارسال پیامک</div>
-                      <input type="text" class="form-control" v-model="this.person.mobile">
-                      <button :disabled="this.loading" class="btn btn-outline-success" type="button" @click="sendSMS()">{{ this.send_message_label }}</button>
-                    </div>
-                  </div>
-                  <div class="mt-3">
-                    <i class="fas fa-share-nodes me-3"></i>
-                    <label>اشتراک گذاری در شبکه‌های اجتماعی</label>
-                  </div>
-                  <div class="mt-2">
-                    <a target="_blank" :href="'tg://msg?text=' + this.shortlink_url">
-                      <img src="/img/icons/telegram.png" class="m-3" style="max-width: 30px;"/>
-                    </a>
-                    <a target="_blank" :href="'et://msg_url?url=' + this.shortlink_url">
-                      <img src="/img/icons/eitaa.jpeg" class="m-3" style="max-width: 30px;"/>
-                    </a>
-                    <a target="_blank" :href="'https://ble.ir/share/url?url=' + this.shortlink_url">
-                      <img src="/img/icons/bale-logo.png" class="m-3" style="max-width: 30px;"/>
-                    </a>
-                    <a target="_blank" :href="'https://ble.ir/share/url?url=' + this.shortlink_url">
-                      <img src="/img/icons/robika.png" class="m-3" style="max-width: 30px;"/>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
@@ -279,7 +173,7 @@ export default defineComponent({
       <div class="col-3 text-center"></div>
       <div class="col-6 text-center">
         <h3 class="font-weight-bold">{{ this.bid.legal_name }}</h3>
-        <h5 class="">صورتحساب فروش کالا و خدمات</h5>
+        <h5 class="">صورتحساب  کالا و خدمات</h5>
       </div>
       <div class="col-3 text-right">
         <p>شماره سفارش: {{item.doc.code}}</p>
@@ -290,7 +184,7 @@ export default defineComponent({
       <table class="table table-bordered">
         <thead>
         <tr>
-          <th class="text-center table-header" colspan="11">مشخصات فروشنده</th>
+          <th class="text-center table-header" colspan="11">مشخصات خریدار</th>
         </tr>
         </thead>
         <tbody>
@@ -327,7 +221,7 @@ export default defineComponent({
         </tbody>
         <thead>
         <tr>
-          <th class="text-center table-header" colspan="11">مشخصات خریدار</th>
+          <th class="text-center table-header" colspan="11">مشخصات تامین کننده</th>
         </tr>
         </thead>
         <tbody>
@@ -387,12 +281,12 @@ export default defineComponent({
         </tr>
         <tr class="bg-light border border-dark border-2">
           <th colspan="2" class="text-right border-0">جمع دریافت‌ها:
-            {{ this.$filters.formatNumber(this.totalRec) }} ریال
+            {{ this.$filters.formatNumber(this.totalSend) }} ریال
           </th>
           <th colspan="1" class="text-right border-end-0">مانده فاکتور:
-            {{ this.$filters.formatNumber(parseInt(this.totalPrice) - parseInt(this.totalRec)) }} ریال
-            <span v-show="parseInt(this.item.doc.amount) <= parseInt(this.totalRec)">(تسویه شده)</span>
-            <span class="text-decoration-underline text-danger" v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec)">(تسویه نشده)</span>
+            {{ this.$filters.formatNumber(parseInt(this.totalPrice) - parseInt(this.totalSend)) }} ریال
+            <span v-show="parseInt(this.item.doc.amount) <= parseInt(this.totalSend)">(تسویه شده)</span>
+            <span class="text-decoration-underline text-danger" v-show="parseInt(this.item.doc.amount) > parseInt(this.totalSend)">(تسویه نشده)</span>
           </th>
           <th colspan="5" class="text-right border-end-0">جمع کل:
             {{ this.$filters.formatNumber(this.totalPrice) }} ریال
@@ -403,7 +297,7 @@ export default defineComponent({
             <div class="container-fluid">
               <div class="row">
                 <div class="col-12">
-                  <div class="text-center">لیست دریافت‌ها</div>
+                  <div class="text-center">لیست پرداخت‌ها</div>
                 </div>
                 <div class="col-12">
                   <div v-show="this.item.relatedDocs.length != 0" class="row">
@@ -413,7 +307,7 @@ export default defineComponent({
                     <div class="col-sm-12 col-md-3 text-center">نوع</div>
                   </div>
                   <div v-show="this.item.relatedDocs.length == 0" class="row">
-                    <b class="text-danger col-sm-12 col-md-12 text-center">هیچ سند دریافتی ثبت نشده است.</b>
+                    <b class="text-danger col-sm-12 col-md-12 text-center">هیچ سند پرداختی ثبت نشده است.</b>
                   </div>
                 </div>
                 <div class="col-12" v-for="rd in this.item.relatedDocs">
@@ -421,18 +315,17 @@ export default defineComponent({
                     <div class="col-sm-12 col-md-3 text-center">{{rd.code}}</div>
                     <div class="col-sm-12 col-md-3 text-center">{{rd.date}}</div>
                     <div class="col-sm-12 col-md-3 text-center">{{this.$filters.formatNumber(rd.amount)}} ریال</div>
-                    <div v-if="rd.type === 'walletPay'"  class="col-sm-12 col-md-3 text-center">پرداخت آنلاین</div>
-                    <div v-else class="col-sm-12 col-md-3 text-center">سند حسابداری</div>
+                    <div class="col-sm-12 col-md-3 text-center">سند حسابداری</div>
                   </div>
                 </div>
               </div>
             </div>
           </th>
-          <th colspan="6" class="text-right">توضیحات:{{ this.item.doc.des.replace("فاکتور فروش:", "") }}</th>
+          <th colspan="6" class="text-right">توضیحات:{{ this.item.doc.des.replace("فاکتور خرید:", "") }}</th>
         </tr>
         <tr style="padding: 60px 0;">
-          <td colspan="4" class="text-right"> امضا خریدار</td>
-          <td colspan="4" class="text-right">مهر و امضا فروشنده</td>
+          <td colspan="4" class="text-right"> امضا تامین کننده</td>
+          <td colspan="4" class="text-right">مهر و امضا خریدار</td>
         </tr>
         </tbody>
       </table>
