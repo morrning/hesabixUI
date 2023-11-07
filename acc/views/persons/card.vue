@@ -11,35 +11,55 @@
     <div class="block-content pt-1 pb-3">
       <div class="row">
         <div class="col-sm-12 col-md-12 m-0 p-0">
-          <div class="col-sm-12 col-md-6 mb-1">
-            <div class="card push">
-              <div class="card-header border-bottom-0 bg-primary-dark text-light">
-                <h3 class="block-title"> کارت حساب <small class="text-info-light">{{selectedPerson.nikename}}</small></h3>
-              </div>
-              <div class="card-body">
-                <small class="mb-2">شخص</small>
-                <v-select
-                    dir="rtl"
-                    :options="listPersons"
-                    label="nikename"
-                    v-model="selectedPerson"
-                    @option:selected="updateRoute(selectedPerson.code)"
-                >
-                  <template #no-options="{ search, searching, loading }">
-                    وردی یافت نشد!
-                  </template>
-                </v-select>
-                <hr />
-                <div class="fw-bold mb-2">کد حسابداری: <small class="text-primary">{{selectedPerson.code}}</small></div>
-                <div class="fw-bold mb-2">نام مستعار: <small class="text-primary">{{selectedPerson.nikename}}</small></div>
-                <div class="fw-bold mb-2">نام و نام خانوادگی: <small class="text-primary">{{selectedPerson.name}}</small></div>
-                <div class="fw-bold mb-2">تلفن: <small class="text-primary">{{selectedPerson.tel}}</small></div>
-                <div class="fw-bold mb-2">موبایل: <small class="text-primary">{{selectedPerson.mobile}}</small></div>
-                <div class="fw-bold mb-2">آدرس: <small class="text-primary">{{selectedPerson.address}}</small></div>
-                <div class="fw-bold mb-2">توضیحات: <small class="text-primary">{{selectedPerson.des}}</small></div>
+          <div class="row">
+            <div class="col-sm-12 col-md-6 mb-1">
+              <div class="card push">
+                <div class="card-header border-bottom-0 bg-primary-dark text-light">
+                  <h3 class="block-title"> کارت حساب <small class="text-info-light">{{selectedPerson.nikename}}</small></h3>
+                </div>
+                <div class="card-body">
+                  <small class="mb-2">شخص</small>
+                  <v-select
+                      dir="rtl"
+                      :options="listPersons"
+                      label="nikename"
+                      v-model="selectedPerson"
+                      @option:selected="updateRoute(selectedPerson.code)"
+                  >
+                    <template #no-options="{ search, searching, loading }">
+                      وردی یافت نشد!
+                    </template>
+                  </v-select>
+                  <hr />
+                  <div class="fw-bold mb-2">کد حسابداری: <small class="text-primary">{{selectedPerson.code}}</small></div>
+                  <div class="fw-bold mb-2">نام مستعار: <small class="text-primary">{{selectedPerson.nikename}}</small></div>
+                  <div class="fw-bold mb-2">نام و نام خانوادگی: <small class="text-primary">{{selectedPerson.name}}</small></div>
+                  <div class="fw-bold mb-2">تلفن: <small class="text-primary">{{selectedPerson.tel}}</small></div>
+                  <div class="fw-bold mb-2">موبایل: <small class="text-primary">{{selectedPerson.mobile}}</small></div>
+                  <div class="fw-bold mb-2">آدرس: <small class="text-primary">{{selectedPerson.address}}</small></div>
+                  <div class="fw-bold mb-2">توضیحات: <small class="text-primary">{{selectedPerson.des}}</small></div>
+                </div>
               </div>
             </div>
+            <div class="col-sm-12 col-md-6 mb-1">
+              <div class="card push">
+                <div class="card-header border-bottom-0 bg-primary-dark text-light">
+                  <h3 class="block-title"> وضعیت حساب <small class="text-info-light">{{selectedPerson.nikename}}</small></h3>
+                </div>
+                <div class="card-body">
+                  <div class="fw-bold mb-2">
+                    وضعیت حسابداری:
+                    <b v-if="selectedPerson.balance > 0" class="text-success">بستانکار</b>
+                    <b v-if="selectedPerson.balance < 0" class="text-danger">بدهکار</b>
+                    <b v-else class="text-dark">تسویه شده</b>
 
+                  </div>
+                  <div class="fw-bold mb-2">بستانکار: <small class="text-primary">{{this.$filters.formatNumber(selectedPerson.bs)}}</small></div>
+                  <div class="fw-bold mb-2">بدهکار: <small class="text-primary">{{this.$filters.formatNumber(selectedPerson.bd)}}</small></div>
+                  <div class="fw-bold mb-2">تراز حسابداری: <small class="text-primary">{{this.$filters.formatNumber(selectedPerson.balance)}}</small></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

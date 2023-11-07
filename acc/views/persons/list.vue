@@ -61,10 +61,10 @@
           >
             <template #item-operation="{ code }">
               <div class="d-flex">
-                <router-link :to="'/acc/persons/card/view/' + code">
+                <router-link class="btn btn-link" :to="'/acc/persons/card/view/' + code">
                   <i class="fa fa-eye text-success"></i>
                 </router-link>
-                <router-link :to="'/acc/persons/mod/' + code">
+                <router-link class="btn btn-link" :to="'/acc/persons/mod/' + code">
                   <i class="fa fa-edit px-2"></i>
                 </router-link>
               </div>
@@ -73,6 +73,19 @@
               <router-link :to="'/acc/persons/card/view/' + code">
                 {{ nikename }}
               </router-link>
+            </template>
+            <template #item-status="{ balance }">
+              <span v-if="balance<0" class="text-danger">بدهکار</span>
+              <span v-if="balance>0" class="text-success">بستانکار</span>
+            </template>
+            <template #item-bs="{ bs }">
+              <span>{{this.$filters.formatNumber(bs)}}</span>
+            </template>
+            <template #item-bd="{ bd }">
+              <span>{{this.$filters.formatNumber(bd)}}</span>
+            </template>
+            <template #item-balance="{ balance }">
+              <span>{{this.$filters.formatNumber(balance)}}</span>
             </template>
           </EasyDataTable>
         </div>
@@ -109,6 +122,10 @@ export default {
       { text: "عملیات", value: "operation"},
       { text: "کد", value: "code" },
       { text: "نام مستعار", value: "nikename", sortable: true, width: 150},
+      { text: "تراز حساب", value: "balance", sortable: true, width: 100},
+      { text: "وضعیت حساب", value: "status", sortable: true, width: 110},
+      { text: "بستانکار", value: "bs", sortable: true, width: 100},
+      { text: "بدهکار", value: "bd", sortable: true, width: 100},
       { text: "نام و نام خانوادگی", value: "name", sortable: true, width: 150},
       { text: "شرکت", value: "company", sortable: true, width: 100},
       { text: "شناسه ملی", value: "shenasemeli", sortable: true, width: 100},
