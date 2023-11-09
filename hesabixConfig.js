@@ -7,5 +7,12 @@ export function getApiUrl() {
     If this be wrong user interface not functioning probably.
      */
     return 'http://localhost';
-    //return 'https://app.hesabix.ir';
+    //return 'https://hesabix.ir';
+}
+export function getVersionCheckerUrl() {
+    /*
+    When you use hesabix in local cloudes with this URL you can check for last version of hesabix
+    If you do not know about this do not change it!
+     */
+    return 'https://hesabix.ir/clude/last-version';
 }

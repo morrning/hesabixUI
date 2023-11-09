@@ -25,8 +25,6 @@
           <EasyDataTable
               show-index
               alternating
-
-
               :search-value="searchValue"
               :headers="headers"
               :items="items"
@@ -39,10 +37,10 @@
               :loading = "loading"
           >
             <template #item-operation="{ code }">
-              <router-link :to="'/acc/cashdesk/mod/' + code">
+              <router-link class="btn btn-link" :to="'/acc/cashdesk/mod/' + code">
                 <i class="fa fa-edit px-2"></i>
               </router-link>
-              <router-link :to="'/acc/cashdesk/card/view/' + code">
+              <router-link class="btn btn-link" :to="'/acc/cashdesk/card/view/' + code">
                 <i class="fa fa-list-check text-warning"></i>
               </router-link>
             </template>
@@ -74,11 +72,11 @@ export default {
     loading: ref(true),
     items:[],
     headers: [
-      { text: "عملیات", value: "operation"},
-      { text: "کد", value: "code" },
-      { text: "نام صندوق", value: "name"},
-      { text: "موجودی(ریال)", value: "balance"},
-      { text: "توضیحات", value: "owner"},
+      { text: "عملیات", value: "operation", width: "130"},
+      { text: "کد", value: "code", width: "100px" },
+      { text: "نام صندوق", value: "name", width: "120px"},
+      { text: "موجودی(ریال)", value: "balance", width: "140px"},
+      { text: "توضیحات", value: "des", width: "150px"},
     ]
   }},
   methods: {

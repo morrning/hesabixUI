@@ -25,7 +25,6 @@
           <EasyDataTable
               show-index
               alternating
-
               :search-value="searchValue"
               :headers="headers"
               :items="items"
@@ -38,10 +37,10 @@
               :loading = "loading"
           >
             <template #item-operation="{ code }">
-              <router-link :to="'/acc/banks/mod/' + code">
+              <router-link class="btn btn-link me-1" :to="'/acc/banks/mod/' + code">
                 <i class="fa fa-edit px-2"></i>
               </router-link>
-              <router-link :to="'/acc/banks/card/view/' + code">
+              <router-link class="btn  btn-link" :to="'/acc/banks/card/view/' + code">
                <i class="fa fa-list-check text-warning"></i>
               </router-link>
             </template>
@@ -73,16 +72,16 @@ export default {
     loading: ref(true),
     items:[],
     headers: [
-      { text: "عملیات", value: "operation"},
-      { text: "کد", value: "code" },
-      { text: "بانک", value: "name"},
-      { text: "موجودی(ریال)", value: "balance"},
-      { text: "صاحب حساب", value: "owner"},
-      { text: "شماره کارت", value: "cardNum"},
-      { text: "شبا", value: "shaba"},
-      { text: "شعبه", value: "shobe"},
-      { text: "تلفن اینترنت بانک", value: "mobileInternetBank"},
-      { text: "شماره کارتخوان", value: "posNum"},
+      { text: "عملیات", value: "operation", width: "130"},
+      { text: "کد", value: "code", width: "100" },
+      { text: "بانک", value: "name", width: "140"},
+      { text: "موجودی(ریال)", value: "balance", width: "140"},
+      { text: "صاحب حساب", value: "owner", width: "120"},
+      { text: "شماره کارت", value: "cardNum", width: "120"},
+      { text: "شبا", value: "shaba", width: "160"},
+      { text: "شعبه", value: "shobe", width: "120"},
+      { text: "تلفن اینترنت بانک", value: "mobileInternetBank", width: "120"},
+      { text: "شماره کارتخوان", value: "posNum", width: "100"},
     ]
   }},
   methods: {

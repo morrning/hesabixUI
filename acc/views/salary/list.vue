@@ -23,25 +23,24 @@
             </div>
           </div>
           <EasyDataTable
-              show-index
-              alternating
-
-              :search-value="searchValue"
-              :headers="headers"
-              :items="items"
-              theme-color="#1d90ff"
-              header-text-direction="center"
-              body-text-direction="center"
-              rowsPerPageMessage="تعداد سطر"
-              emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-              rowsOfPageSeparatorMessage="از"
-              :loading = "loading"
+            show-index
+            alternating
+            :search-value="searchValue"
+            :headers="headers"
+            :items="items"
+            theme-color="#1d90ff"
+            header-text-direction="center"
+            body-text-direction="center"
+            rowsPerPageMessage="تعداد سطر"
+            emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+            rowsOfPageSeparatorMessage="از"
+            :loading = "loading"
           >
-            <template #item-operation="{ code }">
-              <router-link :to="'/acc/salary/mod/' + code">
+            <template #item-operation="{ code }"> 
+              <router-link class="btn  btn-link  me-1" :to="'/acc/salary/mod/' + code">
                 <i class="fa fa-edit px-2"></i>
               </router-link>
-              <router-link :to="'/acc/salary/card/view/' + code">
+              <router-link class="btn  btn-link" :to="'/acc/salary/card/view/' + code">
                 <i class="fa fa-list-check text-warning"></i>
               </router-link>
             </template>
@@ -73,11 +72,11 @@ export default {
     loading: ref(true),
     items:[],
     headers: [
-      { text: "عملیات", value: "operation"},
-      { text: "کد", value: "code" },
-      { text: "نام تنخواه‌گردان", value: "name"},
-      { text: "موجودی(ریال)", value: "balance"},
-      { text: "توضیحات", value: "owner"},
+      { text: "عملیات", value: "operation", width: "130"},
+      { text: "کد", value: "code", width: "70px" },
+      { text: "نام تنخواه‌گردان", value: "name", width: "120px"},
+      { text: "موجودی(ریال)", value: "balance", width: "140px"},
+      { text: "توضیحات", value: "des", width: "150px"},
     ]
   }},
   methods: {

@@ -15,11 +15,11 @@ export default defineComponent({
     headers: [
       { text: "شماره", value: "code" },
       { text: "تاریخ", value: "date", sortable: true},
-      { text: "شماره فاکتور", value: "doc.code", sortable: true},
-      { text: "نوع حواله", value: "typeString"},
-      { text: "شخص", value: "person.nikename", sortable: true},
-      { text: "توضیحات", value: "des", sortable: true},
-      { text: "عملیات", value: "operation"},
+      { text: "شماره فاکتور", value: "doc.code", sortable: true, width:"100"},
+      { text: "نوع حواله", value: "typeString", width:"120"},
+      { text: "شخص", value: "person.nikename", sortable: true, width:"120"},
+      { text: "توضیحات", value: "des", sortable: true, width:"300"},
+      { text: "عملیات", value: "operation", width:"120"},
     ]
   }},
   methods: {

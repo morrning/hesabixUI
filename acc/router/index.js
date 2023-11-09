@@ -260,6 +260,11 @@ const router = createRouter({
       component: () => import('../views/plugins/cc/intro.vue'),
     },
     {
+      path: '/acc/plugins/onlinestore/intro',
+      name: 'plugin_onlinestore_intro',
+      component: () => import('../views/plugins/onlinestore/intro.vue'),
+    },
+    {
       path: '/acc/notifications/list',
       name: 'notification_list',
       component: () => import('../views/notifications/notifications.vue'),
