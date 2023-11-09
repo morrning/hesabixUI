@@ -16,6 +16,9 @@ import money from 'v-money3';
 import Vue3PersianDatetimePicker from 'vue3-persian-datetime-picker';
 import NProgress from "nprogress";
 import Swal from "sweetalert2";
+import CKEditor from '@ckeditor/ckeditor5-vue';
+// Import translations for the Persian language.
+import '@ckeditor/ckeditor5-build-classic/build/translations/fa';
 const app = createApp(App)
 app.component('EasyDataTable', Vue3EasyDataTable);
 app.component('v-select', vSelect);
@@ -59,6 +62,7 @@ axios.interceptors.response.use(function(response) {
 app.use(router)
 app.use(VueGravatar)
 app.use(money)
+app.use(CKEditor)
 app.use(LoadingPlugin)
 app.use(plugin, defaultConfig({
     theme: 'genesis',

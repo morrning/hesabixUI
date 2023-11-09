@@ -197,11 +197,11 @@ export default {
               </ul>
             </li>
             <li class="nav-main-item">
-              <a class="nav-main-link active" href="db_hosting.html">
+              <router-link class="nav-main-link active" to="/manager/reportchange/list">
                 <i class="nav-main-link-icon fa fa-history"></i>
                 <span class="nav-main-link-name"> تاریخچه تغییرات </span>
-                <span class="nav-main-link-badge badge rounded-pill bg-success">+</span>
-              </a>
+                <router-link to="/manager/reportchange/mod/" class="nav-main-link-badge badge rounded-pill bg-success">+</router-link>
+              </router-link>
             </li>
             <li class="nav-main-item">
               <a class="nav-main-link active" href="db_hosting.html">

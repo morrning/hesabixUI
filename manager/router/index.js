@@ -9,6 +9,16 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/manager/reportchange/list',
+      name: 'reportchange_list',
+      component: ()=> import('../views/reportchange/list.vue')
+    },
+    {
+      path: '/manager/reportchange/mod/:id?',
+      name: 'reportchange_mod',
+      component: () => import('../views/reportchange/mod.vue'),
+    },
+    {
       path: '/manager/blog/list',
       name: 'blog_list',
       component: ()=> import('../views/blog/list.vue')

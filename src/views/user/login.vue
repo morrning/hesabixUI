@@ -20,6 +20,11 @@
                 <p class="text-uppercase fw-bold fs-sm text-muted"> ورود </p>
               </div>
               <!-- END Header -->
+              <div v-if="this.loading" class="d-flex justify-content-center">
+                <div class="spinner-border text-danger" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
               <form v-show="!this.loading" @submit.prevent="submit">
                 <div class="form-floating mb-3">
                   <input :disabled="this.loadingSubmit" class="form-control" type="text" v-model="email">
@@ -140,6 +145,8 @@ export default {
       else {
         this.loading = false;
       }
+    }).catch((error)=>{
+      this.loading = false;
     })
   }
 }

@@ -8,6 +8,7 @@ export function getApiUrl() {
      */
     return 'http://localhost';
     //return 'https://hesabix.ir';
+<<<<<<< HEAD
 }
 export function getVersionCheckerUrl() {
     /*
@@ -15,4 +16,6 @@ export function getVersionCheckerUrl() {
     If you do not know about this do not change it!
      */
     return 'https://hesabix.ir/clude/last-version';
+=======
+>>>>>>> 69772af194c2360e1e0c6957c12f81aba448adac
 }
