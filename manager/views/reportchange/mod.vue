@@ -9,18 +9,63 @@ export default defineComponent({
   name: "mod",
   components: {Loading},
   data: ()=>{return{
-    isLoading:false,
+    isLoading:true,
     id:'',
     version:'',
     body:'',
     editor: ClassicEditor,
     editorConfig: {
-      language: 'fa'
+      language: 'fa',
+      fontFamily: {
+            options: [
+                'default',
+                'vazir', 'sans-serif',
+                'Ubuntu Mono, Courier New, Courier, monospace'
+            ]
+        },
     }
   }},
+  mounted(){
+      this.id = this.$route.params.id;
+      if(this.id != 0){
+        axios.post('/api/admin/reportchange/get/' + this.id).then((response)=>{
+            this.version = response.data.version;
+            this.body = response.data.body;
+            this.isLoading = false;
+        });
+      }
+      else{
+        this.isLoading = false;
+      }
+  },
   methods:{
     save(){
-      alert();
+      if(this.version.trim() === '' || this.body.trim() === ''){
+        Swal.fire({
+              text: 'تمام موارد به درستی تکمیل نشده است!',
+              icon: 'error',
+              confirmButtonText: 'قبول',
+            });
+      }
+      else{
+        this.isLoading = true;
+        axios.post('/api/admin/reportchange/mod/' + this.id,{
+          id:this.id,
+          version:this.version,
+          body:this.body
+        }).then((response)=>{
+          if(response.data.result == 1){
+            this.isLoading = false;
+            Swal.fire({
+              text: 'گزارش ثبت شد',
+              icon: 'success',
+              confirmButtonText: 'قبول',
+            }).then((res)=>{
+              this.$router.push('/manager/reportchange/list');
+            })
+          }
+        })
+      }
     }
   }
 })
@@ -44,12 +89,12 @@ export default defineComponent({
     </div>
     <div class="block-content pt-1 pb-3">
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
-      <div class="container">
+      <div class="container mt-3">
         <div class="row">
           <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
               <input v-model="version" class="form-control" type="text">
-              <label class="form-label"><span class="text-danger">(لازم)</span> نام</label>
+              <label class="form-label"><span class="text-danger">(لازم)</span> نسخه</label>
             </div>
           </div>
           <div class="col-sm-12 col-md-12">

@@ -193,14 +193,13 @@ export default {
                     <span class="nav-main-link-name">دیدگاه‌ها</span>
                   </a>
                 </li>
-
               </ul>
             </li>
             <li class="nav-main-item">
               <router-link class="nav-main-link active" to="/manager/reportchange/list">
                 <i class="nav-main-link-icon fa fa-history"></i>
                 <span class="nav-main-link-name"> تاریخچه تغییرات </span>
-                <router-link to="/manager/reportchange/mod/" class="nav-main-link-badge badge rounded-pill bg-success">+</router-link>
+                <router-link to="/manager/reportchange/mod/0" class="nav-main-link-badge badge rounded-pill bg-success">+</router-link>
               </router-link>
             </li>
             <li class="nav-main-item">

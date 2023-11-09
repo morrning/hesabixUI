@@ -77,7 +77,7 @@ export default defineComponent({
         <i class="fa fa-history"></i>
         گزارشات تغییر نسخه</h3>
       <div class="block-options">
-        <router-link to="/manager/reportchange/mod/" class="btn btn-sm btn-primary">
+        <router-link to="/manager/reportchange/mod/0" class="btn btn-sm btn-primary">
           <i class="fa fa-plus"></i>
         </router-link>
       </div>
