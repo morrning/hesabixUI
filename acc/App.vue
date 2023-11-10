@@ -8,6 +8,7 @@ import "nprogress/nprogress.css"
 import "/public/assets/css/dashmix.min.css"
 import Year from "./views/component/Year.vue"
 import Icon from "./views/component/notifications/icon.vue";
+import archive_modal from './views/component/archive/archive_modal.vue';
 import Loading from "vue-loading-overlay";
 import smsPanel from "./views/component/smsPanel.vue";
 import 'vue-loading-overlay/dist/css/index.css';
@@ -120,7 +121,8 @@ export default {
     Loading,
     Year: Year,
     notification: Icon,
-    smsPanel:smsPanel
+    smsPanel:smsPanel,
+    archive_modal:archive_modal
   }
 }
 </script>
@@ -609,6 +611,8 @@ export default {
               </li>
             </ul>
           </li>
+          <li class="nav-main-heading">سایر</li>
+    
           <li class="nav-main-item" v-show="permissions.owner">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu bg-success text-white" data-toggle="submenu" href="#">
               <i class="text-white nav-main-link-icon fa fa-shopping-cart"></i>
@@ -671,6 +675,7 @@ export default {
       <!-- Right Section -->
       <div>
         <notification />
+        <archive_modal />
         <smsPanel />
         <!-- User Dropdown -->
         <div class="dropdown d-inline-block">

@@ -59,7 +59,12 @@
                   <label class="form-check-label">انتقال بین بانکی</label>
                 </div>
               </div>
-
+              <div class="space-y-2">
+                <div class="form-check form-switch">
+                  <input v-model="info.archiveUpload" @change="savePerms()" class="form-check-input" type="checkbox">
+                  <label class="form-check-label">افزودن فایل به آرشیو</label>
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-sm-12 col-md-4">
@@ -99,6 +104,12 @@
                 <label class="form-check-label">صندوق‌ها</label>
               </div>
             </div>
+            <div class="space-y-2">
+                <div class="form-check form-switch">
+                  <input v-model="info.archiveMod" @change="savePerms()" class="form-check-input" type="checkbox">
+                  <label class="form-check-label">ویرایش فایل های آرشیو</label>
+                </div>
+              </div>
           </div>
           <div class="col-sm-12 col-md-4">
             <div class="space-y-2">
@@ -137,6 +148,12 @@
                 <label class="form-check-label">کیف پول حسابیکس</label>
               </div>
             </div>
+            <div class="space-y-2">
+                <div class="form-check form-switch">
+                  <input v-model="info.archiveDelete" @change="savePerms()" class="form-check-input" type="checkbox">
+                  <label class="form-check-label">حذف فایل های آرشیو</label>
+                </div>
+              </div>
           </div>
         </div>
         <div class="row mt-2">
