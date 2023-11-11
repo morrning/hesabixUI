@@ -344,7 +344,11 @@ const router = createRouter({
       name: 'storeroom_mod',
       component: () => import('../views/storeroom/mod.vue'),
     },
-
+    {
+      path: '/acc/archive/list',
+      name: 'archive_list',
+      component: () => import('../views/archive/view_files.vue'),
+    },
     {
       path: "/:catchAll(.*)",
       name: "not-found",

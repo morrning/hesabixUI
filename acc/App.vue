@@ -612,7 +612,37 @@ export default {
             </ul>
           </li>
           <li class="nav-main-heading">سایر</li>
-    
+          <li v-show="permissions.owner || permissions.archiveUpload || permissions.archiveMod || permissions.archiveDelete" class="nav-main-item">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
+              <i class="nav-main-link-icon fa fa-folder-tree"></i>
+              <span class="nav-main-link-name">فضای ذخیره‌سازی</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li v-if="permissions.archiveUpload || permissions.archiveMod || permissions.archiveDelete" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/archive/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-cog"></i>
+                    آرشیو فایل‌ها </span>
+                </router-link>
+              </li>
+              <li v-if="permissions.owner" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/business/logs">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-shopping-bag"></i>
+                    خرید فضای ذخیره سازی  </span>
+                </router-link>
+              </li>
+              <li v-if="permissions.owner" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/business/users">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list-dots"></i>
+                    سوابق خرید
+                  </span>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+
           <li class="nav-main-item" v-show="permissions.owner">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu bg-success text-white" data-toggle="submenu" href="#">
               <i class="text-white nav-main-link-icon fa fa-shopping-cart"></i>
