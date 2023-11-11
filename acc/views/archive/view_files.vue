@@ -5,17 +5,38 @@
           <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
             <i class="fa fw-bold fa-arrow-right"></i>
           </button>
-          <i class="fa fa-bank px-2"></i>
-          ی </h3>
+          <i class="fa fa-folder-tree px-2"></i>
+          آرشیو فایل‌ها</h3>
         <div class="block-options">
-          <router-link to="/acc/banks/mod/" class="block-options-item">
-            <span class="fa fa-plus fw-bolder"></span>
-          </router-link>
+         
         </div>
       </div>
       <div class="block-content pt-1 pb-3">
         <div class="row">
-          <div class="col-sm-12 col-md-12 m-0 p-0">
+          <div class="col-sm-12 col-md-3 p-1">
+            <div class="list-group">
+              <button class="list-group-item list-group-item-action active" aria-current="true">
+                <i class="fa fa-folder-tree"></i>
+                دسته بندی فایل‌ها
+              </button>
+              <button type="button" @click="this.loadData('all')" class="list-group-item list-group-item-action">همه فایل‌ها</button>
+              <button type="button" @click="this.loadData('persons')" class="list-group-item list-group-item-action">اشخاص</button>
+              <button type="button" @click="this.loadData('commodity')" class="list-group-item list-group-item-action">کالا</button>
+              <button type="button" @click="this.loadData('bank')" class="list-group-item list-group-item-action">بانک</button>
+              <button type="button" @click="this.loadData('cashdesk')" class="list-group-item list-group-item-action">صندوق</button>
+              <button type="button" @click="this.loadData('salary')" class="list-group-item list-group-item-action">تنخواه</button>
+              <button type="button" @click="this.loadData('storeroom')" class="list-group-item list-group-item-action">انبار</button>
+              <button type="button" @click="this.loadData('transfer')" class="list-group-item list-group-item-action">انتقال</button>
+              <button type="button" @click="this.loadData('persons_recive')" class="list-group-item list-group-item-action">دریافت</button>
+              <button type="button" @click="this.loadData('persns_send')" class="list-group-item list-group-item-action">پرداخت</button>
+              <button type="button" @click="this.loadData('income')" class="list-group-item list-group-item-action">درآمد</button>
+              <button type="button" @click="this.loadData('cost')" class="list-group-item list-group-item-action">هزینه</button>
+              <button type="button" @click="this.loadData('buy')" class="list-group-item list-group-item-action">خرید</button>
+              <button type="button" @click="this.loadData('sell')" class="list-group-item list-group-item-action">فروش</button>
+              <button type="button" @click="this.loadData('onlinestore')" class="list-group-item list-group-item-action">فروشگاه آنلاین</button>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-9 p-0">
             <div class="mb-1">
               <div class="input-group input-group-sm">
                 <span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -44,14 +65,25 @@
                  <i class="fa fa-list-check text-warning"></i>
                 </router-link>
               </template>
-              <template #item-name="{name, code }">
-                <router-link :to="'/acc/banks/card/view/' + code">
-                  {{name}}
-                </router-link>
+              <template #item-cat="{ cat }">
+                <span v-if="cat == 'persons'">اشخاص</span>
+                <span v-if="cat == 'commodity'">کالا</span>    
+                <span v-if="cat == 'bank'">بانک</span> 
+                <span v-if="cat == 'cashdesk'">صندوق</span> 
+                <span v-if="cat == 'salary'">تنخواه گردان</span> 
+                <span v-if="cat == 'transfer'">انتقال</span> 
+                <span v-if="cat == 'storeroom'">انبار</span> 
+                <span v-if="cat == 'persons_recive'">دریافت</span> 
+                <span v-if="cat == 'persns_send'">پرداخت</span>
+                <span v-if="cat == 'income'">درآمد</span> 
+                <span v-if="cat == 'cost'">هزینه</span> 
+                <span v-if="cat == 'buy'">خرید</span> 
+                <span v-if="cat == 'sell'">فروش</span> 
+                <span v-if="cat == 'onlinestore'">فروشگاه آنلاین</span>              
               </template>
-              <template #item-balance="{ balance }">
-                <label class="text-success" v-if="balance >= 0">{{this.$filters.formatNumber(balance)}}</label>
-                <label class="text-danger" v-else>{{this.$filters.formatNumber( -1 * balance ) }} منفی</label>
+              <template #item-filePublic="{ filePublic }">
+                <i v-if="filePublic" class="text-success fa fa-check"></i>  
+                <i v-else class="text-danger fa fa-close"></i>                           
               </template>
             </EasyDataTable>
           </div>
@@ -70,23 +102,23 @@
     data: ()=>{return {
       searchValue: '',
       loading: ref(true),
+      cat:'all',
       items:[],
       headers: [
         { text: "عملیات", value: "operation", width: "130"},
-        { text: "کد", value: "code", width: "100" },
-        { text: "بانک", value: "name", width: "140"},
-        { text: "موجودی(ریال)", value: "balance", width: "140"},
-        { text: "صاحب حساب", value: "owner", width: "120"},
-        { text: "شماره کارت", value: "cardNum", width: "120"},
-        { text: "شبا", value: "shaba", width: "160"},
-        { text: "شعبه", value: "shobe", width: "120"},
-        { text: "تلفن اینترنت بانک", value: "mobileInternetBank", width: "120"},
-        { text: "شماره کارتخوان", value: "posNum", width: "100"},
+        { text: "نام فایل", value: "filename", width: "100" },
+        { text: "نوع فایل", value: "fileType", width: "120"},
+        { text: "حجم (مگابایت)", value: "filesize", width: "100" },
+        { text: "تاریخ ایجاد", value: "dateSubmit", width: "140"},
+        { text: "ایجاد کننده", value: "submitter", width: "140"},
+        { text: "دسترسی عمومی", value: "filePublic", width: "120"},
+        { text: "دسته بندی", value: "cat", width: "120"},
+    
       ]
     }},
     methods: {
-      loadData(){
-        axios.get('/api/bank/list')
+      loadData(cat){
+        axios.get('/api/archive/list/' + cat)
             .then((response)=>{
               this.items = response.data;
               this.loading = false;
@@ -94,7 +126,7 @@
       },
       deleteItem(code){
         Swal.fire({
-          text: 'آیا برای حذف شخص مطمئن هستید؟',
+          text: 'آیا برای حذف فایل مطمئن هستید؟',
           showCancelButton: true,
           confirmButtonText: 'بله',
           cancelButtonText: `خیر`,
@@ -113,7 +145,7 @@
                   }
                 }
                 Swal.fire({
-                  text: 'شخص با موفقیت حذف شد.',
+                  text: 'فایل با موفقیت حذف شد.',
                   icon: 'success',
                   confirmButtonText: 'قبول'
                 });
@@ -124,7 +156,7 @@
       }
     },
     beforeMount() {
-      this.loadData();
+      this.loadData(this.cat);
     }
   }
   </script>

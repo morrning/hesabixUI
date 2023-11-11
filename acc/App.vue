@@ -621,15 +621,15 @@ export default {
               <li v-if="permissions.archiveUpload || permissions.archiveMod || permissions.archiveDelete" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/archive/list">
                   <span class="nav-main-link-name">
-                    <i class="fa fa-cog"></i>
+                    <i class="fa fa-folder-tree"></i>
                     آرشیو فایل‌ها </span>
                 </router-link>
               </li>
               <li v-if="permissions.owner" class="nav-main-item">
-                <router-link class="nav-main-link" to="/acc/business/logs">
+                <router-link class="nav-main-link" to="/acc/archive/order/new">
                   <span class="nav-main-link-name">
                     <i class="fa fa-shopping-bag"></i>
-                    خرید فضای ذخیره سازی  </span>
+                    سفارش  </span>
                 </router-link>
               </li>
               <li v-if="permissions.owner" class="nav-main-item">

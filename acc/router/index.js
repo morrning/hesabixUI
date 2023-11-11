@@ -350,6 +350,11 @@ const router = createRouter({
       component: () => import('../views/archive/view_files.vue'),
     },
     {
+      path: '/acc/archive/order/new',
+      name: 'order_new',
+      component: () => import('../views/archive/order_new.vue'),
+    },
+    {
       path: "/:catchAll(.*)",
       name: "not-found",
       component: () => import("../views/NotFound.vue"),
