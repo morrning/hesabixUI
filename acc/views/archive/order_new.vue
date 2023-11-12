@@ -9,7 +9,10 @@
           سفارش فضای ذخیره سازی
         </h3>
         <div class="block-options">
-            <button type="button" class="btn btn-sm btn-primary">
+            <button :disabled="this.loading" @click="this.submit()" type="button" class="btn btn-sm btn-primary">
+              <div v-show="this.loading" class="spinner-grow spinner-grow-sm me-2" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
                 <i class="fa fa-bank"></i>
                 پرداخت آنلاین
             </button>
@@ -24,16 +27,16 @@
           </div>
           <div class="row">
             <div class="col-12">
-                <label for="customRange3" class="form-label">فضای مورد نیاز بر حسب گیگابایت:</label>
-            <input v-model="this.space" type="range" class="form-range" min="1" max="5" step="0.5" id="customRange3">
+              <label for="customRange3" class="form-label">فضای مورد نیاز بر حسب گیگابایت:</label>
+              <input :disabled="this.loading" v-model="this.space" type="range" class="form-range" min="1" max="5" step="1" id="customRange3">
             </div>
             <div class="col">
-                <label>فضای انتخاب شده(گیگابایت)</label>
+                <label>فضا(گیگابایت)</label>
                 <input type="text" class="form-control" v-model="this.space" readonly="readonly" />
             </div>
             <div class="col">
                 <label>زمان</label>
-                <select class="form-select" aria-label="Default select example">
+                <select :disabled="this.loading" v-model="this.month" class="form-select" aria-label="ماه">
                     <option value="1" selected>یک ماه</option>
                     <option value="3">سه ماه</option>
                     <option value="6">شش ماه</option>
@@ -42,7 +45,7 @@
             </div>
             <div class="col">
                 <label>مبلغ نهایی (ریال)</label>
-                <input type="text" class="form-control" v-model="this.space" readonly="readonly" />
+                <input type="text" class="form-control text-danger" v-model="this.priceTotal" readonly="readonly"/>
             </div>
           </div>
         </div>
@@ -57,22 +60,46 @@
   
   export default {
     name: "order_new",
+    watch:{
+      space() {
+        this.calc();
+      },
+      month() {
+        this.calc();
+      },
+    },
     data: ()=>{return {
       searchValue: '',
       loading: ref(true),
-      space:1
+      space:1,
+      priceBase:0,
+      month:1,
+      priceTotal:0
     }},
     methods: {
-      loadData(cat){
-        axios.get('/api/archive/list/' + cat)
-            .then((response)=>{
-             
-              this.loading = false;
-            })
+      calc(){
+        this.priceTotal = this.$filters.formatNumber(parseInt(this.space) * parseInt(this.priceBase) * parseInt(this.month)) + 'ریال';
       },
+      loadData(cat){
+        axios.get('/api/archive/order/settings')
+            .then((response)=>{
+              this.priceBase = response.data.priceBase;
+              this.loading = false;
+              this.calc();
+            });
+      },
+      submit(){
+        this.loading = true;
+        axios.post('/api/archive/order/submit',{
+          space:this.space,
+          month:this.month
+        }).then((response)=>{
+          window.location = 'https://www.zarinpal.com/pg/StartPay/' + response.data.authority;
+        });
+      }
     },
-    beforeMount() {
-     
+    mounted() {
+     this.loadData();
     }
   }
   </script>

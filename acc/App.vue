@@ -388,6 +388,23 @@ export default {
                   <router-link to="/acc/persons/send/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </RouterLink>
               </li>
+              <li v-if="permissions.shareholder" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/shareholders/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-circle-dot"></i>
+                    سهامداران
+                  </span>
+                </RouterLink>
+              </li>
+              <li v-if="permissions.getpay" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/persons/send/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-circle-dot"></i>
+                    فروشندگان
+                  </span>
+                  <router-link to="/acc/persons/send/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </RouterLink>
+              </li>
             </ul>
           </li>
           <li v-show="permissions.commodity" class="nav-main-item">
@@ -429,19 +446,25 @@ export default {
             <ul class="nav-main-submenu">
               <li v-if="permissions.bank" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/banks/list">
-                  <span class="nav-main-link-name"> حساب‌های بانکی</span>
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-bank"></i>
+                    حساب‌های بانکی</span>
                   <router-link to="/acc/banks/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </RouterLink>
               </li>
               <li v-if="permissions.cashdesk" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/cashdesk/list">
-                  <span class="nav-main-link-name"> صندوق‌ها</span>
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-money-bill-wheat"></i>
+                    صندوق‌ها</span>
                   <router-link to="/acc/cashdesk/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </RouterLink>
               </li>
               <li v-if="permissions.salary" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/salary/list">
-                  <span class="nav-main-link-name"> تنخواه‌گردان‌ها</span>
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-circle-dot"></i>
+                    تنخواه‌گردان‌ها</span>
                   <router-link to="/acc/salary/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </RouterLink>
               </li>
@@ -454,8 +477,27 @@ export default {
               </li>
               <li v-if="permissions.bankTransfer" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/transfer/list">
-                  <span class="nav-main-link-name"> انتقال </span>
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-circle-dot"></i>
+                    انتقال
+                  </span>
                   <RouterLink to="/acc/transfer/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</RouterLink>
+                </RouterLink>
+              </li>
+              <li v-if="permissions.getpay" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/persons/send/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-circle-dot"></i>
+                    چک‌های دریافتی
+                  </span>
+                </RouterLink>
+              </li>
+              <li v-if="permissions.getpay" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/persons/send/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-circle-dot"></i>
+                    چک‌های پرداختی
+                  </span>
                 </RouterLink>
               </li>
             </ul>
@@ -488,6 +530,14 @@ export default {
                     <i class="fa fa-box-tissue"></i>
                     موجودی کالا</span>
                 </router-link>
+              </li>
+              <li v-if="permissions.getpay" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/persons/send/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-circle-dot"></i>
+                    انبارگردانی
+                  </span>
+                </RouterLink>
               </li>
             </ul>
           </li>
@@ -547,6 +597,7 @@ export default {
                     <i class="fa fa-book-open"></i>
                     اسناد حسابداری
                   </span>
+                  <router-link to="/acc/sell/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </router-link>
               </li>
               <li class="nav-main-item">
@@ -556,6 +607,14 @@ export default {
                     جدول حساب‌ها
                   </span>
                 </router-link>
+              </li>
+              <li v-if="permissions.getpay" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/persons/send/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-circle-dot"></i>
+                    بستن سال مالی
+                  </span>
+                </RouterLink>
               </li>
             </ul>
           </li>
@@ -633,7 +692,7 @@ export default {
                 </router-link>
               </li>
               <li v-if="permissions.owner" class="nav-main-item">
-                <router-link class="nav-main-link" to="/acc/business/users">
+                <router-link class="nav-main-link" to="/acc/archive/order/list">
                   <span class="nav-main-link-name">
                     <i class="fa fa-list-dots"></i>
                     سوابق خرید

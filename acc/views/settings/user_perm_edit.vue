@@ -105,6 +105,12 @@
               </div>
             </div>
             <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.shareholder" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">سهامداران</label>
+              </div>
+            </div>
+            <div class="space-y-2">
                 <div class="form-check form-switch">
                   <input v-model="info.archiveMod" @change="savePerms()" class="form-check-input" type="checkbox">
                   <label class="form-check-label">ویرایش فایل های آرشیو</label>
