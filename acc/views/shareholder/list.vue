@@ -8,12 +8,28 @@
         <i class="fa fa-circle-dot px-2"></i>
         سهامداران </h3>
       <div class="block-options">
-        <router-link to="/acc/cashdesk/mod/" class="block-options-item">
-          <span class="fa fa-plus fw-bolder"></span>
-        </router-link>
+       
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
+      <div class="input-group mb-3">
+        <span class="input-group-text">
+          <i class="fa fa-person me-2"></i>
+          سهامدار
+        </span>
+        <v-select dir="rtl" class="form-control" :options="persons" label="nikename" v-model="shareholder.person">
+          <template #no-options="{ search, searching, loading }">
+                  وردی یافت نشد!
+          </template>
+        </v-select>
+        <span class="input-group-text">
+          <i class="fa fa-file me-2"></i>
+          تعداد سهام
+        </span>
+        <input type="number" class="form-control" min="1" v-model="this.shareholder.percent">
+        <button @click="submit()" type="button" class="btn btn-primary">ثبت</button>
+      </div>
+
       <div class="row">
         <div class="col-sm-12 col-md-12 m-0 p-0">
           <EasyDataTable
@@ -54,20 +70,32 @@ export default {
     loading: ref(true),
     items:[],
     headers: [
-      { text: "شخص", value: "name", width: "120px"},
-      { text: "درصد سهام", value: "balance", width: "140px"},
-      { text: "توضیحات", value: "des", width: "150px"},
+      { text: "شخص", value: "person.nikename", width: "120px"},
+      { text: "درصد سهام", value: "percent", width: "140px"},
       { text: "عملیات", value: "operation", width: "130"},
-    ]
+    ],
+    persons:[],
+    shareholder:{
+      percent:1,
+      person:null
+    }
   }},
   methods: {
     loadData(){
-      axios.get('/api/cashdesk/list')
+      axios.get('/api/shareholders/list')
           .then((response)=>{
             this.items = response.data;
             this.loading = false;
-          })
+          });
+      
+      //load persons
+      axios.get('/api/person/list').then((response)=>{
+        this.persons = response.data;
+      });
     },
+    submit(){
+      alert()
+    }
   },
   beforeMount() {
     this.loadData();
