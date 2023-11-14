@@ -396,15 +396,6 @@ export default {
                   </span>
                 </RouterLink>
               </li>
-              <li v-if="permissions.getpay" class="nav-main-item">
-                <RouterLink class="nav-main-link" to="/acc/persons/send/list">
-                  <span class="nav-main-link-name">
-                    <i class="fa fa-circle-dot"></i>
-                    فروشندگان
-                  </span>
-                  <router-link to="/acc/persons/send/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
-                </RouterLink>
-              </li>
             </ul>
           </li>
           <li v-show="permissions.commodity" class="nav-main-item">
@@ -484,22 +475,6 @@ export default {
                   <RouterLink to="/acc/transfer/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</RouterLink>
                 </RouterLink>
               </li>
-              <li v-if="permissions.getpay" class="nav-main-item">
-                <RouterLink class="nav-main-link" to="/acc/persons/send/list">
-                  <span class="nav-main-link-name">
-                    <i class="fa fa-circle-dot"></i>
-                    چک‌های دریافتی
-                  </span>
-                </RouterLink>
-              </li>
-              <li v-if="permissions.getpay" class="nav-main-item">
-                <RouterLink class="nav-main-link" to="/acc/persons/send/list">
-                  <span class="nav-main-link-name">
-                    <i class="fa fa-circle-dot"></i>
-                    چک‌های پرداختی
-                  </span>
-                </RouterLink>
-              </li>
             </ul>
           </li>
           <li v-show="permissions.store" class="nav-main-item">
@@ -530,14 +505,6 @@ export default {
                     <i class="fa fa-box-tissue"></i>
                     موجودی کالا</span>
                 </router-link>
-              </li>
-              <li v-if="permissions.getpay" class="nav-main-item">
-                <RouterLink class="nav-main-link" to="/acc/persons/send/list">
-                  <span class="nav-main-link-name">
-                    <i class="fa fa-circle-dot"></i>
-                    انبارگردانی
-                  </span>
-                </RouterLink>
               </li>
             </ul>
           </li>

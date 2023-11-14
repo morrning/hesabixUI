@@ -169,6 +169,27 @@ export default {
                 <span class="nav-main-link-name"> داشبورد </span>
               </Router-link>
             </li>
+            <li class="nav-main-heading"> امور مالی </li>
+            <li class="nav-main-item">
+              <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu"
+                 data-toggle="submenu" href="#">
+                <i class="nav-main-link-icon fa fa-globe"></i>
+                <span class="nav-main-link-name">کیف پول</span>
+              </a>
+              <ul class="nav-main-submenu">
+                <li class="nav-main-item">
+                  <router-link class="nav-main-link" to="/manager/wallet/list">
+                    <span class="nav-main-link-name">فهرست حساب‌ها</span>
+                    <span class="nav-main-link-badge badge rounded-pill bg-success">3</span>
+                  </router-link>
+                </li>
+                <li class="nav-main-item">
+                  <router-link class="nav-main-link" to="/manager/wallet/mod">
+                    <span class="nav-main-link-name">ثبت واریزی</span>
+                  </router-link>
+                </li>
+              </ul>
+            </li>
             <li class="nav-main-heading"> محتوا </li>
             <li class="nav-main-item">
               <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu"
@@ -216,7 +237,6 @@ export default {
                 <span class="nav-main-link-badge badge rounded-pill bg-success">+</span>
               </a>
             </li>
-
             <li class="nav-main-item">
               <router-link class="nav-main-link active" to="/manager/support/list">
                 <i class="nav-main-link-icon fa fa-life-ring"></i>
@@ -226,7 +246,12 @@ export default {
 
 
             <li class="nav-main-heading">سایر</li>
-
+            <li class="nav-main-item">
+              <router-link class="nav-main-link active" to="/manager/users/list">
+                <i class="nav-main-link-icon fa fa-users"></i>
+                <span class="nav-main-link-name"> کاربران </span>
+              </router-link>
+            </li>
             <li class="nav-main-item">
               <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu"
                  data-toggle="submenu" href="#">

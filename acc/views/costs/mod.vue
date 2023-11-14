@@ -326,7 +326,6 @@ export default {
       })
     },
     save() {
-      console.log(this.persons)
       if(this.persons.length == 0){
         Swal.fire({
           text: 'انتخاب حداقل یک مرکز هزینه الزامی است.',

@@ -35,6 +35,30 @@ const router = createRouter({
         'title': 'مشاهده درخواست',
         'login': true
       }
+    },
+    {
+      path: '/manager/wallet/list',
+      component: () => import('../views/wallet/list.vue'),
+      meta: {
+        'title': 'لیست حساب‌ها',
+        'login': true
+      }
+    },
+    {
+      path: '/manager/wallet/mod',
+      component: () => import('../views/wallet/mod.vue'),
+      meta: {
+        'title': 'ثبت واریزی',
+        'login': true
+      }
+    },
+    {
+      path: '/manager/users/list',
+      component: () => import('../views/users/list.vue'),
+      meta: {
+        'title': 'لیست کاربران',
+        'login': true
+      }
     }
   ]
 })

@@ -12,22 +12,34 @@
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
-      <div class="input-group mb-3">
-        <span class="input-group-text">
-          <i class="fa fa-person me-2"></i>
-          سهامدار
-        </span>
-        <v-select dir="rtl" class="form-control" :options="persons" label="nikename" v-model="shareholder.person">
-          <template #no-options="{ search, searching, loading }">
-                  وردی یافت نشد!
-          </template>
-        </v-select>
-        <span class="input-group-text">
-          <i class="fa fa-file me-2"></i>
-          تعداد سهام
-        </span>
-        <input type="number" class="form-control" min="1" v-model="this.shareholder.percent">
-        <button @click="submit()" type="button" class="btn btn-primary">ثبت</button>
+      <div class="row mb-3 align-items-end border border-secondary rounded-2 p-2">
+        <div class="col-sm-12 col-md-4 my-2">
+          <label class="form-label">
+            <i class="fa fa-person me-2"></i>
+            سهامدار
+          </label>
+          <v-select dir="rtl" class="" :options="persons" label="nikename" v-model="shareholder.person">
+            <template #no-options="{ search, searching, loading }">
+              وردی یافت نشد!
+            </template>
+          </v-select>
+        </div>
+        <div class="col-sm-12 col-md-4 my-2">
+          <label class="form-label">
+            <i class="fa fa-file me-2"></i>
+            تعداد سهام
+          </label>
+          <input type="number" @keypress="this.$filters.onlyNumber($event)" class="form-control" min="1" v-model="this.shareholder.percent">
+        </div>
+        <div class="col-sm-12 col-md-4 my-2">
+          <button :disabled="this.loading" @click="submit()" type="button" class="btn btn-primary">
+            <div v-show="this.loading" class="spinner-grow spinner-grow-sm me-2" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <i class="fa fa-save me-2"></i>
+            افزودن سهامدار
+          </button>
+        </div>
       </div>
 
       <div class="row">
@@ -46,8 +58,11 @@
               rowsOfPageSeparatorMessage="از"
               :loading = "loading"
           >
-            <template #item-operation="{ code }">
-              <button type="button" class="btn btn-link" :to="'/acc/cashdesk/mod/' + code">
+            <template #item-percent="{ percent }">
+              <span>{{this.$filters.formatNumber(percent)}}</span>
+            </template>
+            <template #item-operation="{ id }">
+              <button @click="this.deleteItem(id)" type="button" class="btn btn-link">
                 <i class="fa fa-trash px-2 text-danger"></i>
               </button>
             </template>
@@ -71,7 +86,7 @@ export default {
     items:[],
     headers: [
       { text: "شخص", value: "person.nikename", width: "120px"},
-      { text: "درصد سهام", value: "percent", width: "140px"},
+      { text: "تعداد سهام", value: "percent", width: "140px"},
       { text: "عملیات", value: "operation", width: "130"},
     ],
     persons:[],
@@ -82,19 +97,76 @@ export default {
   }},
   methods: {
     loadData(){
+      this.loading = true;
       axios.get('/api/shareholders/list')
           .then((response)=>{
             this.items = response.data;
             this.loading = false;
           });
-      
       //load persons
       axios.get('/api/person/list').then((response)=>{
         this.persons = response.data;
       });
     },
     submit(){
-      alert()
+      if(this.shareholder.person == null){
+        Swal.fire({
+          text: 'سهامدار انتخاب نشده است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      else if(this.shareholder.percent == ''){
+        Swal.fire({
+          text: 'تعداد سهام وارد نشده است .',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      else{
+        //going to save data
+        axios.post('/api/shareholders/insert',{
+          person:this.shareholder.person.id,
+          count:this.shareholder.percent
+        }).then((response)=>{
+          Swal.fire({
+            text: 'سهامدار با موفقیت افزوده شد .',
+            icon: 'success',
+            confirmButtonText: 'قبول'
+          });
+          this.shareholder.percent = 1;
+          this.shareholder.person = null;
+          this.loadData();
+        });
+      }
+    },
+    deleteItem(id){
+      Swal.fire({
+        text: 'آیا برای حذف این سهامدار مطمئن هستید؟',
+        icon: 'warning',
+        confirmButtonText: 'قبول',
+        showCancelButton:true,
+        cancelButtonText:'انصراف'
+      }).then((result)=>{
+        if (result.isConfirmed) {
+          this.loading = true;
+          axios.get('/api/shareholders/remove/' + id)
+              .then((response)=>{
+                this.loading = false;
+                Swal.fire({
+                  text: 'سهامدار حذف شد.',
+                  icon: 'success',
+                  confirmButtonText: 'قبول'
+                }).then((result)=>{
+                  for(let z=0; z<this.items.length; z++){
+                    if(this.items[z]['id'] == id){
+                      this.items.splice(z ,1);
+                    }
+                  }
+                });
+              });
+        }
+      });
     }
   },
   beforeMount() {
