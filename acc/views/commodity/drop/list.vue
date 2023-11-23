@@ -39,7 +39,7 @@
               :loading="loading"
           >
             <template #item-operation="{ id,canEdit }">
-              <router-link v-if="canEdit" :to="'/acc/commodity/drop/mod/' + id">
+              <router-link class="btn btn-sm btn-link" v-if="canEdit" :to="'/acc/commodity/drop/mod/' + id">
                 <i class="fa fa-edit px-2"></i>
               </router-link>
             </template>

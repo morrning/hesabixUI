@@ -7,6 +7,8 @@
         </button>
         سند حسابداری</h3>
       <div class="block-options">
+        <archive-upload doctype="456"></archive-upload>
+
         <button class="btn btn-sm btn-primary mx-2" onclick="Dashmix.helpers('dm-print');" type="button">
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ سند</span>
@@ -85,15 +87,21 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import {ref} from "vue";
 import Loading from "vue-loading-overlay";
+import ArchiveUpload from "../component/archive/archiveUpload.vue";
 
 export default {
   name: "viewDoc",
   components: {
+    ArchiveUpload,
     Loading,
   },
   data: ()=>{return {
     isLoading: true,
-    item:null,
+    item:{
+      doc:{
+        code:''
+      }
+    },
   }},
   methods: {
     loadData(){

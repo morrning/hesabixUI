@@ -37,15 +37,9 @@
               <i v-else class="fa fa-lock-open text-success"></i>
             </template>
             <template #item-operation="{ code,type }">
-              <router-link class="text-success" :to="'/acc/accounting/view/' + code">
+              <router-link class="btn btn-sm btn-link text-success" :to="'/acc/accounting/view/' + code">
                 <i class="fa fa-eye px-1"></i>
               </router-link>
-              <router-link v-if="type == 'accounting'" :to="'/acc/banks/mod/' + code">
-                <i class="fa fa-edit px-1"></i>
-              </router-link>
-              <span v-if="type == 'accounting'" class="text-danger px-1" @click="deleteItem(code)">
-                <i class="fa fa-trash"></i>
-              </span>
             </template>
           </EasyDataTable>
         </div>

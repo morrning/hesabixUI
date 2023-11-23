@@ -10,6 +10,9 @@
       </span>
     </div>
     <div class="block-content">
+      <div class="justify-content-center text-center">
+        <loading color="blue" loader="dots" v-model:active="loading" :is-full-page="false"/>
+      </div>
       <div class="list-group mb-3">
         <div v-for="item in contents" @click="runBid(item.id)" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
           <img src="/img/icons/business.png" alt="twbs" class="rounded-circle flex-shrink-0" width="50" height="50">
@@ -35,13 +38,23 @@
 
 <script>
 import axios from "axios";
+import {ref} from "vue";
+import Loading from "vue-loading-overlay";
 
 export default {
   name: "list",
+  components: {Loading},
   data: ()=>{ return {
+    loading: ref(true),
     contents: [],
   }},
   methods:{
+    loadData(){
+      axios.post('/api/business/list').then((response)=>{
+        this.contents = response.data;
+        this.loading = false;
+      });
+    },
     runBid(id){
       localStorage.setItem('activeBid',id);
       axios.post('/api/year/list',{}, {
@@ -58,10 +71,8 @@ export default {
       })
     }
   },
-  async beforeMount() {
-    await axios.post('/api/business/list').then((response)=>{
-      this.contents = response.data;
-    });
+  beforeMount() {
+    this.loadData();
   }
 }
 </script>

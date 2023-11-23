@@ -43,6 +43,9 @@
                 </div>
                 <div class="text-center mt-3">
                   <button :disabled="this.loadingSubmit" type="submit" class="btn btn-primary">
+                    <div v-show="this.loadingSubmit" class="spinner-grow spinner-grow-sm me-2" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
                     <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i>
                     ورود به حسابیکس
                   </button>
@@ -138,7 +141,7 @@ export default {
   },
   created() {
     axios.post('/api/user/check/login').then((response)=>{
-      if(response.data.result == true){
+      if(response.data.result === true){
         document.getElementById('loginTokenID').setAttribute('value' , localStorage.getItem('X-AUTH-TOKEN'));
         document.getElementById('loginMainSite').submit();
       }

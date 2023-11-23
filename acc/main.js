@@ -16,12 +16,13 @@ import money from 'v-money3';
 import Vue3PersianDatetimePicker from 'vue3-persian-datetime-picker';
 import NProgress from "nprogress";
 import Swal from "sweetalert2";
+import Uploader from 'vue-media-upload';
 import {getApiUrl} from "../hesabixConfig";
 const app = createApp(App)
 app.component('EasyDataTable', Vue3EasyDataTable);
 app.component('v-select', vSelect);
 app.component('DatePicker', Vue3PersianDatetimePicker)
-
+app.component('Uploader', Uploader);
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
 NProgress.configure({ showSpinner: false });
 app.config.globalProperties.$API_URL = getApiUrl();
@@ -95,6 +96,10 @@ app.config.globalProperties.$filters = {
     },
     getApiUrl(){
         return getApiUrl();
+    },
+    async isLogin(){
+        let result = await axios.get('/api/user/check/login');
+        return result.status === 200;
     }
 }
 

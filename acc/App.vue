@@ -620,14 +620,6 @@ export default {
                 </router-link>
               </li>
               <li v-if="permissions.owner" class="nav-main-item">
-                <router-link class="nav-main-link" to="/acc/sms/panel">
-                  <span class="nav-main-link-name">
-                    <i class="fa fa-message"></i>
-                    سرویس پیامک و شارژ
-                  </span>
-                </router-link>
-              </li>
-              <li v-if="permissions.owner" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/business/apis">
                   <span class="nav-main-link-name">
                     <i class="fa fa-plug-circle-xmark"></i>
@@ -637,7 +629,17 @@ export default {
               </li>
             </ul>
           </li>
-          <li class="nav-main-heading">سایر</li>
+          <li class="nav-main-heading">سرویس‌ها</li>
+          <li class="nav-main-item">
+            <li v-if="permissions.owner" class="nav-main-link-name">
+              <router-link class="nav-main-link" to="/acc/sms/panel">
+                <i class="nav-main-link-icon fa fa-message"></i>
+                <span class="nav-main-link-name">
+                    سرویس پیامک
+                  </span>
+              </router-link>
+            </li>
+          </li>
           <li v-show="permissions.owner || permissions.archiveUpload || permissions.archiveMod || permissions.archiveDelete" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu" data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-folder-tree"></i>
@@ -731,8 +733,26 @@ export default {
       <!-- Right Section -->
       <div>
         <notification />
-        <archive_modal />
-        <smsPanel />
+
+        <div class="dropdown d-inline-block">
+          <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm me-1 btn-alt-secondary" data-bs-toggle="dropdown" id="page-header-service-dropdown" type="button">
+            <i class="fa fa-fw fa-cogs mx-1"></i>
+            <span class="d-none d-sm-inline-block">سرویس‌ها</span>
+            <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
+          </button>
+          <div aria-labelledby="page-header-service-dropdown" class="dropdown-menu dropdown-menu-end p-0" style="width:20rem">
+            <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3"> سرویس‌ها </div>
+            <div class="row p-1">
+              <div class="col-12">
+                <archive_modal />
+              </div>
+              <div class="col-12">
+                <hr>
+                <smsPanel />
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- User Dropdown -->
         <div class="dropdown d-inline-block">
           <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm me-1 btn-alt-secondary" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">

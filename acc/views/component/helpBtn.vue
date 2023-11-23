@@ -5,7 +5,8 @@ export default defineComponent({
   name: "helpBtn",
   props:{
     vsource: String,
-    label: String
+    label: String,
+    rndiv: String,
   }
 })
 </script>
@@ -27,7 +28,7 @@ export default defineComponent({
           </div>
         </div>
         <div class="modal-body">
-          <div id="95517874605"><component is="script" :src="this.$props.vsource"></component></div>
+          <div :id="this.$props.rndiv"><component is="script" :src="this.$props.vsource"></component></div>
         </div>
 
       </div>

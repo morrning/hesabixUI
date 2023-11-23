@@ -62,8 +62,12 @@
                   </div>
                 </div>
                 <div class="text-center mb-4">
-                  <button class="btn btn-hero btn-primary w-100" type="submit">
-                    <i class="fa fa-fw fa-plus opacity-50 me-1"></i> ثبت نام </button>
+                  <button :disabled="this.loading" class="btn btn-hero btn-primary w-100" type="submit">
+                    <div v-show="this.loading" class="spinner-grow spinner-grow-sm me-2" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <i class="fa fa-fw fa-plus opacity-50 me-1"></i> ثبت نام
+                  </button>
                 </div>
                 <div class="text-center mb-0">
                   <RouterLink to="/user/login">
@@ -89,6 +93,7 @@ import {email, required} from "@vuelidate/validators";
 import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
+import {ref} from "vue";
 
 export default {
   name: "register",
@@ -99,6 +104,7 @@ export default {
   },
   data () {
     return {
+      loading: ref(true),
       email: '',
       password: '',
       name: '',
@@ -114,8 +120,9 @@ export default {
       name: {required}
     }
   },
-  async beforeMount() {
-    if(await this.app_isLogin() === true){
+  mounted() {
+    this.loading = false;
+    if(this.$filters.isLogin() === true){
       this.$router.push({ name: 'home' });
     }
   },
@@ -139,14 +146,15 @@ export default {
           });
         }
         else{
+          this.loading = true;
           // perform async actions
           axios.post( '/api/user/register', {
             name: this.name,
             email: this.email,
             mobile: this.mobile,
             password: this.password
-          })
-              .then(function (response) {
+          }).then((response) => {
+                this.loading=false;
                 if(response.data.error === 0){
                   //go to success page
                   router.push('/user/active/' + response.data.id)
@@ -165,8 +173,7 @@ export default {
                     confirmButtonText: 'قبول'
                   });
                 }
-              })
-
+          });
         }
         }
       }

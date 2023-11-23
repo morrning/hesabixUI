@@ -5,7 +5,7 @@
         <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
-        <help-btn label="راهنمای بخش اشخاص" vsource="https://www.aparat.com/embed/zq1pJ?data[rnddiv]=95517874605&data[responsive]=yes"></help-btn>
+        <help-btn label="راهنمای بخش اشخاص" rndiv="95517874605" vsource="https://www.aparat.com/embed/zq1pJ?data[rnddiv]=95517874605&data[responsive]=yes"></help-btn>
         <i class="mx-2 fa fa-list"></i>
         اشخاص </h3>
       <div class="block-options">

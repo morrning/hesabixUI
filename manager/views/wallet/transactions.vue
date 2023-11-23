@@ -1,31 +1,34 @@
 <script lang="ts">
 import {defineComponent, ref} from 'vue'
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default defineComponent({
-  name: "list",
+  name: "transactions",
   data: ()=>{return {
     searchValue: '',
     loading: ref(true),
     items:[],
     headers: [
-      { text: "دسته‌بندی", value: "cat", sortable: true},
-      { text: "عنوان", value: "title", sortable: true},
-      { text: "تاریخ", value: "dateSubmit", sortable: true},
-      { text: "نویسنده", value: "submitter", sortable: true},
-      { text: "عملیات", value: "operation"},
+      { text: "تاریخ", value: "dateSubmit"},
+      { text: "کسب و کار", value: "bidName"},
+      { text: "نوع", value: "type"},
+      { text: "شبا پرداخت", value: "shaba"},
+      { text: "کارت پرداخت", value: "cardPan"},
+      { text: "شماره پیگیری", value: "refID"},
+      { text: "درگاه/بانک", value: "gatePay"},
     ]
   }},
-  methods:{
+  methods: {
     loadData(){
-      this.loading = true;
-      axios.post('/api/admin/blog/posts').then((response)=>{
-        this.items = response.data;
-        this.loading = false;
-      })
+      axios.get('/api/admin/wallets/transactions/list')
+          .then((response)=>{
+            this.items = response.data;
+            this.loading = false;
+          })
     }
   },
-  mounted() {
+  beforeMount() {
     this.loadData();
   }
 })
@@ -38,12 +41,9 @@ export default defineComponent({
         <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
-        <i class="fa fa-book"></i>
-        پست‌های وبلاگ</h3>
+        <i class="fa fa-list px-2"></i>
+        تراکنش‌ها </h3>
       <div class="block-options">
-        <router-link to="/manager/blog/mod" class="btn btn-sm btn-primary">
-          <i class="fa fa-plus"></i>
-        </router-link>
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
@@ -69,10 +69,16 @@ export default defineComponent({
               rowsOfPageSeparatorMessage="از"
               :loading = "loading"
           >
-            <template #item-operation="{ url }">
-              <a target="_blank" class="text-success" :href="this.$filters.getApiUrl() +'/front/blog/post/' + url">
-                <i class="fa fa-eye px-1"></i>
-              </a>
+            <template #item-type="{ type }">
+              <span v-if="type == 'pay'" class="text-success">پرداخت به حساب</span>
+              <span v-else class="text-danger">دریافت در حساب</span>
+            </template>
+            <template #item-gatePay="{ gatePay }">
+              <span v-if="gatePay == 'zarinpal'" class="text-warning">
+                <img src="/img/icons/zarinpal.png" class="img-avatar img-avatar16"  alt="زرین پال"/>
+                زرین‌پال
+              </span>
+              <span v-else class="text-success"><i class="fa fa-bank"></i> {{gatePay}}</span>
             </template>
           </EasyDataTable>
         </div>

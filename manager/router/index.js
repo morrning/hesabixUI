@@ -37,10 +37,26 @@ const router = createRouter({
       }
     },
     {
+      path: '/manager/wallet/transaction/insert/:id',
+      component: () => import('../views/wallet/mod.vue'),
+      meta: {
+        'title': 'ثبت تراکنش',
+        'login': true
+      }
+    },
+    {
       path: '/manager/wallet/list',
       component: () => import('../views/wallet/list.vue'),
       meta: {
         'title': 'لیست حساب‌ها',
+        'login': true
+      }
+    },
+    {
+      path: '/manager/wallet/transactions',
+      component: () => import('../views/wallet/transactions.vue'),
+      meta: {
+        'title': 'لیست تراکنش‌ها',
         'login': true
       }
     },
@@ -57,6 +73,30 @@ const router = createRouter({
       component: () => import('../views/users/list.vue'),
       meta: {
         'title': 'لیست کاربران',
+        'login': true
+      }
+    },
+    {
+      path: '/manager/business/list',
+      component: () => import('../views/business/list.vue'),
+      meta: {
+        'title': 'لیست کسب و کار‌ها',
+        'login': true
+      }
+    },
+    {
+      path: '/manager/settings/sms/info',
+      component: () => import('../views/settings/sms/info.vue'),
+      meta: {
+        'title': 'تنظیمات پیامک',
+        'login': true
+      }
+    },
+    {
+      path: '/manager/settings/system/info',
+      component: () => import('../views/settings/system.vue'),
+      meta: {
+        'title': 'تنظیمات سیستم',
         'login': true
       }
     }

@@ -36,6 +36,10 @@ app.config.globalProperties.$filters = {
     },
     getApiUrl(){
         return getApiUrl();
+    },
+    async isLogin(){
+        let result = await axios.get('/api/user/check/login');
+        return result.status === 200;
     }
 }
 app.mount('#page-container')

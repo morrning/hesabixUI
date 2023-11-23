@@ -28,6 +28,16 @@ export default defineComponent({
       { text: "شماره کارت", value: "cardPan"},
       { text: "شماره پیگیری", value: "refID"},
       { text: "درگاه پرداخت", value: "gatePay"},
+    ],
+    walletPaysSearchValue: '',
+    walletPaysItems:[],
+    walletPaysHeaders: [
+      { text: "تاریخ", value: "dateSubmit" },
+      { text: "مبلغ", value: "amount"},
+      { text: "توضیحات", value: "des"},
+      { text: "شماره شبا", value: "shaba"},
+      { text: "شماره پیگیری", value: "refID"},
+      { text: "بانک مبدا", value: "bank"},
     ]
   }},
   methods:{
@@ -41,9 +51,14 @@ export default defineComponent({
             this.logItems = response.data;
             this.loading=false;
           });
-      axios.post('/api/wallet/transactions')
+      axios.post('/api/wallet/transactions/income')
           .then((response)=>{
             this.walletItems = response.data;
+            this.loading=false;
+          })
+      axios.post('/api/wallet/transactions/pay')
+          .then((response)=>{
+            this.walletPaysItems = response.data;
             this.loading=false;
           })
     }
@@ -118,13 +133,50 @@ export default defineComponent({
           </ul>
           <div class="tab-content px-3" id="myTabContent">
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-              <span class="text-info">فعلا سوابقی ثبت نشده است</span>
+              <div class="my-2">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text"><i class="fa fa-search"></i></span>
+                  <input v-model="walletPaysSearchValue" class="form-control" type="text" placeholder="جست و جو ...">
+                </div>
+              </div>
+              <EasyDataTable
+                  :headers="walletPaysHeaders"
+                  :items="walletPaysItems"
+                  alternating
+
+                  :search-value="walletPaysSearchValue"
+                  theme-color="#1d90ff"
+                  table-class-name="customize-table"
+                  header-text-direction="center"
+                  body-text-direction="center"
+                  rowsPerPageMessage="تعداد سطر"
+                  emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+                  rowsOfPageSeparatorMessage="از"
+                  :loading="loading"
+              >
+                <template #item-status="{ status }">
+                  <span v-if="status == 100" class="text-success"><i class="fa fa-check me-2"></i>موفق</span>
+                  <span v-else class="text-danger"><i class="fa fa-info me-2"></i>پرداخت نشده</span>
+                </template>
+                <template #item-amount="{ amount }">
+                  <span class="">{{this.$filters.formatNumber(amount)}}</span>
+                </template>
+                <template #item-cardPan="{ cardPan }">
+                  <span style="direction:ltr" class="">{{cardPan}}</span>
+                </template>
+                <template #item-gatePay="{ gatePay }">
+                  <span class="text-warning" v-if="gatePay == 'zarinpal'">
+                    <img src="/img/icons/zarinpal.png" class="img-avatar img-avatar16" />
+                    زرین پال
+                  </span>
+                </template>
+              </EasyDataTable>
             </div>
             <div class="tab-pane fade" id="pays" role="tabpanel" aria-labelledby="pays-tab">
               <div class="my-2">
                 <div class="input-group input-group-sm">
                   <span class="input-group-text"><i class="fa fa-search"></i></span>
-                  <input v-model="logSearchValue" class="form-control" type="text" placeholder="جست و جو ...">
+                  <input v-model="walletSearchValue" class="form-control" type="text" placeholder="جست و جو ...">
                 </div>
               </div>
               <EasyDataTable

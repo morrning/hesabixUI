@@ -5,6 +5,7 @@
         <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
+        <help-btn label="راهنمای بخش دریافت‌ها" rndiv="99572101733" vsource="https://www.aparat.com/embed/OFLEV?data[rnddiv]=99572101733&data[responsive]=yes"></help-btn>
         <i class="mx-2 fa fa-circle-down"></i>
         دریافت ها </h3>
       <div class="block-options">
@@ -57,15 +58,15 @@
               :loading = "loading"
           >
             <template #item-operation="{ code }">
-              <router-link class="text-success" :to="'/acc/accounting/view/' + code">
-                <i class="fa fa-eye px-1"></i>
+              <router-link class="btn btn-sm btn-link text-success" :to="'/acc/accounting/view/' + code">
+                <i class="fa fa-eye"></i>
               </router-link>
-              <router-link :to="{name:'person_receive_mod',params:{id: code}}">
+              <router-link class="btn btn-sm btn-link" :to="{name:'person_receive_mod',params:{id: code}}">
                 <i class="fa fa-edit px-1"></i>
               </router-link>
-              <span class="text-danger px-1" @click="deleteItem(code)">
+              <button class="btn btn-sm btn-link text-danger" @click="deleteItem(code)">
                 <i class="fa fa-trash"></i>
-              </span>
+              </button>
             </template>
           </EasyDataTable>
         </div>
@@ -78,8 +79,10 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import {ref} from "vue";
+import HelpBtn from "../../component/helpBtn.vue";
 export default {
   name: "list",
+  components: {HelpBtn},
   data: ()=>{return {
     itemsSelected: [],
     searchValue: '',

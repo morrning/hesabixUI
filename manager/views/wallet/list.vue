@@ -10,55 +10,25 @@ export default defineComponent({
     loading: ref(true),
     items:[],
     headers: [
-      { text: "عملیات", value: "operation", width: "130"},
-      { text: "کد", value: "code", width: "100" },
-      { text: "بانک", value: "name", width: "140"},
-      { text: "موجودی(ریال)", value: "balance", width: "140"},
-      { text: "صاحب حساب", value: "owner", width: "120"},
-      { text: "شماره کارت", value: "cardNum", width: "120"},
-      { text: "شبا", value: "shaba", width: "160"},
-      { text: "شعبه", value: "shobe", width: "120"},
-      { text: "تلفن اینترنت بانک", value: "mobileInternetBank", width: "120"},
-      { text: "شماره کارتخوان", value: "posNum", width: "100"},
+      { text: "عملیات", value: "operation"},
+      { text: "کسب و کار", value: "bidName"},
+      { text: "کیف پول", value: "walletEnabled"},
+      { text: "حساب متصل", value: "bankAcName"},
+      { text: "صاحب حساب متصل", value: "bankAcOwner"},
+      { text: "شبای حساب متصل", value: "bankAcShaba"},
+      { text: "کارت متصل", value: "bankAcCardNum"},
+      { text: "پرداخت‌ها(ریال)", value: "totalPays"},
+      { text: "واریز‌ها(ریال)", value: "totalIncome"},
+      { text: "قابل تسویه(ریال)", value: "canDeposit"},
     ]
   }},
   methods: {
     loadData(){
-      axios.get('/api/bank/list')
+      axios.get('/api/admin/wallets/list')
           .then((response)=>{
             this.items = response.data;
             this.loading = false;
           })
-    },
-    deleteItem(code){
-      Swal.fire({
-        text: 'آیا برای حذف شخص مطمئن هستید؟',
-        showCancelButton: true,
-        confirmButtonText: 'بله',
-        cancelButtonText: `خیر`,
-      }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
-          axios.post('/api/business/delete/user',{
-            'code': code}
-          ).then((response)=>{
-            if(response.data.result == 1){
-              let index = 0;
-              for(let z=0; z<this.items.length; z++){
-                index ++;
-                if(this.items[z]['code'] == code){
-                  this.items.splice(index -1 ,1);
-                }
-              }
-              Swal.fire({
-                text: 'شخص با موفقیت حذف شد.',
-                icon: 'success',
-                confirmButtonText: 'قبول'
-              });
-            }
-          })
-        }
-      })
     }
   },
   beforeMount() {
@@ -102,22 +72,23 @@ export default defineComponent({
               rowsOfPageSeparatorMessage="از"
               :loading = "loading"
           >
-            <template #item-operation="{ code }">
-              <router-link class="btn btn-link me-1" :to="'/acc/banks/mod/' + code">
-                <i class="fa fa-edit px-2"></i>
-              </router-link>
-              <router-link class="btn  btn-link" :to="'/acc/banks/card/view/' + code">
-                <i class="fa fa-list-check text-warning"></i>
+            <template #item-operation="{ id, totalPays, totalIncome }">
+              <router-link v-if="totalPays != totalIncome" title="ثبت واریز" class="btn btn-sm btn-link me-1" :to="'/manager/wallet/transaction/insert/' + id">
+                <i class="fa fa-plus-circle px-2"></i>
               </router-link>
             </template>
-            <template #item-name="{name, code }">
-              <router-link :to="'/acc/banks/card/view/' + code">
-                {{name}}
-              </router-link>
+            <template #item-walletEnabled="{ walletEnabled }">
+              <span v-if="walletEnabled" class="text-success">فعال</span>
+              <span v-else class="text-danger">غیرفعال</span>
             </template>
-            <template #item-balance="{ balance }">
-              <label class="text-success" v-if="balance >= 0">{{this.$filters.formatNumber(balance)}}</label>
-              <label class="text-danger" v-else>{{this.$filters.formatNumber( -1 * balance ) }} منفی</label>
+            <template #item-totalPays="{ totalPays }">
+              <span >{{ this.$filters.formatNumber(totalPays) }}</span>
+            </template>
+            <template #item-totalIncome="{ totalIncome }">
+              <span >{{ this.$filters.formatNumber(totalIncome) }}</span>
+            </template>
+            <template #item-canDeposit="{ totalIncome,totalPays }">
+              <span >{{ this.$filters.formatNumber(totalIncome - totalPays) }}</span>
             </template>
           </EasyDataTable>
         </div>

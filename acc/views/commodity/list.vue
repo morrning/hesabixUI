@@ -41,7 +41,7 @@
               :loading="loading"
           >
             <template #item-operation="{ code }">
-              <router-link :to="'/acc/commodity/mod/' + code">
+              <router-link class="btn btn-sm btn-link" :to="'/acc/commodity/mod/' + code">
                 <i class="fa fa-edit px-2"></i>
               </router-link>
               <span class="text-danger d-none" @click="deleteItem(code)">

@@ -126,8 +126,7 @@ export default {
       <div class="smini-visible-block">
         <div class="content-header bg-black-10">
           <!-- Logo -->
-          <a class="fw-semibold text-white tracking-wide" href="index.html"> D<span class="opacity-75">x</span>
-          </a>
+          <router-link class="fw-semibold text-white tracking-wide" to="/"><span class="opacity-75">x</span></router-link>
           <!-- END Logo -->
         </div>
       </div>
@@ -163,13 +162,7 @@ export default {
         <!-- Side Navigation -->
         <div class="content-side pt-0">
           <ul class="nav-main">
-            <li class="nav-main-item">
-              <Router-link class="nav-main-link active" to="/">
-                <i class="nav-main-link-icon fa fa-chart-pie"></i>
-                <span class="nav-main-link-name"> داشبورد </span>
-              </Router-link>
-            </li>
-            <li class="nav-main-heading"> امور مالی </li>
+            <li class="nav-main-heading pt-1"> امور مالی </li>
             <li class="nav-main-item">
               <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu"
                  data-toggle="submenu" href="#">
@@ -180,17 +173,16 @@ export default {
                 <li class="nav-main-item">
                   <router-link class="nav-main-link" to="/manager/wallet/list">
                     <span class="nav-main-link-name">فهرست حساب‌ها</span>
-                    <span class="nav-main-link-badge badge rounded-pill bg-success">3</span>
                   </router-link>
                 </li>
                 <li class="nav-main-item">
-                  <router-link class="nav-main-link" to="/manager/wallet/mod">
-                    <span class="nav-main-link-name">ثبت واریزی</span>
+                  <router-link class="nav-main-link" to="/manager/wallet/transactions">
+                    <span class="nav-main-link-name">تراکنش‌ها</span>
                   </router-link>
                 </li>
               </ul>
             </li>
-            <li class="nav-main-heading"> محتوا </li>
+            <li class="nav-main-heading pt-1"> محتوا </li>
             <li class="nav-main-item">
               <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu"
                  data-toggle="submenu" href="#">
@@ -245,11 +237,17 @@ export default {
             </li>
 
 
-            <li class="nav-main-heading">سایر</li>
+            <li class="nav-main-heading pt-1">سایر</li>
             <li class="nav-main-item">
               <router-link class="nav-main-link active" to="/manager/users/list">
                 <i class="nav-main-link-icon fa fa-users"></i>
                 <span class="nav-main-link-name"> کاربران </span>
+              </router-link>
+            </li>
+            <li class="nav-main-item">
+              <router-link class="nav-main-link active" to="/manager/business/list">
+                <i class="nav-main-link-icon fa fa-users"></i>
+                <span class="nav-main-link-name"> کسب و کار‌ها </span>
               </router-link>
             </li>
             <li class="nav-main-item">
@@ -260,15 +258,14 @@ export default {
               </a>
               <ul class="nav-main-submenu">
                 <li class="nav-main-item">
-                  <a class="nav-main-link" href="">
-                    <span class="nav-main-link-name">پایگاه داده</span>
-                    <span class="nav-main-link-badge badge rounded-pill bg-success">3</span>
-                  </a>
+                  <router-link class="nav-main-link" to="/manager/settings/sms/info">
+                    <span class="nav-main-link-name">پیامک</span>
+                  </router-link>
                 </li>
                 <li class="nav-main-item">
-                  <a class="nav-main-link" href="">
+                  <router-link class="nav-main-link" to="/manager/settings/system/info">
                     <span class="nav-main-link-name">سیستم</span>
-                  </a>
+                  </router-link>
                 </li>
               </ul>
             </li>

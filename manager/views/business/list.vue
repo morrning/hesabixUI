@@ -1,6 +1,7 @@
 <script lang="ts">
 import {defineComponent, ref} from 'vue'
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default defineComponent({
   name: "list",
@@ -9,23 +10,27 @@ export default defineComponent({
     loading: ref(true),
     items:[],
     headers: [
-      { text: "دسته‌بندی", value: "cat", sortable: true},
-      { text: "عنوان", value: "title", sortable: true},
-      { text: "تاریخ", value: "dateSubmit", sortable: true},
-      { text: "نویسنده", value: "submitter", sortable: true},
       { text: "عملیات", value: "operation"},
+      { text: "نام", value: "name" },
+      { text: "مالک", value: "owner"},
+      { text: "موبایل مالک", value: "ownerMobile"},
+      { text: "تاریخ ایجاد", value: "dateRegister"},
+      { text: "تعداد کالا و خدمات", value: "commodityCount"},
+      { text: "تعداد اشخاص", value: "personsCount"},
+      { text: "تعداد اسناد حسابداری", value: "hesabdariDocsCount"},
+      { text: "تعداد اسناد انبار", value: "StoreroomDocsCount"},
     ]
   }},
-  methods:{
+  methods: {
     loadData(){
-      this.loading = true;
-      axios.post('/api/admin/blog/posts').then((response)=>{
-        this.items = response.data;
-        this.loading = false;
-      })
-    }
+      axios.get('/api/admin/business/list')
+          .then((response)=>{
+            this.items = response.data;
+            this.loading = false;
+          })
+    },
   },
-  mounted() {
+  beforeMount() {
     this.loadData();
   }
 })
@@ -38,12 +43,11 @@ export default defineComponent({
         <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
-        <i class="fa fa-book"></i>
-        پست‌های وبلاگ</h3>
+        <i class="fa fa-list-dots px-2"></i>
+        کسب و کار‌ها
+        <span class="badge bg-secondary">{{ this.items.length }}</span>
+      </h3>
       <div class="block-options">
-        <router-link to="/manager/blog/mod" class="btn btn-sm btn-primary">
-          <i class="fa fa-plus"></i>
-        </router-link>
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
@@ -69,10 +73,12 @@ export default defineComponent({
               rowsOfPageSeparatorMessage="از"
               :loading = "loading"
           >
-            <template #item-operation="{ url }">
-              <a target="_blank" class="text-success" :href="this.$filters.getApiUrl() +'/front/blog/post/' + url">
-                <i class="fa fa-eye px-1"></i>
-              </a>
+            <template #item-operation="{ code }">
+
+            </template>
+            <template #item-status="{ status }">
+              <span v-if="status" class="text-success">فعال</span>
+              <span v-else class="text-danger">غیرفعال</span>
             </template>
           </EasyDataTable>
         </div>
