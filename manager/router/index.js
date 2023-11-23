@@ -99,6 +99,14 @@ const router = createRouter({
         'title': 'تنظیمات سیستم',
         'login': true
       }
+    },
+    {
+      path: '/manager/settings/update/info',
+      component: () => import('../views/settings/update-center.vue'),
+      meta: {
+        'title': 'به روزرسانی هسته',
+        'login': true
+      }
     }
   ]
 })

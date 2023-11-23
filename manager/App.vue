@@ -267,6 +267,11 @@ export default {
                     <span class="nav-main-link-name">سیستم</span>
                   </router-link>
                 </li>
+                <li class="nav-main-item">
+                  <router-link class="nav-main-link" to="/manager/settings/update/info">
+                    <span class="nav-main-link-name">به روز رسانی</span>
+                  </router-link>
+                </li>
               </ul>
             </li>
             <li class="nav-main-item">
