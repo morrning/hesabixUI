@@ -20,6 +20,7 @@
                 دسته بندی فایل‌ها
               </button>
               <button type="button" @click="this.loadData('all')" class="list-group-item list-group-item-action">همه فایل‌ها</button>
+              <button type="button" @click="this.loadData('accounting')" class="list-group-item list-group-item-action">اسناد حسابداری</button>
               <button type="button" @click="this.loadData('persons')" class="list-group-item list-group-item-action">اشخاص</button>
               <button type="button" @click="this.loadData('commodity')" class="list-group-item list-group-item-action">کالا</button>
               <button type="button" @click="this.loadData('bank')" class="list-group-item list-group-item-action">بانک</button>
@@ -66,6 +67,7 @@
                 </router-link>
               </template>
               <template #item-cat="{ cat }">
+                <span v-if="cat == 'accounting'">اسناد حسابداری</span>
                 <span v-if="cat == 'persons'">اشخاص</span>
                 <span v-if="cat == 'commodity'">کالا</span>    
                 <span v-if="cat == 'bank'">بانک</span> 

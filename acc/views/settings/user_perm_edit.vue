@@ -65,6 +65,12 @@
                   <label class="form-check-label">افزودن فایل به آرشیو</label>
                 </div>
               </div>
+              <div class="space-y-2">
+                <div class="form-check form-switch">
+                  <input v-model="info.archiveView" @change="savePerms()" class="form-check-input" type="checkbox">
+                  <label class="form-check-label">مشاهده فایل های آرشیو</label>
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-sm-12 col-md-4">
@@ -115,7 +121,7 @@
                   <input v-model="info.archiveMod" @change="savePerms()" class="form-check-input" type="checkbox">
                   <label class="form-check-label">ویرایش فایل های آرشیو</label>
                 </div>
-              </div>
+            </div>
           </div>
           <div class="col-sm-12 col-md-4">
             <div class="space-y-2">

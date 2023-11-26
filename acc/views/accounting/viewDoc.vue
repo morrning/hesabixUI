@@ -7,8 +7,7 @@
         </button>
         سند حسابداری</h3>
       <div class="block-options">
-        <archive-upload doctype="456"></archive-upload>
-
+        <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="accounting" cat="accounting"></archive-upload>
         <button class="btn btn-sm btn-primary mx-2" onclick="Dashmix.helpers('dm-print');" type="button">
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ سند</span>
@@ -99,6 +98,7 @@ export default {
     isLoading: true,
     item:{
       doc:{
+        id:0,
         code:''
       }
     },
