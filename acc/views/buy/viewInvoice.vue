@@ -4,9 +4,11 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import send from "../component/send.vue";
 import recList from "../component/recList.vue";
+import ArchiveUpload from "../component/archive/archiveUpload.vue";
 export default defineComponent({
   name: "viewInvoice",
   components:{
+    ArchiveUpload,
     send:send,
     recList:recList
   },
@@ -104,6 +106,7 @@ export default defineComponent({
         <i class="fas fa-file-invoice-dollar"></i>
         مشاهده و چاپ فاکتور خرید</h3>
       <div class="block-options">
+        <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="buy" cat="buy"></archive-upload>
         <!-- Button trigger modal -->
         <button v-show="parseInt(this.item.doc.amount) <= parseInt(this.totalSend)" type="button" class="btn btn-sm btn-success" disabled="disabled">
           <i class="fas fa-check-double me-2"></i>

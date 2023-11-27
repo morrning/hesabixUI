@@ -30,7 +30,7 @@ export default {
   </b>
   <label class="">کل فضا: <span class="text-primary-dark">{{this.$filters.formatNumber(this.info.size)}}</span> مگابایت </label>
   <div class="progress my-3 mx-1" role="progressbar" aria-label="فضای استفاده شده" :aria-valuenow="this.info.remain" aria-valuemin="0" :aria-valuemax="this.info.size">
-    <div class="progress-bar progress-bar-striped progress-bar-animated" :style="'width: ' + ((parseInt(this.info.remain) * 100) / parseInt(this.info.size)) + '%'"></div>
+    <div class="progress-bar progress-bar-striped progress-bar-animated" :style="'width: ' + ((parseInt(this.info.used) * 100) / parseInt(this.info.size)) + '%'"></div>
   </div>
 </template>
 

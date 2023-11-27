@@ -537,6 +537,12 @@ export default {
             </a>
             <ul class="nav-main-submenu">
               <li v-if="permissions.sell" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/sell/fast-mod/">
+                  <i class="fa fa-car nav-main-link-icon"></i>
+                  <span class="nav-main-link-name"> فاکتور سریع</span>
+                </router-link>
+              </li>
+              <li v-if="permissions.sell" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/sell/list/">
                   <span class="nav-main-link-name"> فاکتورهای فروش</span>
                   <router-link to="/acc/sell/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
