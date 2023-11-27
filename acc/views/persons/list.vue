@@ -44,11 +44,9 @@
           <EasyDataTable
               :table-class-name="tableClassName"
               v-model:items-selected="itemsSelected"
-
               multi-sort
               show-index
               alternating
-
               :search-value="searchValue"
               :headers="headers"
               :items="items"
@@ -74,6 +72,9 @@
               <router-link :to="'/acc/persons/card/view/' + code">
                 {{ nikename }}
               </router-link>
+            </template>
+            <template #item-speedAccess="{ speedAccess }">
+              <i v-if="speedAccess" class="fa fa-check text-success"></i>
             </template>
             <template #item-status="{ balance }">
               <span v-if="balance<0" class="text-danger">بدهکار</span>
@@ -130,6 +131,7 @@ export default {
       { text: "بستانکار", value: "bs", sortable: true, width: 100},
       { text: "بدهکار", value: "bd", sortable: true, width: 100},
       { text: "نام و نام خانوادگی", value: "name", sortable: true, width: 150},
+      { text: "دسترسی سریع", value: "speedAccess", width: 100},
       { text: "تاریخ تولد/ثبت", value: "birthday", sortable: true, width: 150},
       { text: "شرکت", value: "company", sortable: true, width: 100},
       { text: "شناسه ملی", value: "shenasemeli", sortable: true, width: 100},

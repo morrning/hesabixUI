@@ -215,6 +215,11 @@ const router = createRouter({
       component: () => import('../views/sell/mod.vue'),
     },
     {
+      path: '/acc/sell/fast-mod/:id?',
+      name: 'sell_fast_mod',
+      component: () => import('../views/sell/fastMod.vue'),
+    },
+    {
       path: '/acc/sell/list',
       name: 'sell_list',
       component: () => import('../views/sell/list.vue'),

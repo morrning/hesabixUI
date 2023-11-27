@@ -48,6 +48,9 @@
                 <i class="fa fa-trash"></i>
               </span>
             </template>
+            <template #item-speedAccess="{ speedAccess }">
+              <i v-if="speedAccess" class="fa fa-check text-success"></i>
+            </template>
             <template #item-priceBuy="{ priceBuy }">
               {{this.$filters.formatNumber(priceBuy)}}
             </template>
@@ -87,6 +90,7 @@ export default {
       { text: "کالا / خدمات", value: "khadamat", sortable: true, width: 150},
       { text: "نام کالا و خدمات", value: "name", sortable: true, width: 150},
       { text: "واحد شمارش", value: "unit", sortable: true, width: 100},
+      { text: "دسترسی سریع", value: "speedAccess", width: 100},
       { text: "دسته‌بندی", value: "cat", sortable: true, width: 100},
       { text: "قیمت خرید", value: "priceBuy", width: 100},
       { text: "قیمت فروش", value: "priceSell", width: 100},

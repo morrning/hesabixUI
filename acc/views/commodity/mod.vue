@@ -30,6 +30,14 @@
               </div>
             </div>
           </div>
+          <div class="col-sm-12 col-md-12 mb-3">
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="this.data.speedAccess" class="form-check-input" type="checkbox">
+                <label class="form-check-label">دسترسی سریع (در صدور فاکتور سریع فروش و سایر افزونه‌ها استفاده می شود)</label>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="row">
           <div class="col-sm-12 col-md-6">

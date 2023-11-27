@@ -90,12 +90,20 @@ export default defineComponent({
           'Content-Type': 'multipart/form-data'
         }
       }).then((resp)=>{
-        Swal.fire({
-          text: 'فایل‌های انتخابی ذخیره شدند.',
-          icon: 'success',
-          confirmButtonText: 'قبول'
-        });
-        this.getFilesList();
+        if(resp.data.result === 'nem'){
+          Swal.fire({
+            text: 'فضای کافی وجود ندارد لطفا حساب کاربری خود را شارژ نمایید.',
+            icon: 'success',
+            confirmButtonText: 'قبول'
+          });
+        }else{
+          Swal.fire({
+            text: 'فایل‌های انتخابی ذخیره شدند.',
+            icon: 'success',
+            confirmButtonText: 'قبول'
+          });
+          this.getFilesList();
+        }
       });
     }
   },
@@ -104,7 +112,8 @@ export default defineComponent({
 
 <template>
   <!-- Button trigger modal -->
-  <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#archiveModal">
+  <button type="button" class="btn btn-sm btn-outline-success mx-2" data-bs-toggle="modal" data-bs-target="#archiveModal">
+    <span class="badge text-bg-dark me-2">{{this.fileStack.length}}</span>
     <i class="fa fa-file me-1"></i>
     آرشیو
   </button>

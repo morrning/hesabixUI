@@ -58,13 +58,13 @@
                 rowsOfPageSeparatorMessage="از"
                 :loading = "loading"
             >
-              <template #item-operation="{ code }">
-                <router-link class="btn btn-link me-1" :to="'/acc/banks/mod/' + code">
-                  <i class="fa fa-edit px-2"></i>
-                </router-link>
-                <router-link class="btn  btn-link" :to="'/acc/banks/card/view/' + code">
-                 <i class="fa fa-list-check text-warning"></i>
-                </router-link>
+              <template #item-operation="{ id, filename,fileType}">
+                <a class="btn btn-link" href="/" @click.prevent="downloadFile(id,filename,fileType)">
+                  <i class="fa fa-download"></i>
+                </a>
+                <button @click="deleteItem(id)" class="btn ms-2 btn-link text-danger">
+                  <i class="fa fa-trash"></i>
+                </button>
               </template>
               <template #item-cat="{ cat }">
                 <span v-if="cat == 'accounting'">اسناد حسابداری</span>
@@ -119,14 +119,14 @@
       ]
     }},
     methods: {
-      loadData(cat){
+      loadData(cat) {
         axios.get('/api/archive/list/' + cat)
-            .then((response)=>{
+            .then((response) => {
               this.items = response.data;
               this.loading = false;
             })
       },
-      deleteItem(code){
+      deleteItem(id) {
         Swal.fire({
           text: 'آیا برای حذف فایل مطمئن هستید؟',
           showCancelButton: true,
@@ -135,17 +135,9 @@
         }).then((result) => {
           /* Read more about isConfirmed, isDenied below */
           if (result.isConfirmed) {
-            axios.post('/api/business/delete/user',{
-              'code': code}
-            ).then((response)=>{
-              if(response.data.result == 1){
-                let index = 0;
-                for(let z=0; z<this.items.length; z++){
-                  index ++;
-                  if(this.items[z]['code'] == code){
-                    this.items.splice(index -1 ,1);
-                  }
-                }
+            axios.post('api/archive/file/remove/' + id).then((response) => {
+              if (response.data.result == 1) {
+                this.loadData(this.cat);
                 Swal.fire({
                   text: 'فایل با موفقیت حذف شد.',
                   icon: 'success',
@@ -155,7 +147,18 @@
             })
           }
         })
-      }
+      },
+      downloadFile(id,filename,fileType) {
+        axios.get(this.$filters.getApiUrl() + '/api/archive/file/get/' + id, {responseType: "arraybuffer"})
+            .then(response => {
+              const blob = new Blob([response.data], {type: fileType});
+              const link = document.createElement('a');
+              link.href = URL.createObjectURL(blob);
+              link.download = filename;
+              link.click();
+              URL.revokeObjectURL(link.href);
+            });
+      },
     },
     beforeMount() {
       this.loadData(this.cat);
