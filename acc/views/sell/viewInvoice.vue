@@ -156,7 +156,7 @@ export default defineComponent({
         </button>
         <button v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec)" type="button" class="btn btn-sm btn-danger" @click="this.recModal.show()">
           <i class="fas fa-money-bill-1-wave"></i>
-          <span class="d-none d-sm-inline-block">ثبت دربافت</span>
+          <span class="d-none d-sm-inline-block">ثبت دریافت</span>
         </button>
         <!-- Modal -->
         <div class="modal fade" id="rec-modal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">

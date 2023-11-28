@@ -25,6 +25,7 @@
                 display-format="jYYYY-jMM-jDD"
                 :min="year.start"
                 :max="year.end"
+                simple
             />
           </div>
           <div class="col-sm-12 col-md-12">
