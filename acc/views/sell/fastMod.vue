@@ -159,13 +159,40 @@ export default defineComponent({
           rows:outItems,
           update:''
         }).then((response)=>{
-          Swal.fire({
-            text: 'فاکتور ثبت شد.',
-            icon: 'success',
-            confirmButtonText: 'قبول'
-          }).then(() => {
-            this.$router.push('/acc/sell/list')
+          outItems = [];
+          outItems.push({
+            bs:bd,
+            bd:0,
+            type:'person',
+            id:this.person.id,
+            des:'دریافت وجه فاکتور',
+            table:3
           });
+          outItems.push({
+            bs:0,
+            bd:bd,
+            type:'cashdesk',
+            id:this.cashdesk.id,
+            des:'دریافت وجه فاکتور',
+            table:121
+          });
+          axios.post('/api/accounting/insert',{
+            type: 'sell_receive',
+            date: this.data.date,
+            des: 'دریافت وجه فاکتور',
+            rows:outItems,
+            update:'',
+            related:response.data.doc.code
+          }).then((response)=> {
+            Swal.fire({
+              text: 'فاکتور ثبت شد.',
+              icon: 'success',
+              confirmButtonText: 'قبول'
+            }).then(() => {
+              this.$router.push('/acc/sell/list')
+            });
+          });
+
         })
       }
     },
@@ -182,6 +209,9 @@ export default defineComponent({
   mounted() {
     Dashmix.layout('sidebar_close');
     this.loadData();
+  },
+  unmounted() {
+    Dashmix.layout('sidebar_open');
   }
 })
 </script>

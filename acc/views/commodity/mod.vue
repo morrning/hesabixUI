@@ -67,8 +67,9 @@
           <div class="col-sm-12 col-md-12 mb-4">
             <small class="mb-2">دسته بندی</small>
             <treeselect
+                :autoLoadRootOptions="false"
                 placeholder="دسته بندی را انتخاب کنید"
-                v-model="data.cat"
+                v-model="this.data.cat"
                 :multiple="false"
                 :disable-branch-nodes="true"
                 :options="listCats"
@@ -148,7 +149,8 @@ export default {
       orderPoint:0,
       commodityCountCheck:false,
       minOrderCount:1,
-      dayLoading:0
+      dayLoading:0,
+      speedAccess:false
     },
     listCats:[],
     currencyConfig:{
@@ -182,7 +184,6 @@ export default {
       });
       axios.post('/api/commodity/cat/childs').then((response) => {
         this.listCats = response.data;
-        this.data.cat = this.listCats[0];
       });
       if (id != '') {
         //load info
