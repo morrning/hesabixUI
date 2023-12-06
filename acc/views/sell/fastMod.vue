@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 export default defineComponent({
   name: "fastMod",
   data:()=>{return{
+    tempID:'',
     year:{},
     data:{
       des:'',
@@ -176,6 +177,7 @@ export default defineComponent({
             des:'دریافت وجه فاکتور',
             table:121
           });
+          this.tempID = response.data.doc.code;
           axios.post('/api/accounting/insert',{
             type: 'sell_receive',
             date: this.data.date,
@@ -189,7 +191,7 @@ export default defineComponent({
               icon: 'success',
               confirmButtonText: 'قبول'
             }).then(() => {
-              this.$router.push('/acc/sell/list')
+              this.$router.push('/acc/sell/view/' + this.tempID)
             });
           });
 

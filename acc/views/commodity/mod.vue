@@ -66,14 +66,9 @@
           </div>
           <div class="col-sm-12 col-md-12 mb-4">
             <small class="mb-2">دسته بندی</small>
-            <treeselect
-                :autoLoadRootOptions="false"
-                placeholder="دسته بندی را انتخاب کنید"
-                v-model="this.data.cat"
-                :multiple="false"
-                :disable-branch-nodes="true"
-                :options="listCats"
-            />
+            <select class="form-select" aria-label="دسته‌بندی" v-model="this.data.cat">
+              <option v-for="(item, index) in listCats" :value="item.id">{{item.name}}</option>
+            </select>
           </div>
           <div class="col-sm-12 col-md-12">
             <div class="form-floating mb-4">
@@ -182,8 +177,11 @@ export default {
       axios.post('/api/commodity/units').then((response) => {
         this.units = response.data;
       });
-      axios.post('/api/commodity/cat/childs').then((response) => {
+      axios.post('/api/commodity/cat/get/line').then((response) => {
         this.listCats = response.data;
+        if(!this.$route.params.id){
+          this.data.cat = response.data[1]
+        }
       });
       if (id != '') {
         //load info

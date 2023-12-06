@@ -9,7 +9,8 @@ export default defineComponent({
     systemInfo: {
       keywords:'',
       description:'',
-      scripts:''
+      scripts:'',
+      zarinpal:''
     },
     loading: ref(true),
   }},
@@ -77,6 +78,14 @@ export default defineComponent({
               <div class="form-floating mb-4">
                 <input v-model="systemInfo.description" class="form-control" type="text" :disabled="loading">
                 <label class="form-label">شرح سایت</label>
+              </div>
+            </div>
+          </div>
+          <div class="row my-2 mx-1">
+            <div class="col-sm-12 col-md-12">
+              <div class="form-floating mb-4">
+                <input style="direction:ltr" v-model="systemInfo.zarinpal" class="form-control" type="text" :disabled="loading">
+                <label class="form-label">کد API زرین‌پال</label>
               </div>
             </div>
           </div>
