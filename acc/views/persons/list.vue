@@ -12,7 +12,7 @@
         <router-link to="/acc/persons/mod/" class="btn btn-sm btn-primary ms-2">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
-        <importExcel></importExcel>
+        <importExcel :windowsState="this.importWindowsState"></importExcel>
         <div class="dropdown">
           <a class="btn btn-sm btn-danger ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-file-pdf"></i>
@@ -117,8 +117,22 @@ XLSX.set_cptable(cpexcel);
 
 export default {
   name: "list",
-  components: {HelpBtn,importExcel},
+  components: {
+    HelpBtn,
+    importExcel:importExcel
+  },
+  watch:{
+    'importWindowsState.submited'(newValue,oldValue) {
+      this.importWindowsState.submited = false;
+      if(newValue){
+        this.loadData();
+      }
+    }
+  },
   data: ()=>{return {
+    importWindowsState:{
+      submited:false
+    },
     tableClassName:'extable',
     searchValue: '',
     loading : ref(true),

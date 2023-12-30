@@ -1,14 +1,56 @@
 <script lang="ts">
+import axios from 'axios';
+import Swal from 'sweetalert2';
 import {defineComponent} from 'vue'
-
+import {ref} from 'vue'
 export default defineComponent({
   name: "person-import-excel",
   props:{
-    
+    windowsState:Object
   },
+  data:()=>{return{
+    loading:ref(false),
+    file:null
+  }},
   methods:{
+    addFile(e) {
+      this.file = e.target.files[0];
+    },
     submit(){
-      alert()
+      if(this.file === null){
+        Swal.fire({
+          text: 'فایل انتخاب نشده است',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      else{
+        //send excel file to server
+        let formData = new FormData();
+        formData.append('file', this.file);
+        axios.post( '/api/person/import/excel',formData,
+        {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
+        }).then(()=>{
+          Swal.fire({
+            text: 'فایل با موفقیت ثبت شد.',
+            icon: 'success',
+            confirmButtonText: 'قبول'
+          }).then((resp)=>{
+            this.$refs.Close.click();
+            this.$props.windowsState.submited = true;
+          });
+        })
+        .catch(()=>{
+          Swal.fire({
+            text: 'متاسفانه خطایی به وجود آمد.',
+            icon: 'error',
+            confirmButtonText: 'قبول'
+          });
+        });
+      }
     }
   }
 })
@@ -16,7 +58,7 @@ export default defineComponent({
 
 <template>
   <!-- Button trigger modal -->
-  <button type="button" class="ms-2 btn btn-sm btn-primary" title="وارد کردن از اکسل" data-bs-toggle="modal" data-bs-target="#importexcel" >
+  <button ref="Close" type="button" class="ms-2 btn btn-sm btn-primary modal-close-btn" title="وارد کردن از اکسل" data-bs-toggle="modal" data-bs-target="#importexcel" >
     <i class="fa fa-file-import"></i>
   </button>
 
@@ -34,13 +76,13 @@ export default defineComponent({
             <ul>
                 <li>برای وارد کردن لیست فراد در اکسل ابتدا فایل نمونه را دریافت نمایید سپس مطابق الگو اطلاعات را تکمیل کنید در مرحله بعدی با انتخاب فایل نسبت به ورود از لیست اقدام کنید</li>
                 <li>
-                    <a href="https://hesabix.ir" target="_blank">دریافت فایل نمونه</a>
+                    <a :href="this.$filters.getApiUrl() + '/imports/persons-import.xlsx'" target="_blank">دریافت فایل نمونه</a>
                 </li>
             </ul>
             <form @submit.prevent="submit()">
               <div class="mb-3">
                   <label for="formFileSm" class="form-label">انتخاب فایل</label>
-                  <input class="custom-file-input form-control" id="formFileSm" type="file" accept="application/vnd.ms-excel,application/vnd.ms-excel.sheet.macroEnabled.12,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                  <input @change="addFile" class="custom-file-input form-control" id="formFileSm" type="file" accept="application/vnd.ms-excel,application/vnd.ms-excel.sheet.macroEnabled.12,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
               </div>
               <div class="mb-3">
                   <button type="submit" class="btn btn-primary">
@@ -55,7 +97,5 @@ export default defineComponent({
 </template>
 
 <style scoped>
-    .custom-file-input:lang(en)~.custom-file-label::after {
-        content: "انتخاب فایل";
-    }
+  
 </style>
