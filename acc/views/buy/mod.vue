@@ -261,7 +261,6 @@ export default {
 
     },
     deleteItem(index){
-      alert(index)
       Swal.fire({
         text: 'آیا برای حذف این مورد مطمئن هستید؟',
         showCancelButton: true,
