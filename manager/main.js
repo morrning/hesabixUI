@@ -29,10 +29,7 @@ axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOK
 NProgress.configure({ showSpinner: false });
 app.config.globalProperties.$API_URL = getApiUrl();
 axios.defaults.baseURL = app.config.globalProperties.$API_URL;
-
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-axios.defaults.headers.common['activeBid'] = localStorage.getItem('activeBid');
-axios.defaults.headers.common['activeYear'] = localStorage.getItem('activeYear');
+axios.defaults.withCredentials = true;
 axios.interceptors.request.use(function(config) {
     // Do something before request is sent
     NProgress.start();

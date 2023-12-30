@@ -12,6 +12,7 @@
         <router-link to="/acc/persons/mod/" class="btn btn-sm btn-primary ms-2">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
+        <importExcel></importExcel>
         <div class="dropdown">
           <a class="btn btn-sm btn-danger ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-file-pdf"></i>
@@ -111,11 +112,12 @@ XLSX.set_fs(fs);
 /* load the codepage support library for extended support with older formats  */
 import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs';
 import HelpBtn from "../component/helpBtn.vue";
+import importExcel from "../component/importModal/person-import-excel.vue";
 XLSX.set_cptable(cpexcel);
 
 export default {
   name: "list",
-  components: {HelpBtn},
+  components: {HelpBtn,importExcel},
   data: ()=>{return {
     tableClassName:'extable',
     searchValue: '',

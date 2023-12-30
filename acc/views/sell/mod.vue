@@ -115,8 +115,8 @@
                 emptyMessage="هیچ آیتمی به این فاکتور افزوده نشده است."
                 rowsOfPageSeparatorMessage="از"
             >
-              <template #item-operation="{ code }">
-                <span class="text-danger px-1" @click="deleteItem(code)">
+              <template #item-operation="{ index }">
+                <span class="text-danger px-1" @click="deleteItem(index)">
                   <i class="fa fa-trash"></i>
                 </span>
               </template>
@@ -274,24 +274,7 @@ export default {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          axios.post('/api/accounting/remove',{
-            'code': code}
-          ).then((response)=>{
-            if(response.data.result == 1){
-              let index = 0;
-              for(let z=0; z<this.items.length; z++){
-                index ++;
-                if(this.items[z]['code'] == code){
-                  this.items.splice(index -1 ,1);
-                }
-              }
-              Swal.fire({
-                text: 'سند با موفقیت حذف شد.',
-                icon: 'success',
-                confirmButtonText: 'قبول'
-              });
-            }
-          })
+          this.items.splice(index -1 ,1);
         }
       })
     },

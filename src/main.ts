@@ -12,7 +12,7 @@ import VueCountdown from '@chenfengyuan/vue-countdown';
 import Vue3EasyDataTable from "vue3-easy-data-table";
 import 'vue3-easy-data-table/dist/style.css';
 import {getApiUrl} from "../hesabixConfig"
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+axios.defaults.withCredentials = true;
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
 const app = createApp(App)
 app.component('EasyDataTable', Vue3EasyDataTable);

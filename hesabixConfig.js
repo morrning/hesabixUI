@@ -6,7 +6,8 @@ export function getApiUrl() {
     This set for access user interface to API.
     If this be wrong user interface not functioning probably.
      */
-    return 'http://localhost';
+    return 'https://next.hesabix.ir';
+    //return 'http://localhost';
     //return 'https://hesabix.ir';
 }
 export function getVersionCheckerUrl() {

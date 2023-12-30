@@ -102,8 +102,6 @@
             <EasyDataTable
                 show-index
                 alternating
-
-
                 :headers="headers"
                 :items="items"
                 theme-color="#1d90ff"
@@ -113,8 +111,8 @@
                 emptyMessage="هیچ آیتمی به این فاکتور افزوده نشده است."
                 rowsOfPageSeparatorMessage="از"
             >
-              <template #item-operation="{ code }">
-                <span class="text-danger px-1" @click="deleteItem(code)">
+              <template #item-operation="{ index }">
+                <span class="text-danger px-1" @click="deleteItem(index)">
                   <i class="fa fa-trash"></i>
                 </span>
               </template>
@@ -246,6 +244,7 @@ export default {
         this.itemData.price = this.$filters.formatNumber(this.itemData.price);
         this.itemData.count = this.$filters.formatNumber(this.itemData.count);
         this.itemData.bd = this.$filters.formatNumber(this.itemData.bd);
+        
         this.items.push(this.itemData);
         this.itemData = {
           commodity:this.commodity[0],
@@ -262,6 +261,7 @@ export default {
 
     },
     deleteItem(index){
+      alert(index)
       Swal.fire({
         text: 'آیا برای حذف این مورد مطمئن هستید؟',
         showCancelButton: true,
@@ -270,24 +270,7 @@ export default {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          axios.post('/api/accounting/remove',{
-            'code': code}
-          ).then((response)=>{
-            if(response.data.result == 1){
-              let index = 0;
-              for(let z=0; z<this.items.length; z++){
-                index ++;
-                if(this.items[z]['code'] == code){
-                  this.items.splice(index -1 ,1);
-                }
-              }
-              Swal.fire({
-                text: 'سند با موفقیت حذف شد.',
-                icon: 'success',
-                confirmButtonText: 'قبول'
-              });
-            }
-          })
+          this.items.splice(index -1 ,1);
         }
       })
     },
