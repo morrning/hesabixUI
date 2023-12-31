@@ -11,6 +11,7 @@
         <router-link to="/acc/commodity/mod/" class="btn btn-sm btn-primary ms-1">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
+        <importExcel :windowsState="this.importWindowsState"></importExcel>
         <a href="#" class="btn btn-sm btn-danger ms-2" @click.prevent="print()">
           <i class="fa fa-print"></i>
         </a>
@@ -76,10 +77,25 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import {ref} from "vue";
+import importExcel from "../component/importModal/commodity-import-excel.vue";
 
 export default {
   name: "list",
+  components: {
+    importExcel:importExcel
+  },
+  watch:{
+    'importWindowsState.submited'(newValue,oldValue) {
+      this.importWindowsState.submited = false;
+      if(newValue){
+        this.loadData();
+      }
+    }
+  },
   data: ()=>{return {
+    importWindowsState:{
+      submited:false
+    },
     printID:'',
     searchValue: '',
     loading : ref(true),

@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import {defineComponent} from 'vue'
 import {ref} from 'vue'
 export default defineComponent({
-  name: "person-import-excel",
+  name: "commodity-import-excel",
   props:{
     windowsState:Object
   },
@@ -28,7 +28,7 @@ export default defineComponent({
         //send excel file to server
         let formData = new FormData();
         formData.append('file', this.file);
-        axios.post( '/api/person/import/excel',formData,
+        axios.post( '/api/commodity/import/excel',formData,
         {
           headers: {
               'Content-Type': 'multipart/form-data'
@@ -74,9 +74,9 @@ export default defineComponent({
         </div>
         <div class="modal-body">
             <ul>
-                <li>برای وارد کردن لیست افراد در اکسل ابتدا فایل نمونه را دریافت نمایید سپس مطابق الگو اطلاعات را تکمیل کنید در مرحله بعدی با انتخاب فایل نسبت به ورود از لیست اقدام کنید</li>
+                <li>برای وارد کردن لیست فراد در اکسل ابتدا فایل نمونه را دریافت نمایید سپس مطابق الگو اطلاعات را تکمیل کنید در مرحله بعدی با انتخاب فایل نسبت به ورود از لیست اقدام کنید</li>
                 <li>
-                    <a :href="this.$filters.getApiUrl() + '/imports/persons-import.xlsx'" target="_blank">دریافت فایل نمونه</a>
+                    <a :href="this.$filters.getApiUrl() + '/imports/commodities-import.xlsx'" target="_blank">دریافت فایل نمونه</a>
                 </li>
             </ul>
             <form @submit.prevent="submit()">
