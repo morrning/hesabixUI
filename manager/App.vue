@@ -269,7 +269,7 @@ export default {
                 </li>
                 <li class="nav-main-item">
                   <router-link class="nav-main-link" to="/manager/settings/update/info">
-                    <span class="nav-main-link-name">به روز رسانی</span>
+                    <span class="nav-main-link-name">بانک اطلاعاتی</span>
                   </router-link>
                 </li>
               </ul>
