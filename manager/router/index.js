@@ -77,6 +77,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/manager/users/change-password/:id',
+      component: () => import('../views/users/change-password.vue'),
+      meta: {
+        'title': 'تغییر کلمه عبور',
+        'login': true
+      }
+    },
+    {
       path: '/manager/business/list',
       component: () => import('../views/business/list.vue'),
       meta: {

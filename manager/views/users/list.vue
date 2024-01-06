@@ -71,8 +71,10 @@ export default defineComponent({
               rowsOfPageSeparatorMessage="از"
               :loading = "loading"
           >
-            <template #item-operation="{ code }">
-
+            <template #item-operation="{ id }">
+                <router-link :to="'/manager/users/change-password/' + id" title="تغییر کلمه عبور">
+                  <i class="fa fa-lock"></i>
+                </router-link>
             </template>
             <template #item-status="{ status }">
               <span v-if="status" class="text-success">فعال</span>
