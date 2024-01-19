@@ -449,28 +449,28 @@ export default {
             if(item.type == 'person'){
               this.persons.push({
                 id:item.person,
-                amount: item.bs,
+                amount: item.bd,
                 des: item.des
               });
             }
             else if(item.type == 'bank'){
               this.banks.push({
                 id:item.bank,
-                amount: item.bd,
+                amount: item.bs,
                 des: item.des
               });
             }
             else if(item.type == 'cashdesk'){
               this.cashdesks.push({
                 id:item.cashdesk,
-                amount: item.bd,
+                amount: item.bs,
                 des: item.des
               });
             }
             else if(item.type == 'salary'){
               this.salarys.push({
                 id:item.salary,
-                amount: item.bd,
+                amount: item.bs,
                 des: item.des
               });
             }
@@ -616,7 +616,7 @@ export default {
               confirmButtonText: 'قبول'
             }).then((result)=>{
               if(result.isConfirmed){
-                this.$router.push('/acc/persons/receive/list');
+                this.$router.push('/acc/persons/send/list');
               }
             });
           }
