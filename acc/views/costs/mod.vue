@@ -134,6 +134,116 @@
               </div>
             </div>
           </div>
+          <div class="col-sm-12 col-md-6 px-1" v-for="(item, index) in salarys">
+            <div class="block block-rounded border border-gray">
+              <div class="block-header bg-info">
+                <h3 class="block-title">
+                  <small class="text-black">
+                    <span class="mx-2">{{index + 1}}</span>
+                    <i class="fa fa-dot-circle"></i>
+                     تنخواه گردان
+                  </small>
+                </h3>
+                <span class="block-options">
+                <button class="btn rounded-circle btn-sm btn-danger" @click="removeSalary(index)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </span>
+              </div>
+              <div class="block-content-sm mx-2">
+                <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-12">
+                        <small class="mb-2">تنخواه گردان</small>
+                        <v-select
+                            @change="alert()"
+                            dir="rtl"
+                            :options="listSalarys"
+                            label="name"
+                            v-model="item.id"
+                            @option:deselecting="funcCanSubmit()"
+                            @search:focus="funcCanSubmit()"
+                            @option:selecting="funcCanSubmit()"
+                        >
+                          <template #no-options="{ search, searching, loading }">
+                            وردی یافت نشد!
+                          </template>
+                        </v-select>
+                      </div>
+                      <div class="col-sm-12 col-md-12">
+                        <small class="mb-2">مبلغ</small>
+                        <money3 @change="calc()" class="form-control" v-model="item.amount" v-bind="currencyConfig"></money3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                    <div class="form-floating my-2">
+                      <input v-model="item.des" type="text" class="form-control">
+                      <label>شرح</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6 px-1" v-for="(item, index) in cashdesks">
+            <div class="block block-rounded border border-gray">
+              <div class="block-header bg-light">
+                <h3 class="block-title">
+                  <small class="text-black">
+                    <span class="mx-2">{{index + 1}}</span>
+                    <i class="fa fa-money-bill-wheat"></i>
+                     صندوق
+                  </small>
+                </h3>
+                <span class="block-options">
+                <button class="btn rounded-circle btn-sm btn-danger" @click="removeCashdesk(index)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </span>
+              </div>
+              <div class="block-content-sm mx-2">
+                <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-12">
+                        <small class="mb-2">صندوق</small>
+                        <v-select
+                            @change="alert()"
+                            dir="rtl"
+                            :options="listCashdesks"
+                            label="name"
+                            v-model="item.id"
+                            @option:deselecting="funcCanSubmit()"
+                            @search:focus="funcCanSubmit()"
+                            @option:selecting="funcCanSubmit()"
+                        >
+                          <template #no-options="{ search, searching, loading }">
+                            وردی یافت نشد!
+                          </template>
+                        </v-select>
+                      </div>
+                      <div class="col-sm-12 col-md-12">
+                        <small class="mb-2">مبلغ</small>
+                        <money3 @change="calc()" class="form-control" v-model="item.amount" v-bind="currencyConfig"></money3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                    <div class="form-floating my-2">
+                      <input v-model="item.des" type="text" class="form-control">
+                      <label>شرح</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="row">
           <div class="col-12 text-end">
@@ -152,9 +262,13 @@
                       <i class="fa fa-bank"></i>
                       حساب بانکی
                     </button>
-                    <button disabled="disabled" type="button" class="dropdown-item" href="javascript:void(0)">
-                      <i class="fa fa-desktop"></i>
+                    <button @click="addCashdesk()" type="button" class="dropdown-item" href="javascript:void(0)">
+                      <i class="fa fa-money-bill-wheat"></i>
                       صندوق
+                    </button>
+                    <button @click="addSalary()" type="button" class="dropdown-item" href="javascript:void(0)">
+                      <i class="fa fa-dot-circle"></i>
+                      تنخواه گردان
                     </button>
                   </div>
                 </div>
@@ -206,8 +320,12 @@ export default {
     balance: 0,
     listPersons:[],
     listBanks:[],
+    listCashdesks:[],
+    listSalarys:[],
     persons:[],
     banks:[],
+    salarys:[],
+    cashdesks:[],
     year: '',
     currencyConfig:{
       masked: false,
@@ -247,6 +365,12 @@ export default {
       this.banks.forEach((item)=>{
         side = parseInt(side) + parseInt(item.amount);
       });
+      this.salarys.forEach((item)=>{
+        side = parseInt(side) + parseInt(item.amount);
+      });
+      this.cashdesks.forEach((item)=>{
+        side = parseInt(side) + parseInt(item.amount);
+      });
       this.balance = parseInt(this.sum) - parseInt(side);
       this.funcCanSubmit();
 
@@ -282,6 +406,26 @@ export default {
     removeBank(index){
       this.banks.splice(index, 1);
     },
+    addCashdesk(){
+      this.cashdesks.push({
+        person:'',
+        amount: '',
+        des: ''
+      })
+    },
+    removeCashdesk(index){
+      this.cashdesks.splice(index, 1);
+    },
+    addSalary(){
+      this.salarys.push({
+        person:'',
+        amount: '',
+        des: ''
+      })
+    },
+    removeSalary(index){
+      this.salarys.splice(index, 1);
+    },
     loadData() {
       if(this.$route.params.id){
         this.updateID = this.$route.params.id;
@@ -299,6 +443,20 @@ export default {
             else if(item.type == 'bank'){
               this.banks.push({
                 id:item.bank,
+                amount: item.bs,
+                des: item.des
+              });
+            }
+            else if(item.type == 'cashdesk'){
+              this.cashdesks.push({
+                id:item.cashdesk,
+                amount: item.bs,
+                des: item.des
+              });
+            }
+            else if(item.type == 'salary'){
+              this.salarys.push({
+                id:item.salary,
                 amount: item.bs,
                 des: item.des
               });
@@ -325,6 +483,16 @@ export default {
       axios.get('/api/bank/list').then((response)=>{
         this.listBanks = response.data;
       })
+
+      //get list of cashdesks
+      axios.get('/api/cashdesk/list').then((response)=>{
+        this.listCashdesks = response.data;
+      });
+
+      //get list of salarys
+      axios.get('/api/salary/list').then((response)=>{
+        this.listSalarys = response.data;
+      })
     },
     save() {
       if(this.persons.length == 0){
@@ -334,9 +502,25 @@ export default {
           confirmButtonText: 'قبول'
         });
       }
-      if(this.banks.length == 0){
+      let sideOK = true;
+      this.banks.forEach((item)=>{
+        if(item.id == null || item.id == ''){
+          sideOK = false;
+        }
+      });
+      this.salarys.forEach((item)=>{
+        if(item.id == null || item.id == ''){
+          sideOK = false;
+        }
+      })
+      this.cashdesks.forEach((item)=>{
+        if(item.id == null || item.id == ''){
+          sideOK = false;
+        }
+      })
+      if(sideOK == false){
         Swal.fire({
-          text: 'انتخاب حداقل یک طرف حساب الزامی است.',
+          text: 'یکی از طرف‌های حساب انتخاب نشده است.',
           icon: 'error',
           confirmButtonText: 'قبول'
         });
@@ -354,66 +538,80 @@ export default {
           confirmButtonText: 'قبول'
         });
       }
-      let bankOK = true;
-      this.banks.forEach((item)=>{
-        if(item.id == null || item.id == ''){
-          bankOK = false;
-        }
-      })
-      if(bankOK == false){
-        Swal.fire({
-          text: 'یکی از طرف‌های حساب انتخاب نشده است.',
-          icon: 'error',
-          confirmButtonText: 'قبول'
-        });
-      }
-      //going to save in api
-      //save persons pattern
-      let rows = [];
-      if(this.data.des == '') this.data.des = 'هزینه‌ها';
-      this.persons.forEach((item)=>{
-        if(item.des == '') item.des = 'هزینه'
-        rows.push({
-          id: item.id,
-          bs: 0,
-          bd: parseInt(item.amount),
-          des: item.des,
-          type: 'calc',
-          table:item.id
-        });
-      })
-      this.banks.forEach((item)=>{
-        if(item.des == '') item.des = 'هزینه'
-        rows.push({
-          id: item.id.id,
-          bs: parseInt(item.amount),
-          bd: 0,
-          des: item.des,
-          type: 'bank',
-          table:5
-        });
-      })
-
-      axios.post('/api/accounting/insert',{
-        update: this.updateID,
-        date: this.data.date,
-        type: 'cost',
-        des: this.data.des,
-        rows: rows
-
-      }).then((response)=>{
-        if(response.data.result == 1){
-          Swal.fire({
-            text: 'سند ثبت شد.',
-            icon: 'success',
-            confirmButtonText: 'قبول'
-          }).then((result)=>{
-            if(result.isConfirmed){
-              this.$router.push('/acc/costs/list');
-            }
+      if(personOK && sideOK){
+        //going to save in api
+        //save persons pattern
+        let rows = [];
+        if(this.data.des == '') this.data.des = 'هزینه‌ها';
+        this.persons.forEach((item)=>{
+          if(item.des == '') item.des = 'هزینه'
+          rows.push({
+            id: item.id,
+            bs: 0,
+            bd: parseInt(item.amount),
+            des: item.des,
+            type: 'calc',
+            table:item.id
           });
-        }
-      })
+        })
+        this.banks.forEach((item)=>{
+          if(item.des == '') item.des = 'هزینه'
+          rows.push({
+            id: item.id.id,
+            bs: parseInt(item.amount),
+            bd: 0,
+            des: item.des,
+            type: 'bank',
+            table:5
+          });
+        })
+        
+        this.salarys.forEach((item)=>{
+          if(item.des == '') item.des = 'هزینه'
+          rows.push({
+            id: item.id.id,
+            bs: parseInt(item.amount),
+            bd: 0,
+            des: item.des,
+            type: 'salary',
+            table:124
+          });
+        })
+
+        this.cashdesks.forEach((item)=>{
+          if(item.des == '') item.des = 'هزینه'
+          rows.push({
+            id: item.id.id,
+            bs: parseInt(item.amount),
+            bd: 0,
+            des: item.des,
+            type: 'cashdesk',
+            table:123
+          });
+        })
+
+        axios.post('/api/accounting/insert',{
+          update: this.updateID,
+          date: this.data.date,
+          type: 'cost',
+          des: this.data.des,
+          rows: rows
+
+        }).then((response)=>{
+          if(response.data.result == 1){
+            Swal.fire({
+              text: 'سند ثبت شد.',
+              icon: 'success',
+              confirmButtonText: 'قبول'
+            }).then((result)=>{
+              if(result.isConfirmed){
+                this.$router.push('/acc/costs/list');
+              }
+            });
+          }
+        })
+      }
+      
     }
   }
 }

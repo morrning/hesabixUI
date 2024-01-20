@@ -250,6 +250,11 @@ const router = createRouter({
       component: () => import('../views/store/viewProdect.vue'),
     },
     {
+      path: '/acc/plugins/apartemanma/intro',
+      name: 'plugin_apartemanma_intro',
+      component: () => import('../views/plugins/amartemanma/intro.vue'),
+    },
+    {
       path: '/acc/plugins/restamap/intro',
       name: 'plugin_restamap_intro',
       component: () => import('../views/plugins/resamap/intro.vue'),

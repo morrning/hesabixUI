@@ -574,7 +574,7 @@ export default {
             bd: parseInt(item.amount),
             des: item.des,
             type: 'bank',
-            table:5
+            table:9
           });
         })
         this.salarys.forEach((item)=>{

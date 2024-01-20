@@ -35,13 +35,13 @@
               :loading = "loading"
           >
             <template #item-operation="{ code }">
-              <router-link class="text-success" :to="'/acc/accounting/view/' + code">
-                <i class="fa fa-eye px-1"></i>
+              <router-link class="btn btn-sm btn-link text-success pe-1" :to="'/acc/accounting/view/' + code">
+                <i class="fa fa-eye"></i>
               </router-link>
-              <router-link :to="{name:'costs_mod',params:{id: code}}">
-                <i class="fa fa-edit px-1"></i>
+              <router-link class="btn btn-sm btn-link pe-1" :to="{name:'costs_mod',params:{id: code}}">
+                <i class="fa fa-edit"></i>
               </router-link>
-              <span class="text-danger px-1" @click="deleteItem(code)">
+              <span class="btn btn-sm btn-link text-danger pe-1" @click="deleteItem(code)">
                 <i class="fa fa-trash"></i>
               </span>
             </template>
@@ -63,11 +63,11 @@ export default {
     loading: ref(true),
     items:[],
     headers: [
+      { text: "عملیات", value: "operation"},
       { text: "کد", value: "code" },
       { text: "تاریخ", value: "date"},
       { text: "شرح", value: "des"},
       { text: "مبلغ", value: "amount"},
-      { text: "عملیات", value: "operation"},
     ]
   }},
   methods: {

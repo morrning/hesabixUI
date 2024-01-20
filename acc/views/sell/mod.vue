@@ -282,6 +282,8 @@ export default {
       //load year
       axios.get('/api/year/get').then((response)=>{
         this.year = response.data;
+        this.year.start = response.data.year.start + ' 00:00'
+        this.year.end = response.data.year.end + ' 00:00'
         this.data.date = response.data.now;
       })
       //load persons

@@ -62,7 +62,7 @@
                 <i class="fa fa-eye"></i>
               </router-link>
               <router-link class="btn btn-sm btn-link" :to="{name:'person_receive_mod',params:{id: code}}">
-                <i class="fa fa-edit px-1"></i>
+                <i class="fa fa-edit"></i>
               </router-link>
               <button class="btn btn-sm btn-link text-danger" @click="deleteItem(code)">
                 <i class="fa fa-trash"></i>
