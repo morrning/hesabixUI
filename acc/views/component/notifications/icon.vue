@@ -12,7 +12,13 @@ export default {
   methods:{
     jump(item){
       axios.post('/api/notifications/read/' + item.id).then((response)=>{
-        this.$router.push(item.url)
+        if(item.url.startsWith('http')){
+            window.location.href = item.url;
+        }
+        else{
+            this.$router.push(item.url);
+        }
+        
       })
     },
     loadData(){
