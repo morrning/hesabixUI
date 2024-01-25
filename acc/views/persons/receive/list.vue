@@ -45,7 +45,6 @@
               v-model:items-selected="itemsSelected"
               show-index
               alternating
-
               :search-value="searchValue"
               :headers="headers"
               :items="items"

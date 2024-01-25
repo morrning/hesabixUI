@@ -8,6 +8,7 @@
         سند حسابداری</h3>
       <div class="block-options">
         <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="accounting" cat="accounting"></archive-upload>
+        <documentLogButton :doc-code="this.$route.params.id" />
         <button class="btn btn-sm btn-primary mx-2" onclick="Dashmix.helpers('dm-print');" type="button">
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ سند</span>
@@ -87,12 +88,14 @@ import Swal from "sweetalert2";
 import {ref} from "vue";
 import Loading from "vue-loading-overlay";
 import ArchiveUpload from "../component/archive/archiveUpload.vue";
+import documentLogButton from "../component/documentLogButton.vue";
 
 export default {
   name: "viewDoc",
   components: {
     ArchiveUpload,
     Loading,
+    documentLogButton
   },
   data: ()=>{return {
     isLoading: true,
