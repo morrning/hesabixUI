@@ -45,9 +45,9 @@
               <router-link class="btn btn-sm btn-link" :to="'/acc/commodity/mod/' + code">
                 <i class="fa fa-edit px-2"></i>
               </router-link>
-              <span class="text-danger d-none" @click="deleteItem(code)">
+              <button class="btn btn-sm text-danger" @click="deleteItem(code)">
                 <i class="fa fa-trash"></i>
-              </span>
+              </button>
             </template>
             <template #item-speedAccess="{ speedAccess }">
               <i v-if="speedAccess" class="fa fa-check text-success"></i>
@@ -101,7 +101,7 @@ export default {
     loading : ref(true),
     items:[],
     headers: [
-      { text: "عملیات", value: "operation"},
+      { text: "عملیات", value: "operation", width:"100"},
       { text: "کد", value: "code" },
       { text: "کالا / خدمات", value: "khadamat", sortable: true, width: 150},
       { text: "نام کالا و خدمات", value: "name", sortable: true, width: 150},
@@ -139,7 +139,7 @@ export default {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          axios.post('/api/business/delete/user',{
+          axios.post('/api/commodity/delete/' + code,{
             'code': code}
           ).then((response)=>{
             if(response.data.result == 1){
@@ -151,8 +151,15 @@ export default {
                 }
               }
               Swal.fire({
-                text: 'شخص با موفقیت حذف شد.',
+                text: 'کالا  با موفقیت حذف شد.',
                 icon: 'success',
+                confirmButtonText: 'قبول'
+              });
+            }
+            else if(response.data.result == 2){
+              Swal.fire({
+                text: 'کالا به دلیل داشتن سند حسابداری یا انبار مرتبط قابل حذف نیست.',
+                icon: 'error',
                 confirmButtonText: 'قبول'
               });
             }
