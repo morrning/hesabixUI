@@ -45,7 +45,6 @@
               v-model:items-selected="itemsSelected"
               show-index
               alternating
-
               :search-value="searchValue"
               :headers="headers"
               :items="items"
@@ -69,6 +68,36 @@
               </span>
             </template>
           </EasyDataTable>
+
+          <div class="container-fluid p-0 mx-0 my-3">
+            <a class="block block-rounded block-link-shadow border-start border-success border-3" href="javascript:void(0)">
+              <div class="block-content block-content-full block-content-sm bg-body-light">
+                  <div class="row">
+                    <div class="col-sm-6 com-md-6">
+                      <span class="text-dark">
+                        <i class="fa fa-list-dots"></i>
+                      مبلغ کل:
+                      </span>
+                      <span class="text-primary">
+                        {{ this.$filters.formatNumber(this.sumTotal) }}
+                        ریال
+                      </span>
+                    </div>
+
+                    <div class="col-sm-6 com-md-6">
+                      <span class="text-dark">
+                        <i class="fa fa-list-check"></i>
+                      جمع مبلغ موارد انتخابی:
+                      </span>
+                      <span class="text-primary">
+                        {{ this.$filters.formatNumber(this.sumSelected) }}
+                        ریال
+                      </span>
+                    </div>
+                </div>       
+              </div>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -84,6 +113,8 @@ export default {
   name: "list",
   components: {HelpBtn},
   data: ()=>{return {
+    sumSelected:0,
+    sumTotal:0,
     itemsSelected: [],
     searchValue: '',
     loading: ref(true),
@@ -104,7 +135,8 @@ export default {
           .then((response)=>{
             this.items = response.data;
             this.items.forEach((item)=>{
-              item.amount = this.$filters.formatNumber(item.amount)
+              item.amount = this.$filters.formatNumber(item.amount);
+              this.sumTotal += parseInt(item.amount.replaceAll(",",""));
             })
             this.loading = false;
           })
@@ -209,6 +241,17 @@ export default {
   },
   beforeMount() {
     this.loadData();
+  },
+  watch:{
+    itemsSelected: {
+      handler: function (val, oldVal) {
+        this.sumSelected = 0;
+        this.itemsSelected.forEach((item)=>{
+          this.sumSelected += parseInt(item.amount.replaceAll(",",""))
+        });
+      },
+      deep: true
+    }
   }
 }
 </script>
