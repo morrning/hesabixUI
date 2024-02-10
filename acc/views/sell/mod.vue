@@ -282,8 +282,6 @@ export default {
       //load year
       axios.get('/api/year/get').then((response)=>{
         this.year = response.data;
-        this.year.start = response.data.year.start + ' 00:00'
-        this.year.end = response.data.year.end + ' 00:00'
         this.data.date = response.data.now;
       })
       //load persons
@@ -313,6 +311,34 @@ export default {
         this.units = response.data;
       });
 
+      //load data for edit document
+      
+      if(this.$route.params.id != ''){
+        axios.get('/api/sell/get/info/' + this.$route.params.id).then((response)=>{
+          this.data.date = response.data.date;
+          this.data.des = response.data.des;
+          this.persons.forEach((item,index)=>{
+            if(item.code == response.data.rows[1].person.code){
+              this.data.person = item;
+            }
+          });
+          response.data.rows.forEach((item,key)=>{
+            if(item.commodity != null){
+              this.items.push({
+                commodity:item.commodity,
+                count:item.commodity_count,
+                price: this.$filters.formatNumber(parseInt(parseInt(item.bd) / parseInt(item.commodity_count))),
+                bs:this.$filters.formatNumber(item.bs),
+                bd:this.$filters.formatNumber(item.bd),
+                type:'commodity',
+                id:this.commodity[0].id,
+                des:'',
+                table:53
+              });
+            }
+          });
+        });
+      }
     },
     save() {
       this.canSubmit=false;
@@ -345,13 +371,12 @@ export default {
           des:'فروش کالا به مشتری',
           table:3
         });
-        this.data.des = 'فاکتور فروش:' + this.data.des;
         axios.post('/api/accounting/insert',{
           type: 'sell',
           date: this.data.date,
           des: this.data.des,
           rows:this.items,
-          update:''
+          update:this.$route.params.id
         }).then((response)=>{
           this.items.pop();
           Swal.fire({

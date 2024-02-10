@@ -44,6 +44,9 @@
               <router-link class="btn btn-sm btn-link text-secondary" :to="'/acc/sell/view/' + code">
                 <i class="fa fa-print"></i>
               </router-link>
+              <span class="btn btn-sm btn-link text-info" @click="canEditItem(code)">
+                <i class="fa fa-edit"></i>
+              </span>
               <span class="btn btn-sm btn-link text-danger" @click="deleteItem(code)">
                 <i class="fa fa-trash"></i>
               </span>
@@ -128,6 +131,23 @@ export default {
             })
             this.loading = false;
           })
+    },
+    canEditItem(code){
+      this.loading = true;
+      axios.post('/api/sell/edit/can/' + code)
+          .then((response)=>{
+            this.loading = false;
+            if(response.data.result == false){
+              Swal.fire({
+                text: 'این فاکتور به دلیل وجود اسناد پرداخت یا حواله های انبار مرتبط با آن قابل ویرایش نیست',
+                confirmButtonText: 'قبول',
+                icon:'error'
+              });
+            }
+            else{
+              this.$router.push('/acc/sell/mod/' + code);
+            }
+          });
     },
     deleteItem(code){
       Swal.fire({
