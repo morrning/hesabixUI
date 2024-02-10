@@ -117,6 +117,7 @@
                 </span>
               </template>
             </EasyDataTable>
+            <button @click="test()"></button>
           </div>
         </div>
       </div>
@@ -208,7 +209,7 @@ export default {
       }
     },
   },
-  beforeMount() {
+  mounted() {
     this.loadData();
   },
   beforeRouteUpdate(to,from){
@@ -306,6 +307,36 @@ export default {
         this.units = response.data;
       });
 
+      //load data for edit document
+      
+      if(this.$route.params.id != ''){
+        axios.get('/api/buy/get/info/' + this.$route.params.id).then((response)=>{
+          this.data.date = response.data.date;
+          this.data.des = response.data.des;
+          this.persons.forEach((item,index)=>{
+            if(item.code == response.data.rows[1].person.code){
+              this.data.person = item;
+            }
+          });
+          response.data.rows.forEach((item,key)=>{
+            if(item.commodity != null){
+              this.items.push({
+                commodity:item.commodity,
+                count:item.commodity_count,
+                price: this.$filters.formatNumber(parseInt(parseInt(item.bd) / parseInt(item.commodity_count))),
+                bs:this.$filters.formatNumber(item.bs),
+                bd:item.bd,
+                type:'commodity',
+                id:item.commodity.id,
+                des:'کالا و خدمات',
+                table:120
+              });
+            }
+          });
+          
+        });
+      }
+
     },
     save() {
       this.canSubmit=false;
@@ -338,13 +369,12 @@ export default {
           des:'خرید کالا از تامین کننده',
           table:3
         });
-        this.data.des = 'فاکتور خرید:' + this.data.des;
         axios.post('/api/accounting/insert',{
           type: 'buy',
           date: this.data.date,
           des: this.data.des,
           rows:this.items,
-          update:''
+          update:this.$route.params.id
         }).then((response)=>{
           this.items.pop();
           Swal.fire({

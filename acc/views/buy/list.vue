@@ -44,6 +44,9 @@
               <router-link class="btn btn-sm btn-link text-secondary" :to="'/acc/buy/view/' + code">
                 <i class="fa fa-print"></i>
               </router-link>
+              <span class="btn btn-sm btn-link text-info" @click="canEditItem(code)">
+                <i class="fa fa-edit"></i>
+              </span>
               <span class="btn btn-sm btn-link text-danger" @click="deleteItem(code)">
                 <i class="fa fa-trash"></i>
               </span>
@@ -105,7 +108,7 @@ export default {
     loading: ref(true),
     items:[],
     headers: [
-      { text: "عملیات", value: "operation", width:"120"},
+      { text: "عملیات", value: "operation", width:"160"},
       { text: "شماره سند", value: "code" , sortable: true, width:"100"},
       { text: "مبلغ", value: "amount", sortable: true},
       { text: "وضعیت", value: "status", sortable: true, width:"100"},
@@ -127,7 +130,7 @@ export default {
               this.sumTotal += parseInt(item.amount.replaceAll(",",''));
             })
             this.loading = false;
-          })
+          });
     },
     deleteItem(code){
       Swal.fire({
@@ -166,6 +169,23 @@ export default {
           })
         }
       })
+    },
+    canEditItem(code){
+      this.loading = true;
+      axios.post('/api/buy/edit/can/' + code)
+          .then((response)=>{
+            this.loading = false;
+            if(response.data.result == false){
+              Swal.fire({
+                text: 'این فاکتور به دلیل وجود اسناد پرداخت یا حواله های انبار مرتبط با آن قابل ویرایش نیست',
+                confirmButtonText: 'قبول',
+                icon:'error'
+              });
+            }
+            else{
+              this.$router.push('/acc/buy/mod/' + code);
+            }
+          });
     }
   },
   beforeMount() {
