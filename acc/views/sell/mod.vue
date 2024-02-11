@@ -331,7 +331,7 @@ export default {
                 bs:this.$filters.formatNumber(item.bs),
                 bd:this.$filters.formatNumber(item.bd),
                 type:'commodity',
-                id:this.commodity[0].id,
+                id:item.commodity.id,
                 des:'',
                 table:53
               });
