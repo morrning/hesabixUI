@@ -7,6 +7,26 @@
         </button>
         کارت حساب اشخاص
       </h3>
+      <div class="block-options">
+        <div class="dropdown">
+          <a class="btn btn-sm btn-danger ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-file-pdf"></i>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a @click.prevent="print(false)" class="dropdown-item" href="#">انتخاب شده‌ها</a></li>
+            <li><a @click.prevent="print(true)" class="dropdown-item" href="#">همه موارد</a></li>
+          </ul>
+        </div>
+        <div class="dropdown">
+          <a class="btn btn-sm btn-success ms-2 dropdown-toggle text-end" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-file-excel"></i>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a @click.prevent="excellOutput(false)" class="dropdown-item" href="#">انتخاب شده‌ها</a></li>
+            <li><a @click.prevent="excellOutput(true)" class="dropdown-item" href="#">همه موارد</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
     <div class="block-content pt-1 pb-3">
       <div class="row">
@@ -75,7 +95,7 @@
           <EasyDataTable
               show-index
               alternating
-
+              v-model:items-selected="itemsSelected"
               :search-value="searchValue"
               :headers="headers"
               :items="items"
@@ -102,12 +122,13 @@
 <script>
 import axios from "axios";
 import {ref} from "vue";
-
+import Swal from "sweetalert2";
 export default {
   name: "card",
   data:()=>{return{
     searchValue: '',
     listPersons:[],
+    itemsSelected:[],
     selectedPerson: [],
     items: [],
     loading: ref(true),
@@ -144,6 +165,91 @@ export default {
           this.loadPerson(this.selectedPerson.code);
         }
       });
+    },
+    excellOutput(AllItems = true){
+      if(AllItems){
+        axios({
+          method: 'post',
+          url:'/api/person/card/list/excel',
+          data:{'code':this.selectedPerson.code},
+          responseType: 'arraybuffer',
+        }).then((response)=>{
+          var FILE = window.URL.createObjectURL(new Blob([response.data]));
+          var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+          var fileLink = document.createElement('a');
+
+          fileLink.href = fileURL;
+          fileLink.setAttribute('download', 'hesabix-person-card-view.xlsx');
+          document.body.appendChild(fileLink);
+          fileLink.click();
+        })
+      }
+      else{
+        if(this.itemsSelected.length === 0){
+          Swal.fire({
+            text: 'هیچ آیتمی انتخاب نشده است.',
+            icon: 'info',
+            confirmButtonText: 'قبول'
+          });
+        }
+        else{
+
+          axios({
+            method: 'post',
+            url:'/api/person/card/list/excel',
+            responseType: 'arraybuffer',
+            data:{
+              'code' : this.selectedPerson.code,
+              'items': this.itemsSelected
+            }
+          }).then((response)=>{
+            var FILE = window.URL.createObjectURL(new Blob([response.data]));
+            var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+            var fileLink = document.createElement('a');
+
+            fileLink.href = fileURL;
+            fileLink.setAttribute('download', 'hesabix-persons-list.xlsx');
+            document.body.appendChild(fileLink);
+            fileLink.click();
+          })
+        }
+      }
+    },
+    print(AllItems = true){
+      if(this.selectedPerson == null){
+          Swal.fire({
+            text: 'هیچ آیتمی انتخاب نشده است.',
+            icon: 'info',
+            confirmButtonText: 'قبول'
+          });
+      }
+      else{
+        if(AllItems){
+          axios.post('/api/person/card/list/print',{'code':this.selectedPerson.code}).then((response)=>{
+            this.printID = response.data.id;
+            window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
+          })
+        }
+        else{
+          if(this.itemsSelected.length === 0){
+            Swal.fire({
+              text: 'هیچ آیتمی انتخاب نشده است.',
+              icon: 'info',
+              confirmButtonText: 'قبول'
+            });
+          }
+          else{
+            axios.post('/api/person/card/list/print',{
+                'code' : this.selectedPerson.code,
+                'items': this.itemsSelected
+              }).then((response)=>{
+              this.printID = response.data.id;
+              window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
+            })
+          }
+        }
+      }
+      
     },
     loadPerson(id){
       this.loading = true;
