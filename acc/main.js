@@ -68,16 +68,12 @@ app.use(plugin, defaultConfig({
 app.use(Vue3PersianDatetimePicker, {
     name: 'CustomDatePicker',
     props: {
-        format: 'jYYYY/jMM/jDD',
-        editable: false,
-        inputClass: '',
-        placeholder: 'انتخاب تاریخ',
-        color: '#3a3a3a',
+        format: 'jYYYY-jMM-jDD',
+        displayFormat: 'jYYYY-jMM-jDD', // if you need jalali dates
+        color: '#0384fc',
         autoSubmit: true,
-        //...
-        //... And whatever you want to set as default.
-        //...
-    }
+        clearable: true,
+      }
 })
 
 //global methods

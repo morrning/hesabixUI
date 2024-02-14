@@ -5,7 +5,6 @@ import axios from "axios";
 import { plugin, defaultConfig } from '@formkit/vue'
 import { fa } from '@formkit/i18n'
 import 'vue3-tel-input/dist/vue3-tel-input.css'
-import 'maz-ui/css/main.css'
 // @ts-ignore
 import VueGravatar from "vue3-gravatar";
 import VueCountdown from '@chenfengyuan/vue-countdown';

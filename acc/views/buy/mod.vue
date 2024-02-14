@@ -27,7 +27,6 @@
                   display-format="jYYYY-jMM-jDD"
                   :min="year.start"
                   :max="year.end"
-                  simple
               />
             </div>
           </div>

@@ -1,3 +1,7 @@
 .formkit-label,formkit-inner,formkit-input {
     font-family: 'vazir', sans-serif;!important;
 }
+
+.vpd-addon-list-item[disabled="false"]{
+    opacity: 1;
+}

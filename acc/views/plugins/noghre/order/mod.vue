@@ -197,7 +197,7 @@ export default defineComponent({
                 display-format="jYYYY-jMM-jDD"
                 :min="year.start"
                 :max="year.end"
-                simple
+                
             />
           </div>
           <div class="col-sm-12 col-md-4 mb-2">
@@ -209,7 +209,7 @@ export default defineComponent({
                 display-format="jYYYY-jMM-jDD"
                 :min="year.start"
                 :max="year.end"
-                simple
+                
             />
           </div>
           <div class="col-sm-12 col-md-3 mb-2">

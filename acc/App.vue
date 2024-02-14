@@ -815,25 +815,34 @@ export default {
 
 <style>
 
-.customize-table {
-  --easy-table-header-font-color: #e1e1e1;
-  --easy-table-header-background-color: #055bbb;
-}
-.form-control ,.form-select{
-  font-family: 'vazir', sans-serif;
-}
-input[type=input]{
-  direction:ltr;
-}
+  .customize-table {
+    --easy-table-header-font-color: #e1e1e1;
+    --easy-table-header-background-color: #055bbb;
+  }
+  .form-control ,.form-select{
+    font-family: 'vazir', sans-serif;
+  }
+  input[type=input]{
+    direction:ltr;
+  }
 
-.node-wrapper{
-  border-radius: 12px;
-}
+  .node-wrapper{
+    border-radius: 12px;
+  }
 
-.content-header{
-  height:2.8rem;
-}
-#page-container.page-header-fixed #main-container {
-  padding-top: 2.6rem;
-}
+  .content-header{
+    height:2.8rem;
+  }
+  #page-container.page-header-fixed #main-container {
+    padding-top: 2.6rem;
+  }
+
+  .vpd-addon-list-item[disabled="false"]{
+    opacity: 1!important;;
+  }
+
+  .vpd-day[disabled] .vpd-day-text{
+    opacity: 1!important;
+    color:rgb(12, 26, 10) !important;
+  }
 </style>
