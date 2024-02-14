@@ -124,6 +124,12 @@
             </div>
           </div>
           <div class="col-sm-12 col-md-4">
+              <div class="space-y-2">
+                <div class="form-check form-switch">
+                  <input v-model="info.cheque" @change="savePerms()" class="form-check-input" type="checkbox">
+                  <label class="form-check-label">مدیریت چک‌ها</label>
+                </div>
+              </div>
             <div class="space-y-2">
               <div class="form-check form-switch">
                 <input v-model="info.accounting" @change="savePerms()" class="form-check-input" type="checkbox">

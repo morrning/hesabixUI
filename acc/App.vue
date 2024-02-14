@@ -459,6 +459,14 @@ export default {
                   <router-link to="/acc/salary/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </RouterLink>
               </li>
+              <li v-if="permissions.cheque" class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/cheque/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-money-check-dollar"></i>
+                    مدیریت چک‌ها</span>
+                  <router-link to="/acc/cheque/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </RouterLink>
+              </li>
               <li v-if="permissions.wallet" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/wallet/view">
                   <span class="nav-main-link-name">
@@ -519,6 +527,10 @@ export default {
                   <span class="nav-main-link-name"> فاکتورهای خرید</span>
                   <router-link to="/acc/buy/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </router-link>
+                <!-- <router-link class="nav-main-link" to="/acc/buy/rfb/list/">
+                  <span class="nav-main-link-name"> فاکتورهای برگشت از خرید</span>
+                  <router-link to="/acc/buy/rfb/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </router-link> -->
               </li>
               <li v-if="permissions.cost" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/costs/list">

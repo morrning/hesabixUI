@@ -195,6 +195,16 @@ const router = createRouter({
       component: () => import('../views/commodity/mod.vue'),
     },
     {
+      path: '/acc/cheque/mod/:id?',
+      name: 'cheque_mod',
+      component: () => import('../views/cheque/mod.vue'),
+    },
+    {
+      path: '/acc/cheque/list',
+      name: 'cheque_list',
+      component: () => import('../views/cheque/list.vue'),
+    },
+    {
       path: '/acc/buy/mod/:id?',
       name: 'buy_mod',
       component: () => import('../views/buy/mod.vue'),
@@ -203,6 +213,16 @@ const router = createRouter({
       path: '/acc/buy/list',
       name: 'buy_list',
       component: () => import('../views/buy/list.vue'),
+    },
+    {
+      path: '/acc/buy/rfb/mod/:id?',
+      name: 'buy__rfb_mod',
+      component: () => import('../views/buy/rfb/mod.vue'),
+    },
+    {
+      path: '/acc/buy/rfb/list',
+      name: 'buy_rfb_list',
+      component: () => import('../views/buy/rfb/list.vue'),
     },
     {
       path: '/acc/buy/view/:id?',
