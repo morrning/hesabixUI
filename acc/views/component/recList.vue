@@ -38,11 +38,18 @@ export default defineComponent({
           ).then((response)=>{
             if(response.data.result == 1){
               Swal.fire({
-                text: 'فاکتور فروش با موفقیت حذف شد.',
+                text: 'سند دریافت فاکتور فروش با موفقیت حذف شد.',
                 icon: 'success',
                 confirmButtonText: 'قبول'
               }).then((result)=>{
                 this.$props.windowsState.submited = true;
+              });
+            }
+            if(response.data.result == 2){
+              Swal.fire({
+                text: response.data.message,
+                icon: 'success',
+                confirmButtonText: 'قبول'
               });
             }
           })

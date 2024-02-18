@@ -8,52 +8,67 @@
         <i class="fa fa-money-check-dollar px-2"></i>
          چک‌های بانکی </h3>
       <div class="block-options">
-        <router-link to="/acc/cheque/mod/" class="block-options-item">
-          <span class="fa fa-plus fw-bolder"></span>
-        </router-link>
+      
       </div>
     </div>
-    <div class="block-content pt-1 pb-3">
+    <div class="block-content pt-0 pb-3">
       <div class="row">
         <div class="col-sm-12 col-md-12 m-0 p-0">
-          <div class="mb-1">
-            <div class="input-group input-group-sm">
-              <span class="input-group-text"><i class="fa fa-search"></i></span>
-              <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
+          <div class="block-content p-0">
+            <div class="col-sm-12 col-md-12 m-0 p-0">
+              <ul class="nav nav-pills flex-column flex-sm-row border border-secondary" id="myTab" role="tablist">
+                <button class="flex-sm-fill text-sm-center nav-link rounded-0 active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">
+                  <i class="fa fa-file-export me-2"></i>
+                  چک‌های دریافتی
+                </button>
+                <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="pays-tab" data-bs-toggle="tab" data-bs-target="#pays" type="button" role="tab" aria-controls="pays" aria-selected="false">
+                  <i class="fa fa-file-import me-2"></i>
+                  چک‌‌های واگذار شده
+                </button>
+              </ul>
+              <div class="tab-content p-0" id="myTabContent">
+                <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                  <div class="my-1">
+                    <div class="input-group input-group-sm">
+                      <span class="input-group-text"><i class="fa fa-search"></i></span>
+                      <input v-model="searchValueInput" class="form-control" type="text" placeholder="جست و جو ...">
+                    </div>
+                  </div>
+                  <EasyDataTable
+                      multi-sort
+                      show-index
+                      alternating
+                      :search-value="searchValueInput"
+                      :headers="headersInput"
+                      :items="itemsInput"
+                      theme-color="#1d90ff"
+                      header-text-direction="center"
+                      body-text-direction="center"
+                      rowsPerPageMessage="تعداد سطر"
+                      emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+                      rowsOfPageSeparatorMessage="از"
+                      :loading="loading"
+                  >
+                    <template #item-operation="{ id,locked }">
+                      <passCheck v-if="!locked" :windowsState="this.passChequeWindowsState" :id="id"/>
+
+                      <router-link :to="'/acc/storeroom/mod/' + id" title="برگشت چک">
+                        <i class="fa fa-arrow-left px-2 text-danger"></i>
+                      </router-link>
+                    </template>
+                    <template #item-status="{ status }">
+                      <div v-show="status=='پاس شده'" class="text-success">{{ status }}</div>
+                      <div v-show="status=='پاس نشده'" class="text-dark">{{ status }}</div>
+                      <div v-show="status=='برگشت خورده'" class="text-danger">{{ status }}</div>
+                    </template>
+                  </EasyDataTable>
+                </div>
+                <div class="tab-pane fade" id="pays" role="tabpanel" aria-labelledby="pays-tab">
+                  
+                </div>
+              </div>
             </div>
           </div>
-          <EasyDataTable
-              show-index
-              alternating
-              :search-value="searchValue"
-              :headers="headers"
-              :items="items"
-              theme-color="#1d90ff"
-              header-text-direction="center"
-              body-text-direction="center"
-              rowsPerPageMessage="تعداد سطر"
-              emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-              rowsOfPageSeparatorMessage="از"
-              :loading = "loading"
-          >
-            <template #item-operation="{ code }">
-              <router-link class="btn btn-link" :to="'/acc/cashdesk/mod/' + code">
-                <i class="fa fa-edit px-2"></i>
-              </router-link>
-              <router-link class="btn btn-link" :to="'/acc/cashdesk/card/view/' + code">
-                <i class="fa fa-list-check text-warning"></i>
-              </router-link>
-            </template>
-            <template #item-name="{ name,code }">
-              <router-link :to="'/acc/cashdesk/card/view/' + code">
-                {{name}}
-              </router-link>
-            </template>
-            <template #item-balance="{ balance }">
-              <label class="text-success" v-if="balance >= 0">{{this.$filters.formatNumber(balance)}}</label>
-              <label class="text-danger" v-else>{{this.$filters.formatNumber( -1 * balance ) }} منفی</label>
-            </template>
-          </EasyDataTable>
         </div>
       </div>
     </div>
@@ -64,28 +79,50 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import {ref} from "vue";
-
+import passCheck from "../component/cheque/passCheck.vue"
 export default {
   name: "list",
+  components:{
+    passCheck:passCheck
+  },
+  watch:{
+    'passChequeWindowsState.submited'(newValue,oldValue) {
+      this.passChequeWindowsState.submited = false;
+      if(newValue){
+        this.loadData();
+      }
+    }
+  },
   data: ()=>{return {
-    searchValue: '',
+    passChequeWindowsState:{
+      submited:false
+    },
     loading: ref(true),
-    items:[],
-    headers: [
+    searchValueInput: '',
+    itemsInput:[],
+    headersInput: [
       { text: "عملیات", value: "operation", width: "130"},
-      { text: "کد", value: "code", width: "100px" },
-      { text: "نام صندوق", value: "name", width: "120px"},
-      { text: "موجودی(ریال)", value: "balance", width: "140px"},
+      { text: "شماره", value: "number", width: "100px" },
+      { text: "کد صیاد", value: "sayadNum", width: "120px"},
+      { text: "مبلغ(ریال)", value: "amount", width: "140px"},
+      { text: "تاریخ", value: "datePay", width: "150px"},
+      { text: "پرداخت کننده", value: "person.nikename", width: "150px"},
+      { text: "بانک", value: "chequeBank", width: "150px"},
+      { text: "وضعیت", value: "status", width: "150px", sortable: true},
+      { text: "تاریخ وصول", value: "date", width: "150px"},
       { text: "توضیحات", value: "des", width: "150px"},
     ]
   }},
   methods: {
     loadData(){
-      axios.get('/api/cashdesk/list')
+      axios.get('/api/cheque/list')
           .then((response)=>{
-            this.items = response.data;
+            this.itemsInput = response.data.input;
+            this.itemsInput.forEach((item)=>{
+              item.amount = this.$filters.formatNumber(item.amount);
+            });
             this.loading = false;
-          })
+          });
     },
   },
   beforeMount() {

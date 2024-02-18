@@ -113,6 +113,26 @@ export default defineComponent({
           referral:''
         }
       }
+      else if(type == "cheque"){
+        obj = {
+          id:'',
+          type:'cheque',
+          bank:{},
+          cashdesk:{},
+          salary:{},
+          bs:0,
+          bd:0,
+          des:'',
+          table:125,
+          referral:'',
+          chequeBank:'',
+          chequeDate:'',
+          chequeSayadNum:'',
+          chequeNum:'',
+          chequeType:'input',
+          person:this.$props.person
+        }
+      }
       if(canAdd){
         this.items.push(obj);
       }
@@ -155,6 +175,12 @@ export default defineComponent({
         if(element.bd == 0){
           errors.push('مبلغ صفر در ردیف ' + (index + 1) + ' نا معتبر است.');
         }
+        if(element.type == 'cheque' && (element.chequeBank == '' || element.chequeNum == '' || element.chequeDate == '')){
+          if(element.bank == null || Object.keys(element.bank).length == 0){
+            errors.push('موارد الزامی ثبت چک در ردیف  ' + (index + 1) + ' وارد نشده است.');
+          }
+        }
+
         //check type selected
         if(element.type == 'bank'){
           if(element.bank == null || Object.keys(element.bank).length == 0){
@@ -271,6 +297,8 @@ export default defineComponent({
         <li><button type="button" @click="addItem('bank')" class="dropdown-item"><i class="fa fa-dot-circle"></i> حساب بانکی</button></li>
         <li><button type="button" @click="addItem('cashdesk')" class="dropdown-item"><i class="fa fa-dot-circle"></i> صندوق</button></li>
         <li><button type="button" @click="addItem('salary')" class="dropdown-item"><i class="fa fa-dot-circle"></i> تنخواه گردان</button></li>
+        <li><button type="button" @click="addItem('cheque')" class="dropdown-item"><i class="fa fa-dot-circle"></i>چک</button></li>
+
       </ul>
       <span class="input-group-text">
         مجموع:
@@ -305,6 +333,7 @@ export default defineComponent({
             <img v-show="pay.type == 'bank'" src="/img/icons/bank.jpg" class="img-fluid" />
             <img v-show="pay.type == 'cashdesk'" src="/img/icons/cashdesk.jpg" class="img-fluid" />
             <img v-show="pay.type == 'salary'" src="/img/icons/salary.jpg" class="img-fluid" />
+            <img v-show="pay.type == 'cheque'" src="/img/icons/check.jpg" class="img-fluid" />
             <button @click="deleteItem(key)" type="button" class="btn text-danger mt-2">
               <i class="fa fa-trash"></i>
             </button>
@@ -338,6 +367,10 @@ export default defineComponent({
                     </template>
                   </v-select>
                 </div>
+                <div v-show="pay.type == 'cheque'" class="">
+                  <label class="form-label">شماره چک</label>
+                  <input class="form-control" v-model="pay.chequeNum">
+                </div>
                 <div v-show="pay.type == 'salary'" class="">
                   <label class="form-label">تنخواه گردان</label>
                   <v-select
@@ -350,6 +383,31 @@ export default defineComponent({
                       وردی یافت نشد!
                     </template>
                   </v-select>
+                </div>
+              </div>
+              <div v-if="pay.type == 'cheque'" class="col-sm-12 col-md-6">
+                <div class="mb-1">
+                  <label  class="form-label">شماره صیاد</label>
+                  <input type="text" v-model="pay.chequeSayadNum" class="form-control">
+                </div>
+              </div>
+              <div v-if="pay.type == 'cheque'" class="col-sm-12 col-md-6">
+                <div class="mb-1">
+                  <label  class="form-label">بانک صادر کننده</label>
+                  <input type="text" v-model="pay.chequeBank" class="form-control">
+                </div>
+              </div>
+              <div v-if="pay.type == 'cheque'" class="col-sm-12 col-md-6">
+                <div class="mb-1">
+                  <div class="form-control">
+                    <label class="form-label">تاریخ:</label>
+                    <date-picker
+                        class=""
+                        v-model="pay.chequeDate"
+                        format="jYYYY-jMM-jDD"
+                        display-format="jYYYY-jMM-jDD"
+                    />
+                  </div>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
