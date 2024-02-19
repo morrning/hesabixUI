@@ -51,8 +51,6 @@ export default defineComponent({
         date:this.passDate,
         des:this.des
       }).then((response) => {
-          this.$props.windowsState.submited = true;
-          this.loading = false;
           Swal.fire({
             text:'ثبت وصول چک با موفقیت ثبت شد.',
             icon: 'success',
@@ -62,6 +60,7 @@ export default defineComponent({
             let btnClose = document.getElementById('pass-check-btn-close');
             btnClose.click();
             this.$props.windowsState.submited = true;
+            this.loading = false;
           });
         }); 
       }

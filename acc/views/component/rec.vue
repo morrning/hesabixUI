@@ -40,7 +40,7 @@ export default defineComponent({
   }},
   methods:{
     fillWithTotal(pay){
-      pay.bd = this.$props.totalAmount;
+      pay.bd = this.$props.totalAmount - this.totalPays;
     },
     addItem(type){
       let obj = {};
@@ -130,7 +130,7 @@ export default defineComponent({
           chequeSayadNum:'',
           chequeNum:'',
           chequeType:'input',
-          person:this.$props.person
+          chequeOwner:this.$props.person
         }
       }
       if(canAdd){
@@ -234,14 +234,16 @@ export default defineComponent({
             element.des = 'دریافت وجه فاکتور شماره ' + this.$props.originalDoc
           }
         });
+        
         rows.push({
-          id:this.$props.person,
-          type:'person',
-          bd:0,
-          bs:this.totalPays,
-          table:3,
-          des:'دریافت وجه فاکتور شماره ' + this.$filters.formatNumber(this.$props.originalDoc)
+            id:this.$props.person,
+            type:'person',
+            bd:0,
+            bs:this.totalPays,
+            table:3,
+            des:'دریافت وجه فاکتور شماره ' + this.$filters.formatNumber(this.$props.originalDoc)
         });
+        
         if(this.des == ''){
           this.des = 'دریافت وجه فاکتور شماره ' + this.$filters.formatNumber(this.originalDoc) ;
         }
@@ -298,7 +300,6 @@ export default defineComponent({
         <li><button type="button" @click="addItem('cashdesk')" class="dropdown-item"><i class="fa fa-dot-circle"></i> صندوق</button></li>
         <li><button type="button" @click="addItem('salary')" class="dropdown-item"><i class="fa fa-dot-circle"></i> تنخواه گردان</button></li>
         <li><button type="button" @click="addItem('cheque')" class="dropdown-item"><i class="fa fa-dot-circle"></i>چک</button></li>
-
       </ul>
       <span class="input-group-text">
         مجموع:

@@ -49,12 +49,12 @@
                       rowsOfPageSeparatorMessage="از"
                       :loading="loading"
                   >
-                    <template #item-operation="{ id,locked }">
+                    <template #item-operation="{ id,locked,rejected }">
                       <passCheck v-if="!locked" :windowsState="this.passChequeWindowsState" :id="id"/>
 
-                      <router-link :to="'/acc/storeroom/mod/' + id" title="برگشت چک">
-                        <i class="fa fa-arrow-left px-2 text-danger"></i>
-                      </router-link>
+                      <a v-if="!rejected && !locked" @click="rejectCheque(id)" class="btn btn-sm btn-link text-danger" title="برگشت چک">
+                        <i class="fa fa-arrow-left px-2"></i>
+                      </a>
                     </template>
                     <template #item-status="{ status }">
                       <div v-show="status=='پاس شده'" class="text-success">{{ status }}</div>
@@ -64,7 +64,40 @@
                   </EasyDataTable>
                 </div>
                 <div class="tab-pane fade" id="pays" role="tabpanel" aria-labelledby="pays-tab">
-                  
+                  <div class="my-1">
+                    <div class="input-group input-group-sm">
+                      <span class="input-group-text"><i class="fa fa-search"></i></span>
+                      <input v-model="searchValueOutput" class="form-control" type="text" placeholder="جست و جو ...">
+                    </div>
+                  </div>
+                  <EasyDataTable
+                      multi-sort
+                      show-index
+                      alternating
+                      :search-value="searchValueOutput"
+                      :headers="headersInput"
+                      :items="itemsOutput"
+                      theme-color="#1d90ff"
+                      header-text-direction="center"
+                      body-text-direction="center"
+                      rowsPerPageMessage="تعداد سطر"
+                      emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+                      rowsOfPageSeparatorMessage="از"
+                      :loading="loading"
+                  >
+                    <template #item-operation="{ id,locked,rejected }">
+                      <passCheck v-if="!locked" :windowsState="this.passChequeWindowsState" :id="id"/>
+
+                      <a v-if="!rejected && !locked" @click="rejectCheque(id)" class="btn btn-sm btn-link text-danger" title="برگشت چک">
+                        <i class="fa fa-arrow-left px-2"></i>
+                      </a>
+                    </template>
+                    <template #item-status="{ status }">
+                      <div v-show="status=='پاس شده'" class="text-success">{{ status }}</div>
+                      <div v-show="status=='پاس نشده'" class="text-dark">{{ status }}</div>
+                      <div v-show="status=='برگشت خورده'" class="text-danger">{{ status }}</div>
+                    </template>
+                  </EasyDataTable>
                 </div>
               </div>
             </div>
@@ -100,8 +133,10 @@ export default {
     loading: ref(true),
     searchValueInput: '',
     itemsInput:[],
+    itemsOutput:[],
+    searchValueOutput:'',
     headersInput: [
-      { text: "عملیات", value: "operation", width: "130"},
+      { text: "عملیات", value: "operation", width: "100"},
       { text: "شماره", value: "number", width: "100px" },
       { text: "کد صیاد", value: "sayadNum", width: "120px"},
       { text: "مبلغ(ریال)", value: "amount", width: "140px"},
@@ -121,9 +156,40 @@ export default {
             this.itemsInput.forEach((item)=>{
               item.amount = this.$filters.formatNumber(item.amount);
             });
+            this.itemsOutput = response.data.output;
+            this.itemsOutput.forEach((item)=>{
+              item.amount = this.$filters.formatNumber(item.amount);
+            });
             this.loading = false;
           });
     },
+    rejectCheque(id){
+      this.loading = true;
+      axios.get('/api/cheque/info/' + id).then((response)=>{
+            this.loading = false;
+            Swal.fire({
+              title: "آیا برای تغییر وضعیت چک به برگشتی مطمئن هستید؟",
+              icon: "question",
+              confirmButtonText: "بله",
+              cancelButtonText: "خیر",
+              showCancelButton: true,
+              showCloseButton: true
+            }).then((result)=>{
+              if(result.isConfirmed){
+                this.loading = true;
+                axios.get('/api/cheque/reject/' + id).then((response)=>{
+                    this.loading = false;
+                    Swal.fire({
+                      title: "وضعیت چک تغییر یافت",
+                      icon: "success",
+                      confirmButtonText: "بله",
+                    });
+                    this.loadData();
+              });
+              }
+            });
+      });
+    }
   },
   beforeMount() {
     this.loadData();
