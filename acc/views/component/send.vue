@@ -20,6 +20,7 @@ export default defineComponent({
     listBanks:[],
     listSalarys:[],
     listCashdesks:[],
+    listChequesForPay:[],
     totalPays:0,
     currencyConfig:{
       masked: false,
@@ -61,6 +62,8 @@ export default defineComponent({
             bank:{},
             cashdesk:{},
             salary:{},
+            cheque:{},
+            chequeforpay:{},
             bs:0,
             bd:0,
             des:'',
@@ -84,12 +87,41 @@ export default defineComponent({
           bank:{},
           cashdesk:{},
           salary:{},
+          cheque:{},
+          chequeforpay:{},
           bs:0,
           bd:0,
           des:'',
           table:121,
           referral:''
         }
+      }
+      else if(type == 'chequeForPay'){
+        if(this.listChequesForPay.length == 0){
+          Swal.fire({
+            text: 'هیچ چک قابل واگذاری یافت نشد.',
+            icon: 'error',
+            confirmButtonText: 'قبول'
+          });
+          canAdd = false;
+        }
+        else{
+           obj = {
+            id:'',
+            type:'chequeforpay',
+            bank:{},
+            cashdesk:{},
+            salary:{},
+            cheque:{},
+            chequeforpay:{},
+            bs:0,
+            bd:0,
+            des:'',
+            table:125,
+            referral:''
+          }
+        }
+       
       }
       else if(type == 'salary'){
         if(this.listSalarys.length == 0){
@@ -106,6 +138,8 @@ export default defineComponent({
           bank:{},
           cashdesk:{},
           salary:{},
+          cheque:{},
+          chequeforpay:{},
           bs:0,
           bd:0,
           des:'',
@@ -134,6 +168,10 @@ export default defineComponent({
       axios.post('/api/cashdesk/list').then((response)=>{
         this.listCashdesks = response.data;
       })
+      //get list of cheques for pay
+      axios.post('/api/cheque/list/forpay').then((response)=>{
+        this.listChequesForPay = response.data;
+      });
       //load year
       axios.get('/api/year/get').then((response)=>{
         this.year = response.data;
@@ -272,7 +310,7 @@ export default defineComponent({
         <li><button type="button" @click="addItem('cashdesk')" class="dropdown-item"><i class="fa fa-dot-circle"></i> صندوق</button></li>
         <li><button type="button" @click="addItem('salary')" class="dropdown-item"><i class="fa fa-dot-circle"></i> تنخواه گردان</button></li>
         <li><button type="button" @click="addItem('cheque')" class="dropdown-item"><i class="fa fa-dot-circle"></i>چک</button></li>
-        <li><button type="button" @click="addItem('payCheque')" class="dropdown-item"><i class="fa fa-dot-circle"></i>خرج چک</button></li>
+        <li><button type="button" @click="addItem('chequeForPay')" class="dropdown-item"><i class="fa fa-dot-circle"></i>خرج چک</button></li>
       </ul>
       <span class="input-group-text">
         مجموع:
@@ -307,6 +345,8 @@ export default defineComponent({
             <img v-show="pay.type == 'bank'" src="/img/icons/bank.jpg" class="img-fluid" />
             <img v-show="pay.type == 'cashdesk'" src="/img/icons/cashdesk.jpg" class="img-fluid" />
             <img v-show="pay.type == 'salary'" src="/img/icons/salary.jpg" class="img-fluid" />
+            <img v-show="pay.type == 'cheque'" src="/img/icons/check.jpg" class="img-fluid" />
+            <img v-show="pay.type == 'chequeforpay'" src="/img/icons/check.jpg" class="img-fluid" />
             <button @click="deleteItem(key)" type="button" class="btn text-danger mt-2">
               <i class="fa fa-trash"></i>
             </button>
@@ -327,6 +367,21 @@ export default defineComponent({
                     </template>
                   </v-select>
                 </div>
+
+                <div v-show="pay.type == 'chequeforpay'" class="">
+                  <label class="form-label">چک‌های قابل واگذاری</label>
+                  <v-select
+                      dir="rtl"
+                      :options="listChequesForPay"
+                      label="label"
+                      v-model="pay.chequeforpay"
+                  >
+                    <template #no-options="{ search, searching, loading }">
+                      وردی یافت نشد!
+                    </template>
+                  </v-select>
+                </div>
+
                 <div v-show="pay.type == 'cashdesk'" class="">
                   <label class="form-label">صندوق</label>
                   <v-select

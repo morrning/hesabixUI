@@ -93,8 +93,8 @@ const router = createRouter({
       }
     },
     {
-      path: '/manager/settings/sms/info',
-      component: () => import('../views/settings/sms/info.vue'),
+      path: '/manager/settings/sms/settings',
+      component: () => import('../views/settings/sms/smsSettings.vue'),
       meta: {
         'title': 'تنظیمات پیامک',
         'login': true

@@ -259,7 +259,12 @@ export default {
               <ul class="nav-main-submenu">
                 <li class="nav-main-item">
                   <router-link class="nav-main-link" to="/manager/settings/sms/info">
-                    <span class="nav-main-link-name">پیامک</span>
+                    <span class="nav-main-link-name">اطلاعات پنل پیامک</span>
+                  </router-link>
+                </li>
+                <li class="nav-main-item">
+                  <router-link class="nav-main-link" to="/manager/settings/sms/settings">
+                    <span class="nav-main-link-name">تنظیمات پیامک</span>
                   </router-link>
                 </li>
                 <li class="nav-main-item">
