@@ -182,52 +182,13 @@ export default {
                 </li>
               </ul>
             </li>
-            <li class="nav-main-heading pt-1"> محتوا </li>
-            <li class="nav-main-item">
-              <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu"
-                 data-toggle="submenu" href="#">
-                <i class="nav-main-link-icon fa fa-globe"></i>
-                <span class="nav-main-link-name">وبلاگ</span>
-              </a>
-              <ul class="nav-main-submenu">
-                <li class="nav-main-item">
-                  <router-link class="nav-main-link" to="/manager/blog/list">
-                    <span class="nav-main-link-name">پست‌ها</span>
-                    <span class="nav-main-link-badge badge rounded-pill bg-success">3</span>
-                  </router-link>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link" href="">
-                    <span class="nav-main-link-name">دسته بندی‌ها</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link" href="">
-                    <span class="nav-main-link-name">دیدگاه‌ها</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
+            
             <li class="nav-main-item">
               <router-link class="nav-main-link active" to="/manager/reportchange/list">
                 <i class="nav-main-link-icon fa fa-history"></i>
                 <span class="nav-main-link-name"> تاریخچه تغییرات </span>
                 <router-link to="/manager/reportchange/mod/0" class="nav-main-link-badge badge rounded-pill bg-success">+</router-link>
               </router-link>
-            </li>
-            <li class="nav-main-item">
-              <a class="nav-main-link active" href="db_hosting.html">
-                <i class="nav-main-link-icon fa fa-book"></i>
-                <span class="nav-main-link-name"> مستندات API </span>
-                <span class="nav-main-link-badge badge rounded-pill bg-success">+</span>
-              </a>
-            </li>
-            <li class="nav-main-item">
-              <a class="nav-main-link active" href="db_hosting.html">
-                <i class="nav-main-link-icon fa fa-list-dots"></i>
-                <span class="nav-main-link-name">راهنمای جامع</span>
-                <span class="nav-main-link-badge badge rounded-pill bg-success">+</span>
-              </a>
             </li>
             <li class="nav-main-item">
               <router-link class="nav-main-link active" to="/manager/support/list">
@@ -257,11 +218,6 @@ export default {
                 <span class="nav-main-link-name">تنظیمات</span>
               </a>
               <ul class="nav-main-submenu">
-                <li class="nav-main-item">
-                  <router-link class="nav-main-link" to="/manager/settings/sms/info">
-                    <span class="nav-main-link-name">اطلاعات پنل پیامک</span>
-                  </router-link>
-                </li>
                 <li class="nav-main-item">
                   <router-link class="nav-main-link" to="/manager/settings/sms/settings">
                     <span class="nav-main-link-name">تنظیمات پیامک</span>
@@ -342,23 +298,7 @@ export default {
       </div>
       <!-- END Header Content -->
 
-      <!-- Header Search -->
-      <div class="overlay-header bg-sidebar-dark" id="page-header-search">
-        <div class="content-header">
-          <form action="be_pages_generic_search.html" class="w-100" method="POST">
-            <div class="input-group">
-              <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-              <button class="btn btn-danger" data-action="header_search_off" data-toggle="layout" type="button">
-                <i class="fa fa-fw fa-times-circle"></i>
-              </button>
-              <input class="form-control border-0" id="page-header-search-input" name="page-header-search-input"
-                     placeholder="جستجوی اپلیکیشن" type="text" />
-            </div>
-          </form>
-        </div>
-      </div>
-      <!-- END Header Search -->
-
+      
       <!-- Header Loader -->
       <!-- Please check out the Loaders page under Components category to see examples of showing/hiding it -->
       <div class="overlay-header bg-primary-darker" id="page-header-loader">
@@ -375,7 +315,7 @@ export default {
     <!-- Main Container -->
     <main id="main-container">
       <!-- Page Content -->
-      <div class="content content-full p-0">
+      <div class="content content-full p-1">
         <RouterView />
       </div>
       <!-- END Page Content -->

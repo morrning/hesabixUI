@@ -464,7 +464,6 @@ export default {
                   <span class="nav-main-link-name">
                     <i class="fa fa-money-check-dollar"></i>
                     مدیریت چک‌ها</span>
-                  <router-link to="/acc/cheque/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </RouterLink>
               </li>
               <li v-if="permissions.wallet" class="nav-main-item">

@@ -309,8 +309,8 @@ export default defineComponent({
         <li><button type="button" @click="addItem('bank')" class="dropdown-item"><i class="fa fa-dot-circle"></i> حساب بانکی</button></li>
         <li><button type="button" @click="addItem('cashdesk')" class="dropdown-item"><i class="fa fa-dot-circle"></i> صندوق</button></li>
         <li><button type="button" @click="addItem('salary')" class="dropdown-item"><i class="fa fa-dot-circle"></i> تنخواه گردان</button></li>
-        <li><button type="button" @click="addItem('cheque')" class="dropdown-item"><i class="fa fa-dot-circle"></i>چک</button></li>
-        <li><button type="button" @click="addItem('chequeForPay')" class="dropdown-item"><i class="fa fa-dot-circle"></i>خرج چک</button></li>
+        <li><button disabled="disabled" type="button" @click="addItem('cheque')" class="dropdown-item"><i class="fa fa-dot-circle"></i>چک</button></li>
+        <li><button disabled="disabled" type="button" @click="addItem('chequeForPay')" class="dropdown-item"><i class="fa fa-dot-circle"></i>خرج چک</button></li>
       </ul>
       <span class="input-group-text">
         مجموع:

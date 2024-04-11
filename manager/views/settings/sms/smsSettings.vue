@@ -70,8 +70,9 @@ export default defineComponent({
     </div>
     <div class="block-content pt-1 pb-3">
       <div class="row">
-        <div class="col-sm-12 col-md-12 m-0 p-0">
+        <div class="col-sm-12 col-md-12">
           <div class="row pt-3">
+            <h4 class="text-primary">اطلاعات اپراتور پیامک</h4>
             <div class="col-sm-12 col-md-4">
               <div class="form-floating mb-4">
                 <select v-model="form.plan" class="form-select" aria-label="اپراتور سرویس دهنده پیامک">
@@ -99,16 +100,17 @@ export default defineComponent({
                 <label class="form-label"><span class="text-danger"></span>توکن ارسال به وب سرویس</label>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-12 m-0 p-0">
-          <div class="row pt-3">
             <div class="col-sm-12 col-md-4">
               <div class="form-floating mb-4">
                 <input v-model="form.fromNum" class="form-control" type="text" :disabled="loading">
                 <label class="form-label"><span class="text-danger"></span>سرشماره ارسال پیامک</label>
               </div>
             </div>
+          </div>
+        </div>
+        <h4 class="text-primary">شناسه الگوهای پیامک</h4>
+        <div class="col-sm-12 col-md-12">
+          <div class="row pt-3">
             <div class="col-sm-12 col-md-4">
               <div class="form-floating mb-4">
                 <input v-model="form.f2a" class="form-control" type="text" :disabled="loading">
