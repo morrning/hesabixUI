@@ -11,6 +11,7 @@ export default defineComponent({
       plan:'melipayamak',
       walletpay:'',
       changePassword:'',
+      recPassword:'',
       f2a:'',
       ticketReplay:'',
       ticketRec:'',
@@ -119,8 +120,14 @@ export default defineComponent({
             </div>
             <div class="col-sm-12 col-md-4">
               <div class="form-floating mb-4">
-                <input v-model="form.forgetpassword" class="form-control" type="text" :disabled="loading">
+                <input v-model="form.recPassword" class="form-control" type="text" :disabled="loading">
                 <label class="form-label"><span class="text-danger"></span>بازیابی کلمه عبور</label>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <div class="form-floating mb-4">
+                <input v-model="form.changePassword" class="form-control" type="text" :disabled="loading">
+                <label class="form-label"><span class="text-danger"></span>ارسال کلمه عبور</label>
               </div>
             </div>
             <div class="col-sm-12 col-md-4">
