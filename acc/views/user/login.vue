@@ -12,7 +12,7 @@
                 <!-- Header -->
                 <div class="mb-2 text-center">
                   <router-link class="link-fx fw-bold fs-1" to="/">
-                    <span class="text-dark">حسا</span><span class="text-primary">بیکس</span>
+                    <span class="text-dark">حسا</span><span class="text-primary">بکس</span>
                   </router-link>
                   <p class="text-uppercase fw-bold fs-sm text-muted"> ورود </p>
                 </div>

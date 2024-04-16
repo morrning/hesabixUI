@@ -15,6 +15,16 @@ const router = createRouter({
       component: ()=> import('../views/reports/reports.vue')
     },
     {
+      path: '/acc/reports/persons/debtors',
+      name: 'person_debtors_list',
+      component: () => import('../views/reports/persons/debtors.vue'),
+    },
+    {
+      path: '/acc/reports/persons/depositors',
+      name: 'person_depositors_list',
+      component: () => import('../views/reports/persons/depositors.vue'),
+    },
+    {
       path: '/acc/costs/list',
       name: 'costs_list',
       component: () => import('../views/costs/list.vue'),

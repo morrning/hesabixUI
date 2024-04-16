@@ -32,7 +32,7 @@
         <!-- Left Section -->
         <div>
           <!-- Logo -->
-          <RouterLink class="fw-semibold text-white" to="/">حساب<span class="opacity-75">یکس</span></RouterLink>
+          <RouterLink class="fw-semibold text-white" to="/">{{ siteName }}</RouterLink>
           <!-- END Logo -->
         </div>
         <!-- END Left Section -->
@@ -67,7 +67,7 @@
               <div class="p-2">
                 <span @click="logout" class="dropdown-item mb-0">
                   <i class="fa fa-fw fa-arrow-alt-circle-left text-gray me-1"></i>
-                  خروج از حسابیکس
+                  خروج از {{ siteName }}
                 </span>
               </div>
             </div>
@@ -140,12 +140,12 @@
     <footer class="bg-body-extra-light" id="page-footer">
       <div class="content py-0">
         <div class="row fs-sm">
-          <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-end">حسابیکس با
+          <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-end">{{ siteName }} با
           <i class="fa fa-heart text-danger"></i>
-            متن باز است.
+             و عشق توسعه یافته.
           </div>
           <div class="col-sm-6 order-sm-1 text-center text-sm-start">
-            <a class="fw-semibold" href="https://github.com/morrning/hesabixCore" target="_blank">حسابیکس {{this.hesabix.version}}</a>
+            <a class="fw-semibold" href="https://github.com/morrning/hesabixCore" target="_blank">{{ siteName }} {{this.hesabix.version}}</a>
           </div>
         </div>
       </div>
@@ -157,11 +157,12 @@
 
 <script>
 import axios from "axios";
-
+import {getSiteName} from "/hesabixConfig"
 export default {
   // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
   name: "profile-main",
   data: ()=>{return{
+    siteName:'',
     ROLE_ADMIN:false,
     user: {
       mobile:'1'
@@ -173,6 +174,9 @@ export default {
       lastUpdateDes:'',
     }
   }},
+  created(){
+    this.siteName = getSiteName();
+  },
   methods:{
     logout(){
       axios.post( '/api/user/logout')

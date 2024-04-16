@@ -71,7 +71,7 @@ export default defineComponent({
             <div class="col-sm-12 col-md-12">
               <div class="form-floating mb-4">
                 <input v-model="systemInfo.appSite" class="form-control" type="url" placeholder="https://example.com"  :disabled="loading">
-                <label class="form-label">آدرس  interface حسابیکس</label>
+                <label class="form-label">آدرس  interface</label>
               </div>
             </div>
           </div>

@@ -312,11 +312,7 @@ export default {
         axios.get('/api/buy/get/info/' + this.$route.params.id).then((response)=>{
           this.data.date = response.data.date;
           this.data.des = response.data.des;
-          this.persons.forEach((item,index)=>{
-            if(item.code == response.data.rows[1].person.code){
-              this.data.person = item;
-            }
-          });
+          this.data.person = response.data.person;
           response.data.rows.forEach((item,key)=>{
             if(item.commodity != null){
               this.items.push({

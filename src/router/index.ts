@@ -85,7 +85,7 @@ const router = createRouter({
             name:'user_login',
             component: () => import('../views/user/login.vue'),
             meta: {
-                'title': 'ورود به حسابیکس',
+                'title': 'ورود به حساب کاربری',
             }
         },
         {
@@ -101,7 +101,7 @@ const router = createRouter({
             name:'user_register',
             component: () => import('../views/user/register.vue'),
             meta: {
-                'title': 'عضویت در حسابیکس',
+                'title': 'عضویت',
             }
         },
         {

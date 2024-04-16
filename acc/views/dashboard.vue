@@ -87,6 +87,30 @@
               </div>
             </router-link>
           </div>
+          <div v-show="permissions.sell" class="col-6 col-lg-3">
+            <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0" to="/acc/sell/list">
+              <div class="block-content py-5">
+                <div class="fs-3 fw-semibold mb-1 text-primary">{{ this.$filters.formatNumber(stat.sells_total) }}</div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  <i class="fa-solid fa-money-bill-trend-up"></i>
+                  <br>
+                   فروش
+                </p>
+              </div>
+            </router-link>
+          </div>
+          <div v-show="permissions.buy" class="col-6 col-lg-3">
+            <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0" to="/acc/buy/list/">
+              <div class="block-content py-5">
+                <div class="fs-3 fw-semibold mb-1 text-primary">{{ this.$filters.formatNumber(stat.buys_total) }}</div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  <i class="fa fa-cart-shopping"></i>
+                  <br>
+                   خرید
+                </p>
+              </div>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>

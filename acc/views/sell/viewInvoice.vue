@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import rec from "../component/rec.vue";
 import recList from "../component/recList.vue";
 import ArchiveUpload from "../component/archive/archiveUpload.vue";
+import {getApiUrl} from "/hesabixConfig";
 export default defineComponent({
   name: "viewInvoice",
   components:{
@@ -71,10 +72,10 @@ export default defineComponent({
       axios.post('/api/accounting/doc/get',{'code':this.$route.params.id}).then((response)=>{
           this.item = response.data;
           if(this.item.doc.shortlink != null){
-            this.shortlink_url = 'https://hesabix.ir/sl/sell/' + localStorage.getItem("activeBid") + '/' + this.item.doc.shortlink;
+            this.shortlink_url = getApiUrl() + '/sl/sell/' + localStorage.getItem("activeBid") + '/' + this.item.doc.shortlink;
           }
           else{
-            this.shortlink_url = 'https://hesabix.ir/sl/sell/' + localStorage.getItem("activeBid") + '/' + this.item.doc.id;
+            this.shortlink_url = getApiUrl() + '/sl/sell/' + localStorage.getItem("activeBid") + '/' + this.item.doc.id;
           }
           response.data.rows.forEach(element => {
             if(element.person){
@@ -201,7 +202,7 @@ export default defineComponent({
                 <rec-list ref="recListRef" :windowsState="this.recListWindowsState" :items="this.item.relatedDocs"></rec-list>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
+                <button type="button" ref="btnCloseModalRec" class="btn btn-secondary btn-close-modal" data-bs-dismiss="modal">بازگشت</button>
               </div>
             </div>
           </div>
@@ -421,7 +422,12 @@ export default defineComponent({
                 </div>
                 <div class="col-12" v-for="rd in this.item.relatedDocs">
                   <div class="row">
-                    <div class="col-sm-12 col-md-3 text-center">{{rd.code}}</div>
+                    <div class="col-sm-12 col-md-3 text-center">
+                      <router-link :to="'/acc/accounting/view/' + rd.code">
+                        <span class="text-success fa fa-eye"></span>
+                      </router-link>
+                      {{rd.code}}
+                    </div>
                     <div class="col-sm-12 col-md-3 text-center">{{rd.date}}</div>
                     <div class="col-sm-12 col-md-3 text-center">{{this.$filters.formatNumber(rd.amount)}} ریال</div>
                     <div v-if="rd.type === 'walletPay'"  class="col-sm-12 col-md-3 text-center">پرداخت آنلاین</div>

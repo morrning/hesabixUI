@@ -11,7 +11,7 @@
               <!-- Header -->
               <div class="mb-2 text-center">
                 <router-link class="link-fx fw-bold fs-1" to="/">
-                  <span class="text-dark">حسا</span><span class="text-primary">بیکس</span>
+                  <span class="text-primary">{{ siteName }}</span>
                 </router-link>
                 <p class="text-uppercase fw-bold fs-sm text-muted">ایجاد حساب جدید</p>
               </div>
@@ -94,6 +94,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
 import {ref} from "vue";
+import { getSiteName } from '/hesabixConfig';
 
 export default {
   name: "register",
@@ -104,6 +105,7 @@ export default {
   },
   data () {
     return {
+      siteName:'',
       loading: ref(true),
       email: '',
       password: '',
@@ -179,6 +181,7 @@ export default {
       }
   },
   async created() {
+    this.siteName = getSiteName();
     await axios.post('/api/user/check/login').then((response)=>{
       if(response.data.result == true){
         this.$router.push('/profile/business');

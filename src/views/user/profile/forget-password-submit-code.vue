@@ -1,7 +1,7 @@
 <script lang="ts">
 import axios from 'axios';
 import Swal from "sweetalert2";
-import {getApiUrl} from "../../../../hesabixConfig"
+import {getApiUrl, getSiteName} from "../../../../hesabixConfig"
 
 export default {
   name: "forget-password-submit-code",
@@ -9,6 +9,7 @@ export default {
     email: [String]
   },
   data: ()=>{return{
+    siteName:'',
     email:'',
     code: '',
     isCoutDown: false,
@@ -53,7 +54,7 @@ export default {
             Swal.fire({
               text: 'کلمه عبور جدید به پست الکترونیکی و موبایل شما ارسال شد.',
               icon: 'success',
-              confirmButtonText: 'ورود به حسابیکس'
+              confirmButtonText: 'ورود به حساب کاربری'
             }).then((res)=>{
               this.$router.push('/user/login');
             });
@@ -85,6 +86,9 @@ export default {
   },
   mounted() {
     this.loadData();
+  },
+  created(){
+    this.siteName = getSiteName();
   }
 }
 </script>
@@ -102,7 +106,7 @@ export default {
               <!-- Header -->
               <div class="mb-2 text-center">
                 <a class="link-fx fw-bold fs-1" href="/">
-                  <span class="text-dark">حساب</span><span class="text-primary">یکس</span>
+                  <span class="text-primary">{{ siteName }}</span>
                 </a>
                 <p class="text-uppercase fw-bold fs-sm text-muted">  تغییر کلمه عبور </p>
               </div>

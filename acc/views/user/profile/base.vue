@@ -37,7 +37,7 @@
               تغییر کلمه عبور</router-link>
             <router-link v-if="superadmin" to="/admin/dashboard" class="list-group-item list-group-item-action text-danger">
               <i class="fa fa-dashboard"></i>
-               پنل مدیریت حسابیکس</router-link>
+               پنل مدیریت</router-link>
           </div>
         </div>
         <div class="col-sm-12 col-md-8">

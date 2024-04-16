@@ -23,6 +23,12 @@
                   <li>
                     <router-link to="/acc/persons/card/view/">کارت حساب</router-link>
                   </li>
+                  <li>
+                    <router-link to="/acc/reports/persons/debtors">بدهکاران</router-link>
+                  </li>
+                  <li>
+                    <router-link to="/acc/reports/persons/depositors">بستانکاران</router-link>
+                  </li>
                 </ul>
               </div>
             </div>

@@ -49,7 +49,7 @@ axios.interceptors.response.use(function(response) {
     if(error.code === 404){
         // Do something with response error
         Swal.fire({
-            text: 'اتصال با سرویس دهنده حسابیکس برقرار نشد. لطفا اتصال اینترنت خود را بررسی نمایید.',
+            text: 'اتصال با سرویس دهنده برقرار نشد. لطفا اتصال اینترنت خود را بررسی نمایید.',
             icon: 'error',
             confirmButtonText: 'قبول'
         });

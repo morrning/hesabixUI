@@ -88,7 +88,7 @@ export default {
     },
     deleteItem(token){
       Swal.fire({
-        text: 'آیا برای این مورد مطمئن هستید؟ دسترسی برنامه‌هایی که از این رابط استفاده می‌کنند به حسابیکس قطع خواهد شد.',
+        text: 'آیا برای این مورد مطمئن هستید؟ دسترسی برنامه‌هایی که از این رابط استفاده می‌کنند قطع خواهد شد.',
         showCancelButton: true,
         confirmButtonText: 'بله',
         cancelButtonText: `خیر`,

@@ -87,7 +87,7 @@ export default {
             .catch(function (error) {
               Swal.fire({
                 title: 'خطا',
-                text: 'ارتباط با حسابیکس قطع شده است...',
+                text: 'ارتباط با سرویس دهنده قطع شده است...',
                 icon: 'error',
                 confirmButtonText: 'قبول'
               })

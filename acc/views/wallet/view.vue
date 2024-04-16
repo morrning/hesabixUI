@@ -77,7 +77,7 @@ export default defineComponent({
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fa fa-wallet px-2"></i>
-        کیف پول حسابیکس </h3>
+        کیف پول </h3>
       <div class="block-options">
 
       </div>
@@ -91,7 +91,7 @@ export default defineComponent({
                 <div class="mb-3">
                   <img alt="" class="img-avatar img-avatar96" src="/img/icons/wallet.png">
                 </div>
-                <h1 class="fs-lg mb-0">کیف پول حسابیکس</h1>
+                <h1 class="fs-lg mb-0">کیف پول </h1>
                 <p class="text-muted">
                   <i class="fa fa-award text-warning me-1"></i> سریعترین راه دریافت آنلاین مبلغ  فاکتور از مشتری </p>
               </div>

@@ -280,7 +280,7 @@ export default defineComponent({
           <td>{{ commodity.count }}</td>
           <td>{{ commodity.commodity.unit }}</td>
           <td>{{ this.$filters.formatNumber(commodity.unitPrice) }}</td>
-          <td>{{ this.$filters.formatNumber(commodity.bs) }}</td>
+          <td>{{ this.$filters.formatNumber(commodity.bd) }}</td>
         </tr>
         <tr class="bg-light border border-dark border-2">
           <th colspan="2" class="text-right border-0">جمع دریافت‌ها:
@@ -315,7 +315,11 @@ export default defineComponent({
                 </div>
                 <div class="col-12" v-for="rd in this.item.relatedDocs">
                   <div class="row">
-                    <div class="col-sm-12 col-md-3 text-center">{{rd.code}}</div>
+                    <div class="col-sm-12 col-md-3 text-center">
+                      <router-link :to="'/acc/accounting/view/' + rd.code">
+                        <span class="text-success fa fa-eye"></span>
+                      </router-link>
+                      {{rd.code}}</div>
                     <div class="col-sm-12 col-md-3 text-center">{{rd.date}}</div>
                     <div class="col-sm-12 col-md-3 text-center">{{this.$filters.formatNumber(rd.amount)}} ریال</div>
                     <div class="col-sm-12 col-md-3 text-center">سند حسابداری</div>

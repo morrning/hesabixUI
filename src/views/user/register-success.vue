@@ -8,7 +8,7 @@
             <img class="mb-2 text-center" src="/img/logo-blue.png" style="max-width: 85px;">
           </h2>
         </router-link>
-        <h3 class="fw-light text-muted push text-center"> از اینکه حسابیکس را برای انجام امور مالی خود انتخاب کرده‌اید سپاسگزاریم.</h3>
+        <h3 class="fw-light text-muted push text-center"> از اینکه {{ siteName }} را برای مدیریت امور مالی خود انتخاب کرده‌اید سپاسگزاریم.</h3>
       </div>
       <div class="row my-5 justify-content-center text-center bg-gray-light p-4">
         <div class="col-sm-12 col-md-6">
@@ -32,14 +32,14 @@
             <i class="fa fa-2x fa-earth-asia text-danger"></i>
           </div>
           <h4 class="h5 mb-2"> همیشه در دسترس </h4>
-          <p class="mb-0 text-muted"> از زمان شروع به کار حسابیکس تاکنون هیچ مشکلی در زمینه خدمات رسانی و قطع سرویس به وجود نیامده است. </p>
+          <p class="mb-0 text-muted"> از زمان شروع به کار {{ siteName }} تاکنون هیچ مشکلی در زمینه خدمات رسانی و قطع سرویس به وجود نیامده است. </p>
         </div>
         <div class="col-sm-6 col-md-4 mb-5">
           <div class="my-3">
             <i class="fa fa-2x fa-book-bible text-xinspire"></i>
           </div>
           <h4 class="h5 mb-2"> منابع آموزشی </h4>
-          <p class="mb-0 text-muted"> به روز ترین آموزش ها و راهنمای استفاده از حسابیکس به صورت کامل و کاملا رایگلن در اختیار شماست. </p>
+          <p class="mb-0 text-muted"> به روز ترین آموزش ها و راهنمای استفاده از {{ siteName }} به صورت کامل و کاملا رایگلن در اختیار شماست. </p>
         </div>
       </div>
     </div>
@@ -48,8 +48,16 @@
 </template>
 
 <script>
+import { getSiteName } from '/hesabixConfig';
+
 export default {
-  name: "register-success"
+  name: "register-success",
+  data:()=>{return {
+    siteName:'',
+  }},
+  created(){
+    this.siteName = getSiteName();
+  }
 }
 </script>
 

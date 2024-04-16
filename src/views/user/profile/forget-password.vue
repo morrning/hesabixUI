@@ -3,11 +3,12 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useVuelidate } from '@vuelidate/core'
 import { required , email} from '@vuelidate/validators'
-
+import {getApiUrl, getSiteName} from "../../../../hesabixConfig"
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "login",
   data: ()=>{return{
+    siteName:'',
     email:'',
     loading:  false
   }},
@@ -61,6 +62,7 @@ export default {
     }
   },
   created() {
+    this.siteName = getSiteName();
     axios.post('/api/user/check/login').then((response)=>{
       if(response.data.result == true){
         this.$router.push('/profile/business')
@@ -83,7 +85,7 @@ export default {
               <!-- Header -->
               <div class="mb-2 text-center">
                 <a class="link-fx fw-bold fs-1" href="/">
-                  <span class="text-dark">حساب</span><span class="text-primary">یکس</span>
+                  <span class="text-primary">{{ siteName }}</span>
                 </a>
                 <p class="text-uppercase fw-bold fs-sm text-muted"> بازیابی کلمه عبور </p>
               </div>

@@ -15,7 +15,7 @@
               <!-- Header -->
               <div class="mb-2 text-center">
                 <a class="link-fx fw-bold fs-1" href="/">
-                  <span class="text-dark">حساب</span><span class="text-primary">یکس</span>
+                  <span class="text-primary">{{ siteName }}</span>
                 </a>
                 <p class="text-uppercase fw-bold fs-sm text-muted"> ورود </p>
               </div>
@@ -47,7 +47,7 @@
                       <span class="visually-hidden">Loading...</span>
                     </div>
                     <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i>
-                    ورود به حسابیکس
+                    ورود به {{ siteName }}
                   </button>
                 </div>
                 <div class="text-center mt-4">
@@ -76,12 +76,14 @@
 
 <script>
 import axios from 'axios'
+import { getSiteName } from '/hesabixConfig';
 import Swal from 'sweetalert2'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "login",
   data: ()=>{return{
+    siteName:'',
     loading: true,
     loadingSubmit: false,
     email:'',
@@ -140,6 +142,7 @@ export default {
     }
   },
   created() {
+    this.siteName = getSiteName();
     axios.post('/api/user/check/login').then((response)=>{
       if(response.data.result === true){
         document.getElementById('loginTokenID').setAttribute('value' , localStorage.getItem('X-AUTH-TOKEN'));

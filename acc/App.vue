@@ -12,10 +12,12 @@ import archive_modal from './views/component/archive/archive_modal.vue';
 import Loading from "vue-loading-overlay";
 import smsPanel from "./views/component/smsPanel.vue";
 import 'vue-loading-overlay/dist/css/index.css';
+import {getSiteName} from "../hesabixConfig"
 export default {
 
   data(){
     return {
+      siteName:'',
       isLoading: false,
       userFullName: '',
       userEmail: '',
@@ -60,7 +62,7 @@ export default {
     })
   },
   created() {
-
+    this.siteName = getSiteName();
   },
   methods:{
     logout(){
@@ -264,7 +266,7 @@ export default {
               </span>
           <span class="smini-hidden"><span class="text-light">
             <img alt="hesabix" style="max-height:25px" src="/assets/media/favicons/favw.png"/>
-            حسابیکس
+            {{ siteName }}
           </span>
               </span>
         </router-link>
@@ -787,7 +789,7 @@ export default {
 
               <div class="dropdown-divider" role="separator"></div>
               <button class="dropdown-item" @click="this.logout">
-                <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> خروج از حسابیکس </button>
+                <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> خروج از حساب </button>
             </div>
           </div>
         </div>
