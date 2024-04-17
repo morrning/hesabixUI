@@ -14,138 +14,165 @@
     </div>
     <div class="block-content py-3 vl-parent">
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 col-md-12 mb-3">
-            <div class="space-y-2">
-              <div class="form-check form-switch">
-                <input v-model="person.speedAccess" class="form-check-input" type="checkbox">
-                <label class="form-check-label">دسترسی سریع (در صدور فاکتور سریع فروش و سایر افزونه‌ها استفاده می شود)</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.nikename" class="form-control" type="text">
-              <label class="form-label"><span class="text-danger">(لازم)</span> نام مستعار</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.company" class="form-control" type="text">
-              <label class="form-label"> شرکت </label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.name" class="form-control" type="text">
-              <label class="form-label">نام / نام خانوادگی</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.birthday" class="form-control" type="text">
-              <label class="form-label">تاریخ تولد / ثبت</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.des" class="form-control" type="text">
-              <label class="form-label">توضیحات</label>
-            </div>
-          </div>
-        </div>
-        <h3>اطلاعات پایه</h3>
-        <div class="row">
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.shenasemeli" class="form-control" type="text">
-              <label class="form-label">شناسه ملی</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.sabt" class="form-control" type="text">
-              <label class="form-label">شماره ثبت</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.codeeghtesadi" class="form-control" type="text">
-              <label class="form-label">کد اقتصادی</label>
-            </div>
-          </div>
-        </div>
-        <h3>اطلاعات تماس</h3>
-        <div class="row">
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.mobile" class="form-control" type="text">
-              <label class="form-label">تلفن همراه</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.tel" class="form-control" type="text">
-              <label class="form-label">تلفن</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.fax" class="form-control" type="text">
-              <label class="form-label">فکس</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.email" class="form-control" type="text">
-              <label class="form-label">پست الکترونیکی</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.website" class="form-control" type="text">
-              <label class="form-label">وب سایت</label>
-            </div>
-          </div>
-        </div>
 
-        <h3>اطلاعات آدرس</h3>
-        <div class="row">
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.keshvar" class="form-control" type="text">
-              <label class="form-label">کشور</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.ostan" class="form-control" type="text">
-              <label class="form-label">استان</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.shahr" class="form-control" type="text">
-              <label class="form-label">شهر</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="person.postalcode" class="form-control" type="text">
-              <label class="form-label">کد پستی</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-12">
-            <div class="form-floating mb-4">
-              <input v-model="person.address" class="form-control" type="text">
-              <label class="form-label">آدرس</label>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="block block-rounded">
+                <ul class="nav nav-tabs nav-tabs-alt" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button aria-controls="btabs-alt-static-home" aria-selected="true" class="nav-link active" data-bs-target="#btabs-alt-static-home" data-bs-toggle="tab" id="btabs-alt-static-home-tab" role="tab"> اطلاعات پایه </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button aria-controls="btabs-alt-static-profile" aria-selected="false" class="nav-link" data-bs-target="#btabs-alt-static-profile" data-bs-toggle="tab" id="btabs-alt-static-profile-tab" role="tab" tabindex="-1"> اطلاعات اقتصادی </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button aria-controls="btabs-alt-static-profile" aria-selected="false" class="nav-link" data-bs-target="#btabs-alt-static-profile2" data-bs-toggle="tab" id="btabs-alt-static-profile-tab2" role="tab" tabindex="-2"> اطلاعات تماس </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button aria-controls="btabs-alt-static-profile" aria-selected="false" class="nav-link" data-bs-target="#btabs-alt-static-profile3" data-bs-toggle="tab" id="btabs-alt-static-profile-tab3" role="tab" tabindex="-3">  آدرس </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button aria-controls="btabs-alt-static-profile" aria-selected="false" class="nav-link" data-bs-target="#btabs-alt-static-profile4" data-bs-toggle="tab" id="btabs-alt-static-profile-tab4" role="tab" tabindex="-4">  حساب‌های بانکی </button>
+                  </li>
+                </ul>
+                <div class="block-content tab-content">
+                  <div aria-labelledby="btabs-alt-static-home-tab" class="tab-pane active show" id="btabs-alt-static-home" role="tabpanel" tabindex="0">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-12 mb-3">
+                        <div class="space-y-2">
+                          <div class="form-check form-switch">
+                            <input v-model="person.speedAccess" class="form-check-input" type="checkbox">
+                            <label class="form-check-label">دسترسی سریع (در صدور فاکتور سریع فروش و سایر افزونه‌ها استفاده می شود)</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.nikename" class="form-control" type="text">
+                          <label class="form-label"><span class="text-danger">(لازم)</span> نام مستعار</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.company" class="form-control" type="text">
+                          <label class="form-label"> شرکت </label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.name" class="form-control" type="text">
+                          <label class="form-label">نام / نام خانوادگی</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.birthday" class="form-control" type="text">
+                          <label class="form-label">تاریخ تولد / ثبت</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.des" class="form-control" type="text">
+                          <label class="form-label">توضیحات</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div aria-labelledby="btabs-alt-static-profile-tab" class="tab-pane" id="btabs-alt-static-profile" role="tabpanel" tabindex="0">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.shenasemeli" class="form-control" type="text">
+                          <label class="form-label">شناسه ملی</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.sabt" class="form-control" type="text">
+                          <label class="form-label">شماره ثبت</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.codeeghtesadi" class="form-control" type="text">
+                          <label class="form-label">کد اقتصادی</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div aria-labelledby="btabs-alt-static-profile-tab2" class="tab-pane" id="btabs-alt-static-profile2" role="tabpanel" tabindex="0">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.mobile" class="form-control" type="text">
+                          <label class="form-label">تلفن همراه</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.tel" class="form-control" type="text">
+                          <label class="form-label">تلفن</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.fax" class="form-control" type="text">
+                          <label class="form-label">فکس</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.email" class="form-control" type="text">
+                          <label class="form-label">پست الکترونیکی</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.website" class="form-control" type="text">
+                          <label class="form-label">وب سایت</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div aria-labelledby="btabs-alt-static-profile-tab3" class="tab-pane" id="btabs-alt-static-profile3" role="tabpanel" tabindex="0">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.keshvar" class="form-control" type="text">
+                          <label class="form-label">کشور</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.ostan" class="form-control" type="text">
+                          <label class="form-label">استان</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.shahr" class="form-control" type="text">
+                          <label class="form-label">شهر</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.postalcode" class="form-control" type="text">
+                          <label class="form-label">کد پستی</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-12">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.address" class="form-control" type="text">
+                          <label class="form-label">آدرس</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div aria-labelledby="btabs-alt-static-profile-tab4" class="tab-pane" id="btabs-alt-static-profile4" role="tabpanel" tabindex="0">
+                    
+                  </div>
+                </div>
+              </div>
     </div>
   </div>
 </template>
