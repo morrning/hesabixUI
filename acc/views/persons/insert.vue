@@ -14,7 +14,6 @@
     </div>
     <div class="block-content py-3 vl-parent">
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
-
       <div class="block block-rounded">
                 <ul class="nav nav-tabs nav-tabs-alt" role="tablist">
                   <li class="nav-item" role="presentation">
@@ -44,6 +43,15 @@
                           </div>
                         </div>
                       </div>
+                      <div class="col-sm-12 col-md-12 mb-3">
+                        <div class="space-x-2 border rounded p-3">
+                          <p class="py-0 my-0 text-primary">نوع مشتری</p>
+                          <div v-for="(item,index) in person.types" class="form-check form-check-inline">
+                            <input @change="console.log(this.person.types)" v-model="person.types[index].checked" checked="" class="form-check-input" type="checkbox">
+                            <label class="form-check-label">{{ item.label }}</label>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div class="row">
                       <div class="col-sm-12 col-md-6">
@@ -62,12 +70,6 @@
                         <div class="form-floating mb-4">
                           <input v-model="person.name" class="form-control" type="text">
                           <label class="form-label">نام / نام خانوادگی</label>
-                        </div>
-                      </div>
-                      <div class="col-sm-12 col-md-6">
-                        <div class="form-floating mb-4">
-                          <input v-model="person.birthday" class="form-control" type="text">
-                          <label class="form-label">تاریخ تولد / ثبت</label>
                         </div>
                       </div>
                       <div class="col-sm-12 col-md-6">
@@ -106,6 +108,12 @@
                         <div class="form-floating mb-4">
                           <input v-model="person.mobile" class="form-control" type="text">
                           <label class="form-label">تلفن همراه</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-6">
+                        <div class="form-floating mb-4">
+                          <input v-model="person.mobile2" class="form-control" type="text">
+                          <label class="form-label">تلفن همراه دوم</label>
                         </div>
                       </div>
                       <div class="col-sm-12 col-md-6">
@@ -169,7 +177,59 @@
                     </div>
                   </div>
                   <div aria-labelledby="btabs-alt-static-profile-tab4" class="tab-pane" id="btabs-alt-static-profile4" role="tabpanel" tabindex="0">
-                    
+                    <div class="row mb-3 justify-content-end text-end">
+                      <div class="col-sm-12 col-md-12">
+                        <button @click="addNewcard()" type="button" class="btn btn-primary">
+                          <i class="fa fa-add"></i>
+                          افزودن
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row" v-for="(item,index) in person.accounts">
+                      <div class="block block-rounded border border-gray mx-0 px-0">
+                        <div class="block-header bg-light">
+                          <h3 class="block-title">
+                            <small class="text-dark">
+                              <i class="fa fa-bank"></i>
+                              حساب بانکی
+                            </small>
+                          </h3>
+                          <span class="block-options">
+                          <button class="btn rounded-circle btn-sm btn-danger" @click="removeCard(index)">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </span>
+                        </div>
+                        <div class="block-content">
+                          <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                  <div class="form-floating mb-4">
+                                    <input v-model="person.accounts[index].bank" class="form-control" type="text">
+                                    <label class="form-label"><span class="text-danger">(لازم)</span> بانک </label>
+                                  </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                  <div class="form-floating mb-4">
+                                    <input v-model="person.accounts[index].accountNum" class="form-control" type="text">
+                                    <label class="form-label">شماره حساب</label>
+                                  </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                  <div class="form-floating mb-4">
+                                    <input v-model="person.accounts[index].cardNum" class="form-control" type="text">
+                                    <label class="form-label">شماره کارت</label>
+                                  </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                  <div class="form-floating mb-4">
+                                    <input v-model="person.accounts[index].shabaNum" class="form-control" type="text">
+                                    <label class="form-label">شماره شبا</label>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -189,12 +249,19 @@ export default {
   },
   data: ()=>{return{
     isLoading: false,
+    account:{
+      name:'',
+      cardNum:'',
+      shabaNum:'',
+      accountNum:''
+    },
     person: {
       nikename: '',
       name: '',
       des: '',
       tel: '',
       mobile: '',
+      mobile2: '',
       address: '',
       company: '',
       shenasemeli: '',
@@ -208,6 +275,8 @@ export default {
       website:'',
       fax:'',
       code: 0,
+      types:[],
+      accounts:[],
     }
   }},
   mounted() {
@@ -217,7 +286,25 @@ export default {
     this.loadData(to.params.id);
   },
   methods:{
+    addNewcard(){
+      alert();
+      this.person.accounts.push({
+        cardNum:'',
+        accountNum:'',
+        shabaNum:'',
+        bank:''
+      });
+    },
+    removeCard(index){
+      this.person.accounts.splice(index, 1);
+    },
     loadData(id = ''){
+      //load person types
+      axios.post('/api/person/types/get').then((response)=>{
+          this.person.types = response.data;
+          this.isLoading = false;
+      });
+
       if(id != ''){
         //load user info
         this.isLoading = true;
