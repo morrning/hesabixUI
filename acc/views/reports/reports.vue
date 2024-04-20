@@ -29,6 +29,9 @@
                   <li>
                     <router-link to="/acc/reports/persons/depositors">بستانکاران</router-link>
                   </li>
+                  <li>
+                    <router-link to="/acc/reports/persons/buysell">خرید و فروش های اشخاص</router-link>
+                  </li>
                 </ul>
               </div>
             </div>
