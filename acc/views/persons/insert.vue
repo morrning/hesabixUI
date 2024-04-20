@@ -308,13 +308,10 @@ export default {
       }
       else{
         //user is new
-        this.person.nikename = '';
-        this.person.name = '';
-        this.person.tel = '';
-        this.person.mobile = '';
-        this.person.address = '';
-        this.person.des  = '';
-        this.person.code = '';
+        axios.post('/api/person/types/get').then((response)=>{
+          this.person.types = response.data;   
+          this.isLoading = false;
+        });
         this.person.code = 0;
       }
     },
