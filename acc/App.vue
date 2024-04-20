@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import {inject} from "vue";
 import NProgress from "nprogress/nprogress.js";
 import "nprogress/nprogress.css"
-import "/public/assets/css/dashmix.min.css"
+import "/assets/css/dashmix.min.css"
 import Year from "./views/component/Year.vue"
 import Icon from "./views/component/notifications/icon.vue";
 import archive_modal from './views/component/archive/archive_modal.vue';

@@ -287,7 +287,6 @@ export default {
   },
   methods:{
     addNewcard(){
-      alert();
       this.person.accounts.push({
         cardNum:'',
         accountNum:'',
@@ -299,17 +298,11 @@ export default {
       this.person.accounts.splice(index, 1);
     },
     loadData(id = ''){
-      //load person types
-      axios.post('/api/person/types/get').then((response)=>{
-          this.person.types = response.data;
-          this.isLoading = false;
-      });
-
       if(id != ''){
         //load user info
         this.isLoading = true;
         axios.post('/api/person/info/' + id).then((response)=>{
-          this.person = response.data;
+          this.person = response.data;   
           this.isLoading = false;
         });
       }
@@ -346,7 +339,16 @@ export default {
           confirmButtonText: 'قبول'
         });
       }
-
+      this.person.accounts.forEach((item)=>{
+        if(item.bank == ''){
+          canSubmit = false;
+          Swal.fire({
+            text: 'بخش حساب‌های بانکی به درستی تکمیل نشده است.لطفا موارد الزامی را وارد کنید.',
+            icon: 'error',
+            confirmButtonText: 'قبول'
+          });
+        }
+      });
       if(canSubmit){
         this.isLoading = true;
         axios.post('/api/person/mod/' + this.person.code,this.person).then((response)=>{

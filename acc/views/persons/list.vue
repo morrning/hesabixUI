@@ -60,14 +60,22 @@
               :loading="loading"
           >
             <template #item-operation="{ code }">
-              <div class="d-flex">
-                <router-link class="btn btn-link" :to="'/acc/persons/card/view/' + code">
-                  <i class="fa fa-eye text-success"></i>
-                </router-link>
-                <router-link class="btn btn-link" :to="'/acc/persons/mod/' + code">
-                  <i class="fa fa-edit px-2"></i>
-                </router-link>
-              </div>
+              <div class="dropdown-center">
+                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm text-primary" data-bs-toggle="dropdown" id="dropdown-align-center-alt-primary" type="button">
+                      <i class="fa-solid fa-ellipsis"></i>
+                    </button>
+                    <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end" style="">
+                    <router-link class="dropdown-item" :to="'/acc/persons/card/view/' + code">
+                      <i class="fa fa-eye text-success pe-2"></i>
+                      مشاهده
+                    </router-link>
+                    <router-link class="dropdown-item" :to="'/acc/persons/mod/' + code">
+                      <i class="fa fa-edit pe-2"></i>
+                      ویرایش
+                    </router-link>
+                  </div>
+                </div>
+            
             </template>
             <template #item-nikename="{ nikename,code }">
               <router-link :to="'/acc/persons/card/view/' + code">

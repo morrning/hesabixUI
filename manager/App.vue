@@ -4,7 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import NProgress from "nprogress/nprogress.js";
 import "nprogress/nprogress.css"
-import "/public/assets/css/dashmix.min.css"
+import "/assets/css/dashmix.min.css"
 import 'vue-loading-overlay/dist/css/index.css';
 export default {
 
