@@ -488,7 +488,7 @@ export default {
         })
       }
       //get list of persons
-      axios.get('/api/person/list').then((response)=>{
+      axios.get('/api/person/list/limit').then((response)=>{
         this.listPersons = response.data;
       });
 

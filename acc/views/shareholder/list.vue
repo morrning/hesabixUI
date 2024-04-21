@@ -104,7 +104,7 @@ export default {
             this.loading = false;
           });
       //load persons
-      axios.get('/api/person/list').then((response)=>{
+      axios.get('/api/person/list/limit').then((response)=>{
         this.persons = response.data;
       });
     },

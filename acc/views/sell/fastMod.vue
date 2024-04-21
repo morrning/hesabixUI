@@ -90,7 +90,7 @@ export default defineComponent({
         this.data.date = response.data.now;
       })
       //load persons
-      axios.post('/api/person/list',{speedAccess:true}).then((response)=>{
+      axios.post('/api/person/list/limit',{speedAccess:true}).then((response)=>{
         this.persons = response.data;
         if(response.data.length != 0){
           this.person = response.data[0];

@@ -84,7 +84,7 @@ export default {
       alert(this.person)
     },
     getData(){
-      axios.get('/api/person/list').then((response)=>{
+      axios.get('/api/person/list/limit').then((response)=>{
         this.persons = response.data;
         this.persons.forEach((item)=>{
           item.labelName = '(' + item.code + ')=>  ' +  item.nikename;

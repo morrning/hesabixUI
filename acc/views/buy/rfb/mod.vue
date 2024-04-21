@@ -280,7 +280,7 @@ export default {
         this.data.date = response.data.now;
       })
       //load persons
-      axios.get('/api/person/list').then((response)=>{
+      axios.get('/api/person/list/limit').then((response)=>{
         this.persons = response.data;
       });
       //load commodities

@@ -151,7 +151,7 @@ export default {
       this.loadData();
     },
     loadData(){
-      axios.post('/api/person/list').then((response)=>{
+      axios.post('/api/person/list/limit').then((response)=>{
         this.listPersons = response.data;
         if(this.$route.params.id != ''){
           this.loadPerson(this.$route.params.id);

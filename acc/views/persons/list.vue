@@ -180,6 +180,7 @@ export default {
   methods: {
     filterTable() {
       this.loading = true;
+      let calcItems = [];
       let isAll = true;
       let selectedTypes = [];
       this.types.forEach((item) => {
@@ -188,7 +189,32 @@ export default {
           selectedTypes.push(item);
         }
       });
+      if (isAll) {
+        this.items = this.orgItems;
+      }
+      else {
+        this.orgItems.forEach((item) => {
+          item.types.forEach((itemB) => {
+            selectedTypes.forEach((st) => {
+              if (st.code == itemB.code && itemB.checked == true) {
+                let existBefore = false;
+                calcItems.forEach((ri) => {
+                  if (item.code == ri.code) {
+                    existBefore = true;
+                  }
+                })
+                if (existBefore == false) {
+                  calcItems.push(item);
+                }
 
+              }
+            });
+          });
+        });
+        this.items = calcItems;
+      }
+
+      this.loading = false;
     },
     loadData() {
       axios.get('/api/person/list')

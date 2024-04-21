@@ -66,7 +66,7 @@ export default defineComponent({
     loadData(){
       //load persons
       this.isLoading = true;
-      axios.get('/api/person/list')
+      axios.get('/api/person/list/limit')
           .then((response)=>{
             this.persons = response.data;
             this.isLoading=false;
