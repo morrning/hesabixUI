@@ -38,6 +38,25 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-12 m-0 p-0">
+                <div class="mb-1">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
+                  </div>
+                </div>
+                <EasyDataTable v-model:items-selected="itemsSelected" multi-sort show-index alternating
+                  :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
+                  header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
+                  emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
+                  <template #item-khadamat="{ khadamat }">
+                    <label v-if="khadamat == false">کالا و اقلام فیزیکی</label>
+                    <label v-else>خدمات</label>
+                  </template>
+                </EasyDataTable>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -61,7 +80,20 @@ export default {
         { id: 'sell', label: 'فروش' },
       ],
       selectedType: {},
-      selectedPerson: {}
+      selectedPerson: {},
+      searchValue: '',
+      loading: ref(true),
+      items: [],
+      itemsSelected: [],
+      headers: [
+        { text: "کد", value: "code" },
+        { text: "کالا / خدمات", value: "khadamat", sortable: true },
+        { text: "نام کالا و خدمات", value: "name", sortable: true },
+        { text: "واحد شمارش", value: "unit", sortable: true },
+        { text: "تعداد", value: "count", sortable: true },
+        { text: "مبلغ فی", value: "priceOne", sortable: true },
+        { text: "مبلغ کل", value: "priceAll", sortable: true },
+      ],
     }
   },
   methods: {
@@ -69,13 +101,23 @@ export default {
       axios.get('/api/person/list/limit')
         .then((response) => {
           this.persons = response.data;
-          if(this.persons.length != 0){
+          if (this.persons.length != 0) {
             this.selectedPerson = this.persons[0];
           }
           this.selectedType = this.types[0];
           this.loading = false;
-        })
+        });
     },
+    filter() {
+      this.loading = true;
+      axios.post('/api/report/person/buysell', {
+        type: this.selectedType.id,
+        person: this.selectedPerson.code
+      }).then((response) => {
+        this.items = response.data;
+        this.loading = false;
+      })
+    }
   },
   beforeMount() {
     this.loadData();
@@ -83,13 +125,13 @@ export default {
   watch: {
     selectedPerson: {
       handler: function (val, oldVal) {
-       alert();
+        this.filter();
       },
       deep: true
     },
     selectedType: {
       handler: function (val, oldVal) {
-       alert();
+        this.filter();
       },
       deep: true
     }

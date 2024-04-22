@@ -21,7 +21,7 @@ import {getApiUrl} from "../hesabixConfig";
 const app = createApp(App)
 app.component('EasyDataTable', Vue3EasyDataTable);
 app.component('v-select', vSelect);
-app.component('DatePicker', Vue3PersianDatetimePicker)
+app.component('DatePicker', Vue3PersianDatetimePicker);
 app.component('Uploader', Uploader);
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
 NProgress.configure({ showSpinner: false });

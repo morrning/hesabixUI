@@ -9,12 +9,14 @@ import 'vue3-tel-input/dist/vue3-tel-input.css'
 import VueGravatar from "vue3-gravatar";
 import VueCountdown from '@chenfengyuan/vue-countdown';
 import Vue3EasyDataTable from "vue3-easy-data-table";
+import Vue3PersianDatetimePicker from 'vue3-persian-datetime-picker';
 import 'vue3-easy-data-table/dist/style.css';
 import {getApiUrl} from "../hesabixConfig"
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
 const app = createApp(App)
 app.component('EasyDataTable', Vue3EasyDataTable);
+app.component('DatePicker', Vue3PersianDatetimePicker);
 app.config.globalProperties.$API_URL = getApiUrl();
 axios.defaults.baseURL = app.config.globalProperties.$API_URL;
 

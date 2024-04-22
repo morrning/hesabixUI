@@ -140,10 +140,6 @@
     <footer class="bg-body-extra-light" id="page-footer">
       <div class="content py-0">
         <div class="row fs-sm">
-          <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-end">{{ siteName }} با
-          <i class="fa fa-heart text-danger"></i>
-             و عشق توسعه یافته.
-          </div>
           <div class="col-sm-6 order-sm-1 text-center text-sm-start">
             <a class="fw-semibold" href="https://github.com/morrning/hesabixCore" target="_blank">{{ siteName }} {{this.hesabix.version}}</a>
           </div>
