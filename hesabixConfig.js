@@ -6,9 +6,9 @@ export function getApiUrl() {
     This set for access user interface to API.
     If this be wrong user interface not functioning probably.
      */
-    return 'https://next.hesabix.ir';
+    //return 'https://next.hesabix.ir';
     //return 'http://localhost';
-    //return 'https://hesabax.ir';
+    return 'https://hesabix.ir';
 }
 
 export function getSiteName() {
@@ -17,7 +17,7 @@ export function getSiteName() {
     This set for set site name thats apear on interface
     If this be wrong user interface not functioning probably.
      */
-    return 'حسابکس';
+    return 'حسابیکس';
     //return 'sitename';
 }
 

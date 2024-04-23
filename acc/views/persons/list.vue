@@ -75,7 +75,6 @@
                   </router-link>
                 </div>
               </div>
-
             </template>
             <template #item-nikename="{ nikename, code }">
               <router-link :to="'/acc/persons/card/view/' + code">
