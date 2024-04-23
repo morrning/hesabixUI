@@ -5,7 +5,8 @@
         <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
-        فاکتور فروش </h3>
+        فاکتور فروش
+      </h3>
       <div class="block-options">
         <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-alt-primary">
           <i class="fa fa-save"></i>
@@ -14,32 +15,20 @@
       </div>
     </div>
     <div class="block-content py-3 px-0 vl-parent">
-      <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
+      <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false" />
       <div class="container">
         <div class="row">
           <div class="col-sm-12 col-md-6 mb-2">
             <div class="form-control">
               <label class="form-label">تاریخ:</label>
-              <date-picker
-                  class=""
-                  v-model="data.date"
-                  format="jYYYY-jMM-jDD"
-                  display-format="jYYYY-jMM-jDD"
-                  :min="year.start"
-                  :max="year.end"
-                
-              />
+              <date-picker class="" v-model="data.date" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
+                :min="year.start" :max="year.end" />
             </div>
           </div>
           <div class="col-sm-12 col-md-6">
             <div class="form-control mb-2">
               <label class="form-label">مشتری</label>
-              <v-select
-                  dir="rtl"
-                  :options="persons"
-                  label="nikename"
-                  v-model="data.person"
-              >
+              <v-select dir="rtl" :options="persons" label="nikename" v-model="data.person">
                 <template #no-options="{ search, searching, loading }">
                   وردی یافت نشد!
                 </template>
@@ -59,13 +48,7 @@
         <div class="row">
           <div class="col-sm-12 col-md-5 mb-2">
             <label class="form-label">کالا و خدمات</label>
-            <v-select
-                dir="rtl"
-                :options="commodity"
-                label="name"
-                v-model="itemData.commodity"
-                class=""
-            >
+            <v-select dir="rtl" :options="commodity" label="name" v-model="itemData.commodity" class="">
               <template #no-options="{ search, searching, loading }">
                 وردی یافت نشد!
               </template>
@@ -92,7 +75,7 @@
           <div class="col">
             <button class="btn btn-success" @click="addItem">
               <i class="fa fa-save"></i>
-               افزودن به فاکتور
+              افزودن به فاکتور
             </button>
           </div>
         </div>
@@ -100,27 +83,47 @@
       <div class="container mt-4">
         <div class="row">
           <div class="col-12">
-            <span class="text-primary">    اقلام فاکتور       </span>
-            <span class="text-secondary">({{items.length}} قلم)</span>
-            <EasyDataTable
-                show-index
-                alternating
-
-                :headers="headers"
-                :items="items"
-                theme-color="#1d90ff"
-                header-text-direction="center"
-                body-text-direction="center"
-                rowsPerPageMessage="تعداد سطر"
-                emptyMessage="هیچ آیتمی به این فاکتور افزوده نشده است."
-                rowsOfPageSeparatorMessage="از"
-            >
+            <span class="text-primary"> اقلام فاکتور </span>
+            <span class="text-secondary">({{ items.length }} قلم)</span>
+            <EasyDataTable  v-model:items-selected="itemsSelected" show-index alternating :headers="headers" :items="items" theme-color="#1d90ff"
+              header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
+              emptyMessage="هیچ آیتمی به این فاکتور افزوده نشده است." rowsOfPageSeparatorMessage="از">
               <template #item-operation="{ index }">
                 <span class="text-danger px-1" @click="deleteItem(index)">
                   <i class="fa fa-trash"></i>
                 </span>
               </template>
             </EasyDataTable>
+            <div class="container-fluid p-0 mx-0 my-3">
+              <a class="block block-rounded block-link-shadow border-start border-success border-3"
+                href="javascript:void(0)">
+                <div class="block-content block-content-full block-content-sm bg-body-light">
+                  <div class="row">
+                    <div class="col-sm-6 com-md-6">
+                      <span class="text-dark">
+                        <i class="fa fa-list-dots"></i>
+                        مبلغ کل:
+                      </span>
+                      <span class="text-primary">
+                        {{ this.$filters.formatNumber(this.sumTotal) }}
+                        ریال
+                      </span>
+                    </div>
+
+                    <div class="col-sm-6 com-md-6">
+                      <span class="text-dark">
+                        <i class="fa fa-list-check"></i>
+                        جمع مبلغ موارد انتخابی:
+                      </span>
+                      <span class="text-primary">
+                        {{ this.$filters.formatNumber(this.sumSelected) }}
+                        ریال
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -131,14 +134,14 @@
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
-import {ref} from "vue";
+import { ref } from "vue";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import Treeselect from 'vue3-treeselect'
 // import the styles
 import 'vue3-treeselect/dist/vue3-treeselect.css'
-import {Money3} from "v-money3";
+import { Money3 } from "v-money3";
 export default {
   name: "mod",
   components: {
@@ -146,126 +149,149 @@ export default {
     Loading,
     Treeselect
   },
-  data: ()=>{return{
-    items:[],
-    headers: [
-      { text: "کد کالا", value: "commodity.code" },
-      { text: "کالا", value: "commodity.name" },
-      { text: "شرح", value: "des"},
-      { text: "واحد", value: "commodity.unit"},
-      { text: "تعداد", value: "count"},
-      { text: "مبلغ واحد", value: "price"},
-      { text: "مبلغ کل", value: "bs"},
-      { text: "عملیات", value: "operation"},
-    ],
-    isLoading: false,
-    canSubmit: true,
-    updateID: null,
-    sum : 0,
-    balance: 0,
-    currencyConfig:{
-      masked: false,
-      prefix: '',
-      suffix: 'ریال',
-      thousands: ',',
-      decimal: '.',
-      precision: 0,
-      disableNegative: false,
-      disabled: false,
-      min: 0,
-      max: null,
-      allowBlank: false,
-      minimumNumberOfCharacters: 0,
-      shouldRound: true,
-      focusOnRight: false,
-    },
-    data: {
-      date: '',
-      des: '',
-      person: ''
-    },
-    year: '',
-    persons:[],
-    commodity:[],
-    units:[],
-    itemData:{
-      commodity:'',
-      count:1,
-      price:0,
-      bs:0,
-      bd:0,
-      type:'commodity',
-      id:0,
-      des:'',
-      table:53
+  data: () => {
+    return {
+      sumSelected: 0,
+      sumTotal: 0,
+      itemsSelected: [],
+      items: [],
+      headers: [
+        { text: "کد کالا", value: "commodity.code" },
+        { text: "کالا", value: "commodity.name" },
+        { text: "شرح", value: "des" },
+        { text: "واحد", value: "commodity.unit" },
+        { text: "تعداد", value: "count" },
+        { text: "مبلغ واحد", value: "price" },
+        { text: "مبلغ کل", value: "bs" },
+        { text: "عملیات", value: "operation" },
+      ],
+      isLoading: false,
+      canSubmit: true,
+      updateID: null,
+      sum: 0,
+      balance: 0,
+      currencyConfig: {
+        masked: false,
+        prefix: '',
+        suffix: 'ریال',
+        thousands: ',',
+        decimal: '.',
+        precision: 0,
+        disableNegative: false,
+        disabled: false,
+        min: 0,
+        max: null,
+        allowBlank: false,
+        minimumNumberOfCharacters: 0,
+        shouldRound: true,
+        focusOnRight: false,
+      },
+      data: {
+        date: '',
+        des: '',
+        person: ''
+      },
+      year: '',
+      persons: [],
+      commodity: [],
+      units: [],
+      itemData: {
+        commodity: '',
+        count: 1,
+        price: 0,
+        bs: 0,
+        bd: 0,
+        type: 'commodity',
+        id: 0,
+        des: '',
+        table: 53
+      }
     }
-  }},
-  watch:{
-    'itemData.price': function (){
+  },
+  watch: {
+    'itemData.price': function () {
       this.calc();
     },
-    'itemData.count': function (){
+    'itemData.count': function () {
       this.calc();
     },
-    'itemData.commodity': function (newVal, oldVal){
-      if(newVal != ''){
+    'itemData.commodity': function (newVal, oldVal) {
+      if (newVal != '') {
         this.itemData.price = this.itemData.commodity.priceSell.valueOf();
       }
       this.itemData.des = this.itemData.commodity.des;
+    },
+    itemsSelected: {
+      handler: function (val, oldVal) {
+        this.sumSelected = 0;
+        this.itemsSelected.forEach((item) => {
+          this.sumSelected += parseInt(item.price.replaceAll(',', ''));
+        })
+      },
+      deep: true
+    },
+    items: {
+      handler: function (val, oldVal) {
+        this.sumTotal = 0;
+        this.items.forEach((item) => {
+          this.sumTotal += parseInt(item.price.replaceAll(',', ''));
+        })
+      },
+      deep: true
     },
   },
   beforeMount() {
     this.loadData();
   },
-  beforeRouteUpdate(to,from){
+  beforeRouteUpdate(to, from) {
     this.loadData(to.params.id);
   },
   methods: {
-    calc(){
+    calc() {
       this.itemData.bs = this.itemData.price.valueOf() * this.itemData.count.valueOf()
     },
-    addItem(){
-      if(this.itemData.count == 0){
+    addItem() {
+      if (this.itemData.count == 0) {
         Swal.fire({
           text: 'تعداد صفر نامعتبر است.',
           icon: 'error',
           confirmButtonText: 'قبول'
         });
       }
-      else if(this.itemData.price == 0){
+      else if (this.itemData.price == 0) {
         Swal.fire({
           text: 'قیمت صفر نامعتبر است.',
           icon: 'error',
           confirmButtonText: 'قبول'
         });
       }
-      else if(this.itemData.commodity == '' || this.itemData.commodity == undefined){
+      else if (this.itemData.commodity == '' || this.itemData.commodity == undefined) {
         Swal.fire({
           text: 'کالایی انتخاب نشده است.',
           icon: 'error',
           confirmButtonText: 'قبول'
         });
       }
-      else{
+      else {
         this.itemData.price = this.$filters.formatNumber(this.itemData.price);
         this.itemData.count = this.$filters.formatNumber(this.itemData.count);
         this.itemData.bs = this.$filters.formatNumber(this.itemData.bs);
         this.items.push(this.itemData);
         this.itemData = {
-          commodity:this.commodity[0],
-          count:1,
-          price:0,
-          bs:0,
-          bd:0,
-          type:'commodity',
-          id:this.commodity[0].id,
-          des:'',
-          table:53
+          commodity: this.commodity[0],
+          count: 1,
+          price: 0,
+          bs: 0,
+          bd: 0,
+          type: 'commodity',
+          id: this.commodity[0].id,
+          des: '',
+          table: 53
         }
       }
 
     },
-    deleteItem(index){
+    deleteItem(index) {
       Swal.fire({
         text: 'آیا برای حذف این مورد مطمئن هستید؟',
         showCancelButton: true,
@@ -274,62 +300,62 @@ export default {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          this.items.splice(index -1 ,1);
+          this.items.splice(index - 1, 1);
         }
       })
     },
     loadData() {
       //load year
-      axios.get('/api/year/get').then((response)=>{
+      axios.get('/api/year/get').then((response) => {
         this.year = response.data;
         this.data.date = response.data.now;
       })
       //load persons
-      axios.get('/api/person/list/limit').then((response)=>{
+      axios.get('/api/person/list/limit').then((response) => {
         this.persons = response.data;
       });
       //load commodities
-      axios.get('/api/commodity/list').then((response)=>{
+      axios.get('/api/commodity/list').then((response) => {
         this.commodity = response.data;
-        if(response.data.length != 0){
+        if (response.data.length != 0) {
           this.itemData.commodity = response.data[0];
         }
-        else{
+        else {
           Swal.fire({
             text: 'برای ثبت فاکتور خرید ابتدا یک کالای جدید تعریف کنید.',
             icon: 'warning',
             confirmButtonText: 'تعریف کالای جدید'
-          }).then((result)=>{
-            if(result.isConfirmed){
+          }).then((result) => {
+            if (result.isConfirmed) {
               this.$router.push('/acc/commodity/mod/');
             }
           });
         }
       });
       //load commodity units
-      axios.get('/api/commodity/units').then((response)=>{
+      axios.get('/api/commodity/units').then((response) => {
         this.units = response.data;
       });
 
       //load data for edit document
-      
-      if(this.$route.params.id != ''){
-        axios.get('/api/sell/get/info/' + this.$route.params.id).then((response)=>{
+
+      if (this.$route.params.id != '') {
+        axios.get('/api/sell/get/info/' + this.$route.params.id).then((response) => {
           this.data.date = response.data.date;
           this.data.des = response.data.des;
           this.data.person = response.data.person;
-          response.data.rows.forEach((item,key)=>{
-            if(item.commodity != null){
+          response.data.rows.forEach((item, key) => {
+            if (item.commodity != null) {
               this.items.push({
-                commodity:item.commodity,
-                count:item.commodity_count,
+                commodity: item.commodity,
+                count: item.commodity_count,
                 price: this.$filters.formatNumber(parseInt(parseInt(item.bs) / parseInt(item.commodity_count))),
-                bs:this.$filters.formatNumber(item.bs),
-                bd:this.$filters.formatNumber(item.bd),
-                type:'commodity',
-                id:item.commodity.id,
-                des:'',
-                table:53
+                bs: this.$filters.formatNumber(item.bs),
+                bd: this.$filters.formatNumber(item.bd),
+                type: 'commodity',
+                id: item.commodity.id,
+                des: '',
+                table: 53
               });
             }
           });
@@ -337,43 +363,43 @@ export default {
       }
     },
     save() {
-      this.canSubmit=false;
-      if(this.items.length == 0){
+      this.canSubmit = false;
+      if (this.items.length == 0) {
         Swal.fire({
           text: 'فاکتور فاقد کالا می باشد.',
           icon: 'warning',
           confirmButtonText: 'قبول'
         });
       }
-      else if(this.data.person == null || this.data.person == ''){
+      else if (this.data.person == null || this.data.person == '') {
         Swal.fire({
           text: 'مشتری انتخاب نشده است.',
           icon: 'warning',
           confirmButtonText: 'قبول'
         });
       }
-      else{
+      else {
         // add kharidar
         let bd = 0;
-        this.items.forEach((item)=>{
+        this.items.forEach((item) => {
           bd = bd + parseInt(item.bs.replace(/,(?=\d{3})/g, ''));
         })
         this.items.push({
-          commodity:this.commodity[0],
-          bs:0,
-          bd:bd,
-          type:'person',
-          id:this.data.person.id,
-          des:'فروش کالا به مشتری',
-          table:3
+          commodity: this.commodity[0],
+          bs: 0,
+          bd: bd,
+          type: 'person',
+          id: this.data.person.id,
+          des: 'فروش کالا به مشتری',
+          table: 3
         });
-        axios.post('/api/accounting/insert',{
+        axios.post('/api/accounting/insert', {
           type: 'sell',
           date: this.data.date,
           des: this.data.des,
-          rows:this.items,
-          update:this.$route.params.id
-        }).then((response)=>{
+          rows: this.items,
+          update: this.$route.params.id
+        }).then((response) => {
           this.items.pop();
           Swal.fire({
             text: 'فاکتور ثبت شد.',
@@ -384,12 +410,10 @@ export default {
           });
         })
       }
-      this.canSubmit=true;
+      this.canSubmit = true;
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

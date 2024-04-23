@@ -54,6 +54,13 @@
                     <label v-if="khadamat == false">کالا و اقلام فیزیکی</label>
                     <label v-else>خدمات</label>
                   </template>
+                  <template #item-docCode="{ docCode }">
+                    <RouterLink :to="'/acc/accounting/view/' + docCode">{{ docCode }}</RouterLink>
+                  </template>
+                  <template #item-type="{ docCode,type }">
+                    <RouterLink v-if="type == 'buy'" :to="'/acc/buy/view/' + docCode">خرید</RouterLink>
+                    <RouterLink v-else-if="type == 'sell'" :to="'/acc/sell/view/' + docCode">فروش</RouterLink>
+                  </template>
                 </EasyDataTable>
               </div>
             </div>
@@ -68,6 +75,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import { ref } from "vue";
+import { RouterLink } from "vue-router";
 
 export default {
   name: "buysellByPerson",
@@ -87,12 +95,16 @@ export default {
       itemsSelected: [],
       headers: [
         { text: "کد", value: "code" },
+        { text: "سند حسابداری", value: "docCode" },
+        { text: "نوع", value: "type" },
+        { text: "تاریخ", value: "date" },
         { text: "کالا / خدمات", value: "khadamat", sortable: true },
         { text: "نام کالا و خدمات", value: "name", sortable: true },
         { text: "واحد شمارش", value: "unit", sortable: true },
         { text: "تعداد", value: "count", sortable: true },
         { text: "مبلغ فی", value: "priceOne", sortable: true },
         { text: "مبلغ کل", value: "priceAll", sortable: true },
+        { text: "تجمعی", value: "amountInc", sortable: true },
       ],
     }
   },
@@ -115,6 +127,11 @@ export default {
         person: this.selectedPerson.code
       }).then((response) => {
         this.items = response.data;
+        let sum = 0;
+        this.items.forEach((item)=>{
+          sum += parseInt(item.priceAll.replaceAll(',',''));
+          item.amountInc = this.$filters.formatNumber(sum) ;
+        });
         this.loading = false;
       })
     }
