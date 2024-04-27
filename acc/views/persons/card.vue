@@ -77,7 +77,7 @@
                     وضعیت حسابداری:
                     <b v-if="selectedPerson.balance > 0" class="text-success">بستانکار</b>
                     <b v-if="selectedPerson.balance < 0" class="text-danger">بدهکار</b>
-                    <b v-else class="text-dark">تسویه شده</b>
+                    <b v-if="selectedPerson.balance == 0" class="text-dark">تسویه شده</b>
 
                   </div>
                   <div class="fw-bold mb-2">بستانکار: <small class="text-primary">{{
