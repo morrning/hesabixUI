@@ -39,9 +39,36 @@
               <div class="col-sm-12 col-md-6">
                 <div class="mb-2">
                   <label class="form-label">شخص</label>
-                  <v-select dir="rtl" :options="persons" label="nikename" v-model="selectedPerson">
+                  <v-select dir="rtl" @search="searchPerson" :options="persons" label="nikename"
+                    v-model="selectedPerson">
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
+                    </template>
+                    <template v-slot:option="option">
+                      <div class="row mb-1">
+                        <div class="col-12">
+                          <i class="fa fa-user me-2"></i>
+                          {{ option.nikename }}
+                        </div>
+                        <div class="col-12">
+                          <div class="row">
+                            <div class="col-6">
+                              <i class="fa fa-phone me-2"></i>
+                              {{ option.mobile }}
+                            </div>
+                            <div class="col-6">
+                              <i class="fa fa-bars"></i>
+                              تراز:
+                              {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+          parseInt(option.bd))) }}
+                              <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
+                                بدهکار </span>
+                              <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
+                                بستانکار </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </template>
                   </v-select>
                 </div>
@@ -160,8 +187,15 @@ export default {
     }
   },
   methods: {
+    searchPerson(query, loading) {
+      loading(true);
+      axios.post('/api/person/list/search', { search: query }).then((response) => {
+        this.persons = response.data;
+        loading(false);
+      });
+    },
     loadData() {
-      axios.get('/api/person/list/limit')
+      axios.get('/api/person/list/search')
         .then((response) => {
           this.persons = response.data;
           if (this.persons.length != 0) {

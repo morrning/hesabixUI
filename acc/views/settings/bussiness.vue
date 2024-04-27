@@ -6,6 +6,10 @@
         اطلاعات کسب و کار
       </h3>
       <div class="block-options">
+        <button @click="submit()" type="submit" class="btn-success btn mt-2">
+          <i class="fa fa-save me-2"></i>
+          ذخیره تغییرات
+        </button>
       </div>
     </div>
     <div class="block-content pb-3">
@@ -279,7 +283,6 @@
                 </div>
               </div>
             </div>
-            <button type="submit" class="btn-alt-primary btn mt-2">ثبت</button>
           </form>
         </div>
       </div>
@@ -319,7 +322,7 @@ export default {
         shortlinks: false,
         walletEnabled: false,
         walletMatchBank: '',
-        year:{}
+        year: {}
       },
       listBanks: [],
     }
@@ -344,7 +347,7 @@ export default {
       }
     },
     submit() {
-      if (this.content.name === '' || this.content.legal_name === '' || this.content.maliyatafzode === '') {
+      if (this.content.year.label === '' || this.content.name === '' || this.content.legal_name === '' || this.content.maliyatafzode === '') {
         Swal.fire({
           text: 'تکمیل موارد ستاره دار الزامی است.',
           icon: 'error',

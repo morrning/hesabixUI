@@ -17,7 +17,7 @@ export function getSiteName() {
     This set for set site name thats apear on interface
     If this be wrong user interface not functioning probably.
      */
-    return 'حسابکس';
+    return 'حسابیکس';
     //return 'sitename';
 }
 

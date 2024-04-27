@@ -28,12 +28,53 @@
           <div class="col-sm-12 col-md-6">
             <div class="form-control mb-2">
               <label class="form-label">تامین کننده</label>
-
-              <v-select dir="rtl" :options="persons" label="nikename" v-model="data.person">
-                <template #no-options="{ search, searching, loading }">
-                  وردی یافت نشد!
-                </template>
-              </v-select>
+              <div class="row">
+                <div class="col-10">
+                  <v-select @search="searchPerson" class="" dir="rtl" :options="persons" label="nikename"
+                    v-model="data.person">
+                    <template v-slot:option="option">
+                      <div class="row mb-1">
+                        <div class="col-12">
+                          <i class="fa fa-user me-2"></i>
+                          {{ option.nikename }}
+                        </div>
+                        <div class="col-12">
+                          <div class="row">
+                            <div class="col-6">
+                              <i class="fa fa-phone me-2"></i>
+                              {{ option.mobile }}
+                            </div>
+                            <div class="col-6">
+                              <i class="fa fa-bars"></i>
+                              تراز:
+                              {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+          parseInt(option.bd))) }}
+                              <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
+                                بدهکار </span>
+                              <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
+                                بستانکار </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+                  </v-select>
+                  <span v-if="selectedPersonWithDet.bs != undefined" class="text-info ms-2">
+                    تراز:
+                    {{ this.$filters.formatNumber(Math.abs(parseInt(this.selectedPersonWithDet.bs) -
+          parseInt(this.selectedPersonWithDet.bd))) }}
+                    <span class="text-danger"
+                      v-if="parseInt(this.selectedPersonWithDet.bs) - parseInt(this.selectedPersonWithDet.bd) < 0">
+                      بدهکار </span>
+                    <span class="text-success"
+                      v-if="parseInt(this.selectedPersonWithDet.bs) - parseInt(this.selectedPersonWithDet.bd) > 0">
+                      بستانکار </span>
+                  </span>
+                </div>
+                <div class="col-2">
+                  <quickView :code="this.data.person.code"></quickView>
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-sm-12 col-md-12">
@@ -141,6 +182,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import Treeselect from 'vue3-treeselect'
+import quickView from "../component/person/quickView.vue";
 // import the styles
 import 'vue3-treeselect/dist/vue3-treeselect.css'
 import { Money3 } from "v-money3";
@@ -149,7 +191,8 @@ export default {
   components: {
     Money3,
     Loading,
-    Treeselect
+    Treeselect,
+    quickView
   },
   data: () => {
     return {
@@ -157,6 +200,7 @@ export default {
       sumTotal: 0,
       itemsSelected: [],
       items: [],
+      selectedPersonWithDet: {},
       headers: [
         { text: "کد کالا", value: "commodity.code" },
         { text: "کالا", value: "commodity.name" },
@@ -224,8 +268,8 @@ export default {
     itemsSelected: {
       handler: function (val, oldVal) {
         this.sumSelected = 0;
-        this.itemsSelected.forEach((item)=>{
-          this.sumSelected += parseInt(item.price.replaceAll(',',''));
+        this.itemsSelected.forEach((item) => {
+          this.sumSelected += parseInt(item.price.replaceAll(',', ''));
         })
       },
       deep: true
@@ -233,9 +277,17 @@ export default {
     items: {
       handler: function (val, oldVal) {
         this.sumTotal = 0;
-        this.items.forEach((item)=>{
-          this.sumTotal += parseInt(item.price.replaceAll(',',''));
+        this.items.forEach((item) => {
+          this.sumTotal += parseInt(item.price.replaceAll(',', ''));
         })
+      },
+      deep: true
+    },
+    'data.person': {
+      handler: function (val, oldVal) {
+        axios.post('/api/person/info/' + this.data.person.code).then((response) => {
+          this.selectedPersonWithDet = response.data;
+        });
       },
       deep: true
     },
@@ -247,6 +299,13 @@ export default {
     this.loadData(to.params.id);
   },
   methods: {
+    searchPerson(query, loading) {
+      loading(true);
+      axios.post('/api/person/list/search', { search: query }).then((response) => {
+        this.persons = response.data;
+        loading(false);
+      });
+    },
     calc() {
       this.itemData.bd = this.itemData.price.valueOf() * this.itemData.count.valueOf()
     },
@@ -311,7 +370,7 @@ export default {
         this.data.date = response.data.now;
       })
       //load persons
-      axios.get('/api/person/list/limit').then((response) => {
+      axios.get('/api/person/list/search').then((response) => {
         this.persons = response.data;
       });
       //load commodities

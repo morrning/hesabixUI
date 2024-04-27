@@ -620,7 +620,7 @@ export default {
                 <router-link class="nav-main-link" to="/acc/business/settings">
                   <span class="nav-main-link-name">
                     <i class="fa fa-cog"></i>
-                    اطلاعات کسب‌و‌کار </span>
+                    تنظیمات کسب‌و‌کار </span>
                 </router-link>
               </li>
               <li v-if="permissions.log" class="nav-main-item">

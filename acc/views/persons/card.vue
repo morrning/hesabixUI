@@ -43,10 +43,36 @@
                 </div>
                 <div class="card-body">
                   <small class="mb-2">شخص</small>
-                  <v-select dir="rtl" :options="listPersons" label="nikename" v-model="selectedPerson"
-                    @option:selected="updateRoute(selectedPerson.code)">
+                  <v-select dir="rtl" @search="searchPerson" :options="listPersons" label="nikename"
+                    v-model="selectedPerson" @option:selected="updateRoute(selectedPerson.code)">
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
+                    </template>
+                    <template v-slot:option="option">
+                      <div class="row mb-1">
+                        <div class="col-12">
+                          <i class="fa fa-user me-2"></i>
+                          {{ option.nikename }}
+                        </div>
+                        <div class="col-12">
+                          <div class="row">
+                            <div class="col-6">
+                              <i class="fa fa-phone me-2"></i>
+                              {{ option.mobile }}
+                            </div>
+                            <div class="col-6">
+                              <i class="fa fa-bars"></i>
+                              تراز:
+                              {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+          parseInt(option.bd))) }}
+                              <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
+                                بدهکار </span>
+                              <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
+                                بستانکار </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </template>
                   </v-select>
                   <hr />
@@ -148,12 +174,19 @@ export default {
     this.loadData();
   },
   methods: {
+    searchPerson(query, loading) {
+      loading(true);
+      axios.post('/api/person/list/search', { search: query }).then((response) => {
+        this.listPersons = response.data;
+        loading(false);
+      });
+    },
     updateRoute(id) {
       this.$router.push(id);
       this.loadData();
     },
     loadData() {
-      axios.post('/api/person/list/limit').then((response) => {
+      axios.post('/api/person/list/search').then((response) => {
         this.listPersons = response.data;
         if (this.$route.params.id != '') {
           this.loadPerson(this.$route.params.id);
