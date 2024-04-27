@@ -191,9 +191,10 @@ export default {
     excellOutput(AllItems = true) {
       if (AllItems) {
         axios({
-          method: 'get',
+          method: 'post',
           url: '/api/report/person/buysell/export/excel',
           responseType: 'arraybuffer',
+          data: { items: this.items }
         }).then((response) => {
           var FILE = window.URL.createObjectURL(new Blob([response.data]));
           var fileURL = window.URL.createObjectURL(new Blob([response.data]));

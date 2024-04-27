@@ -28,6 +28,12 @@
                 
             />
           </div>
+          <div class="col-sm-12 col-md-6 mb-2">
+            <div class="alert alert-sm alert-info">
+              <i class="fa fa-info-circle me-2"></i>
+              دکمه ثبت بعد از صفر بودن مبلغ باقی مانده و تکمیل شدن حساب‌ها فعال می شود
+            </div>
+          </div>
           <div class="col-sm-12 col-md-12">
             <div class="form-floating mb-2">
               <input v-model="data.des" class="form-control" type="text">
