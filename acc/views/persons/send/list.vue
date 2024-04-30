@@ -183,7 +183,7 @@ export default {
           var fileLink = document.createElement('a');
 
           fileLink.href = fileURL;
-          fileLink.setAttribute('download', 'hesabix-persons-send-list.xlsx');
+          fileLink.setAttribute('download', 'persons-send-list.xlsx');
           document.body.appendChild(fileLink);
           fileLink.click();
         })
@@ -208,7 +208,7 @@ export default {
             var fileLink = document.createElement('a');
 
             fileLink.href = fileURL;
-            fileLink.setAttribute('download', 'hesabix-persons-send-list.xlsx');
+            fileLink.setAttribute('download', 'persons-send-list.xlsx');
             document.body.appendChild(fileLink);
             fileLink.click();
           })

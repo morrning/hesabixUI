@@ -235,7 +235,7 @@ export default {
           var fileLink = document.createElement('a');
 
           fileLink.href = fileURL;
-          fileLink.setAttribute('download', 'hesabix-buysell-report-list.xlsx');
+          fileLink.setAttribute('download', 'buysell-report-list.xlsx');
           document.body.appendChild(fileLink);
           fileLink.click();
         })
@@ -260,7 +260,7 @@ export default {
             var fileLink = document.createElement('a');
 
             fileLink.href = fileURL;
-            fileLink.setAttribute('download', 'hesabix-buysell-report-list.xlsx');
+            fileLink.setAttribute('download', 'buysell-report-list.xlsx');
             document.body.appendChild(fileLink);
             fileLink.click();
           })
