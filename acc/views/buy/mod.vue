@@ -90,9 +90,31 @@
         <div class="row">
           <div class="col-sm-12 col-md-5 mb-2">
             <label class="form-label">کالا و خدمات</label>
-            <v-select dir="rtl" :options="commodity" label="name" v-model="itemData.commodity" class="">
+            <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name" v-model="itemData.commodity" class="">
               <template #no-options="{ search, searching, loading }">
                 وردی یافت نشد!
+              </template>
+              <template v-slot:option="option">
+                <div class="row mb-1">
+                  <div class="col-12">
+                    <i class="fa fa-box me-1"></i>
+                    {{ option.name }}
+                  </div>
+                  <div class="col-12">
+                    
+                    <small v-if="option.khadamat == false">
+                      <i class="fa fa-store me-1"></i>
+                      <small class="text-danger">
+                        موجودی:
+                      </small>
+                      <label style="direction: ltr;">
+                        {{ option.count }}
+                      </label>
+                      {{ option.unit }}
+                    </small>
+
+                  </div>
+                </div>
               </template>
             </v-select>
           </div>
@@ -264,6 +286,7 @@ export default {
       if (newVal != '') {
         this.itemData.price = this.itemData.commodity.priceBuy.valueOf();
       }
+      this.itemData.des = this.itemData.commodity.des;
     },
     itemsSelected: {
       handler: function (val, oldVal) {
@@ -303,6 +326,13 @@ export default {
       loading(true);
       axios.post('/api/person/list/search', { search: query }).then((response) => {
         this.persons = response.data;
+        loading(false);
+      });
+    },
+    searchCommodity(query, loading) {
+      loading(true);
+      axios.post('/api/commodity/list/search', { search: query }).then((response) => {
+        this.commodity = response.data;
         loading(false);
       });
     },
@@ -374,7 +404,7 @@ export default {
         this.persons = response.data;
       });
       //load commodities
-      axios.get('/api/commodity/list').then((response) => {
+      axios.get('/api/commodity/list/search').then((response) => {
         this.commodity = response.data;
         if (response.data.length != 0) {
           this.itemData.commodity = response.data[0];

@@ -78,6 +78,25 @@
             <template #item-priceSell="{ priceSell }">
               {{ this.$filters.formatNumber(priceSell) }}
             </template>
+            <template #item-count="{ count, khadamat }">
+              <label v-if="khadamat == false">
+                <span class="text-danger" v-if="count < 0">
+                  <i class="fa fa-arrow-down me-1"></i>
+                  {{ this.$filters.formatNumber(Math.abs(count)) }}
+                  کمبود موجودی
+                </span>
+                <span class="text-success" v-if="count > 0">
+                  <i class="fa fa-arrow-up me-1"></i>
+                  {{ this.$filters.formatNumber(Math.abs(count)) }}
+                </span>
+                <span class="text-dark" v-if="count == 0">
+                  {{ this.$filters.formatNumber(Math.abs(count)) }}
+                </span>
+              </label>
+              <label v-else>آیتم خدماتی</label>
+
+
+            </template>
             <template #item-khadamat="{ khadamat }">
               <label v-if="khadamat == false">کالا و اقلام فیزیکی</label>
               <label v-else>خدمات</label>
@@ -129,6 +148,7 @@ export default {
         { text: "کالا / خدمات", value: "khadamat", sortable: true, width: 150 },
         { text: "نام کالا و خدمات", value: "name", sortable: true, width: 150 },
         { text: "واحد شمارش", value: "unit", sortable: true, width: 100 },
+        { text: "موجودی", value: "count", sortable: true, width: 150 },
         { text: "دسترسی سریع", value: "speedAccess", width: 100 },
         { text: "دسته‌بندی", value: "cat", sortable: true, width: 100 },
         { text: "قیمت خرید", value: "priceBuy", sortable: true, width: 100 },
@@ -159,7 +179,7 @@ export default {
           var fileURL = window.URL.createObjectURL(new Blob([response.data]));
           var fileLink = document.createElement('a');
           fileLink.href = fileURL;
-          fileLink.setAttribute('download', 'hesabix-commodity-list.xlsx');
+          fileLink.setAttribute('download', 'commodity-list.xlsx');
           document.body.appendChild(fileLink);
           fileLink.click();
         })
@@ -184,7 +204,7 @@ export default {
             var fileLink = document.createElement('a');
 
             fileLink.href = fileURL;
-            fileLink.setAttribute('download', 'hesabix-commodity-list.xlsx');
+            fileLink.setAttribute('download', 'commodity-list.xlsx');
             document.body.appendChild(fileLink);
             fileLink.click();
           })

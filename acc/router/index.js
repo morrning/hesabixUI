@@ -20,6 +20,11 @@ const router = createRouter({
       component: () => import('../views/reports/persons/debtors.vue'),
     },
     {
+      path: '/acc/reports/commodity/buysell',
+      name: 'commodity_report_buysell',
+      component: () => import('../views/reports/commodity/buysellByCommodity.vue'),
+    },
+    {
       path: '/acc/reports/persons/depositors',
       name: 'person_depositors_list',
       component: () => import('../views/reports/persons/depositors.vue'),

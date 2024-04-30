@@ -6,10 +6,10 @@
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fa-solid fa-chart-simple px-2"></i>
-        گزارش خرید و فروش های اشخاص
+        گزارش خرید و فروش های به تفکیک کالا
       </h3>
       <div class="block-options">
-        <div class="dropdown">
+        <div hidden class="dropdown">
           <a class="btn btn-sm btn-danger ms-2 dropdown-toggle text-end" href="#" role="button"
             data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-file-pdf"></i>
@@ -19,7 +19,7 @@
             <li><a @click.prevent="print(true)" class="dropdown-item" href="#">همه موارد</a></li>
           </ul>
         </div>
-        <div class="dropdown">
+        <div hidden class="dropdown">
           <a class="btn btn-sm btn-success ms-2 dropdown-toggle text-end" href="#" role="button"
             data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-file-excel"></i>
@@ -38,35 +38,29 @@
             <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="mb-2">
-                  <label class="form-label">شخص</label>
-                  <v-select dir="rtl" @search="searchPerson" :options="persons" label="nikename"
-                    v-model="selectedPerson">
+                  <label class="form-label">کالا و خدمات</label>
+                  <v-select dir="rtl" @search="searchCommodity" :options="commoditys" label="name"
+                    v-model="selectedCommodity">
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
                     </template>
                     <template v-slot:option="option">
                       <div class="row mb-1">
                         <div class="col-12">
-                          <i class="fa fa-user me-2"></i>
-                          {{ option.nikename }}
+                          <i class="fa fa-box me-1"></i>
+                          {{ option.name }}
                         </div>
                         <div class="col-12">
-                          <div class="row">
-                            <div class="col-6">
-                              <i class="fa fa-phone me-2"></i>
-                              {{ option.mobile }}
-                            </div>
-                            <div class="col-6">
-                              <i class="fa fa-bars"></i>
-                              تراز:
-                              {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
-          parseInt(option.bd))) }}
-                              <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
-                                بدهکار </span>
-                              <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
-                                بستانکار </span>
-                            </div>
-                          </div>
+                          <small v-if="option.khadamat == false">
+                            <i class="fa fa-store me-1"></i>
+                            <small class="text-danger">
+                              موجودی:
+                            </small>
+                            <label style="direction: ltr;">
+                              {{ option.count }}
+                            </label>
+                            {{ option.unit }}
+                          </small>
                         </div>
                       </div>
                     </template>
@@ -96,16 +90,15 @@
                   :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
                   header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
                   emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
-                  <template #item-khadamat="{ khadamat }">
-                    <label v-if="khadamat == false">کالا و اقلام فیزیکی</label>
-                    <label v-else>خدمات</label>
-                  </template>
                   <template #item-docCode="{ docCode }">
                     <RouterLink :to="'/acc/accounting/view/' + docCode">{{ docCode }}</RouterLink>
                   </template>
                   <template #item-type="{ docCode, type }">
-                    <RouterLink v-if="type == 'buy'" :to="'/acc/buy/view/' + docCode">خرید</RouterLink>
-                    <RouterLink v-else-if="type == 'sell'" :to="'/acc/sell/view/' + docCode">فروش</RouterLink>
+                    <RouterLink class="text-success" v-if="type == 'buy'" :to="'/acc/buy/view/' + docCode">خرید</RouterLink>
+                    <RouterLink class="text-danger" v-else-if="type == 'sell'" :to="'/acc/sell/view/' + docCode">فروش</RouterLink>
+                  </template>
+                  <template #item-person="{ person, type }">
+                    <RouterLink :to="'/acc/persons/card/view/' + person.code">{{ person.nikename }}</RouterLink>
                   </template>
                 </EasyDataTable>
                 <div class="container-fluid p-0 mx-0 my-3">
@@ -154,68 +147,71 @@ import { ref } from "vue";
 import { RouterLink } from "vue-router";
 
 export default {
-  name: "buysellByPerson",
+  name: "buysellByCommodity",
   data: () => {
     return {
       loading: ref(true),
       sumSelected: 0,
       sumTotal: 0,
-      persons: [],
+      commoditys: [],
       types: [
         { id: 'buy', label: 'خرید' },
         { id: 'sell', label: 'فروش' },
+        { id: 'all', label: 'همه موارد' },
       ],
       selectedType: {},
-      selectedPerson: {},
+      selectedCommodity: {},
       searchValue: '',
       loading: ref(true),
       items: [],
       itemsSelected: [],
       headers: [
         { text: "کد", value: "code" },
-        { text: "سند حسابداری", value: "docCode" },
+        { text: "حسابداری", value: "docCode" },
         { text: "نوع", value: "type" },
+        { text: "شخص", value: "person" },
         { text: "تاریخ", value: "date" },
-        { text: "کالا / خدمات", value: "khadamat", sortable: true },
-        { text: "نام کالا و خدمات", value: "name", sortable: true },
-        { text: "واحد شمارش", value: "unit", sortable: true },
         { text: "تعداد", value: "count", sortable: true },
+        { text: "موجودی", value: "amountInc", sortable: true },
         { text: "مبلغ فی", value: "priceOne", sortable: true },
         { text: "مبلغ کل", value: "priceAll", sortable: true },
-        { text: "تجمعی", value: "amountInc", sortable: true },
       ],
     }
   },
   methods: {
-    searchPerson(query, loading) {
+    searchCommodity(query, loading) {
       loading(true);
-      axios.post('/api/person/list/search', { search: query }).then((response) => {
-        this.persons = response.data;
+      axios.post('/api/commodity/list/search', { search: query }).then((response) => {
+        this.commoditys = response.data;
         loading(false);
       });
     },
     loadData() {
-      axios.get('/api/person/list/search')
+      axios.get('/api/commodity/list/search')
         .then((response) => {
-          this.persons = response.data;
-          if (this.persons.length != 0) {
-            this.selectedPerson = this.persons[0];
+          this.commoditys = response.data;
+          if (this.commoditys.length != 0) {
+            this.selectedCommodity = this.commoditys[0];
           }
-          this.selectedType = this.types[0];
+          this.selectedType = this.types[2];
           this.loading = false;
         });
     },
     filter() {
       this.loading = true;
-      axios.post('/api/report/person/buysell', {
+      axios.post('/api/report/commodity/buysell', {
         type: this.selectedType.id,
-        person: this.selectedPerson.code
+        commodity: this.selectedCommodity.code
       }).then((response) => {
         this.items = response.data;
         let sum = 0;
         this.sumTotal = 0;
         this.items.forEach((item) => {
-          sum += parseInt(item.priceAll.replaceAll(',', ''));
+          if (item.type == 'sell') {
+            sum -= parseInt(item.count.replaceAll(',', ''));
+          } else if (item.type == 'buy') {
+            sum += parseInt(item.count.replaceAll(',', ''));
+          }
           item.amountInc = this.$filters.formatNumber(sum);
         });
         this.sumTotal = sum;
@@ -295,7 +291,7 @@ export default {
     this.loadData();
   },
   watch: {
-    selectedPerson: {
+    selectedCommodity: {
       handler: function (val, oldVal) {
         this.filter();
       },
