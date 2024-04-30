@@ -274,7 +274,7 @@ export default {
       handler: function (val, oldVal) {
         this.sumSelected = 0;
         this.itemsSelected.forEach((item) => {
-          this.sumSelected += parseInt(item.price.replaceAll(',', ''));
+          this.sumSelected += parseInt(item.bs.replaceAll(',', ''));
         })
       },
       deep: true
@@ -283,7 +283,7 @@ export default {
       handler: function (val, oldVal) {
         this.sumTotal = 0;
         this.items.forEach((item) => {
-          this.sumTotal += parseInt(item.price.replaceAll(',', ''));
+          this.sumTotal += parseInt(item.bs.replaceAll(',', ''));
         })
       },
       deep: true
