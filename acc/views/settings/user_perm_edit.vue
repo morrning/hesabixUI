@@ -14,9 +14,9 @@
     <div class="block-content p-0">
       <div class="alert alert-primary">
         ویرایش دسترسی‌های کاربر با نام
-        <span class="fw-bold">{{this.info.user}}</span>
+        <span class="fw-bold">{{ this.info.user }}</span>
         با پست الکترونیکی
-        <span class="fw-bold">{{this.info.email}}</span>
+        <span class="fw-bold">{{ this.info.email }}</span>
       </div>
       <div class="container-fluid">
         <div class="row">
@@ -117,19 +117,19 @@
               </div>
             </div>
             <div class="space-y-2">
-                <div class="form-check form-switch">
-                  <input v-model="info.archiveMod" @change="savePerms()" class="form-check-input" type="checkbox">
-                  <label class="form-check-label">ویرایش فایل های آرشیو</label>
-                </div>
+              <div class="form-check form-switch">
+                <input v-model="info.archiveMod" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">ویرایش فایل های آرشیو</label>
+              </div>
             </div>
           </div>
           <div class="col-sm-12 col-md-4">
-              <div class="space-y-2">
-                <div class="form-check form-switch">
-                  <input v-model="info.cheque" @change="savePerms()" class="form-check-input" type="checkbox">
-                  <label class="form-check-label">مدیریت چک‌ها</label>
-                </div>
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.cheque" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">مدیریت چک‌ها</label>
               </div>
+            </div>
             <div class="space-y-2">
               <div class="form-check form-switch">
                 <input v-model="info.accounting" @change="savePerms()" class="form-check-input" type="checkbox">
@@ -167,11 +167,44 @@
               </div>
             </div>
             <div class="space-y-2">
-                <div class="form-check form-switch">
-                  <input v-model="info.archiveDelete" @change="savePerms()" class="form-check-input" type="checkbox">
-                  <label class="form-check-label">حذف فایل های آرشیو</label>
-                </div>
+              <div class="form-check form-switch">
+                <input v-model="info.archiveDelete" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">حذف فایل های آرشیو</label>
               </div>
+            </div>
+          </div>
+        </div>
+        <div v-show="this.isPluginActive('accpro')" class="row mt-2">
+          <b>بسته حسابداری پیشرفته</b>
+          <div class="col-sm-12 col-md-4">
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.plugAccproRfbuy" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">فاکتورهای برگشت از خرید</label>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.plugAccproCloseYear" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">بستن سال مالی</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.plugAccproRfsell" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">فاکتورهای برگشت از فروش</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.plugAccproAccounting" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">صدور و ویرایش اسناد حسابداری</label>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row mt-2">
@@ -212,33 +245,36 @@ import axios from "axios";
 
 export default {
   name: "user_perm_edit",
-  data:()=>{return{
-    info:{},
-    plugins:{}
-  }},
-  methods:{
-    isPluginActive(plugName){
+  data: () => {
+    return {
+      info: {},
+      plugins: {}
+    }
+  },
+  methods: {
+    isPluginActive(plugName) {
       return this.plugins[plugName] !== undefined;
     },
-    getData(id){
+    getData(id) {
       axios.post('/api/business/get/user/permissions',
-          {'bid':localStorage.getItem('activeBid'),
-            'email':id
-          }
-      ).then((response)=>{
+        {
+          'bid': localStorage.getItem('activeBid'),
+          'email': id
+        }
+      ).then((response) => {
         this.info = response.data;
         this.info.bid = localStorage.getItem('activeBid');
       });
       //get active plugins
-      axios.post('/api/plugin/get/actives',).then((response)=>{
+      axios.post('/api/plugin/get/actives',).then((response) => {
         this.plugins = response.data;
       });
     },
-    savePerms(){
-      axios.post('/api/business/save/user/permissions',this.info)
+    savePerms() {
+      axios.post('/api/business/save/user/permissions', this.info)
     }
   },
-  beforeRouteEnter(to,from,next) {
+  beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.getData(to.params.email);
     })
@@ -246,6 +282,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

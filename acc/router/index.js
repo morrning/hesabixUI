@@ -270,6 +270,21 @@ const router = createRouter({
       component: () => import('../views/sell/viewInvoice.vue'),
     },
     {
+      path: '/acc/rfbuy/mod/:id?',
+      name: 'rfbuy_mod',
+      component: () => import('../views/rfbuy/mod.vue'),
+    },
+    {
+      path: '/acc/rfbuy/list',
+      name: 'rfbuy_list',
+      component: () => import('../views/rfbuy/list.vue'),
+    },
+    {
+      path: '/acc/rfbuy/view/:id?',
+      name: 'rfbuy_view',
+      component: () => import('../views/rfbuy/viewInvoice.vue'),
+    },
+    {
       path: '/acc/plugin-center/list',
       name: 'plugin_center_list',
       component: () => import('../views/store/plugin-world.vue'),
@@ -293,6 +308,11 @@ const router = createRouter({
       path: '/acc/plugins/apartemanma/intro',
       name: 'plugin_apartemanma_intro',
       component: () => import('../views/plugins/amartemanma/intro.vue'),
+    },
+    {
+      path: '/acc/plugins/accpro/intro',
+      name: 'plugin_accpro_intro',
+      component: () => import('../views/plugins/accpro/intro.vue'),
     },
     {
       path: '/acc/plugins/restamap/intro',

@@ -207,6 +207,7 @@ export default {
     },
     filter() {
       this.loading = true;
+      this.itemsSelected =[];
       axios.post('/api/report/person/buysell', {
         type: this.selectedType.id,
         person: this.selectedPerson.code

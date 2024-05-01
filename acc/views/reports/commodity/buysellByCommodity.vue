@@ -112,7 +112,7 @@
                             مبلغ کل:
                           </span>
                           <span class="text-primary">
-                            {{ this.$filters.formatNumber(this.sumTotal) }}
+                            {{ this.$filters.formatNumber(this.sumMoneyTotal) }}
                             ریال
                           </span>
                         </div>
@@ -153,6 +153,7 @@ export default {
       loading: ref(true),
       sumSelected: 0,
       sumTotal: 0,
+      sumMoneyTotal:0,
       commoditys: [],
       types: [
         { id: 'buy', label: 'خرید' },
@@ -199,22 +200,27 @@ export default {
     },
     filter() {
       this.loading = true;
+      this.itemsSelected =[];
       axios.post('/api/report/commodity/buysell', {
         type: this.selectedType.id,
         commodity: this.selectedCommodity.code
       }).then((response) => {
         this.items = response.data;
         let sum = 0;
+        let sumMoney = 0;
         this.sumTotal = 0;
         this.items.forEach((item) => {
           if (item.type == 'sell') {
             sum -= parseInt(item.count.replaceAll(',', ''));
+            sumMoney += parseInt(item.priceAll.replaceAll(',', ''));
           } else if (item.type == 'buy') {
             sum += parseInt(item.count.replaceAll(',', ''));
+            sumMoney += parseInt(item.priceAll.replaceAll(',', ''));
           }
           item.amountInc = this.$filters.formatNumber(sum);
         });
         this.sumTotal = sum;
+        this.sumMoneyTotal = sumMoney;
         this.loading = false;
       })
     },

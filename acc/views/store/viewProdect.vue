@@ -52,7 +52,7 @@ export default defineComponent({
                 <p class="text-muted mb-3"> مدت اعتبار افزونه :
                 <i class="text-primary">{{item.timelabel}}</i>
                 </p>
-                <p class="fs-sm fw-bold text-muted mb-0"> مبلغ قابل پرداخت: (  ۹ درصد مالیات بر ارزش افزوده اضافه می‌شود)
+                <p class="fs-sm fw-bold text-muted mb-0"> مبلغ قابل پرداخت: (با احتساب مالیات بر ارزش افزوده)
                   <h3 class="text-success">{{ Intl.NumberFormat('en-US').format((item.price * 109)/100) }} تومان</h3>
                 </p>
                 <div class="text-center">
