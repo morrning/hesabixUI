@@ -6,10 +6,10 @@
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fa fa-book"></i>
-        فاکتورهای برگشت از خرید
+        فاکتورهای برگشت از فروش
       </h3>
       <div class="block-options">
-        <router-link to="/acc/rfbuy/mod/" class="block-options-item">
+        <router-link to="/acc/rfsell/mod/" class="block-options-item">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
       </div>
@@ -39,7 +39,7 @@
                     <i class="fa fa-file text-success pe-2"></i>
                     سند حسابداری
                   </router-link>
-                  <router-link class="dropdown-item" :to="'/acc/rfbuy/view/' + code">
+                  <router-link class="dropdown-item" :to="'/acc/rfsell/view/' + code">
                     <i class="fa fa-eye text-info pe-2"></i>
                     مشاهده فاکتور
                   </router-link>
@@ -55,7 +55,7 @@
               </div>
             </template>
             <template #item-des="{ des }">
-              {{ des.replace("فاکتور فروش:", "") }}
+              {{ des.replace("فاکتور برگشت از فروش:", "") }}
             </template>
             <template #item-status="{ status }">
               <span v-if="status == 'تسویه شده'" class="text-success"><i class="fa fa-check me-2"></i>تسویه شده</span>
@@ -115,11 +115,11 @@ export default {
       headers: [
         { text: "عملیات", value: "operation" },
         { text: "شماره سند", value: "code", sortable: true },
+        { text: "مبلغ", value: "amount", sortable: true },
         { text: "وضعیت", value: "status", sortable: true },
-        { text: "تاریخ", value: "date", sortable: true },
+        { text: "تاریخ", value: "date", sortable: true},
         { text: "شرح", value: "des", sortable: true },
         { text: "تامین کننده", value: "person", sortable: true },
-        { text: "مبلغ", value: "amount", sortable: true },
         { text: "ثبت کننده", value: "submitter", sortable: true },
       ]
     }
@@ -127,32 +127,15 @@ export default {
   methods: {
     loadData() {
       axios.post('/api/accounting/search', {
-        type: 'rfbuy'
+        type: 'rfsell'
       })
         .then((response) => {
           this.items = response.data;
           this.items.forEach((item) => {
-            item.amount = this.$filters.formatNumber(item.amount);
+            item.amount = this.$filters.formatNumber(item.amount)
             this.sumTotal += parseInt(item.amount.replaceAll(",", ''));
           })
           this.loading = false;
-        })
-    },
-    canEditItem(code) {
-      this.loading = true;
-      axios.post('/api/rfbuy/edit/can/' + code)
-        .then((response) => {
-          this.loading = false;
-          if (response.data.result == false) {
-            Swal.fire({
-              text: 'این فاکتور به دلیل وجود اسناد پرداخت یا حواله های انبار مرتبط با آن قابل ویرایش نیست',
-              confirmButtonText: 'قبول',
-              icon: 'error'
-            });
-          }
-          else {
-            this.$router.push('/acc/rfbuy/mod/' + code);
-          }
         });
     },
     deleteItem(code) {
@@ -178,7 +161,7 @@ export default {
                 }
               }
               Swal.fire({
-                text: 'فاکتور برگشت از خرید با موفقیت حذف شد.',
+                text: 'فاکتور برگشت از فروش با موفقیت حذف شد.',
                 icon: 'success',
                 confirmButtonText: 'قبول'
               });
@@ -193,6 +176,23 @@ export default {
           })
         }
       })
+    },
+    canEditItem(code) {
+      this.loading = true;
+      axios.post('/api/rfsell/edit/can/' + code)
+        .then((response) => {
+          this.loading = false;
+          if (response.data.result == false) {
+            Swal.fire({
+              text: 'این فاکتور به دلیل وجود اسناد پرداخت یا حواله های انبار مرتبط با آن قابل ویرایش نیست',
+              confirmButtonText: 'قبول',
+              icon: 'error'
+            });
+          }
+          else {
+            this.$router.push('/acc/rfsell/mod/' + code);
+          }
+        });
     }
   },
   beforeMount() {

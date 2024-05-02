@@ -2,10 +2,10 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
+        <router-link class="text-warning mx-2 px-2" to="/acc/buy/list">
           <i class="fa fw-bold fa-arrow-right"></i>
-        </button>
-        فاکتور برگشت از خرید
+        </router-link>
+        فاکتور برگشت از فروش
       </h3>
       <div class="block-options">
         <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-alt-primary">
@@ -27,14 +27,11 @@
           </div>
           <div class="col-sm-12 col-md-6">
             <div class="form-control mb-2">
-              <label class="form-label">تامین کننده</label>
+              <label class="form-label">خریدار</label>
               <div class="row">
                 <div class="col-10">
-                  <v-select class="" dir="rtl" @search="searchPerson" :options="persons" label="nikename"
+                  <v-select @search="searchPerson" class="" dir="rtl" :options="persons" label="nikename"
                     v-model="data.person">
-                    <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
-                    </template>
                     <template v-slot:option="option">
                       <div class="row mb-1">
                         <div class="col-12">
@@ -104,6 +101,7 @@
                     {{ option.name }}
                   </div>
                   <div class="col-12">
+                    
                     <small v-if="option.khadamat == false">
                       <i class="fa fa-store me-1"></i>
                       <small class="text-danger">
@@ -114,6 +112,7 @@
                       </label>
                       {{ option.unit }}
                     </small>
+
                   </div>
                 </div>
               </template>
@@ -129,7 +128,7 @@
           </div>
           <div class="col-sm-12 col-md-3 mb-2">
             <label class="form-label">قیمت کل</label>
-            <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bs" />
+            <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bd" />
           </div>
           <div class="col-sm-12 col-md-12 mb-2">
             <label class="form-label">شرح</label>
@@ -223,17 +222,16 @@ export default {
       sumTotal: 0,
       itemsSelected: [],
       items: [],
+      selectedPersonWithDet: {},
       headers: [
         { text: "کد کالا", value: "commodity.code" },
         { text: "کالا", value: "commodity.name" },
-        { text: "شرح", value: "des" },
         { text: "واحد", value: "commodity.unit" },
         { text: "تعداد", value: "count" },
         { text: "مبلغ واحد", value: "price" },
-        { text: "مبلغ کل", value: "bs" },
+        { text: "مبلغ کل", value: "bd" },
         { text: "عملیات", value: "operation" },
       ],
-      selectedPersonWithDet: {},
       isLoading: false,
       canSubmit: true,
       updateID: null,
@@ -272,7 +270,7 @@ export default {
         bd: 0,
         type: 'commodity',
         id: 0,
-        des: '',
+        des: 'کالا و خدمات',
         table: 120
       }
     }
@@ -286,7 +284,7 @@ export default {
     },
     'itemData.commodity': function (newVal, oldVal) {
       if (newVal != '') {
-        this.itemData.price = this.itemData.commodity.priceSell.valueOf();
+        this.itemData.price = this.itemData.commodity.priceBuy.valueOf();
       }
       this.itemData.des = this.itemData.commodity.des;
     },
@@ -294,7 +292,7 @@ export default {
       handler: function (val, oldVal) {
         this.sumSelected = 0;
         this.itemsSelected.forEach((item) => {
-          this.sumSelected += parseInt(item.bs.replaceAll(',', ''));
+          this.sumSelected += parseInt(item.bd.replaceAll(',', ''));
         })
       },
       deep: true
@@ -303,7 +301,7 @@ export default {
       handler: function (val, oldVal) {
         this.sumTotal = 0;
         this.items.forEach((item) => {
-          this.sumTotal += parseInt(item.bs.replaceAll(',', ''));
+          this.sumTotal += parseInt(item.bd.replaceAll(',', ''));
         })
       },
       deep: true
@@ -317,7 +315,7 @@ export default {
       deep: true
     },
   },
-  beforeMount() {
+  mounted() {
     this.loadData();
   },
   beforeRouteUpdate(to, from) {
@@ -339,7 +337,7 @@ export default {
       });
     },
     calc() {
-      this.itemData.bs = this.itemData.price.valueOf() * this.itemData.count.valueOf()
+      this.itemData.bd = this.itemData.price.valueOf() * this.itemData.count.valueOf()
     },
     addItem() {
       if (this.itemData.count == 0) {
@@ -366,7 +364,7 @@ export default {
       else {
         this.itemData.price = this.$filters.formatNumber(this.itemData.price);
         this.itemData.count = this.$filters.formatNumber(this.itemData.count);
-        this.itemData.bs = this.$filters.formatNumber(this.itemData.bs);
+        this.itemData.bd = this.$filters.formatNumber(this.itemData.bd);
         this.items.push(this.itemData);
         this.itemData = {
           commodity: this.commodity[0],
@@ -376,7 +374,7 @@ export default {
           bd: 0,
           type: 'commodity',
           id: this.commodity[0].id,
-          des: '',
+          des: 'کالا و خدمات',
           table: 120
         }
       }
@@ -431,7 +429,7 @@ export default {
       //load data for edit document
 
       if (this.$route.params.id != '') {
-        axios.get('/api/sell/get/info/' + this.$route.params.id).then((response) => {
+        axios.get('/api/rfsell/get/info/' + this.$route.params.id).then((response) => {
           this.data.date = response.data.date;
           this.data.des = response.data.des;
           this.data.person = response.data.person;
@@ -440,18 +438,20 @@ export default {
               this.items.push({
                 commodity: item.commodity,
                 count: item.commodity_count,
-                price: this.$filters.formatNumber(parseInt(parseInt(item.bs) / parseInt(item.commodity_count))),
+                price: this.$filters.formatNumber(parseInt(parseInt(item.bd) / parseInt(item.commodity_count))),
                 bs: this.$filters.formatNumber(item.bs),
-                bd: this.$filters.formatNumber(item.bd),
+                bd: item.bd,
                 type: 'commodity',
                 id: item.commodity.id,
-                des: '',
+                des: 'کالا و خدمات',
                 table: 120
               });
             }
           });
+
         });
       }
+
     },
     save() {
       this.canSubmit = false;
@@ -464,28 +464,28 @@ export default {
       }
       else if (this.data.person == null || this.data.person == '') {
         Swal.fire({
-          text: 'مشتری انتخاب نشده است.',
+          text: ' خریدار انتخاب نشده است.',
           icon: 'warning',
           confirmButtonText: 'قبول'
         });
       }
       else {
-        // add kharidar
-        let bd = 0;
+        // add tamin konanade
+        let bs = 0;
         this.items.forEach((item) => {
-          bd = bd + parseInt(item.bs.replace(/,(?=\d{3})/g, ''));
+          bs = bs + parseInt(item.bd.replace(/,(?=\d{3})/g, ''));
         })
         this.items.push({
           commodity: this.commodity[0],
-          bs: 0,
-          bd: bd,
+          bs: bs,
+          bd: 0,
           type: 'person',
           id: this.data.person.id,
-          des: 'برگشت از خرید به تامین کننده',
+          des: 'برگشت کالا به خریدار',
           table: 3
         });
         axios.post('/api/accounting/insert', {
-          type: 'rfbuy',
+          type: 'rfsell',
           date: this.data.date,
           des: this.data.des,
           rows: this.items,
@@ -497,7 +497,7 @@ export default {
             icon: 'success',
             confirmButtonText: 'قبول'
           }).then(() => {
-            this.$router.push('/acc/rfbuy/list')
+            this.$router.push('/acc/rfsell/list')
           });
         })
       }

@@ -235,16 +235,6 @@ const router = createRouter({
       component: () => import('../views/buy/list.vue'),
     },
     {
-      path: '/acc/buy/rfb/mod/:id?',
-      name: 'buy__rfb_mod',
-      component: () => import('../views/buy/rfb/mod.vue'),
-    },
-    {
-      path: '/acc/buy/rfb/list',
-      name: 'buy_rfb_list',
-      component: () => import('../views/buy/rfb/list.vue'),
-    },
-    {
       path: '/acc/buy/view/:id?',
       name: 'buy_view',
       component: () => import('../views/buy/viewInvoice.vue'),
@@ -283,6 +273,21 @@ const router = createRouter({
       path: '/acc/rfbuy/view/:id?',
       name: 'rfbuy_view',
       component: () => import('../views/rfbuy/viewInvoice.vue'),
+    },
+    {
+      path: '/acc/rfsell/mod/:id?',
+      name: 'rfsell_mod',
+      component: () => import('../views/rfsell/mod.vue'),
+    },
+    {
+      path: '/acc/rfsell/list',
+      name: 'rfsell_list',
+      component: () => import('../views/rfsell/list.vue'),
+    },
+    {
+      path: '/acc/rfsell/view/:id?',
+      name: 'rfsell_view',
+      component: () => import('../views/rfsell/viewInvoice.vue'),
     },
     {
       path: '/acc/plugin-center/list',

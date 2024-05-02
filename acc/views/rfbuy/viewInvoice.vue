@@ -70,22 +70,17 @@ export default defineComponent({
     },
     loadData(){
       axios.post('/api/accounting/doc/get',{'code':this.$route.params.id}).then((response)=>{
-          this.item = response.data;
-          if(this.item.doc.shortlink != null){
-            this.shortlink_url = getApiUrl() + '/sl/sell/' + localStorage.getItem("activeBid") + '/' + this.item.doc.shortlink;
-          }
-          else{
-            this.shortlink_url = getApiUrl() + '/sl/sell/' + localStorage.getItem("activeBid") + '/' + this.item.doc.id;
-          }
-          response.data.rows.forEach(element => {
+          response.data.rows.forEach((element) => {
             if(element.person){
               this.person = element.person
             }
             else if(element.commodity){
+              this.totalPrice += parseInt(element.bs);
+              element.unitPrice = element.bs / element.count
               this.commoditys.push(element);
-              this.totalPrice += parseInt(element.bs)
             }
           });
+          this.item = response.data;
         response.data.relatedDocs.forEach(element => {
           this.totalRec += parseInt(element.amount)
         });
@@ -94,42 +89,6 @@ export default defineComponent({
           this.bid = response.data;
         });
     },
-    sendSMS(){
-      this.loading = true;
-      const regex = new RegExp("^(\\+98|0)?9\\d{9}$");
-      if(!regex.test(this.person.mobile)){
-        Swal.fire({
-          text: 'شماره موبایل وارد شده نا معتبر است.',
-          icon: 'error',
-          confirmButtonText: 'قبول'
-        });
-        this.loading = false;
-      }
-      else{
-        this.send_message_label = 'در حال ارسال...';
-        axios.post('/api/sms/send/sell-invoice/' + this.item.doc.id + '/' + this.person.mobile).then((response)=>{
-          if(response.data.result == 2) {
-            Swal.fire({
-              text: 'اعتبار سرویس پیامک کافی نیست.',
-              icon: 'error',
-              confirmButtonText: 'قبول'
-            });
-            this.send_message_label = 'ارسال';
-          }
-          else if(response.data.result == 1) {
-            Swal.fire({
-              text: 'پیامک اطلاع رسانی ارسال شد.',
-              icon: 'success',
-              confirmButtonText: 'قبول'
-            });
-            this.send_message_label = 'ارسال شد!'
-          }
-          this.loading = false;
-        })
-      }
-
-
-    }
   },
   mounted() {
     this.loadData();
@@ -147,7 +106,7 @@ export default defineComponent({
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fas fa-file-invoice-dollar"></i>
-        مشاهده و چاپ فاکتور فروش</h3>
+        مشاهده و چاپ فاکتور برگشت از خرید</h3>
       <div class="block-options">
         <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="sell" cat="sell"></archive-upload>
         <!-- Button trigger modal -->
@@ -211,70 +170,6 @@ export default defineComponent({
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ فاکتور</span>
         </button>
-
-        <!-- Button trigger modal -->
-        <button v-show="this.bid.shortlinks" type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <i class="fas fa-share-nodes"></i>
-          <span class="d-none d-sm-inline-block">اشتراک گذاری</span>
-        </button>
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">
-                  <i class="fas fa-share-nodes"></i>
-                  اشتراک گذاری
-                </h1>
-                <div class="block-options">
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-              </div>
-              <div class="modal-body">
-                <div class="container">
-                  <div class="row">
-                    <div class="input-group mb-2">
-                      <div class="input-group-text">
-                        <i class="fa fa-paperclip me-2"></i>
-                        پیوند فاکتور</div>
-                      <input Readonly="Readonly" type="text" class="form-control" v-model="shortlink_url">
-                      <button class="btn btn-outline-success" type="button" @click="copyToCliboard()">{{ this.copy_label }}</button>
-                    </div>
-                    <div class="input-group">
-                      <div class="input-group-text">
-                        <i class="fa fa-message me-2"></i>
-                        ارسال پیامک</div>
-                      <input type="text" class="form-control" v-model="this.person.mobile">
-                      <button :disabled="this.loading" class="btn btn-outline-success" type="button" @click="sendSMS()">{{ this.send_message_label }}</button>
-                    </div>
-                  </div>
-                  <div class="mt-3">
-                    <i class="fas fa-share-nodes me-3"></i>
-                    <label>اشتراک گذاری در شبکه‌های اجتماعی</label>
-                  </div>
-                  <div class="mt-2">
-                    <a target="_blank" :href="'tg://msg?text=' + this.shortlink_url">
-                      <img src="/img/icons/telegram.png" class="m-3" style="max-width: 30px;"/>
-                    </a>
-                    <a target="_blank" :href="'et://msg_url?url=' + this.shortlink_url">
-                      <img src="/img/icons/eitaa.jpeg" class="m-3" style="max-width: 30px;"/>
-                    </a>
-                    <a target="_blank" :href="'https://ble.ir/share/url?url=' + this.shortlink_url">
-                      <img src="/img/icons/bale-logo.png" class="m-3" style="max-width: 30px;"/>
-                    </a>
-                    <a target="_blank" :href="'https://ble.ir/share/url?url=' + this.shortlink_url">
-                      <img src="/img/icons/robika.png" class="m-3" style="max-width: 30px;"/>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
@@ -283,7 +178,7 @@ export default defineComponent({
       <div class="col-3 text-center"></div>
       <div class="col-6 text-center">
         <h3 class="font-weight-bold">{{ this.bid.legal_name }}</h3>
-        <h5 class="">صورتحساب فروش کالا و خدمات</h5>
+        <h5 class="">صورتحساب برگشت از خرید کالا و خدمات</h5>
       </div>
       <div class="col-3 text-right">
         <p>شماره سفارش: {{item.doc.code}}</p>
@@ -294,7 +189,7 @@ export default defineComponent({
       <table class="table table-bordered">
         <thead>
         <tr>
-          <th class="text-center table-header" colspan="11">مشخصات فروشنده</th>
+          <th class="text-center table-header" colspan="11">مشخصات خریدار</th>
         </tr>
         </thead>
         <tbody>
@@ -331,7 +226,7 @@ export default defineComponent({
         </tbody>
         <thead>
         <tr>
-          <th class="text-center table-header" colspan="11">مشخصات خریدار</th>
+          <th class="text-center table-header" colspan="11">مشخصات تامین کننده</th>
         </tr>
         </thead>
         <tbody>
@@ -441,7 +336,7 @@ export default defineComponent({
         </tr>
         <tr style="padding: 60px 0;">
           <td colspan="4" class="text-right"> امضا خریدار</td>
-          <td colspan="4" class="text-right">مهر و امضا فروشنده</td>
+          <td colspan="4" class="text-right">مهر و امضا تامین‌کننده</td>
         </tr>
         </tbody>
       </table>

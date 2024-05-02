@@ -591,14 +591,19 @@ export default {
             <ul class="nav-main-submenu">
               <li v-if="permissions.buy" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/buy/list/">
-                  <span class="nav-main-link-name"> فاکتورهای خرید</span>
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-basket-shopping"></i>
+                    فاکتورهای خرید</span>
                   <router-link to="/acc/buy/mod/"
                     class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </router-link>
               </li>
               <li v-if="permissions.plugAccproRfbuy && this.isPluginActive('accpro')" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/rfbuy/list/">
-                  <span class="nav-main-link-name">برگشت از خرید</span>
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-delete-left"></i>
+                    برگشت از خرید
+                  </span>
                   <router-link to="/acc/rfbuy/mod/"
                     class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </router-link>
@@ -623,14 +628,26 @@ export default {
             <ul class="nav-main-submenu">
               <li v-if="permissions.sell" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/sell/fast-mod/">
-                  <i class="fa fa-car nav-main-link-icon"></i>
+                  <i class="fa fa-car"></i>
                   <span class="nav-main-link-name"> فاکتور سریع</span>
                 </router-link>
               </li>
               <li v-if="permissions.sell" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/sell/list/">
-                  <span class="nav-main-link-name"> فاکتورهای فروش</span>
+                  <span class="nav-main-link-name"> 
+                    <i class="fa-brands fa-shopify"></i>
+                    فاکتورهای فروش</span>
                   <router-link to="/acc/sell/mod/"
+                    class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </router-link>
+              </li>
+              <li v-if="permissions.plugAccproRfsell && this.isPluginActive('accpro')" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/rfsell/list/">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-delete-left"></i>
+                    برگشت از فروش
+                  </span>
+                  <router-link to="/acc/rfsell/mod/"
                     class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </router-link>
               </li>
