@@ -10,10 +10,7 @@
       </span>
     </div>
     <div class="block-content">
-      <div class="justify-content-center text-center">
-        <loading color="blue" loader="dots" v-model:active="loading" :is-full-page="false"/>
-      </div>
-      <div class="list-group mb-3">
+      <div class="list-group mb-3" v-show="!loading">
         <div v-for="item in contents" @click="runBid(item.id)" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
           <img src="/img/icons/business.png" alt="twbs" class="rounded-circle flex-shrink-0" width="50" height="50">
           <div class="d-flex gap-2 w-100 justify-content-between">
@@ -31,6 +28,9 @@
             </div>
           </div>
         </router-link>
+      </div>
+      <div class="justify-content-center text-center">
+        <loading color="blue" loader="dots" v-model:active="loading" :is-full-page="false"/>
       </div>
     </div>
   </div>
