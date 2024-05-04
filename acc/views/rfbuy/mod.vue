@@ -30,7 +30,7 @@
               <label class="form-label">تامین کننده</label>
               <div class="row">
                 <div class="col-10">
-                  <v-select class="" dir="rtl" @search="searchPerson" :options="persons" label="nikename"
+                  <v-select class="" :filterable="false" dir="rtl" @search="searchPerson" :options="persons" label="nikename"
                     v-model="data.person">
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!

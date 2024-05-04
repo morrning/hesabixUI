@@ -30,7 +30,7 @@
               <label class="form-label">خریدار</label>
               <div class="row">
                 <div class="col-10">
-                  <v-select @search="searchPerson" class="" dir="rtl" :options="persons" label="nikename"
+                  <v-select :filterable="false" @search="searchPerson" class="" dir="rtl" :options="persons" label="nikename"
                     v-model="data.person">
                     <template v-slot:option="option">
                       <div class="row mb-1">

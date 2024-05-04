@@ -79,6 +79,22 @@
               </div>
             </div>
             <div class="row">
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="">
+                  <label class="form-label">تاریخ شروع:</label>
+                  <date-picker class="" v-model="dateStart" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
+                    :min="year.start" :max="year.end" />
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="">
+                  <label class="form-label">تاریخ پایان:</label>
+                  <date-picker class="" v-model="dateEnd" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
+                    :min="dateStart" :max="year.end" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-sm-12 col-md-12 m-0 p-0">
                 <div class="mb-1">
                   <div class="input-group input-group-sm">
@@ -94,8 +110,15 @@
                     <RouterLink :to="'/acc/accounting/view/' + docCode">{{ docCode }}</RouterLink>
                   </template>
                   <template #item-type="{ docCode, type }">
-                    <RouterLink class="text-success" v-if="type == 'buy'" :to="'/acc/buy/view/' + docCode">خرید</RouterLink>
-                    <RouterLink class="text-danger" v-else-if="type == 'sell'" :to="'/acc/sell/view/' + docCode">فروش</RouterLink>
+                    <RouterLink class="text-success" v-if="type == 'buy'" :to="'/acc/buy/view/' + docCode">خرید
+                    </RouterLink>
+                    <RouterLink class="text-danger" v-else-if="type == 'sell'" :to="'/acc/sell/view/' + docCode">فروش
+                    </RouterLink>
+                    <RouterLink class="text-info" v-else-if="type == 'rfbuy'" :to="'/acc/rfbuy/view/' + docCode">برگشت
+                      از خرید</RouterLink>
+                    <RouterLink class="text-warning" v-else-if="type == 'rfsell'" :to="'/acc/rfsell/view/' + docCode">
+                      برگشت از فروش</RouterLink>
+
                   </template>
                   <template #item-person="{ person, type }">
                     <RouterLink :to="'/acc/persons/card/view/' + person.code">{{ person.nikename }}</RouterLink>
@@ -152,12 +175,17 @@ export default {
     return {
       loading: ref(true),
       sumSelected: 0,
+      year: {},
+      dateStart: '',
+      dateEnd: '',
       sumTotal: 0,
-      sumMoneyTotal:0,
+      sumMoneyTotal: 0,
       commoditys: [],
       types: [
         { id: 'buy', label: 'خرید' },
         { id: 'sell', label: 'فروش' },
+        { id: 'rfbuy', label: 'برگشت از خرید' },
+        { id: 'rfsell', label: 'برگشت از فروش' },
         { id: 'all', label: 'همه موارد' },
       ],
       selectedType: {},
@@ -194,16 +222,23 @@ export default {
           if (this.commoditys.length != 0) {
             this.selectedCommodity = this.commoditys[0];
           }
-          this.selectedType = this.types[2];
+          this.selectedType = this.types[4];
+          this.loading = false;
+        });
+      axios.get('/api/year/get')
+        .then((response) => {
+          this.year = response.data;
           this.loading = false;
         });
     },
     filter() {
       this.loading = true;
-      this.itemsSelected =[];
+      this.itemsSelected = [];
       axios.post('/api/report/commodity/buysell', {
         type: this.selectedType.id,
-        commodity: this.selectedCommodity.code
+        commodity: this.selectedCommodity.code,
+        dateStart: this.dateStart,
+        dateEnd: this.dateEnd
       }).then((response) => {
         this.items = response.data;
         let sum = 0;
@@ -297,6 +332,18 @@ export default {
     this.loadData();
   },
   watch: {
+    dateStart: {
+      handler: function (val, oldVal) {
+        this.filter();
+      },
+      deep: false
+    },
+    dateEnd: {
+      handler: function (val, oldVal) {
+        this.filter();
+      },
+      deep: false
+    },
     selectedCommodity: {
       handler: function (val, oldVal) {
         this.filter();

@@ -9,7 +9,7 @@
         گزارش خرید و فروش های اشخاص
       </h3>
       <div class="block-options">
-        <div class="dropdown">
+        <div hidden class="dropdown">
           <a class="btn btn-sm btn-danger ms-2 dropdown-toggle text-end" href="#" role="button"
             data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-file-pdf"></i>
@@ -39,7 +39,7 @@
               <div class="col-sm-12 col-md-6">
                 <div class="mb-2">
                   <label class="form-label">شخص</label>
-                  <v-select dir="rtl" @search="searchPerson" :options="persons" label="nikename"
+                  <v-select :filterable="false" dir="rtl" @search="searchPerson" :options="persons" label="nikename"
                     v-model="selectedPerson">
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
@@ -85,6 +85,22 @@
               </div>
             </div>
             <div class="row">
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="">
+                  <label class="form-label">تاریخ شروع:</label>
+                  <date-picker class="" v-model="dateStart" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
+                    :min="year.start" :max="year.end" />
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="">
+                  <label class="form-label">تاریخ پایان:</label>
+                  <date-picker class="" v-model="dateEnd" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
+                    :min="dateStart" :max="year.end" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-sm-12 col-md-12 m-0 p-0">
                 <div class="mb-1">
                   <div class="input-group input-group-sm">
@@ -97,15 +113,21 @@
                   header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
                   emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
                   <template #item-khadamat="{ khadamat }">
-                    <label v-if="khadamat == false">کالا و اقلام فیزیکی</label>
+                    <label v-if="khadamat == false">کالا</label>
                     <label v-else>خدمات</label>
                   </template>
                   <template #item-docCode="{ docCode }">
                     <RouterLink :to="'/acc/accounting/view/' + docCode">{{ docCode }}</RouterLink>
                   </template>
                   <template #item-type="{ docCode, type }">
-                    <RouterLink v-if="type == 'buy'" :to="'/acc/buy/view/' + docCode">خرید</RouterLink>
-                    <RouterLink v-else-if="type == 'sell'" :to="'/acc/sell/view/' + docCode">فروش</RouterLink>
+                    <RouterLink class="text-success" v-if="type == 'buy'" :to="'/acc/buy/view/' + docCode">خرید
+                    </RouterLink>
+                    <RouterLink class="text-danger" v-else-if="type == 'sell'" :to="'/acc/sell/view/' + docCode">فروش
+                    </RouterLink>
+                    <RouterLink class="text-info" v-else-if="type == 'rfbuy'" :to="'/acc/rfbuy/view/' + docCode">برگشت
+                      از خرید</RouterLink>
+                    <RouterLink class="text-warning" v-else-if="type == 'rfsell'" :to="'/acc/rfsell/view/' + docCode">
+                      برگشت از فروش</RouterLink>
                   </template>
                 </EasyDataTable>
                 <div class="container-fluid p-0 mx-0 my-3">
@@ -160,11 +182,17 @@ export default {
       loading: ref(true),
       sumSelected: 0,
       sumTotal: 0,
+      year: {},
       persons: [],
       types: [
         { id: 'buy', label: 'خرید' },
         { id: 'sell', label: 'فروش' },
+        { id: 'rfbuy', label: 'برگشت از خرید' },
+        { id: 'rfsell', label: 'برگشت از فروش' },
+        { id: 'all', label: 'همه موارد' },
       ],
+      dateStart: '',
+      dateEnd: '',
       selectedType: {},
       selectedPerson: {},
       searchValue: '',
@@ -204,13 +232,21 @@ export default {
           this.selectedType = this.types[0];
           this.loading = false;
         });
+
+      axios.get('/api/year/get')
+        .then((response) => {
+          this.year = response.data;
+          this.loading = false;
+        });
     },
     filter() {
       this.loading = true;
-      this.itemsSelected =[];
+      this.itemsSelected = [];
       axios.post('/api/report/person/buysell', {
         type: this.selectedType.id,
-        person: this.selectedPerson.code
+        person: this.selectedPerson.code,
+        dateStart: this.dateStart,
+        dateEnd: this.dateEnd
       }).then((response) => {
         this.items = response.data;
         let sum = 0;
@@ -296,6 +332,18 @@ export default {
     this.loadData();
   },
   watch: {
+    dateStart: {
+      handler: function (val, oldVal) {
+        this.filter();
+      },
+      deep: false
+    },
+    dateEnd: {
+      handler: function (val, oldVal) {
+        this.filter();
+      },
+      deep: false
+    },
     selectedPerson: {
       handler: function (val, oldVal) {
         this.filter();

@@ -75,8 +75,10 @@ export default defineComponent({
               this.person = element.person
             }
             else if(element.commodity){
+              
+              this.totalPrice += parseInt(element.bd);
+              element.unitPrice = element.bd / element.count;
               this.commoditys.push(element);
-              this.totalPrice += parseInt(element.bd)
             }
           });
         response.data.relatedDocs.forEach(element => {
@@ -104,7 +106,7 @@ export default defineComponent({
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fas fa-file-invoice-dollar"></i>
-        مشاهده و چاپ فاکتور خرید</h3>
+        مشاهده و چاپ فاکتور برگشت از فروش</h3>
       <div class="block-options">
         <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="buy" cat="buy"></archive-upload>
         <!-- Button trigger modal -->
@@ -176,7 +178,7 @@ export default defineComponent({
       <div class="col-3 text-center"></div>
       <div class="col-6 text-center">
         <h3 class="font-weight-bold">{{ this.bid.legal_name }}</h3>
-        <h5 class="">صورتحساب  کالا و خدمات</h5>
+        <h5 class="">صورتحساب  برگشت از فروش</h5>
       </div>
       <div class="col-3 text-right">
         <p>شماره سفارش: {{item.doc.code}}</p>
@@ -187,7 +189,7 @@ export default defineComponent({
       <table class="table table-bordered">
         <thead>
         <tr>
-          <th class="text-center table-header" colspan="11">مشخصات خریدار</th>
+          <th class="text-center table-header" colspan="11">مشخصات فروشنده</th>
         </tr>
         </thead>
         <tbody>
@@ -224,7 +226,7 @@ export default defineComponent({
         </tbody>
         <thead>
         <tr>
-          <th class="text-center table-header" colspan="11">مشخصات تامین کننده</th>
+          <th class="text-center table-header" colspan="11">مشخصات  خریدار</th>
         </tr>
         </thead>
         <tbody>
