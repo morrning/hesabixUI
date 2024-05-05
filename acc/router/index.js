@@ -20,6 +20,11 @@ const router = createRouter({
       component: () => import('../views/reports/persons/debtors.vue'),
     },
     {
+      path: '/acc/reports/acc/balance_sheet',
+      name: 'acc_balanceSheet_list',
+      component: () => import('../views/reports/balanceSheet.vue'),
+    },
+    {
       path: '/acc/reports/commodity/buysell',
       name: 'commodity_report_buysell',
       component: () => import('../views/reports/commodity/buysellByCommodity.vue'),
@@ -63,6 +68,11 @@ const router = createRouter({
       path: '/acc/accounting/table',
       name: 'accounting_table',
       component: () => import('../views/accounting/table.vue'),
+    },
+    {
+      path: '/acc/accounting/close_year',
+      name: 'accounting_close_year',
+      component: () => import('../views/accounting/closeyear.vue'),
     },
     {
       path: '/acc/accounting/view/:id?',
