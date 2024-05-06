@@ -35,15 +35,27 @@
               :loading = "loading"
           >
             <template #item-operation="{ code }">
-              <router-link class="btn btn-sm btn-link text-success" :to="'/acc/accounting/view/' + code">
-                <i class="fa fa-eye"></i>
-              </router-link>
-              <router-link class="btn btn-sm btn-link" :to="{name:'costs_mod',params:{id: code}}">
-                <i class="fa fa-edit"></i>
-              </router-link>
-              <span class="btn btn-sm btn-link text-danger" @click="deleteItem(code)">
-                <i class="fa fa-trash"></i>
-              </span>
+              <div class="dropdown-center">
+                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm text-primary"
+                  data-bs-toggle="dropdown" id="dropdown-align-center-alt-primary" type="button">
+                  <i class="fa-solid fa-ellipsis"></i>
+                </button>
+                <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
+                  style="">
+                  <router-link class="dropdown-item" :to="'/acc/accounting/view/' + code">
+                    <i class="fa fa-eye pe-2 text-success"></i>
+                    سند حسابداری
+                  </router-link>
+                  <router-link class="dropdown-item" :to="{name:'costs_mod',params:{id: code}}">
+                    <i class="fa fa-edit pe-2"></i>
+                    ویرایش
+                  </router-link>
+                  <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger">
+                    <i class="fa fa-trash pe-2"></i>
+                    حذف
+                  </button>
+                </div>
+              </div>
             </template>
           </EasyDataTable>
           <div class="container-fluid p-0 mx-0 my-3">

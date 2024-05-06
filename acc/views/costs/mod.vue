@@ -47,7 +47,7 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button class="btn rounded-circle btn-sm btn-danger" @click="removePerson(index)">
+                  <button class="btn rounded-circle btn-sm btn-danger" @click="removeItem(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
@@ -59,7 +59,8 @@
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">مرکز هزینه</small>
                         <treeselect :disable-branch-nodes="true" v-model="item.id" :multiple="false"
-                          :options="listscosts" />
+                          :options="listscosts" placeholder="انتخاب  مرکز هزینه" noOptionsText="آیتمی انتخاب نشده است."
+                          noChildrenText="فاقد زیرمجموعه" noResultsText="موردی یافت نشد" />
                       </div>
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">مبلغ</small>
@@ -249,7 +250,7 @@
                     <div class="row">
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">شخص</small>
-                  
+
                         <v-select :filterable="false" @search="searchPerson" class="" dir="rtl" :options="listPersons"
                           label="nikename" v-model="item.id">
                           <template v-slot:option="option">
@@ -260,18 +261,18 @@
                               </div>
                               <div class="col-12">
                                 <div class="row">
-                                  <div class="col-6">
+                                  <div v-if="option.mobile != ''" class="col-6">
                                     <i class="fa fa-phone me-2"></i>
                                     {{ option.mobile }}
                                   </div>
-                                  <div class="col-6">
+                                  <div class="col-6" v-if="parseInt(option.bs) - parseInt(option.bd) != 0">
                                     <i class="fa fa-bars"></i>
                                     تراز:
                                     {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
           parseInt(option.bd))) }}
-                                    <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
+                                    <span class="" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                                       بدهکار </span>
-                                    <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
+                                    <span class="" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
                                       بستانکار </span>
                                   </div>
                                 </div>
@@ -455,14 +456,13 @@ export default {
       }
     },
     addItem() {
-      console.log(this.costs)
       this.costs.push({
         id: this.costs[1],
         amount: '',
         des: ''
-      })
+      });
     },
-    removeCosts(index) {
+    removeItem(index){
       this.costs.splice(index, 1);
     },
     addBank() {
@@ -520,7 +520,7 @@ export default {
           this.data.date = response.data.doc.date;
           response.data.rows.forEach((item) => {
             if (item.type == 'calc') {
-              this.persons.push({
+              this.costs.push({
                 id: item.refCode,
                 amount: item.bd,
                 des: item.des
@@ -585,15 +585,15 @@ export default {
       //get list of salarys
       axios.get('/api/salary/list').then((response) => {
         this.listSalarys = response.data;
-      })
+      });
 
-      //get list of salarys
+      //get list of persons
       axios.get('/api/person/list/search').then((response) => {
         this.listPersons = response.data;
-      })
+      });
     },
     save() {
-      if (this.persons.length == 0) {
+      if (this.costs.length == 0) {
         Swal.fire({
           text: 'انتخاب حداقل یک مرکز هزینه الزامی است.',
           icon: 'error',
@@ -629,7 +629,7 @@ export default {
         });
       }
       let personOK = true;
-      this.persons.forEach((item) => {
+      this.costs.forEach((item) => {
         if (item.id == null || item.id == '') {
           personOK = false;
         }
