@@ -24,9 +24,7 @@
                                 <thead>
                                     <tr class="text-uppercase">
                                         <th>آیتم</th>
-                                        <th>بستانکار</th>
-                                        <th>بدهکار</th>
-                                        <th>تراز</th>
+                                        <th>مبلغ</th>
                                         <th>وضعیت</th>
                                     </tr>
                                 </thead>
@@ -34,14 +32,6 @@
                                     <tr>
                                         <td>
                                             <span class="fw-semibold">بانک‌ها</span>
-                                        </td>
-                                        <td>
-                                            <span class="fs-sm text-muted">{{
-                this.$filters.formatNumber(YearInfo.banks.bd) }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="fs-sm text-muted">{{
-                this.$filters.formatNumber(YearInfo.banks.bs) }}</span>
                                         </td>
                                         <td>
                                             <span class="fs-sm text-muted">{{
@@ -63,14 +53,6 @@
                                         </td>
                                         <td>
                                             <span class="fs-sm text-muted">{{
-                this.$filters.formatNumber(YearInfo.cashdesks.bd) }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="fs-sm text-muted">{{
-                this.$filters.formatNumber(YearInfo.cashdesks.bs) }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="fs-sm text-muted">{{
                 this.$filters.formatNumber(Math.abs(YearInfo.cashdesks.bd -
                     YearInfo.cashdesks.bs)) }}</span>
                                         </td>
@@ -89,14 +71,6 @@
                                         </td>
                                         <td>
                                             <span class="fs-sm text-muted">{{
-                this.$filters.formatNumber(YearInfo.salarys.bd) }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="fs-sm text-muted">{{
-                this.$filters.formatNumber(YearInfo.salarys.bs) }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="fs-sm text-muted">{{
                 this.$filters.formatNumber(Math.abs(YearInfo.salarys.bd -
                     YearInfo.salarys.bs)) }}</span>
                                         </td>
@@ -112,10 +86,6 @@
                                     <tr>
                                         <td>
                                             <span class="fw-semibold">بدهکاران</span>
-                                        </td>
-                                        <td>
-                                        </td>
-                                        <td>
                                         </td>
                                         <td>
                                             <span v-if="YearInfo.persons.bs -

@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import rec from "../component/rec.vue";
 import recList from "../component/recList.vue";
 import ArchiveUpload from "../component/archive/archiveUpload.vue";
+
 import {getApiUrl} from "/hesabixConfig";
 export default defineComponent({
   name: "viewInvoice",
@@ -211,7 +212,6 @@ export default defineComponent({
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ فاکتور</span>
         </button>
-
         <!-- Button trigger modal -->
         <button v-show="this.bid.shortlinks" type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
           <i class="fas fa-share-nodes"></i>

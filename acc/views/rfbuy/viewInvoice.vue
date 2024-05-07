@@ -108,7 +108,7 @@ export default defineComponent({
         <i class="fas fa-file-invoice-dollar"></i>
         مشاهده و چاپ فاکتور برگشت از خرید</h3>
       <div class="block-options">
-        <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="sell" cat="sell"></archive-upload>
+        <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="rfbuy" cat="rfbuy"></archive-upload>
         <!-- Button trigger modal -->
         <button v-show="parseInt(this.item.doc.amount) <= parseInt(this.totalRec)" type="button" class="btn btn-sm btn-success" disabled="disabled">
           <i class="fas fa-check-double me-2"></i>
