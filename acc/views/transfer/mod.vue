@@ -34,15 +34,15 @@
           <div class="col-sm-12 col-md-6">
             <h3>از:</h3>
             <div class="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
-              <input @change="this.changeFrom('bank')" type="radio" class="btn-check" name="btnradio" id="btnradio1"
+              <input :checked="this.sideOne.content == 'bank'" @change="this.changeFrom('bank')" type="radio" class="btn-check" name="btnradio" id="btnradio1"
                 autocomplete="off" checked>
               <label class="btn btn-outline-primary" for="btnradio1">بانک</label>
 
-              <input @change="this.changeFrom('cashdesk')" type="radio" class="btn-check" name="btnradio" id="btnradio2"
+              <input :checked="this.sideOne.content == 'cashdesk'" @change="this.changeFrom('cashdesk')" type="radio" v-model="this.sideOne.content" class="btn-check" name="btnradio" id="btnradio2"
                 autocomplete="off">
               <label class="btn btn-outline-primary" for="btnradio2">صندوق</label>
 
-              <input @change="this.changeFrom('salary')" type="radio" class="btn-check" name="btnradio" id="btnradio3"
+              <input :checked="this.sideOne.content == 'salary'" @change="this.changeFrom('salary')" type="radio" class="btn-check" name="btnradio" id="btnradio3"
                 autocomplete="off">
               <label class="btn btn-outline-primary" for="btnradio3">تنخواه</label>
             </div>
@@ -88,9 +88,9 @@
                           </div>
                           <div class="col-12">
                             موجودی:
-                           {{ this.$filters.formatNumber(option.balance) }}
-                          <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
-                          <span class="text-success" v-if="option.balance > 0">بستانکار</span>
+                            {{ this.$filters.formatNumber(option.balance) }}
+                            <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
+                            <span class="text-success" v-if="option.balance > 0">بستانکار</span>
                           </div>
                         </div>
                       </template>
@@ -112,9 +112,9 @@
                           </div>
                           <div class="col-12">
                             موجودی:
-                           {{ this.$filters.formatNumber(option.balance) }}
-                          <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
-                          <span class="text-success" v-if="option.balance > 0">بستانکار</span>
+                            {{ this.$filters.formatNumber(option.balance) }}
+                            <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
+                            <span class="text-success" v-if="option.balance > 0">بستانکار</span>
                           </div>
                         </div>
                       </template>
@@ -122,7 +122,7 @@
                   </div>
                 </div>
                 <div class="form-floating mb-2">
-                  <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.sideOne.amount" />
+                  <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.sideOne.bs" />
                   <label class="form-label">مبلغ</label>
                 </div>
                 <div class="form-floating mb-2">
@@ -168,9 +168,9 @@
                           </div>
                           <div class="col-12">
                             موجودی:
-                           {{ this.$filters.formatNumber(option.balance) }}
-                          <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
-                          <span class="text-success" v-if="option.balance > 0">بستانکار</span>
+                            {{ this.$filters.formatNumber(option.balance) }}
+                            <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
+                            <span class="text-success" v-if="option.balance > 0">بستانکار</span>
                           </div>
                         </div>
                       </template>
@@ -192,9 +192,9 @@
                           </div>
                           <div class="col-12">
                             موجودی:
-                           {{ this.$filters.formatNumber(option.balance) }}
-                          <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
-                          <span class="text-success" v-if="option.balance > 0">بستانکار</span>
+                            {{ this.$filters.formatNumber(option.balance) }}
+                            <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
+                            <span class="text-success" v-if="option.balance > 0">بستانکار</span>
                           </div>
                         </div>
                       </template>
@@ -216,9 +216,9 @@
                           </div>
                           <div class="col-12">
                             موجودی:
-                           {{ this.$filters.formatNumber(option.balance) }}
-                          <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
-                          <span class="text-success" v-if="option.balance > 0">بستانکار</span>
+                            {{ this.$filters.formatNumber(option.balance) }}
+                            <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
+                            <span class="text-success" v-if="option.balance > 0">بستانکار</span>
                           </div>
                         </div>
                       </template>
@@ -227,7 +227,7 @@
                 </div>
                 <div class="form-floating mb-2">
                   <money3 readonly="readonly" v-bind="currencyConfig" min=0 class="form-control"
-                    v-model="this.sideTwo.amount" />
+                    v-model="this.sideTwo.bd" />
                   <label class="form-label">مبلغ</label>
                 </div>
                 <div class="form-floating mb-2">
@@ -259,8 +259,8 @@ export default {
     Loading
   },
   watch: {
-    'sideOne.amount': function () {
-      this.sideTwo.amount = this.sideOne.amount;
+    'sideOne.bs': function () {
+      this.sideTwo.bd = this.sideOne.bs;
     },
     'sideOne.tax': function () {
       this.sideTwo.tax = this.sideOne.tax;
@@ -311,7 +311,8 @@ export default {
         bank: undefined,
         cashdesk: undefined,
         salary: undefined,
-        amount: 0,
+        bs: 0,
+        bd: 0,
         tax: 0,
         reference: '',
         table: 5,
@@ -323,7 +324,8 @@ export default {
         bank: undefined,
         cashdesk: undefined,
         salary: undefined,
-        amount: 0,
+        bs: 0,
+        bd: 0,
         tax: 0,
         reference: '',
         table: 5,
@@ -351,9 +353,89 @@ export default {
         this.year = response.data;
         this.date = response.data.now;
       });
+      if (this.$route.params.id != '') {
+        axios.post('/api/accounting/doc/get', {
+          code: this.$route.params.id
+        }).then((response) => {
+          let taxAmount = 0;
+          response.data.rows.forEach((item, key) => {
+            if (item.refCode == '108') {
+              //item is tax
+              taxAmount = item.bd;
+              response.data.rows[key].id = 'ignore';
+            }
+          });
+
+          response.data.rows.forEach((item, key) => {
+            if (item.bs == taxAmount) {
+              response.data.rows[key].id = 'ignore';
+            }
+          });
+          response.data.rows.forEach((item, key) => {
+            if (item.bs != 0 && item.tableCode == 5 && item.id != 'ignore') {
+              alert(item.id)
+              let opt = {
+                content: '',
+                bank: undefined,
+                cashdesk: undefined,
+                salary: undefined,
+                bs: item.bs,
+                bd: item.bd,
+                tax: taxAmount,
+                reference: '',
+                table: 5,
+                id: '',
+                des: item.des
+              };
+              if (item.bank != undefined) {
+                opt.bank = item.bank;
+                opt.content = 'bank';
+              }
+              else if (item.cashdesk != undefined) {
+                opt.cashdesk = item.cashdesk;
+                opt.content = 'cashdesk';
+              }
+              else if (item.salary != undefined) {
+                opt.salary = item.salary;
+                opt.content = 'salary';
+              }
+              this.sideOne = opt
+            }
+            else if (item.bd != 0 && item.tableCode == 5 && item.id != 'ignore') {
+              alert()
+              let opt = {
+                content: '',
+                bank: undefined,
+                cashdesk: undefined,
+                salary: undefined,
+                bs: item.bs,
+                bd: item.bd,
+                tax: taxAmount,
+                reference: '',
+                table: 5,
+                id: '',
+                des: item.des
+              };
+              if (item.bank != undefined) {
+                opt.bank = item.bank;
+                opt.content = 'bank';
+              }
+              else if (item.cashdesk != undefined) {
+                opt.cashdesk = item.cashdesk;
+                opt.content = 'cashdesk';
+              }
+              else if (item.salary != undefined) {
+                opt.salary = item.salary;
+                opt.content = 'salary';
+              }
+              this.sideTwo = opt;
+            }
+          });
+        });
+      }
     },
     save() {
-      if (this.sideOne.amount == 0) {
+      if (this.sideOne.bs == 0) {
         Swal.fire({
           text: 'مبلغ انتقال وارد نشده است.',
           icon: 'error',
@@ -387,10 +469,10 @@ export default {
           date: this.date,
           des: this.des,
           type: 'transfer',
-          update: '',
+          update: this.$route.params.id,
           rows: [
             {
-              bs: this.sideOne.amount,
+              bs: this.sideOne.bs,
               bd: 0,
               type: this.sideOne.content,
               bank: this.sideOne.bank,
@@ -402,7 +484,7 @@ export default {
               referral: this.sideOne.reference
             },
             {
-              bd: this.sideTwo.amount,
+              bd: this.sideTwo.bd,
               bs: 0,
               type: this.sideTwo.content,
               bank: this.sideTwo.bank,
