@@ -9,7 +9,9 @@ export default defineComponent({
   },
   data: () => {
     return {
-      selectedPerson: {}
+      selectedPerson: {
+        accounts:[]
+      }
     }
   },
   methods: {
@@ -83,6 +85,28 @@ export default defineComponent({
                     this.$filters.formatNumber(selectedPerson.balance) }}</small></div>
               </div>
 
+            </div>
+          </div>
+          <div v-if="this.selectedPerson.accounts.length != 0" class="row">
+            <div class="col-12">
+              <h4 class="text-primary">حساب‌های بانکی</h4>
+              <div v-for="item in selectedPerson.accounts" class="block block-rounded bg-light mb-1">
+                <div class="block-header">
+                  <h3 class="block-title"> {{ item.bank }} <small> {{ item.accountNum }}</small></h3>
+                </div>
+                <div class="block-content pt-0">
+                  <ul class="list-group mb-1">
+                    <li class="list-group-item">
+                      <span class="text-muted">شماره کارت:</span>
+                      {{ item.cardNum }}
+                    </li>
+                    <li class="list-group-item">
+                      <span class="text-muted">شماره شبا:</span>
+                      {{ item.shabaNum }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>

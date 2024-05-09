@@ -91,6 +91,34 @@
                 </div>
               </div>
             </div>
+            <div v-if="this.selectedPerson.accounts.length != 0" class="col-sm-12 col-md-6 mb-1">
+              <div class="card push">
+                <div class="card-header border-bottom-0 bg-primary-dark text-light">
+                  <h3 class="block-title"> 
+                      حساب‌های بانکی
+                  </h3>
+                </div>
+                <div class="card-body p-0">
+                  <div v-for="item in selectedPerson.accounts" class="block bg-light mb-0">
+                    <div class="block-header">
+                      <h3 class="block-title"> {{ item.bank }} <small> {{ item.accountNum }}</small></h3>
+                    </div>
+                    <div class="block-content pt-0 m-0">
+                      <ul class="list-group mb-1">
+                        <li class="list-group-item">
+                          <span class="text-muted">شماره کارت:</span>
+                          {{ item.cardNum }}
+                        </li>
+                        <li class="list-group-item">
+                          <span class="text-muted">شماره شبا:</span>
+                          {{ item.shabaNum }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="col-sm-12 col-md-6 mb-1">
               <div class="card push">
                 <div class="card-header border-bottom-0 bg-primary-dark text-light">
@@ -156,7 +184,9 @@ export default {
       searchValue: '',
       listPersons: [],
       itemsSelected: [],
-      selectedPerson: [],
+      selectedPerson: {
+        accounts:[]
+      },
       items: [],
       loading: ref(true),
       headers: [
