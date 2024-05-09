@@ -687,7 +687,7 @@ export default {
                   </span>
                 </router-link>
               </li>
-              <li v-if="permissions.plugAccproCloseYear" class="nav-main-item">
+              <li v-if="permissions.plugAccproCloseYear && this.isPluginActive('accpro')" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/accounting/close_year">
                   <span class="nav-main-link-name">
                     <i class="fa fa-circle-dot"></i>

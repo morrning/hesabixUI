@@ -95,19 +95,19 @@
                   <li>
                     <router-link to="/acc/reports/commodity/buysell">خرید و فروش به تفکیک کالا</router-link>
                   </li>
-                  
+
                 </ul>
               </div>
             </div>
             <!-- END Bold -->
           </div>
-          <div class="col-sm-12 col-md-6 mb-2">
+          <div v-if="this.isPluginActive('accpro')" class="col-sm-12 col-md-6 mb-2">
             <!-- Bold -->
             <div class="block block-rounded border border-secondary border-opacity-25">
               <div class="block-header block-header-default border border-bottom">
                 <h3 class="block-title">
                   <i class="fa fa-list"></i>
-                   حسابداری
+                  حسابداری
                 </h3>
               </div>
               <div class="block-content">
@@ -115,7 +115,7 @@
                   <li>
                     <router-link to="/acc/reports/acc/balance_sheet">ترازنامه</router-link>
                   </li>
-                  
+
                 </ul>
               </div>
             </div>
@@ -128,11 +128,30 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
-  name: "reports"
+  name: "reports",
+  data(){
+    return {
+      plugins: [],
+    }
+  },
+  methods: {
+    loadData() {
+      //get active plugins
+      axios.post('/api/plugin/get/actives',).then((response) => {
+        this.plugins = response.data;
+      });
+    },
+    isPluginActive(plugName) {
+      return this.plugins[plugName] !== undefined;
+    },
+  },
+  mounted(){
+    this.loadData();
+  }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
