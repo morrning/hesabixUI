@@ -8,7 +8,8 @@
         انتقال
       </h3>
       <div class="block-options">
-        <button @click="save()" type="button" class="btn btn-alt-primary"><i class="fa fa-save"></i> ثبت</button>
+        <archive-upload v-if="this.$route.params.id != ''" :docid="this.$route.params.id" doctype="transfer" cat="transfer"></archive-upload>
+        <button @click="save()" type="button" class="btn btn-sm btn-alt-primary"><i class="fa fa-save"></i> ثبت</button>
       </div>
     </div>
     <div class="block-content py-3 vl-parent">
@@ -34,16 +35,16 @@
           <div class="col-sm-12 col-md-6">
             <h3>از:</h3>
             <div class="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
-              <input :checked="this.sideOne.content == 'bank'" @change="this.changeFrom('bank')" type="radio" class="btn-check" name="btnradio" id="btnradio1"
-                autocomplete="off" checked>
+              <input :checked="this.sideOne.content == 'bank'" @change="this.changeFrom('bank')" type="radio"
+                class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
               <label class="btn btn-outline-primary" for="btnradio1">بانک</label>
 
-              <input :checked="this.sideOne.content == 'cashdesk'" @change="this.changeFrom('cashdesk')" type="radio" v-model="this.sideOne.content" class="btn-check" name="btnradio" id="btnradio2"
-                autocomplete="off">
+              <input :checked="this.sideOne.content == 'cashdesk'" @change="this.changeFrom('cashdesk')" type="radio"
+                v-model="this.sideOne.content" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
               <label class="btn btn-outline-primary" for="btnradio2">صندوق</label>
 
-              <input :checked="this.sideOne.content == 'salary'" @change="this.changeFrom('salary')" type="radio" class="btn-check" name="btnradio" id="btnradio3"
-                autocomplete="off">
+              <input :checked="this.sideOne.content == 'salary'" @change="this.changeFrom('salary')" type="radio"
+                class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
               <label class="btn btn-outline-primary" for="btnradio3">تنخواه</label>
             </div>
             <div class="row mt-2">
@@ -139,15 +140,15 @@
           <div class="col-sm-12 col-md-6">
             <h3>به:</h3>
             <div class="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
-              <input @change="this.changeDes('bank')" type="radio" class="btn-check" name="btnradio1" id="btnradio4"
+              <input v-model="this.sideTwo.content" :checked="this.sideTwo.content == 'bank'"  @change="this.changeDes('bank')" type="radio" class="btn-check" name="btnradio1" id="btnradio4"
                 autocomplete="off" checked>
               <label class="btn btn-outline-warning" for="btnradio4">بانک</label>
 
-              <input @change="this.changeDes('cashdesk')" type="radio" class="btn-check" name="btnradio1" id="btnradio5"
+              <input v-model="this.sideTwo.content" :checked="this.sideTwo.content == 'cashdesk'" @change="this.changeDes('cashdesk')" type="radio" class="btn-check" name="btnradio1" id="btnradio5"
                 autocomplete="off">
               <label class="btn btn-outline-warning" for="btnradio5">صندوق</label>
 
-              <input @change="this.changeDes('salary')" type="radio" class="btn-check" name="btnradio1" id="btnradio6"
+              <input v-model="this.sideTwo.content" :checked="this.sideTwo.content == 'salary'" @change="this.changeDes('salary')" type="radio" class="btn-check" name="btnradio1" id="btnradio6"
                 autocomplete="off">
               <label class="btn btn-outline-warning" for="btnradio6">تنخواه</label>
             </div>
@@ -252,11 +253,13 @@
 import axios from "axios";
 import Loading from "vue-loading-overlay";
 import Swal from "sweetalert2";
+import archiveUpload from "../component/archive/archiveUpload.vue";
 
 export default {
   name: "mod",
   components: {
-    Loading
+    Loading,
+    archiveUpload
   },
   watch: {
     'sideOne.bs': function () {
@@ -367,13 +370,13 @@ export default {
           });
 
           response.data.rows.forEach((item, key) => {
-            if (item.bs == taxAmount) {
+            if (item.bs == taxAmount && item.bs != 0) {
               response.data.rows[key].id = 'ignore';
             }
           });
           response.data.rows.forEach((item, key) => {
+
             if (item.bs != 0 && item.tableCode == 5 && item.id != 'ignore') {
-              alert(item.id)
               let opt = {
                 content: '',
                 bank: undefined,
@@ -401,8 +404,7 @@ export default {
               }
               this.sideOne = opt
             }
-            else if (item.bd != 0 && item.tableCode == 5 && item.id != 'ignore') {
-              alert()
+            if (parseInt(item.bd) != 0 && parseInt(item.tableCode) == 5 && item.id != 'ignore') {
               let opt = {
                 content: '',
                 bank: undefined,

@@ -9,7 +9,7 @@
         لیست انتقال‌ها
       </h3>
       <div class="block-options">
-        <router-link to="/acc/transfer/mod/" class="block-options-item">
+        <router-link title="افزودن سند انتقال جدید" to="/acc/transfer/mod/" class="block-options-item">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
       </div>
@@ -38,6 +38,11 @@
                   <router-link class="dropdown-item" :to="'/acc/accounting/view/' + code">
                     <i class="fa fa-file text-success pe-2"></i>
                     سند حسابداری
+                  </router-link>
+                  <!-- Button trigger modal -->
+                  <router-link :to="'/acc/transfer/mod/' + code" class="dropdown-item">
+                    <i class="fa fa-eye text-primary pe-2"></i>
+                    مشاهده
                   </router-link>
                   <router-link :to="'/acc/transfer/mod/' + code" class="dropdown-item">
                     <i class="fa fa-edit pe-2"></i>
@@ -78,8 +83,13 @@ import Swal from "sweetalert2";
 import { ref } from "vue";
 export default {
   name: "list",
+  components: {
+   
+  },
   data: () => {
     return {
+      showTransferModal: {},
+      transferQuickDoc:{},
       searchValue: '',
       loading: ref(true),
       items: [],
@@ -96,6 +106,14 @@ export default {
     }
   },
   methods: {
+    showModal(code) {
+      var myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('quickTransferView'));
+      myModal.show();
+    },
+    hideModal() {
+      var myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('quickTransferView'));
+      myModal.hide();
+    },
     loadData() {
       axios.post('/api/transfer/search',)
         .then((response) => {
