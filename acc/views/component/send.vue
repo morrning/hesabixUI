@@ -260,7 +260,7 @@ export default defineComponent({
         axios.post('/api/accounting/insert',{
           date: this.date,
           des: this.des,
-          type:'sell_receive',
+          type:'buy_send',
           update:null,
           rows:rows,
           related:this.$props.originalDoc

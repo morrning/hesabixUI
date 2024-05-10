@@ -7,7 +7,8 @@
         </router-link>
         مشخصات حساب بانکی </h3>
       <div class="block-options">
-        <button @click="save()" type="button" class="btn btn-alt-primary"><i class="fa fa-save"></i> ثبت</button>
+        <archive-upload v-if="this.$route.params.id != ''" :docid="this.$route.params.id" doctype="bank" cat="bank"></archive-upload>
+        <button @click="save()" type="button" class="btn btn-sm btn-alt-primary"><i class="fa fa-save"></i> ثبت</button>
       </div>
     </div>
     <div class="block-content py-3 vl-parent">
@@ -65,11 +66,14 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
+import archiveUpload from "../component/archive/archiveUpload.vue";
+
 
 export default {
   name: "mod",
   components: {
-    Loading
+    Loading,
+    archiveUpload
   },
   data: ()=>{return{
     isLoading: false,

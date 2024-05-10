@@ -6,7 +6,8 @@
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fa fa-bank px-2"></i>
-        تنخواه‌گردان‌ها </h3>
+        تنخواه‌گردان‌ها
+      </h3>
       <div class="block-options">
         <router-link to="/acc/salary/mod/" class="block-options-item">
           <span class="fa fa-plus fw-bolder"></span>
@@ -22,36 +23,39 @@
               <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
             </div>
           </div>
-          <EasyDataTable
-            show-index
-            alternating
-            :search-value="searchValue"
-            :headers="headers"
-            :items="items"
-            theme-color="#1d90ff"
-            header-text-direction="center"
-            body-text-direction="center"
-            rowsPerPageMessage="تعداد سطر"
-            emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-            rowsOfPageSeparatorMessage="از"
-            :loading = "loading"
-          >
-            <template #item-operation="{ code }"> 
-              <router-link class="btn  btn-link  me-1" :to="'/acc/salary/mod/' + code">
-                <i class="fa fa-edit px-2"></i>
-              </router-link>
-              <router-link class="btn  btn-link" :to="'/acc/salary/card/view/' + code">
-                <i class="fa fa-list-check text-warning"></i>
-              </router-link>
+          <EasyDataTable show-index alternating :search-value="searchValue" :headers="headers" :items="items"
+            theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
+            rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
+            :loading="loading">
+            <template #item-operation="{ code }">
+              <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm text-primary"
+                data-bs-toggle="dropdown" id="dropdown-align-center-alt-primary" type="button">
+                <i class="fa-solid fa-ellipsis"></i>
+              </button>
+              <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
+                style="">
+                <router-link class="dropdown-item" :to="'/acc/salary/card/view/' + code">
+                  <i class="fa fa-eye text-success pe-2"></i>
+                  مشاهده
+                </router-link>
+                <router-link class="dropdown-item" :to="'/acc/salary/mod/' + code">
+                  <i class="fa fa-edit pe-2"></i>
+                  ویرایش
+                </router-link>
+                <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger">
+                  <i class="fa fa-trash pe-2"></i>
+                  حذف
+                </button>
+              </div>
             </template>
-            <template #item-name="{ name,code }">
+            <template #item-name="{ name, code }">
               <router-link :to="'/acc/salary/card/view/' + code">
-                {{name}}
+                {{ name }}
               </router-link>
             </template>
             <template #item-balance="{ balance }">
-              <label class="text-success" v-if="balance >= 0">{{this.$filters.formatNumber(balance)}}</label>
-              <label class="text-danger" v-else>{{this.$filters.formatNumber( -1 * balance ) }} منفی</label>
+              <label class="text-success" v-if="balance >= 0">{{ this.$filters.formatNumber(balance) }}</label>
+              <label class="text-danger" v-else>{{ this.$filters.formatNumber(-1 * balance) }} منفی</label>
             </template>
           </EasyDataTable>
         </div>
@@ -63,30 +67,67 @@
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
-import {ref} from "vue";
+import { ref } from "vue";
 
 export default {
   name: "list",
-  data: ()=>{return {
-    searchValue: '',
-    loading: ref(true),
-    items:[],
-    headers: [
-      { text: "عملیات", value: "operation", width: "130"},
-      { text: "کد", value: "code", width: "70px" },
-      { text: "نام تنخواه‌گردان", value: "name", width: "120px"},
-      { text: "موجودی(ریال)", value: "balance", width: "140px"},
-      { text: "توضیحات", value: "des", width: "150px"},
-    ]
-  }},
+  data: () => {
+    return {
+      searchValue: '',
+      loading: ref(true),
+      items: [],
+      headers: [
+        { text: "عملیات", value: "operation", width: "130" },
+        { text: "کد", value: "code", width: "70px" },
+        { text: "نام تنخواه‌گردان", value: "name", width: "120px" },
+        { text: "موجودی(ریال)", value: "balance", width: "140px" },
+        { text: "توضیحات", value: "des", width: "150px" },
+      ]
+    }
+  },
   methods: {
-    loadData(){
+    loadData() {
       axios.get('/api/salary/list')
-          .then((response)=>{
-            this.items = response.data;
-            this.loading = false;
-          })
+        .then((response) => {
+          this.items = response.data;
+          this.loading = false;
+        })
     },
+    deleteItem(code) {
+      Swal.fire({
+        text: 'آیا برای حذف تنخواه‌گردان مطمئن هستید؟',
+        showCancelButton: true,
+        confirmButtonText: 'بله',
+        cancelButtonText: `خیر`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          axios.post('/api/salary/delete/' + code).then((response) => {
+            if (response.data.result == 1) {
+              let index = 0;
+              for (let z = 0; z < this.items.length; z++) {
+                index++;
+                if (this.items[z]['code'] == code) {
+                  this.items.splice(index - 1, 1);
+                }
+              }
+              Swal.fire({
+                text: 'تنخواه‌گردان با موفقیت حذف شد.',
+                icon: 'success',
+                confirmButtonText: 'قبول'
+              });
+            }
+            else if (response.data.result == 2) {
+              Swal.fire({
+                text: 'تنخواه‌گردان به دلیل داشتن تراکنش و اسناد حسابداری مرتبط قابل حذف نیست.',
+                icon: 'error',
+                confirmButtonText: 'قبول'
+              });
+            }
+          })
+        }
+      })
+    }
   },
   beforeMount() {
     this.loadData();
@@ -94,6 +135,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

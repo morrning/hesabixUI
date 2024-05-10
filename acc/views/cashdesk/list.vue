@@ -37,12 +37,25 @@
               :loading = "loading"
           >
             <template #item-operation="{ code }">
-              <router-link class="btn btn-link" :to="'/acc/cashdesk/mod/' + code">
-                <i class="fa fa-edit px-2"></i>
-              </router-link>
-              <router-link class="btn btn-link" :to="'/acc/cashdesk/card/view/' + code">
-                <i class="fa fa-list-check text-warning"></i>
-              </router-link>
+              <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm text-primary"
+                data-bs-toggle="dropdown" id="dropdown-align-center-alt-primary" type="button">
+                <i class="fa-solid fa-ellipsis"></i>
+              </button>
+              <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
+                style="">
+                <router-link class="dropdown-item" :to="'/acc/cashdesk/card/view/' + code">
+                  <i class="fa fa-eye text-success pe-2"></i>
+                  مشاهده
+                </router-link>
+                <router-link class="dropdown-item" :to="'/acc/cashdesk/mod/' + code">
+                  <i class="fa fa-edit pe-2"></i>
+                  ویرایش
+                </router-link>
+                <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger">
+                  <i class="fa fa-trash pe-2"></i>
+                  حذف
+                </button>
+              </div>
             </template>
             <template #item-name="{ name,code }">
               <router-link :to="'/acc/cashdesk/card/view/' + code">
@@ -87,6 +100,41 @@ export default {
             this.loading = false;
           })
     },
+    deleteItem(code) {
+      Swal.fire({
+        text: 'آیا برای حذف صندوق مطمئن هستید؟',
+        showCancelButton: true,
+        confirmButtonText: 'بله',
+        cancelButtonText: `خیر`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          axios.post('/api/cashdesk/delete/' + code).then((response) => {
+            if (response.data.result == 1) {
+              let index = 0;
+              for (let z = 0; z < this.items.length; z++) {
+                index++;
+                if (this.items[z]['code'] == code) {
+                  this.items.splice(index - 1, 1);
+                }
+              }
+              Swal.fire({
+                text: 'صندوق با موفقیت حذف شد.',
+                icon: 'success',
+                confirmButtonText: 'قبول'
+              });
+            }
+            else if (response.data.result == 2) {
+              Swal.fire({
+                text: 'صندوق به دلیل داشتن تراکنش و اسناد حسابداری مرتبط قابل حذف نیست.',
+                icon: 'error',
+                confirmButtonText: 'قبول'
+              });
+            }
+          })
+        }
+      })
+    }
   },
   beforeMount() {
     this.loadData();
