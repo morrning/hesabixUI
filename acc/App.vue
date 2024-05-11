@@ -66,6 +66,31 @@ export default {
     this.siteName = getSiteName();
   },
   methods: {
+    exitBusiness(){
+      Swal.fire({
+        text: 'آیا برای خروج و ترک کسب‌و‌کار مطمئن هستید؟ ترک کسب و کار موجب قطع دسترسی شما خواهد شد و تنها از طریق مالک کسب‌و‌کار قابل بازیابی است.',
+        showCancelButton: true,
+        confirmButtonText: 'بله',
+        cancelButtonText: `خیر`,
+        icon:'warning'
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          axios.post('/api/business/removeuser/me').then((response)=>{
+            if(response.data.result == 1){
+              Swal.fire({
+                text: 'عملیات با موفقیت انجام شد. به صفحه پروفایل کاربری باز می گردید.',
+                icon: 'success',
+                confirmButtonText: 'قبول'
+              }).then((res)=>{
+                document.location = '/';
+              });
+            }
+          })
+        }
+      })
+    
+    },
     logout() {
       axios.post('/api/user/logout')
         .then((response) => {
@@ -817,6 +842,12 @@ export default {
                 </router-link>
               </li>
             </ul>
+          </li>
+          <li v-if="permissions.owner == 0" class="nav-main-item">
+            <a class="nav-main-link text-danger" @click="exitBusiness()">
+              <i class="nav-main-link-icon fa-solid fa-door-open"></i>
+              <span class="nav-main-link-name">خروج و ترک کسب و کار</span>
+            </a>
           </li>
           <li class="nav-main-item border rounded-3 border-white p-2 mt-4">
             <Year></Year>

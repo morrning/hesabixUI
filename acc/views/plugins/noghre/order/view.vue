@@ -30,7 +30,7 @@ export default defineComponent({
       <div class="block block-rounded">
         <div class="block-header block-header-default">
           <h3 class="block-title">
-            <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
+            <button @click="this.$router.back()" type="button" class="btn btn-sm btn-link text-warning mx-2">
               <i class="fa fw-bold fa-arrow-right"></i>
             </button>
             شماره سفارش: {{this.order.doc.code}}

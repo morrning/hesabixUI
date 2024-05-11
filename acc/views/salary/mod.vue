@@ -1,6 +1,6 @@
 <template>
   <div class="block block-content-full ">
-    <div class="block-header block-header-default bg-gray-light">
+    <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
         <router-link class="text-warning mx-2 px-2" to="/acc/salary/list">
           <i class="fa fw-bold fa-arrow-right"></i>

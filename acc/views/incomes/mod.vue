@@ -1,6 +1,6 @@
 <template>
   <div class="block block-content-full ">
-    <div class="block-header block-header-default bg-gray-light">
+    <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
         <router-link class="text-warning mx-2 px-2" to="/acc/incomes/list">
           <i class="fa fw-bold fa-arrow-right"></i>
@@ -8,7 +8,8 @@
         درآمد
       </h3>
       <div class="block-options">
-        <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-alt-primary">
+        <archive-upload v-if="this.$route.params.id != ''" :docid="this.$route.params.id" doctype="income" cat="income"></archive-upload>
+        <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-sm btn-alt-primary">
           <i class="fa fa-save"></i>
           ثبت
         </button>
@@ -367,11 +368,13 @@ import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import Treeselect from 'vue3-treeselect'
 // import the styles
 import 'vue3-treeselect/dist/vue3-treeselect.css'
+import archiveUpload from "../component/archive/archiveUpload.vue";
 export default {
   name: "mod",
   components: {
     Loading,
-    Treeselect
+    Treeselect,
+    archiveUpload
   },
   data: () => {
     return {

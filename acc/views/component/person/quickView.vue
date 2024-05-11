@@ -30,7 +30,7 @@ export default defineComponent({
 <template>
   <!-- Button trigger modal -->
   <button @click="loadData()" :disabled="this.$props.code == undefined" title="مشاهده مشخصات شخص" type="button"
-    class="btn btn-md btn-info text-white rounded" data-bs-toggle="modal" data-bs-target="#quickPersonView">
+    class="btn-block-option" data-bs-toggle="modal" data-bs-target="#quickPersonView">
     <i class="fa fa-eye"></i>
   </button>
   <!-- Modal -->

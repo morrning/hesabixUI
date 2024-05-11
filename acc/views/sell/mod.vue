@@ -1,14 +1,14 @@
 <template>
   <div class="block block-content-full ">
-    <div class="block-header block-header-default bg-gray-light">
+    <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
+        <button @click="this.$router.back()" type="button" class="btn btn-sm btn-link text-warning mx-2">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         فاکتور فروش
       </h3>
       <div class="block-options">
-        <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-alt-primary">
+        <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-sm btn-alt-primary">
           <i class="fa fa-save"></i>
           ثبت
         </button>
@@ -18,139 +18,187 @@
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false" />
       <div class="container">
         <div class="row">
-          <div class="col-sm-12 col-md-6 mb-2">
-            <div class="form-control">
-              <label class="form-label">تاریخ:</label>
-              <date-picker class="" v-model="data.date" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
-                :min="year.start" :max="year.end" />
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-control mb-2">
-              <label class="form-label">مشتری</label>
-              <div class="row">
-                <div class="col-10">
-                  <v-select class="" :filterable="false" dir="rtl" @search="searchPerson" :options="persons" label="nikename"
-                    v-model="data.person">
-                    <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
-                    </template>
-                    <template v-slot:option="option">
-                      <div class="row mb-1">
-                        <div class="col-12">
-                          <i class="fa fa-user me-2"></i>
-                          {{ option.nikename }}
-                        </div>
-                        <div class="col-12">
-                          <div class="row">
-                            <div class="col-6">
-                              <i class="fa fa-phone me-2"></i>
-                              {{ option.mobile }}
-                            </div>
-                            <div class="col-6">
-                              <i class="fa fa-bars"></i>
-                              تراز:
-                              {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
-          parseInt(option.bd))) }}
-                              <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
-                                بدهکار </span>
-                              <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
-                                بستانکار </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </template>
-                  </v-select>
-                  <span v-if="selectedPersonWithDet.bs != undefined" class="text-info ms-2">
-                    تراز:
-                    {{ this.$filters.formatNumber(Math.abs(parseInt(this.selectedPersonWithDet.bs) -
-          parseInt(this.selectedPersonWithDet.bd))) }}
-                    <span class="text-danger"
-                      v-if="parseInt(this.selectedPersonWithDet.bs) - parseInt(this.selectedPersonWithDet.bd) < 0">
-                      بدهکار </span>
-                    <span class="text-success"
-                      v-if="parseInt(this.selectedPersonWithDet.bs) - parseInt(this.selectedPersonWithDet.bd) > 0">
-                      بستانکار </span>
-                  </span>
+          <div class="col-sm-12 col-md-6 mb-1">
+            <div class="block block-rounded border">
+              <div class="block-header block-header-default py-1">
+                <h3 class="block-title text-primary">
+                  <i class="fa fa-calendar"></i>
+                  تاریخ
+                </h3>
+                <div class="block-options">
+
                 </div>
-                <div class="col-2">
-                  <quickView :code="this.data.person.code"></quickView>
-                </div>
+              </div>
+              <div class="block-content pt-1 px-1">
+                <p>
+                  <date-picker class="" v-model="data.date" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
+                    :min="year.start" :max="year.end" />
+                </p>
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-12">
-            <div class="form-control mb-2">
-              <label class="form-label">شرح</label>
-              <input v-model="data.des" class="form-control" type="text">
+          <div class="col-sm-12 col-md-6 mb-1">
+            <div class="block block-rounded border">
+              <div class="block-header block-header-default py-1">
+                <h3 class="block-title text-primary">
+                  <i class="fa fa-person"></i>
+                  مشتری
+                </h3>
+                <div class="block-options">
+                  <quickView :code="this.data.person.code"></quickView>
+                  <quickAdd :code="this.data.person.code"></quickAdd>
+                </div>
+              </div>
+              <div class="block-content pt-1 px-1">
+                <v-select class="mb-1 mx-0" :filterable="false" dir="rtl" @search="searchPerson" :options="persons"
+                  label="nikename" v-model="data.person">
+                  <template #no-options="{ search, searching, loading }">
+                    وردی یافت نشد!
+                  </template>
+                  <template v-slot:option="option">
+                    <div class="row mb-1">
+                      <div class="col-12">
+                        <i class="fa fa-user me-2"></i>
+                        {{ option.nikename }}
+                      </div>
+                      <div class="col-12">
+                        <div class="row">
+                          <div class="col-6">
+                            <i class="fa fa-phone me-2"></i>
+                            {{ option.mobile }}
+                          </div>
+                          <div class="col-6">
+                            <i class="fa fa-bars"></i>
+                            تراز:
+                            {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+          parseInt(option.bd))) }}
+                            <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
+                              بدهکار </span>
+                            <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
+                              بستانکار </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </v-select>
+                <span v-if="selectedPersonWithDet.bs != undefined" class="text-info ms-2">
+                  تراز:
+                  {{ this.$filters.formatNumber(Math.abs(parseInt(this.selectedPersonWithDet.bs) -
+          parseInt(this.selectedPersonWithDet.bd))) }}
+                  <span class="text-danger"
+                    v-if="parseInt(this.selectedPersonWithDet.bs) - parseInt(this.selectedPersonWithDet.bd) < 0">
+                    بدهکار </span>
+                  <span class="text-success"
+                    v-if="parseInt(this.selectedPersonWithDet.bs) - parseInt(this.selectedPersonWithDet.bd) > 0">
+                    بستانکار </span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12 mb-1">
+            <div class="block block-rounded border">
+              <div class="block-header block-header-default py-1">
+                <h3 class="block-title text-primary">
+                  <i class="fa-regular fa-note-sticky"></i>
+                  شرح
+                </h3>
+                <div class="block-options">
+
+                </div>
+              </div>
+              <div class="block-content p-0">
+                <input v-model="data.des" class="form-control" type="text">
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="container mt-2 border p-3 border-primary">
-        <h3 class="text-primary-lighter">افزودن اقلام فاکتور</h3>
-        <div class="row">
-          <div class="col-sm-12 col-md-5 mb-2">
-            <label class="form-label">کالا و خدمات</label>
-            <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name" v-model="itemData.commodity" class="">
-              <template #no-options="{ search, searching, loading }">
-                وردی یافت نشد!
-              </template>
-              <template v-slot:option="option">
-                <div class="row mb-1">
-                  <div class="col-12">
-                    <i class="fa fa-box me-1"></i>
-                    {{ option.name }}
+
+      <!-- Modal -->
+      <div class="modal modal-xl fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title text-primary fs-5" id="exampleModalLabel">افزودن اقلام فاکتور</h1>
+              <div class="block-options">
+                <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row">
+                  <div class="col-sm-12 col-md-5 mb-2">
+                    <label class="form-label">کالا و خدمات</label>
+                    <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name"
+                      v-model="itemData.commodity" class="">
+                      <template #no-options="{ search, searching, loading }">
+                        وردی یافت نشد!
+                      </template>
+                      <template v-slot:option="option">
+                        <div class="row mb-1">
+                          <div class="col-12">
+                            <i class="fa fa-box me-1"></i>
+                            {{ option.name }}
+                          </div>
+                          <div class="col-12">
+                            <small v-if="option.khadamat == false">
+                              <i class="fa fa-store me-1"></i>
+                              <small class="text-danger">
+                                موجودی:
+                              </small>
+                              <label style="direction: ltr;">
+                                {{ option.count }}
+                              </label>
+                              {{ option.unit }}
+                            </small>
+                          </div>
+                        </div>
+                      </template>
+                    </v-select>
                   </div>
-                  <div class="col-12">
-                    <small v-if="option.khadamat == false">
-                      <i class="fa fa-store me-1"></i>
-                      <small class="text-danger">
-                        موجودی:
-                      </small>
-                      <label style="direction: ltr;">
-                        {{ option.count }}
-                      </label>
-                      {{ option.unit }}
-                    </small>
+                  <div class="col-sm-12 col-md-2 mb-2">
+                    <label class="form-label">تعداد</label>
+                    <input class="form-control" type="number" min="1" v-model="this.itemData.count" />
+                  </div>
+                  <div class="col-sm-12 col-md-2 mb-2">
+                    <label class="form-label">قیمت واحد</label>
+                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
+                  </div>
+                  <div class="col-sm-12 col-md-3 mb-2">
+                    <label class="form-label">قیمت کل</label>
+                    <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bs" />
+                  </div>
+                  <div class="col-sm-12 col-md-12 mb-2">
+                    <label class="form-label">شرح</label>
+                    <input class="form-control" type="text" v-model="this.itemData.des" />
                   </div>
                 </div>
-              </template>
-            </v-select>
-          </div>
-          <div class="col-sm-12 col-md-2 mb-2">
-            <label class="form-label">تعداد</label>
-            <input class="form-control" type="number" min="1" v-model="this.itemData.count" />
-          </div>
-          <div class="col-sm-12 col-md-2 mb-2">
-            <label class="form-label">قیمت واحد</label>
-            <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
-          </div>
-          <div class="col-sm-12 col-md-3 mb-2">
-            <label class="form-label">قیمت کل</label>
-            <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bs" />
-          </div>
-          <div class="col-sm-12 col-md-12 mb-2">
-            <label class="form-label">شرح</label>
-            <input class="form-control" type="text" v-model="this.itemData.des" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <button class="btn btn-success" @click="addItem">
-              <i class="fa fa-save"></i>
-              افزودن به فاکتور
-            </button>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
+              <button class="btn btn-success" @click="addItem">
+                <i class="fa fa-save"></i>
+                افزودن به فاکتور
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <div class="container mt-4">
+      <div class="container">
         <div class="row">
           <div class="col-12">
             <span class="text-primary"> اقلام فاکتور </span>
             <span class="text-secondary">({{ items.length }} قلم)</span>
-            <EasyDataTable v-model:items-selected="itemsSelected" show-index alternating :headers="headers"
+            <!-- Button trigger modal add commodity -->
+            <button type="button" class="btn btn-sm float-end btn-primary" data-bs-toggle="modal"
+              data-bs-target="#exampleModal">
+              <i class="fa fa-plus"></i>
+              افزودن ردیف جدید
+            </button>
+            <EasyDataTable class="mt-3" v-model:items-selected="itemsSelected" show-index alternating :headers="headers"
               :items="items" theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
               rowsPerPageMessage="تعداد سطر" emptyMessage="هیچ آیتمی به این فاکتور افزوده نشده است."
               rowsOfPageSeparatorMessage="از">
@@ -209,13 +257,15 @@ import quickView from "../component/person/quickView.vue";
 // import the styles
 import 'vue3-treeselect/dist/vue3-treeselect.css'
 import { Money3 } from "v-money3";
+import quickAdd from "../component/person/quickAdd.vue";
 export default {
   name: "mod",
   components: {
     Money3,
     Loading,
     Treeselect,
-    quickView
+    quickView,
+    quickAdd,
   },
   data: () => {
     return {
@@ -379,6 +429,11 @@ export default {
           des: '',
           table: 53
         }
+        Swal.fire({
+          text: 'آیتم به فاکتور افزوده شد.',
+          icon: 'success',
+          confirmButtonText: 'قبول'
+        });
       }
 
     },
@@ -445,7 +500,7 @@ export default {
                 bd: this.$filters.formatNumber(item.bd),
                 type: 'commodity',
                 id: item.commodity.id,
-                des: '',
+                des: item.des,
                 table: 53
               });
             }

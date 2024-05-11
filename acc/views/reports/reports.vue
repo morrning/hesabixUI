@@ -1,6 +1,6 @@
 <template>
   <div class="block block-content-full ">
-    <div class="block-header block-header-default bg-gray-light">
+    <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark"> گزارشات </h3>
       <div class="block-options">
 

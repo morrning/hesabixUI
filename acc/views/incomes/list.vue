@@ -1,6 +1,6 @@
 <template>
   <div class="block block-content-full ">
-    <div class="block-header block-header-default bg-gray-light">
+    <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
         <i class="mx-2 fa fa-cash-register"></i>
         درآمدها
@@ -26,15 +26,19 @@
             rowsOfPageSeparatorMessage="از" :loading="loading">
             <template #item-operation="{ code }">
               <div class="dropdown-center">
-                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm text-primary"
+                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link"
                   data-bs-toggle="dropdown" id="dropdown-align-center-alt-primary" type="button">
                   <i class="fa-solid fa-ellipsis"></i>
                 </button>
                 <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
                   style="">
                   <router-link class="dropdown-item" :to="'/acc/accounting/view/' + code">
-                    <i class="fa fa-eye pe-2 text-success"></i>
+                    <i class="fa fa-file pe-2 text-primary"></i>
                     سند حسابداری
+                  </router-link>
+                  <router-link class="dropdown-item" :to="{ name: 'incomes_mod', params: { id: code } }">
+                    <i class="fa fa-eye pe-2 text-success"></i>
+                    مشاهده
                   </router-link>
                   <router-link class="dropdown-item" :to="{ name: 'incomes_mod', params: { id: code } }">
                     <i class="fa fa-edit pe-2"></i>

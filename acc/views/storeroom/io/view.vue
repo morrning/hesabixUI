@@ -62,7 +62,7 @@ export default defineComponent({
   <div class="block block-content-full">
     <div class="block-header block-header-default bg-gray-light" id="hide-on-print" >
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="btn text-warning mx-2 px-2">
+        <button @click="this.$router.back()" type="button" class="btn btn-sm btn-link text-warning mx-2">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fas fa-file-invoice-dollar"></i>
