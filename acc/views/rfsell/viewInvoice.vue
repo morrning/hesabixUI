@@ -106,7 +106,7 @@ export default defineComponent({
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fas fa-file-invoice-dollar"></i>
-        مشاهده و چاپ فاکتور برگشت از فروش</h3>
+        مشاهده فاکتور</h3>
       <div class="block-options">
         <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="rfsell" cat="rfsell"></archive-upload>
         <!-- Button trigger modal -->

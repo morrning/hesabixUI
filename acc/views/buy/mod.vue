@@ -104,7 +104,11 @@
                   شرح
                 </h3>
                 <div class="block-options">
-
+                  <mostdes :submitData="desSubmit" type="buy"></mostdes>
+                  <button title="شرح‌های پرتکرار" type="button" class="btn-block-option" data-bs-toggle="modal"
+                    data-bs-target="#mostDesModal">
+                    <i class="fa fa-list"></i>
+                  </button>
                 </div>
               </div>
               <div class="block-content p-0">
@@ -114,14 +118,14 @@
           </div>
         </div>
       </div>
-
+      <quickAddCommodity></quickAddCommodity>
       <!-- Modal -->
-      <div class="modal modal-xl fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+      <div class="modal modal-xl fade" id="addCommodityModal" tabindex="-1" aria-labelledby="addCommodityModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title text-primary fs-5" id="exampleModalLabel">افزودن اقلام فاکتور</h1>
+              <h1 class="modal-title text-primary fs-5" id="addCommodityModalLabel">افزودن اقلام فاکتور</h1>
               <div class="block-options">
                 <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
@@ -130,33 +134,50 @@
               <div class="container">
                 <div class="row">
                   <div class="col-sm-12 col-md-5 mb-2">
-                    <label class="form-label">کالا و خدمات</label>
-                    <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name"
-                      v-model="itemData.commodity" class="">
-                      <template #no-options="{ search, searching, loading }">
-                        وردی یافت نشد!
-                      </template>
-                      <template v-slot:option="option">
-                        <div class="row mb-1">
-                          <div class="col-12">
-                            <i class="fa fa-box me-1"></i>
-                            {{ option.name }}
-                          </div>
-                          <div class="col-12">
-                            <small v-if="option.khadamat == false">
-                              <i class="fa fa-store me-1"></i>
-                              <small class="text-danger">
-                                موجودی:
-                              </small>
-                              <label style="direction: ltr;">
-                                {{ option.count }}
-                              </label>
-                              {{ option.unit }}
-                            </small>
-                          </div>
+                    <div class="block block-rounded border">
+                      <div class="block-header block-header-default py-1">
+                        <h3 class="block-title text-primary">
+                          <i class="fa fa-box pe-2"></i>
+                          کالا و خدمات
+                        </h3>
+                        <div class="block-options">
+                          <!-- Button trigger modal -->
+                          <button title="افزودن کالا/خدمات جدید" type="button" class="btn-block-option"
+                            data-bs-toggle="modal" data-bs-target="#quickComodityAdd">
+                            <i class="fa fa-plus"></i>
+                          </button>
                         </div>
-                      </template>
-                    </v-select>
+                      </div>
+                      <div class="block-content pt-1 px-1">
+                        <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name"
+                          v-model="itemData.commodity" class="">
+                          <template #no-options="{ search, searching, loading }">
+                            وردی یافت نشد!
+                          </template>
+                          <template v-slot:option="option">
+                            <div class="row mb-1">
+                              <div class="col-12">
+                                <i class="fa fa-box me-1"></i>
+                                {{ option.name }}
+                              </div>
+                              <div class="col-12">
+                                <small v-if="option.khadamat == false">
+                                  <i class="fa fa-store me-1"></i>
+                                  <small class="text-danger">
+                                    موجودی:
+                                  </small>
+                                  <label style="direction: ltr;">
+                                    {{ option.count }}
+                                  </label>
+                                  {{ option.unit }}
+                                </small>
+                              </div>
+                            </div>
+                          </template>
+                        </v-select>
+
+                      </div>
+                    </div>
                   </div>
                   <div class="col-sm-12 col-md-2 mb-2">
                     <label class="form-label">تعداد</label>
@@ -171,8 +192,20 @@
                     <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bs" />
                   </div>
                   <div class="col-sm-12 col-md-12 mb-2">
-                    <label class="form-label">شرح</label>
-                    <input class="form-control" type="text" v-model="this.itemData.des" />
+                    <div class="block block-rounded border">
+                      <div class="block-header block-header-default py-1">
+                        <h3 class="block-title text-primary">
+                          <i class="fa-regular fa-note-sticky"></i>
+                          شرح
+                        </h3>
+                        <div class="block-options">
+                          
+                        </div>
+                      </div>
+                      <div class="block-content p-0">
+                        <input v-model="this.itemData.des" class="form-control" type="text">
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -194,7 +227,7 @@
             <span class="text-secondary">({{ items.length }} قلم)</span>
             <!-- Button trigger modal add commodity -->
             <button type="button" class="btn btn-sm float-end btn-primary" data-bs-toggle="modal"
-              data-bs-target="#exampleModal">
+              data-bs-target="#addCommodityModal">
               <i class="fa fa-plus"></i>
               افزودن ردیف جدید
             </button>
@@ -258,6 +291,8 @@ import quickView from "../component/person/quickView.vue";
 import 'vue3-treeselect/dist/vue3-treeselect.css'
 import { Money3 } from "v-money3";
 import quickAdd from "../component/person/quickAdd.vue";
+import quickAddCommodity from "../component/commodity/quickAddCommodity.vue";
+import mostdes from "../component/mostdes.vue";
 export default {
   name: "mod",
   components: {
@@ -265,10 +300,16 @@ export default {
     Loading,
     Treeselect,
     quickView,
-    quickAdd
+    quickAdd,
+    quickAddCommodity,
+    mostdes
   },
   data: () => {
     return {
+      desSubmit: {
+        id: '',
+        des: ''
+      },
       sumSelected: 0,
       sumTotal: 0,
       itemsSelected: [],
@@ -328,6 +369,9 @@ export default {
     }
   },
   watch: {
+    'desSubmit.id': function () {
+      this.data.des = this.desSubmit.des;
+    },
     'itemData.price': function () {
       this.calc();
     },
