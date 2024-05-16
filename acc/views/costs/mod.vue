@@ -49,7 +49,7 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button class="btn rounded-circle btn-sm btn-danger" @click="removeItem(index)">
+                  <button title="حذف" class="btn-block-option text-white ps-2" @click="removeItem(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
@@ -94,7 +94,7 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button class="btn rounded-circle btn-sm btn-danger" @click="removeBank(index)">
+                  <button title="حذف" class="btn-block-option text-white ps-2" @click="removeBank(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
@@ -143,7 +143,7 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button class="btn rounded-circle btn-sm btn-danger" @click="removeSalary(index)">
+                  <button title="حذف" class="btn-block-option text-white ps-2" @click="removeSalary(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
@@ -192,7 +192,7 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button class="btn rounded-circle btn-sm btn-danger" @click="removeCashdesk(index)">
+                  <button title="حذف" class="btn-block-option text-danger ps-2" @click="removeCashdesk(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
@@ -241,7 +241,8 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button class="btn rounded-circle btn-sm btn-danger" @click="removePerson(index)">
+                  <quickAdd :code="0"></quickAdd>
+                  <button title="حذف" class="btn-block-option text-danger ps-2" @click="removePerson(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
@@ -371,12 +372,14 @@ import archiveUpload from "../component/archive/archiveUpload.vue";
 import Treeselect from 'vue3-treeselect'
 // import the styles
 import 'vue3-treeselect/dist/vue3-treeselect.css'
+import quickAdd from "../component/person/quickAdd.vue";
 export default {
   name: "mod",
   components: {
     Loading,
     Treeselect,
-    archiveUpload
+    archiveUpload,
+    quickAdd
   },
   data: () => {
     return {

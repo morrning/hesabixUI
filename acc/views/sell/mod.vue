@@ -133,7 +133,7 @@
             <div class="modal-body">
               <div class="container">
                 <div class="row">
-                  <div class="col-sm-12 col-md-5 mb-2">
+                  <div class="col-sm-12 col-md-5 mb-0">
                     <div class="block block-rounded border">
                       <div class="block-header block-header-default py-1">
                         <h3 class="block-title text-primary">
@@ -179,6 +179,9 @@
                       </div>
                     </div>
                   </div>
+                  <div class="col-sm-12 col-md-12 mb-2">
+
+                  </div>
                   <div class="col-sm-12 col-md-2 mb-2">
                     <label class="form-label">تعداد</label>
                     <input class="form-control" type="number" min="1" v-model="this.itemData.count" />
@@ -187,7 +190,16 @@
                     <label class="form-label">قیمت واحد</label>
                     <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
                   </div>
-                  <div class="col-sm-12 col-md-3 mb-2">
+                  <div class="col-sm-12 col-md-2 mb-2">
+                    <label class="form-label">تخفیف</label>
+                    <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.discount" />
+                  </div>
+                  <div class="col-sm-12 col-md-2 mb-2">
+                    <label class="form-label">مالیات</label>
+                    <money3 readonly="readonly" v-bind="currencyConfig" class="form-control"
+                      v-model.number="this.itemData.tax" />
+                  </div>
+                  <div class="col-sm-12 col-md-4 mb-2">
                     <label class="form-label">قیمت کل</label>
                     <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bs" />
                   </div>
@@ -199,7 +211,7 @@
                           شرح
                         </h3>
                         <div class="block-options">
-                          
+
                         </div>
                       </div>
                       <div class="block-content p-0">
@@ -240,7 +252,30 @@
                   <i class="fa fa-trash"></i>
                 </span>
               </template>
+              <template #item-bs="{ bs }">
+                {{ this.$filters.formatNumber(bs) }}
+              </template>
+              <template #item-tax="{ tax }">
+                {{ this.$filters.formatNumber(tax) }}
+              </template>
+              <template #item-discount="{ discount }">
+                {{ this.$filters.formatNumber(discount) }}
+              </template>
             </EasyDataTable>
+            <div class="row mt-1">
+              <div class="col-sm-12 col-md-3">
+                <div class="input-group input-group-sm mb-3">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    <input v-model="maliyatCheck" class="form-check-input mt-0 me-2" type="checkbox"
+                      aria-label="Checkbox for following text input">
+                    مالیات
+                    %
+                  </span>
+                  <input :disabled="!maliyatCheck" type="number" v-model="maliyatPercent" class="form-control"
+                    aria-label="مالیات بر ارزش افزوده" aria-describedby="inputGroup-sizing-sm">
+                </div>
+              </div>
+            </div>
             <div class="container-fluid p-0 mx-0 my-3">
               <a class="block block-rounded block-link-shadow border-start border-success border-3"
                 href="javascript:void(0)">
@@ -306,9 +341,14 @@ export default {
   },
   data: () => {
     return {
-      desSubmit:{
-        id:'',
-        des:''
+      maliyatCheck: true,
+      maliyatPercent: 0,
+      bid: {
+        maliyatafzode: 0
+      },
+      desSubmit: {
+        id: '',
+        des: ''
       },
       sumSelected: 0,
       sumTotal: 0,
@@ -321,6 +361,8 @@ export default {
         { text: "واحد", value: "commodity.unit" },
         { text: "تعداد", value: "count" },
         { text: "مبلغ واحد", value: "price" },
+        { text: "تخفیف", value: "discount" },
+        { text: "مالیات", value: "tax" },
         { text: "مبلغ کل", value: "bs" },
         { text: "عملیات", value: "operation" },
       ],
@@ -364,7 +406,9 @@ export default {
         type: 'commodity',
         id: 0,
         des: '',
-        table: 53
+        table: 53,
+        discount: 0,
+        tax: 0
       }
     }
   },
@@ -374,6 +418,28 @@ export default {
     },
     'itemData.price': function () {
       this.calc();
+    },
+    'itemData.discount': function () {
+      this.calc();
+    },
+    'maliyatCheck': function (item) {
+      if (item === false) { this.maliyatPercent = 0; }
+      else {
+        this.maliyatPercent = this.bid.maliyatafzode;
+      }
+    },
+    'maliyatPercent': function () {
+
+      this.items.forEach((item, index) => {
+        if (this.maliyatPercent == 0) {
+          item.bs = (item.price * item.count) - item.discount;
+          item.tax = 0;
+        }
+        else {
+          item.bs = (((((parseInt(item.price.replaceAll(',', '')) * parseInt(item.count.replaceAll(',', ''))) - parseInt(item.discount)) * (100 + parseInt(this.maliyatPercent))) / 100)).toString();
+          item.tax = (((parseInt(item.price.replaceAll(',', '')) * parseInt(item.count.replaceAll(',', '')) - item.discount) * (parseInt(this.maliyatPercent))) / 100).toString();
+        }
+      })
     },
     'itemData.count': function () {
       this.calc();
@@ -388,7 +454,7 @@ export default {
       handler: function (val, oldVal) {
         this.sumSelected = 0;
         this.itemsSelected.forEach((item) => {
-          this.sumSelected += parseInt(item.bs.replaceAll(',', ''));
+          this.sumSelected += parseInt(item.bs);
         })
       },
       deep: true
@@ -397,7 +463,7 @@ export default {
       handler: function (val, oldVal) {
         this.sumTotal = 0;
         this.items.forEach((item) => {
-          this.sumTotal += parseInt(item.bs.replaceAll(',', ''));
+          this.sumTotal += parseInt(item.bs);
         })
       },
       deep: true
@@ -433,7 +499,14 @@ export default {
       });
     },
     calc() {
-      this.itemData.bs = this.itemData.price.valueOf() * this.itemData.count.valueOf()
+      if (this.maliyatPercent == 0) {
+        this.itemData.bs = (this.itemData.price.valueOf() * this.itemData.count.valueOf()) - this.itemData.discount.valueOf();
+        this.itemData.tax = 0;
+      }
+      else {
+        this.itemData.bs = (((this.itemData.price.valueOf() * this.itemData.count.valueOf()) - this.itemData.discount.valueOf()) * (100 + this.maliyatPercent.valueOf())) / 100;
+        this.itemData.tax = (((this.itemData.price.valueOf() * this.itemData.count.valueOf()) - this.itemData.discount.valueOf()) * (this.maliyatPercent.valueOf())) / 100;;
+      }
     },
     addItem() {
       if (this.itemData.count == 0) {
@@ -471,7 +544,9 @@ export default {
           type: 'commodity',
           id: this.commodity[0].id,
           des: '',
-          table: 53
+          table: 53,
+          discount: 0,
+          tax: 0
         }
         Swal.fire({
           text: 'آیتم به فاکتور افزوده شد.',
@@ -499,6 +574,10 @@ export default {
       axios.get('/api/year/get').then((response) => {
         this.year = response.data;
         this.data.date = response.data.now;
+      })
+      //load business info
+      axios.get('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
+        this.bid = response.data;
       })
       //load persons
       axios.get('/api/person/list/search').then((response) => {

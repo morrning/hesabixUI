@@ -8,7 +8,7 @@
         پرداخت به اشخاص
       </h3>
       <div class="block-options">
-        <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-alt-primary">
+        <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-sm btn-alt-primary">
           <i class="fa fa-save"></i>
           ثبت
         </button>
@@ -47,7 +47,8 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button class="btn rounded-circle btn-sm btn-danger" @click="removePerson(index)">
+                  <quickAdd :code="0"></quickAdd>
+                  <button title="حذف" class="btn-block-option text-danger ps-2" @click="removePerson(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
@@ -123,7 +124,7 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button class="btn rounded-circle btn-sm btn-danger" @click="removeBank(index)">
+                  <button title="حذف" class="btn-block-option text-danger ps-2" @click="removeBank(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
@@ -172,7 +173,7 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button class="btn rounded-circle btn-sm btn-danger" @click="removeSalary(index)">
+                  <button title="حذف" class="btn-block-option text-danger ps-2" @click="removeSalary(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
@@ -221,7 +222,7 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button class="btn rounded-circle btn-sm btn-danger" @click="removeCashdesk(index)">
+                  <button title="حذف" class="btn-block-option text-danger ps-2" @click="removeCashdesk(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
@@ -320,10 +321,12 @@ import Swal from "sweetalert2";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
+import quickAdd from "../../component/person/quickAdd.vue";
 export default {
   name: "mod",
   components: {
     Loading,
+    quickAdd
   },
   data: () => {
     return {

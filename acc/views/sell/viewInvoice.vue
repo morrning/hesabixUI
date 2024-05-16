@@ -167,7 +167,7 @@ export default defineComponent({
               <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel1">
                   <i class="fas fa-money-bill-1 ms-2"></i>
-                  ثبت دربافت
+                  ثبت دریافت
                 </h1>
                 <div class="block-options">
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
