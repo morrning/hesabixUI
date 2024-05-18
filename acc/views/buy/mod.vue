@@ -42,7 +42,7 @@
               <div class="block-header block-header-default py-1">
                 <h3 class="block-title text-primary">
                   <i class="fa fa-person"></i>
-                  مشتری
+                  تامین کننده
                 </h3>
                 <div class="block-options">
                   <quickView :code="this.data.person.code"></quickView>

@@ -194,11 +194,6 @@
                     <label class="form-label">تخفیف</label>
                     <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.discount" />
                   </div>
-                  <div class="col-sm-12 col-md-2 mb-2">
-                    <label class="form-label">مالیات</label>
-                    <money3 readonly="readonly" v-bind="currencyConfig" class="form-control"
-                      v-model.number="this.itemData.tax" />
-                  </div>
                   <div class="col-sm-12 col-md-4 mb-2">
                     <label class="form-label">قیمت کل</label>
                     <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bs" />
@@ -271,7 +266,7 @@
                     مالیات
                     %
                   </span>
-                  <input :disabled="!maliyatCheck" type="number" v-model="maliyatPercent" class="form-control"
+                  <input :disabled="!maliyatCheck" min="0" max="100" type="number" v-model="maliyatPercent" class="form-control"
                     aria-label="مالیات بر ارزش افزوده" aria-describedby="inputGroup-sizing-sm">
                 </div>
               </div>
@@ -281,24 +276,34 @@
                 href="javascript:void(0)">
                 <div class="block-content block-content-full block-content-sm bg-body-light">
                   <div class="row">
-                    <div class="col-sm-6 com-md-6">
+                    <div class="col-sm-12 col-md-4">
                       <span class="text-dark">
                         <i class="fa fa-list-dots"></i>
-                        مبلغ کل:
+                         مالیات:
                       </span>
                       <span class="text-primary">
                         {{ this.$filters.formatNumber(this.sumTotal) }}
                         ریال
                       </span>
                     </div>
-
-                    <div class="col-sm-6 com-md-6">
+                    
+                    <div class="col-sm-12 col-md-4">
                       <span class="text-dark">
                         <i class="fa fa-list-check"></i>
                         جمع مبلغ موارد انتخابی:
                       </span>
                       <span class="text-primary">
                         {{ this.$filters.formatNumber(this.sumSelected) }}
+                        ریال
+                      </span>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                      <span class="text-dark">
+                        <i class="fa fa-list-dots"></i>
+                        مبلغ کل:
+                      </span>
+                      <span class="text-primary">
+                        {{ this.$filters.formatNumber(this.sumTotal) }}
                         ریال
                       </span>
                     </div>
@@ -578,6 +583,10 @@ export default {
       //load business info
       axios.get('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
         this.bid = response.data;
+        if(this.bid.maliyatafzode == 0){
+          this.maliyatCheck = false;
+        }
+        this.maliyatPercent = this.bid.maliyatafzode;
       })
       //load persons
       axios.get('/api/person/list/search').then((response) => {

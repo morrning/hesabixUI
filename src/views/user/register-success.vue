@@ -39,7 +39,7 @@
             <i class="fa fa-2x fa-book-bible text-xinspire"></i>
           </div>
           <h4 class="h5 mb-2"> منابع آموزشی </h4>
-          <p class="mb-0 text-muted"> به روز ترین آموزش ها و راهنمای استفاده از {{ siteName }} به صورت کامل و کاملا رایگلن در اختیار شماست. </p>
+          <p class="mb-0 text-muted"> به روز ترین آموزش ها و راهنمای استفاده از {{ siteName }} به صورت کامل و کاملا رایگان در اختیار شماست. </p>
         </div>
       </div>
     </div>

@@ -29,9 +29,23 @@
             </div>
           </div>
           <div class="col-sm-12 col-md-12">
-            <div class="form-floating mb-2">
-              <input v-model="data.des" class="form-control" type="text">
-              <label class="form-label">شرح</label>
+            <div class="block block-rounded border">
+              <div class="block-header block-header-default py-1">
+                <h3 class="block-title text-primary">
+                  <i class="fa-regular fa-note-sticky"></i>
+                  شرح
+                </h3>
+                <div class="block-options">
+                  <mostdes :submitData="desSubmit" type="personSend"></mostdes>
+                  <button title="شرح‌های پرتکرار" type="button" class="btn-block-option" data-bs-toggle="modal"
+                    data-bs-target="#mostDesModal">
+                    <i class="fa fa-list"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="block-content p-0">
+                <input v-model="data.des" class="form-control" type="text">
+              </div>
             </div>
           </div>
         </div>
@@ -59,8 +73,8 @@
                     <div class="row">
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">شخص</small>
-                        <v-select dir="rtl" @search="searchPerson" :options="listPersons" label="nikename" v-model="item.id"
-                          @option:deselecting="funcCanSubmit()" @option:selecting="funcCanSubmit()">
+                        <v-select dir="rtl" @search="searchPerson" :options="listPersons" label="nikename"
+                          v-model="item.id" @option:deselecting="funcCanSubmit()" @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
                             وردی یافت نشد!
                           </template>
@@ -79,14 +93,12 @@
                                   <div class="col-6">
                                     <i class="fa fa-bars"></i>
                                     تراز:
-                    {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+                                    {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
           parseInt(option.bd))) }}
-                    <span class="text-danger"
-                      v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
-                      بدهکار </span>
-                    <span class="text-success"
-                      v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
-                      بستانکار </span>
+                                    <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
+                                      بدهکار </span>
+                                    <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
+                                      بستانکار </span>
                                   </div>
                                 </div>
                               </div>
@@ -135,7 +147,7 @@
                     <div class="row">
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">بانک</small>
-                        <v-select @change="alert()" dir="rtl" :options="listBanks" label="name" v-model="item.id"
+                        <v-select  dir="rtl" :options="listBanks" label="name" v-model="item.id"
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
                           @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
@@ -184,7 +196,7 @@
                     <div class="row">
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">تنخواه گردان</small>
-                        <v-select @change="alert()" dir="rtl" :options="listSalarys" label="name" v-model="item.id"
+                        <v-select  dir="rtl" :options="listSalarys" label="name" v-model="item.id"
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
                           @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
@@ -233,7 +245,7 @@
                     <div class="row">
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">صندوق</small>
-                        <v-select @change="alert()" dir="rtl" :options="listCashdesks" label="name" v-model="item.id"
+                        <v-select  dir="rtl" :options="listCashdesks" label="name" v-model="item.id"
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
                           @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
@@ -322,14 +334,20 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import quickAdd from "../../component/person/quickAdd.vue";
+import mostdes from "../../component/mostdes.vue";
 export default {
   name: "mod",
   components: {
     Loading,
-    quickAdd
+    quickAdd,
+    mostdes
   },
   data: () => {
     return {
+      desSubmit: {
+        id: '',
+        des: ''
+      },
       isLoading: false,
       canSubmit: false,
       updateID: null,
@@ -366,6 +384,11 @@ export default {
       },
     }
   },
+  watch: {
+    'desSubmit.id': function () {
+      this.data.des = this.desSubmit.des;
+    },
+  },
   mounted() {
     this.loadData();
   },
@@ -375,7 +398,7 @@ export default {
   methods: {
     searchPerson(query, loading) {
       loading(true);
-      axios.post('/api/person/list/search',{search: query}).then((response) => {
+      axios.post('/api/person/list/search', { search: query }).then((response) => {
         this.listPersons = response.data;
         loading(false);
       });

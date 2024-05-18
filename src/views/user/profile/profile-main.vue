@@ -141,7 +141,7 @@
       <div class="content py-0">
         <div class="row fs-sm">
           <div class="col-sm-6 order-sm-1 text-center text-sm-start">
-            <a class="fw-semibold" href="https://github.com/morrning/hesabixCore" target="_blank">{{ siteName }} {{this.hesabix.version}}</a>
+            <a class="fw-semibold" :href="siteUrl" target="_blank">{{ siteName }} {{this.hesabix.version}}</a>
           </div>
         </div>
       </div>
@@ -153,12 +153,13 @@
 
 <script>
 import axios from "axios";
-import {getSiteName} from "/hesabixConfig"
+import {getSiteName,getApiUrl} from "/hesabixConfig"
 export default {
   // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
   name: "profile-main",
   data: ()=>{return{
     siteName:'',
+    siteUrl:'',
     ROLE_ADMIN:false,
     user: {
       mobile:'1'
@@ -172,6 +173,7 @@ export default {
   }},
   created(){
     this.siteName = getSiteName();
+    this.siteUrl = getApiUrl();
   },
   methods:{
     logout(){
