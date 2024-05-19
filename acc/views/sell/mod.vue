@@ -265,6 +265,9 @@
               <template #item-discount="{ discount }">
                 {{ this.$filters.formatNumber(discount) }}
               </template>
+              <template #item-count="{ count,commodity }">
+                {{ this.$filters.formatNumber(count) }}  {{ commodity.unit }}
+              </template>
             </EasyDataTable>
             <div class="row mt-1">
               <div class="col-sm-12 col-md-3">
@@ -372,8 +375,7 @@ export default {
       headers: [
         { text: "کالا", value: "commodity.name" },
         { text: "شرح", value: "des" },
-        { text: "واحد", value: "commodity.unit" },
-        { text: "تعداد", value: "count" },
+        { text: "تعداد/مقدار", value: "count" },
         { text: "مبلغ واحد", value: "price" },
         { text: "تخفیف", value: "discount" },
         { text: "مالیات", value: "tax" },
