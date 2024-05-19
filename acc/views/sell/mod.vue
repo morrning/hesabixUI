@@ -179,26 +179,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-12 mb-2">
-
-                  </div>
-                  <div class="col-sm-12 col-md-2 mb-2">
-                    <label class="form-label">تعداد</label>
-                    <input class="form-control" type="number" min="1" v-model="this.itemData.count" />
-                  </div>
-                  <div class="col-sm-12 col-md-2 mb-2">
-                    <label class="form-label">قیمت واحد</label>
-                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
-                  </div>
-                  <div class="col-sm-12 col-md-2 mb-2">
-                    <label class="form-label">تخفیف</label>
-                    <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.discount" />
-                  </div>
-                  <div class="col-sm-12 col-md-4 mb-2">
-                    <label class="form-label">قیمت کل</label>
-                    <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bs" />
-                  </div>
-                  <div class="col-sm-12 col-md-12 mb-2">
+                  <div class="col-sm-12 col-md-7 mb-2">
                     <div class="block block-rounded border">
                       <div class="block-header block-header-default py-1">
                         <h3 class="block-title text-primary">
@@ -212,6 +193,31 @@
                       <div class="block-content p-0">
                         <input v-model="this.itemData.des" class="form-control" type="text">
                       </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 mb-2">
+                    <div class="form-floating mb-3">
+                      <money3 v-bind="unitConfig" min=0 class="form-control" style="direction: ltr;"
+                        v-model="this.itemData.count" />
+                      <label for="floatingInput">{{ itemData.commodity.unitData.name }}</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 mb-2">
+                    <div class="form-floating mb-3">
+                      <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
+                      <label for="floatingInput">قیمت واحد</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 mb-2">
+                    <div class="form-floating mb-3">
+                      <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.discount" />
+                      <label for="floatingInput">تخفیف</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 mb-2">
+                    <div class="form-floating mb-3">
+                      <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bs" />
+                      <label for="floatingInput">قیمت کل</label>
                     </div>
                   </div>
                 </div>
@@ -250,6 +256,9 @@
               <template #item-bs="{ bs }">
                 {{ this.$filters.formatNumber(bs) }}
               </template>
+              <template #item-commodity.name="{ commodity }">
+                {{ commodity.code }} - {{ commodity.name }}
+              </template>
               <template #item-tax="{ tax }">
                 {{ this.$filters.formatNumber(tax) }}
               </template>
@@ -266,8 +275,8 @@
                     مالیات
                     %
                   </span>
-                  <input :disabled="!maliyatCheck" min="0" max="100" type="number" v-model="maliyatPercent" class="form-control"
-                    aria-label="مالیات بر ارزش افزوده" aria-describedby="inputGroup-sizing-sm">
+                  <input :disabled="!maliyatCheck" min="0" max="100" type="number" v-model="maliyatPercent"
+                    class="form-control" aria-label="مالیات بر ارزش افزوده" aria-describedby="inputGroup-sizing-sm">
                 </div>
               </div>
             </div>
@@ -279,14 +288,14 @@
                     <div class="col-sm-12 col-md-4">
                       <span class="text-dark">
                         <i class="fa fa-list-dots"></i>
-                         مالیات:
+                        مالیات:
                       </span>
                       <span class="text-primary">
                         {{ this.$filters.formatNumber(this.sumTotal) }}
                         ریال
                       </span>
                     </div>
-                    
+
                     <div class="col-sm-12 col-md-4">
                       <span class="text-dark">
                         <i class="fa fa-list-check"></i>
@@ -356,11 +365,11 @@ export default {
         des: ''
       },
       sumSelected: 0,
+      sumTax: 0,
       sumTotal: 0,
       itemsSelected: [],
       items: [],
       headers: [
-        { text: "کد کالا", value: "commodity.code" },
         { text: "کالا", value: "commodity.name" },
         { text: "شرح", value: "des" },
         { text: "واحد", value: "commodity.unit" },
@@ -368,6 +377,7 @@ export default {
         { text: "مبلغ واحد", value: "price" },
         { text: "تخفیف", value: "discount" },
         { text: "مالیات", value: "tax" },
+        { text: "جمع بدون مالیات", value: "bs" },
         { text: "مبلغ کل", value: "bs" },
         { text: "عملیات", value: "operation" },
       ],
@@ -393,6 +403,22 @@ export default {
         shouldRound: true,
         focusOnRight: false,
       },
+      unitConfig: {
+        masked: false,
+        prefix: '',
+        suffix: '',
+        thousands: ',',
+        decimal: '.',
+        precision: 0,
+        disableNegative: true,
+        disabled: false,
+        min: 0,
+        max: null,
+        allowBlank: false,
+        minimumNumberOfCharacters: 0,
+        shouldRound: false,
+        focusOnRight: false,
+      },
       data: {
         date: '',
         des: '',
@@ -403,17 +429,21 @@ export default {
       commodity: [],
       units: [],
       itemData: {
-        commodity: '',
+        id: 0,
+        commodity: {
+          unit: '',
+          unitData: {
+            name: '',
+            floatNumber: 0
+          }
+        },
         count: 1,
         price: 0,
-        bs: 0,
-        bd: 0,
-        type: 'commodity',
-        id: 0,
+        sumTotal: 0,
+        sumWithoutTax: 0,
+        tax: 0,
         des: '',
-        table: 53,
         discount: 0,
-        tax: 0
       }
     }
   },
@@ -452,6 +482,7 @@ export default {
     'itemData.commodity': function (newVal, oldVal) {
       if (newVal != '') {
         this.itemData.price = this.itemData.commodity.priceSell.valueOf();
+        this.unitConfig.precision = this.itemData.commodity.unitData.floatNumber;
       }
       this.itemData.des = this.itemData.commodity.des;
     },
@@ -481,6 +512,9 @@ export default {
       },
       deep: true
     },
+  },
+  mounted() {
+
   },
   beforeMount() {
     this.loadData();
@@ -541,17 +575,21 @@ export default {
         this.itemData.bs = this.$filters.formatNumber(this.itemData.bs);
         this.items.push(this.itemData);
         this.itemData = {
-          commodity: this.commodity[0],
+          id: 0,
+          commodity: {
+            unit: '',
+            unitData: {
+              name: '',
+              floatNumber: 0
+            }
+          },
           count: 1,
           price: 0,
-          bs: 0,
-          bd: 0,
-          type: 'commodity',
-          id: this.commodity[0].id,
+          sumTotal: 0,
+          sumWithoutTax: 0,
+          tax: 0,
           des: '',
-          table: 53,
           discount: 0,
-          tax: 0
         }
         Swal.fire({
           text: 'آیتم به فاکتور افزوده شد.',
@@ -583,7 +621,7 @@ export default {
       //load business info
       axios.get('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
         this.bid = response.data;
-        if(this.bid.maliyatafzode == 0){
+        if (this.bid.maliyatafzode == 0) {
           this.maliyatCheck = false;
         }
         this.maliyatPercent = this.bid.maliyatafzode;
