@@ -197,8 +197,7 @@
                   </div>
                   <div class="col-sm-12 col-md-3 mb-2">
                     <div class="form-floating mb-3">
-                      <money3 v-bind="unitConfig" min=0 class="form-control" style="direction: ltr;"
-                        v-model="this.itemData.count" />
+                      <money3 v-bind="unitConfig" class="form-control" v-model.number="this.itemData.count" />
                       <label for="floatingInput">{{ itemData.commodity.unitData.name }}</label>
                     </div>
                   </div>
@@ -216,7 +215,8 @@
                   </div>
                   <div class="col-sm-12 col-md-3 mb-2">
                     <div class="form-floating mb-3">
-                      <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bs" />
+                      <money3 readonly="readonly" v-bind="currencyConfig" class="form-control"
+                        v-model.number="this.itemData.sumWithoutTax" />
                       <label for="floatingInput">قیمت کل</label>
                     </div>
                   </div>
@@ -253,8 +253,14 @@
                   <i class="fa fa-trash"></i>
                 </span>
               </template>
-              <template #item-bs="{ bs }">
-                {{ this.$filters.formatNumber(bs) }}
+              <template #item-sumTotal="{ sumTotal }">
+                {{ this.$filters.formatNumber(sumTotal) }}
+              </template>
+              <template #item-sumWithoutTax="{ sumWithoutTax }">
+                {{ this.$filters.formatNumber(sumWithoutTax) }}
+              </template>
+              <template #item-price="{ price }">
+                {{ this.$filters.formatNumber(price) }}
               </template>
               <template #item-commodity.name="{ commodity }">
                 {{ commodity.code }} - {{ commodity.name }}
@@ -265,8 +271,8 @@
               <template #item-discount="{ discount }">
                 {{ this.$filters.formatNumber(discount) }}
               </template>
-              <template #item-count="{ count,commodity }">
-                {{ this.$filters.formatNumber(count) }}  {{ commodity.unit }}
+              <template #item-count="{ count, commodity }">
+                {{ count }} {{ commodity.unit }}
               </template>
             </EasyDataTable>
             <div class="row mt-1">
@@ -278,8 +284,7 @@
                     مالیات
                     %
                   </span>
-                  <input :disabled="!maliyatCheck" min="0" max="100" type="number" v-model="maliyatPercent"
-                    class="form-control" aria-label="مالیات بر ارزش افزوده" aria-describedby="inputGroup-sizing-sm">
+                  <money3 v-bind="unitConfig" aria-label="مالیات بر ارزش افزوده" class="form-control" v-model.number="maliyatPercent" />
                 </div>
               </div>
             </div>
@@ -294,7 +299,7 @@
                         مالیات:
                       </span>
                       <span class="text-primary">
-                        {{ this.$filters.formatNumber(this.sumTotal) }}
+                        {{ this.$filters.formatNumber(this.sumTax) }}
                         ریال
                       </span>
                     </div>
@@ -345,6 +350,7 @@ import { Money3 } from "v-money3";
 import quickAdd from "../component/person/quickAdd.vue";
 import quickAddCommodity from "../component/commodity/quickAddCommodity.vue";
 import mostdes from "../component/mostdes.vue";
+import { format, unformat } from "v-money3";
 export default {
   name: "mod",
   components: {
@@ -379,8 +385,8 @@ export default {
         { text: "مبلغ واحد", value: "price" },
         { text: "تخفیف", value: "discount" },
         { text: "مالیات", value: "tax" },
-        { text: "جمع بدون مالیات", value: "bs" },
-        { text: "مبلغ کل", value: "bs" },
+        { text: "جمع بدون مالیات", value: "sumWithoutTax" },
+        { text: "مبلغ کل", value: "sumTotal" },
         { text: "عملیات", value: "operation" },
       ],
       selectedPersonWithDet: {},
@@ -396,14 +402,14 @@ export default {
         thousands: ',',
         decimal: '.',
         precision: 0,
-        disableNegative: false,
+        disableNegative: true,
         disabled: false,
         min: 0,
         max: null,
         allowBlank: false,
-        minimumNumberOfCharacters: 0,
-        shouldRound: true,
-        focusOnRight: false,
+        minimumNumberOfCharacters: 1,
+        shouldRound: false,
+        focusOnRight: true,
       },
       unitConfig: {
         masked: false,
@@ -414,12 +420,9 @@ export default {
         precision: 0,
         disableNegative: true,
         disabled: false,
-        min: 0,
-        max: null,
         allowBlank: false,
-        minimumNumberOfCharacters: 0,
         shouldRound: false,
-        focusOnRight: false,
+        focusOnRight: true,
       },
       data: {
         date: '',
@@ -439,7 +442,7 @@ export default {
             floatNumber: 0
           }
         },
-        count: 1,
+        count: 0,
         price: 0,
         sumTotal: 0,
         sumWithoutTax: 0,
@@ -466,16 +469,13 @@ export default {
       }
     },
     'maliyatPercent': function () {
-
+      if(this.maliyatPercent == ''){
+        this.maliyatPercent = 0;
+      }
       this.items.forEach((item, index) => {
-        if (this.maliyatPercent == 0) {
-          item.bs = (item.price * item.count) - item.discount;
-          item.tax = 0;
-        }
-        else {
-          item.bs = (((((parseInt(item.price.replaceAll(',', '')) * parseInt(item.count.replaceAll(',', ''))) - parseInt(item.discount)) * (100 + parseInt(this.maliyatPercent))) / 100)).toString();
-          item.tax = (((parseInt(item.price.replaceAll(',', '')) * parseInt(item.count.replaceAll(',', '')) - item.discount) * (parseInt(this.maliyatPercent))) / 100).toString();
-        }
+        item.sumWithoutTax = (item.price * item.count) - item.discount;
+        item.tax = (((item.price * item.count) - item.discount) * (this.maliyatPercent)) / 100;;
+        item.sumTotal = (((parseFloat(item.price) * parseFloat(item.count)) - parseFloat(item.discount)) * (100 + parseFloat(this.maliyatPercent))) / 100;
       })
     },
     'itemData.count': function () {
@@ -483,7 +483,7 @@ export default {
     },
     'itemData.commodity': function (newVal, oldVal) {
       if (newVal != '') {
-        this.itemData.price = this.itemData.commodity.priceSell.valueOf();
+        this.itemData.price = this.itemData.commodity.priceSell;
         this.unitConfig.precision = this.itemData.commodity.unitData.floatNumber;
       }
       this.itemData.des = this.itemData.commodity.des;
@@ -492,7 +492,7 @@ export default {
       handler: function (val, oldVal) {
         this.sumSelected = 0;
         this.itemsSelected.forEach((item) => {
-          this.sumSelected += parseInt(item.bs);
+          this.sumSelected += parseFloat(item.sumTotal);
         })
       },
       deep: true
@@ -500,8 +500,10 @@ export default {
     items: {
       handler: function (val, oldVal) {
         this.sumTotal = 0;
+        this.sumTax = 0;
         this.items.forEach((item) => {
-          this.sumTotal += parseInt(item.bs);
+          this.sumTotal += parseFloat(item.sumTotal);
+          this.sumTax += parseFloat(item.tax);
         })
       },
       deep: true
@@ -540,14 +542,9 @@ export default {
       });
     },
     calc() {
-      if (this.maliyatPercent == 0) {
-        this.itemData.bs = (this.itemData.price.valueOf() * this.itemData.count.valueOf()) - this.itemData.discount.valueOf();
-        this.itemData.tax = 0;
-      }
-      else {
-        this.itemData.bs = (((this.itemData.price.valueOf() * this.itemData.count.valueOf()) - this.itemData.discount.valueOf()) * (100 + this.maliyatPercent.valueOf())) / 100;
-        this.itemData.tax = (((this.itemData.price.valueOf() * this.itemData.count.valueOf()) - this.itemData.discount.valueOf()) * (this.maliyatPercent.valueOf())) / 100;;
-      }
+      this.itemData.sumWithoutTax = (this.itemData.price * this.itemData.count) - this.itemData.discount;
+      this.itemData.tax = (((this.itemData.price * this.itemData.count) - this.itemData.discount) * (this.maliyatPercent)) / 100;;
+      this.itemData.sumTotal = (((parseFloat(this.itemData.price) * parseFloat(this.itemData.count)) - parseFloat(this.itemData.discount)) * (100 + parseFloat(this.maliyatPercent))) / 100;
     },
     addItem() {
       if (this.itemData.count == 0) {
@@ -572,20 +569,11 @@ export default {
         });
       }
       else {
-        this.itemData.price = this.$filters.formatNumber(this.itemData.price);
-        this.itemData.count = this.$filters.formatNumber(this.itemData.count);
-        this.itemData.bs = this.$filters.formatNumber(this.itemData.bs);
         this.items.push(this.itemData);
         this.itemData = {
           id: 0,
-          commodity: {
-            unit: '',
-            unitData: {
-              name: '',
-              floatNumber: 0
-            }
-          },
-          count: 1,
+          commodity: this.commodity[0],
+          count: 0,
           price: 0,
           sumTotal: 0,
           sumWithoutTax: 0,
@@ -697,24 +685,11 @@ export default {
         });
       }
       else {
-        // add kharidar
-        let bd = 0;
-        this.items.forEach((item) => {
-          bd = bd + parseInt(item.bs.replace(/,(?=\d{3})/g, ''));
-        })
-        this.items.push({
-          commodity: this.commodity[0],
-          bs: 0,
-          bd: bd,
-          type: 'person',
-          id: this.data.person.id,
-          des: 'فروش کالا به مشتری',
-          table: 3
-        });
-        axios.post('/api/accounting/insert', {
+        axios.post('/api/sell/mod', {
           type: 'sell',
           date: this.data.date,
           des: this.data.des,
+          buyer: this.data.person,
           rows: this.items,
           update: this.$route.params.id
         }).then((response) => {
