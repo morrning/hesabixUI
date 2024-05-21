@@ -284,7 +284,8 @@
                     مالیات
                     %
                   </span>
-                  <money3 :disabled="!maliyatCheck" v-bind="unitConfig" aria-label="مالیات بر ارزش افزوده" class="form-control" v-model.number="maliyatPercent" />
+                  <money3 :disabled="!maliyatCheck" v-bind="unitConfig" aria-label="مالیات بر ارزش افزوده"
+                    class="form-control" v-model.number="maliyatPercent" />
                 </div>
               </div>
             </div>
@@ -463,15 +464,15 @@ export default {
       this.calc();
     },
     'maliyatCheck': function (item) {
-      if (item === false) { 
+      if (item === false) {
         this.maliyatPercent = 0;
-       }
+      }
       else {
         this.maliyatPercent = this.bid.maliyatafzode;
       }
     },
     'maliyatPercent': function () {
-      if(this.maliyatPercent == ''){
+      if (this.maliyatPercent == '') {
         this.maliyatPercent = 0;
       }
       this.items.forEach((item, index) => {
@@ -657,12 +658,13 @@ export default {
               this.items.push({
                 commodity: item.commodity,
                 count: item.commodity_count,
-                price: this.$filters.formatNumber(parseInt(parseInt(item.bs) / parseInt(item.commodity_count))),
-                bs: this.$filters.formatNumber(item.bs),
-                bd: this.$filters.formatNumber(item.bd),
+                price: parseInt(parseInt(item.bs) / parseInt(item.commodity_count)),
+                bs: item.bs,
+                bd: item.bd,
                 type: 'commodity',
                 id: item.commodity.id,
                 des: item.des,
+                discount: item.discount,
                 table: 53
               });
             }
@@ -695,14 +697,23 @@ export default {
           rows: this.items,
           update: this.$route.params.id
         }).then((response) => {
-          this.items.pop();
-          Swal.fire({
-            text: 'فاکتور ثبت شد.',
-            icon: 'success',
-            confirmButtonText: 'قبول'
-          }).then(() => {
-            this.$router.push('/acc/sell/list')
-          });
+          if (response.data.code == 100) {
+            Swal.fire({
+              text: 'فاکتور ثبت شد.',
+              icon: 'success',
+              confirmButtonText: 'قبول'
+            }).then(() => {
+              this.$router.push('/acc/sell/list')
+            });
+          }
+          else{
+            Swal.fire({
+              text: response.data.message,
+              icon: 'error',
+              confirmButtonText: 'قبول'
+            })
+          }
+
         })
       }
       this.canSubmit = true;
