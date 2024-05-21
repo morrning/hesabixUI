@@ -1,22 +1,25 @@
 <template>
   <!-- Modal -->
-  <div class="modal fade" id="updateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+  <div class="modal fade" id="updateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="updateModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title text-primary-dark" id="updateModalLabel">
+        <div class="modal-header bg-info">
+          <h5 class="modal-title text-light" id="updateModalLabel">
             <i class="fa fa-paint-roller"></i>
-            به روز رسانی جدید</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true"><i class="fa fa-close"></i> </span>
-          </button>
+            به روز رسانی جدید
+          </h5>
+          <div class="block-options">
+            <button type="button" class="btn-close btn  btn-sm text-light bg-light" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
         </div>
         <div class="modal-body">
-          <b>تغییران نسخه اخیر در تاریخ {{this.hesabix.lastUpdateDate}}</b>
+          <b class="text-primary-dark">تغییران نسخه اخیر در تاریخ {{ this.hesabix.lastUpdateDate }}</b>
           <p v-html="this.hesabix.lastUpdateDes"></p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-sm btn-success" data-bs-dismiss="modal">
             <i class="fa fa-check-double me-2"></i>
             بارگزاری نسخه جدید
           </button>
@@ -41,23 +44,25 @@
         <div>
           <!-- User Dropdown -->
           <div class="dropdown d-inline-block">
-            <button aria-expanded="false" aria-haspopup="true" class="btn btn-alt-secondary bg-primary-lighter" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
+            <button aria-expanded="false" aria-haspopup="true" class="btn btn-alt-secondary bg-primary-lighter"
+              data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
               <vue-gravatar class="img-avatar img-avatar32 img-avatar-thumb" :email="this.user.email" :size="32" />
               <i class="fa fa-fw fa-angle-down ms-1"></i>
             </button>
-            <div aria-labelledby="page-header-user-dropdown" class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0">
+            <div aria-labelledby="page-header-user-dropdown"
+              class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0">
               <div class="rounded-top fw-semibold text-center p-3 border-bottom bg-body-light">
                 <div class="mb-2">
                   <vue-gravatar class="img-avatar img-avatar48 img-avatar-thumb" :email="this.user.email" :size="48" />
                 </div>
-                <RouterLink to="/profile/dashboard" class="fw-semibold">{{user.fullname}}</RouterLink>
-                <div class="fs-sm">{{user.email}}</div>
+                <RouterLink to="/profile/dashboard" class="fw-semibold">{{ user.fullname }}</RouterLink>
+                <div class="fs-sm">{{ user.email }}</div>
               </div>
               <div class="p-2">
                 <RouterLink class="dropdown-item" to="/profile/business">
                   <i class="fa fa-fw fa-cog text-gray me-1"></i>
                   کسب و کارها
-                  <span class="badge text-bg-danger float-end">{{this.business_count}}</span>
+                  <span class="badge text-bg-danger float-end">{{ this.business_count }}</span>
                 </RouterLink>
                 <RouterLink class="dropdown-item" to="/profile/business">
                   <i class="fa fa-fw fa-user text-gray me-1"></i>
@@ -94,7 +99,8 @@
             </li>
             <li class="nav-item">
               <router-link class="nav-link text-body-color py-4" to="/profile/new-business">
-                <i class="fa fa-plus-circle fa-fw opacity-50"></i> <span class="d-none d-md-inline ms-1">کسب‌و‌کار جدید</span>
+                <i class="fa fa-plus-circle fa-fw opacity-50"></i> <span class="d-none d-md-inline ms-1">کسب‌و‌کار
+                  جدید</span>
               </router-link>
             </li>
             <li class="nav-item">
@@ -109,7 +115,8 @@
             </li>
             <li class="nav-item">
               <RouterLink class="nav-link text-body-color py-4" to="/profile/change-password">
-                <i class="fa fa-unlock fa-fw opacity-50"></i> <span class="d-none d-md-inline ms-1">تغییر کلمه عبور</span>
+                <i class="fa fa-unlock fa-fw opacity-50"></i> <span class="d-none d-md-inline ms-1">تغییر کلمه
+                  عبور</span>
               </RouterLink>
             </li>
             <li v-show="ROLE_ADMIN" class="nav-item">
@@ -141,7 +148,7 @@
       <div class="content py-0">
         <div class="row fs-sm">
           <div class="col-sm-6 order-sm-1 text-center text-sm-start">
-            <a class="fw-semibold" :href="siteUrl" target="_blank">{{ siteName }} {{this.hesabix.version}}</a>
+            <a class="fw-semibold" :href="siteUrl" target="_blank">{{ siteName }} {{ this.hesabix.version }}</a>
           </div>
         </div>
       </div>
@@ -153,52 +160,57 @@
 
 <script>
 import axios from "axios";
-import {getSiteName,getApiUrl} from "/hesabixConfig"
+import { getSiteName, getApiUrl } from "/hesabixConfig"
 export default {
   // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
   name: "profile-main",
-  data: ()=>{return{
-    siteName:'',
-    siteUrl:'',
-    ROLE_ADMIN:false,
-    user: {
-      mobile:'1'
-    },
-    business_count: 0,
-    hesabix:{
-      version:'',
-      lastUpdateDate:'',
-      lastUpdateDes:'',
+  data: () => {
+    return {
+      siteName: '',
+      siteUrl: '',
+      ROLE_ADMIN: false,
+      user: {
+        mobile: '1'
+      },
+      business_count: 0,
+      hesabix: {
+        version: '',
+        lastUpdateDate: '',
+        lastUpdateDes: '',
+      }
     }
-  }},
-  created(){
+  },
+  created() {
     this.siteName = getSiteName();
     this.siteUrl = getApiUrl();
   },
-  methods:{
-    logout(){
-      axios.post( '/api/user/logout')
-          .then((response) =>{
-            localStorage.removeItem('X-AUTH-TOKEN');
-            document.location.reload();
-            delete  axios.defaults.headers.common['X-AUTH-TOKEN'];
-            window.location.href = this.$filters.getApiUrl() + '/logout/by/token/user/login';
-          });
+  methods: {
+    logout() {
+      axios.post('/api/user/logout')
+        .then((response) => {
+          localStorage.removeItem('X-AUTH-TOKEN');
+          document.location.reload();
+          delete axios.defaults.headers.common['X-AUTH-TOKEN'];
+          window.location.href = this.$filters.getApiUrl() + '/logout/by/token/user/login';
+        });
     },
-    gethesabix(){
-      axios.get( '/api/general/stat').then((response) =>{
+    gethesabix() {
+      axios.get('/api/general/stat').then((response) => {
         this.hesabix = response.data;
         let currentVersion = window.localStorage.getItem('hesabixVersion');
-        if(currentVersion == null || currentVersion != this.hesabix.version){
+
+        if (currentVersion == undefined) {
+          window.localStorage.setItem('hesabixVersion', this.hesabix.version);
+        }
+        else if (currentVersion != this.hesabix.version) {
           //set version Number
           const updateModalEL = document.getElementById('updateModal')
-          const updateModal = new bootstrap.Modal(updateModalEL, {backdrop: true});
+          const updateModal = new bootstrap.Modal(updateModalEL, { backdrop: true });
           updateModalEL.addEventListener('hidden.bs.modal', () => {
+            window.localStorage.setItem('hesabixVersion', this.hesabix.version);
             window.location.reload(true);
-          })
-
+          });
           updateModal.show();
-          window.localStorage.setItem('hesabixVersion',this.hesabix.version);
         }
 
       });
@@ -206,32 +218,30 @@ export default {
   },
   mounted() {
     this.gethesabix();
-    axios.post('/api/admin/has/role/' + 'ROLE_ADMIN').then((response)=>{
+    axios.post('/api/admin/has/role/' + 'ROLE_ADMIN').then((response) => {
       this.ROLE_ADMIN = response.data.result;
     });
   },
   async beforeMount() {
     await axios.post('/api/user/check/login')
-        .then((response) => {
-          if(response.data.result == false){
-            this.$router.push('/user/login');
-          }
-          else {
-            axios.post('/api/user/current/info')
-                .then((res) => {this.user = res.data;});
-            axios.post('/api/business/list/count')
-                .then((response) => {
-                  this.business_count = response.data.count;
-                });
-          }
-
-        }).catch(()=>{
+      .then((response) => {
+        if (response.data.result == false) {
           this.$router.push('/user/login');
-        });
+        }
+        else {
+          axios.post('/api/user/current/info')
+            .then((res) => { this.user = res.data; });
+          axios.post('/api/business/list/count')
+            .then((response) => {
+              this.business_count = response.data.count;
+            });
+        }
+
+      }).catch(() => {
+        this.$router.push('/user/login');
+      });
   },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

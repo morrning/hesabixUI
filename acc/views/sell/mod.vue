@@ -284,7 +284,7 @@
                     مالیات
                     %
                   </span>
-                  <money3 v-bind="unitConfig" aria-label="مالیات بر ارزش افزوده" class="form-control" v-model.number="maliyatPercent" />
+                  <money3 :disabled="!maliyatCheck" v-bind="unitConfig" aria-label="مالیات بر ارزش افزوده" class="form-control" v-model.number="maliyatPercent" />
                 </div>
               </div>
             </div>
@@ -463,7 +463,9 @@ export default {
       this.calc();
     },
     'maliyatCheck': function (item) {
-      if (item === false) { this.maliyatPercent = 0; }
+      if (item === false) { 
+        this.maliyatPercent = 0;
+       }
       else {
         this.maliyatPercent = this.bid.maliyatafzode;
       }

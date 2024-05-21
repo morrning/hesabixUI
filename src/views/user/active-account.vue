@@ -42,7 +42,7 @@ export default defineComponent({
       }
       else{
         axios.post('/api/user/active/account/' + this.email,{code:this.code.toString()}).then((response)=>{
-          if(response.data.result == 'ok'){
+          if(response.data.result == 'ok' || response.data.result == 'active before'){
             Swal.fire({
               text: 'حساب کاربری شما تایید شد.',
               icon: 'success',
