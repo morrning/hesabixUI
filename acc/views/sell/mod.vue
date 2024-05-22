@@ -658,13 +658,16 @@ export default {
               this.items.push({
                 commodity: item.commodity,
                 count: item.commodity_count,
-                price: parseInt(parseInt(item.bs) / parseInt(item.commodity_count)),
+                price: parseInt((parseInt(item.bs) - parseInt(item.tax) + parseInt(item.discount) ) / parseInt(item.commodity_count)),
                 bs: item.bs,
                 bd: item.bd,
                 type: 'commodity',
                 id: item.commodity.id,
                 des: item.des,
                 discount: item.discount,
+                tax: item.tax,
+                sumWithoutTax: item.bs - item.tax,
+                sumTotal: item.bs,
                 table: 53
               });
             }
@@ -697,7 +700,7 @@ export default {
           rows: this.items,
           update: this.$route.params.id
         }).then((response) => {
-          if (response.data.code == 100) {
+          if (response.data.code == 0) {
             Swal.fire({
               text: 'فاکتور ثبت شد.',
               icon: 'success',

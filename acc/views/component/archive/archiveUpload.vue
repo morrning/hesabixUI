@@ -115,7 +115,7 @@ export default defineComponent({
   <button type="button" class="btn btn-sm btn-outline-success mx-2" data-bs-toggle="modal" data-bs-target="#archiveModal">
     <span class="badge text-bg-dark me-2">{{this.fileStack.length}}</span>
     <i class="fa fa-file me-1"></i>
-    آرشیو
+    <span class="d-none d-sm-inline-block">آرشیو</span>
   </button>
   <!-- Modal -->
   <div class="modal modal-lg fade" id="archiveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
