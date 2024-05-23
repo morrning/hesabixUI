@@ -190,27 +190,9 @@ export default defineComponent({
         </button>
         <!-- Modal -->
         <div class="modal fade" id="rec-modal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel1">
-                  <i class="fas fa-money-bill-1 ms-2"></i>
-                  ثبت دریافت
-                </h1>
-                <div class="block-options">
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-              </div>
-              <div class="modal-body">
-                <rec ref="submitPay" :windowsState="this.PayWindowsState" :person="this.person.id"
-                  :original-doc="this.item.doc.code"
-                  :total-amount="parseInt(this.item.doc.amount) - parseInt(this.totalRec)"></rec>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
-              </div>
-            </div>
-          </div>
+          <rec ref="submitPay" :windowsState="this.PayWindowsState" :person="this.person.id"
+            :original-doc="this.item.doc.code" :total-amount="parseInt(this.item.doc.amount) - parseInt(this.totalRec)">
+          </rec>
         </div>
         <button type="button" class="btn btn-sm btn-info ms-2" @click="this.recListModal.show()">
           <i class="fas fa-arrow-alt-circle-down"></i>
