@@ -144,7 +144,7 @@
     <!-- END Main Container -->
 
     <!-- Footer -->
-    <footer class="bg-body-extra-light" id="page-footer">
+    <footer class="bg-body-extra-light fixed-bottom border-top" id="page-footer" style="max-height: 5px;">
       <div class="content py-0">
         <div class="row fs-sm">
           <div class="col-sm-6 order-sm-1 text-center text-sm-start">

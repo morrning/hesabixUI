@@ -185,7 +185,8 @@
             </div>
             <div class="space-y-2">
               <div class="form-check form-switch">
-                <input v-model="info.plugAccproCloseYear" @change="savePerms()" class="form-check-input" type="checkbox">
+                <input v-model="info.plugAccproCloseYear" @change="savePerms()" class="form-check-input"
+                  type="checkbox">
                 <label class="form-check-label">بستن سال مالی</label>
               </div>
             </div>
@@ -201,8 +202,20 @@
           <div class="col-sm-12 col-md-4">
             <div class="space-y-2">
               <div class="form-check form-switch">
-                <input v-model="info.plugAccproAccounting" @change="savePerms()" class="form-check-input" type="checkbox">
+                <input v-model="info.plugAccproAccounting" @change="savePerms()" class="form-check-input"
+                  type="checkbox">
                 <label class="form-check-label">صدور و ویرایش اسناد حسابداری</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-show="this.isPluginActive('accpro')" class="row mt-2">
+          <b>افزونه تعمیرکاران</b>
+          <div class="col-sm-12 col-md-4">
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="info.plugRepservice" @change="savePerms()" class="form-check-input" type="checkbox">
+                <label class="form-check-label">ثبت و ویرایش</label>
               </div>
             </div>
           </div>

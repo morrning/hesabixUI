@@ -392,6 +392,25 @@ export default {
               </li>
             </ul>
           </li>
+          <li v-show="permissions.plugRepservice" class="nav-main-item">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu"
+              data-toggle="submenu" href="#">
+              <i class="nav-main-link-icon fa fa-bowl-food"></i>
+              <span class="nav-main-link-name">تعمیرکاران</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li class="nav-main-item">
+                <RouterLink class="nav-main-link" to="/acc/persons/list">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list"></i>
+                   درخواست‌ها
+                  </span>
+                  <RouterLink to="/acc/persons/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+
+                  </RouterLink>
+                </RouterLink>
+              </li>
+            </ul>
+          </li>
           <li v-show="permissions.plugRestamap" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu"
               data-toggle="submenu" href="#">
