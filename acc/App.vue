@@ -888,11 +888,11 @@ export default {
       <div>
         <!-- Toggle Sidebar -->
         <!-- Layout API, functionality initialized in Template._uiApiLayout()-->
-        <button class="btn-sm btn btn-alt-info me-1" data-action="sidebar_toggle" data-toggle="layout" type="button">
+        <button class=" btn btn-sm btn-alt-info me-1 float-start" data-action="sidebar_toggle" data-toggle="layout" type="button">
           <i class="fa fa-fw fa-bars"></i>
         </button>
         <!-- END Toggle Sidebar -->
-        <b class="ms-1 text-light">
+        <b class="ms-1 text-light d-none d-sm-none d-md-block float-start justify-content-center">
           {{ this.business.name }}
         </b>
       </div>

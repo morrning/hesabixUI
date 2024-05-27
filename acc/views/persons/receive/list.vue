@@ -2,11 +2,9 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="btn btn-sm btn-link text-warning mx-2">
+        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
-        <help-btn label="راهنمای بخش دریافت‌ها" rndiv="99572101733" vsource="https://www.aparat.com/embed/OFLEV?data[rnddiv]=99572101733&data[responsive]=yes"></help-btn>
-        <i class="mx-2 fa fa-circle-down"></i>
         دریافت ها </h3>
       <div class="block-options">
         <router-link to="/acc/persons/receive/mod/" class="btn btn-sm btn-primary ms-2">

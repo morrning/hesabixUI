@@ -6,7 +6,7 @@
     <div class="block-content">
       <div class="row pb-sm-3 pb-md-5 justify-content-center">
         <div class="col-sm-12 col-md-4 my-5 text-center">
-          <vue-gravatar class="img-avatar img-avatar128 img-avatar-thumb" :email="this.user_email" :size="150" />
+          <img src="\img\avatar.png" class="img-avatar img-avatar128" />
         </div>
         <div class="col-sm-10 col-md-8">
           <div class="form-floating mb-3">

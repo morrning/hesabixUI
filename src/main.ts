@@ -2,8 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from "axios";
-import { plugin, defaultConfig } from '@formkit/vue'
-import { fa } from '@formkit/i18n'
+
 import 'vue3-tel-input/dist/vue3-tel-input.css'
 // @ts-ignore
 import VueGravatar from "vue3-gravatar";
@@ -22,12 +21,6 @@ axios.defaults.baseURL = app.config.globalProperties.$API_URL;
 
 app.use(router)
 app.use(VueGravatar)
-app.use(plugin, defaultConfig({
-    theme: 'genesis',
-    locales: { fa },
-    locale: 'fa',
-}))
-app.component(VueCountdown.name, VueCountdown);
 //global methods
 app.config.globalProperties.$filters = {
     formatNumber(value: string) {

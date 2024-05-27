@@ -2,8 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from "axios";
-import { plugin, defaultConfig } from '@formkit/vue'
-import { fa } from '@formkit/i18n'
+
 // @ts-ignore
 import VueGravatar from "vue3-gravatar";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
@@ -61,11 +60,7 @@ app.use(VueGravatar)
 app.use(money)
 app.use(CKEditor)
 app.use(LoadingPlugin)
-app.use(plugin, defaultConfig({
-    theme: 'genesis',
-    locales: { fa },
-    locale: 'fa',
-}))
+
 app.use(Vue3PersianDatetimePicker, {
     name: 'CustomDatePicker',
     props: {
