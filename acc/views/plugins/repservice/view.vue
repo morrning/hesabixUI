@@ -38,7 +38,7 @@ export default defineComponent({
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fas fa-file-invoice-dollar"></i>
-        مشاهده فاکتور
+        مشاهده  درخواست
       </h3>
       <div class="block-options">
       </div>

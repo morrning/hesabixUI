@@ -392,7 +392,7 @@ export default {
               </li>
             </ul>
           </li>
-          <li v-show="permissions.plugRepservice" class="nav-main-item">
+          <li v-show="permissions.plugRepservice && isPluginActive('repservice')" class="nav-main-item">
             <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu"
               data-toggle="submenu" href="#">
               <i class="nav-main-link-icon fa fa-bowl-food"></i>
