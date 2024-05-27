@@ -330,6 +330,25 @@ const router = createRouter({
       component: () => import('../views/plugins/accpro/intro.vue'),
     },
     {
+      path: '/acc/plugins/repservice/intro',
+      name: 'plugin_repservice_intro',
+      component: () => import('../views/plugins/repservice/intro.vue'),
+    },{
+      path: '/acc/plugin/repservice/order/mod/:id?',
+      name: 'plugin_repservice_order_mod',
+      component: () => import('../views/plugins/repservice/mod.vue'),
+    },
+    {
+      path: '/acc/plugin/repservice/order/view/:id?',
+      name: 'plugin_repservice_order_view',
+      component: () => import('../views/plugins/repservice/view.vue'),
+    },
+    {
+      path: '/acc/plugin/repservice/order/list',
+      name: 'plugin_repservice_order_list',
+      component: () => import('../views/plugins/repservice/list.vue'),
+    },
+    {
       path: '/acc/plugins/restamap/intro',
       name: 'plugin_restamap_intro',
       component: () => import('../views/plugins/resamap/intro.vue'),

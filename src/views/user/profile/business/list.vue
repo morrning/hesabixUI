@@ -23,7 +23,7 @@
         </div>
         <router-link to="/profile/new-business" v-if="contents.length === 0">
           <div class="d-flex gap-2 w-100 justify-content-between">
-            <div>
+            <div class="p-2 m-2">
               <h6>اولین کسب و کار خود را ایجاد کنید</h6>
             </div>
           </div>

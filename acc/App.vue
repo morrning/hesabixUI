@@ -66,30 +66,30 @@ export default {
     this.siteName = getSiteName();
   },
   methods: {
-    exitBusiness(){
+    exitBusiness() {
       Swal.fire({
         text: 'آیا برای خروج و ترک کسب‌و‌کار مطمئن هستید؟ ترک کسب و کار موجب قطع دسترسی شما خواهد شد و تنها از طریق مالک کسب‌و‌کار قابل بازیابی است.',
         showCancelButton: true,
         confirmButtonText: 'بله',
         cancelButtonText: `خیر`,
-        icon:'warning'
+        icon: 'warning'
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          axios.post('/api/business/removeuser/me').then((response)=>{
-            if(response.data.result == 1){
+          axios.post('/api/business/removeuser/me').then((response) => {
+            if (response.data.result == 1) {
               Swal.fire({
                 text: 'عملیات با موفقیت انجام شد. به صفحه پروفایل کاربری باز می گردید.',
                 icon: 'success',
                 confirmButtonText: 'قبول'
-              }).then((res)=>{
+              }).then((res) => {
                 document.location = '/';
               });
             }
           })
         }
       })
-    
+
     },
     logout() {
       axios.post('/api/user/logout')
@@ -175,7 +175,7 @@ export default {
                 <div class="bg-primary-op">
                   <div class="content-header">
                     <!-- User Avatar -->
-                    <a class="img-link me-1" href="https://my.hesabix.ir/profile/dashboard">
+                    <a class="img-link me-1" href="https://app.hesabix.ir/profile/dashboard">
                       <vue-gravatar class="img-avatar img-avatar32 img-avatar-thumb" :email="this.userEmail"
                         :size="32" />
                     </a>
@@ -183,7 +183,7 @@ export default {
 
                     <!-- User Info -->
                     <div class="ms-2">
-                      <a class="text-white fw-semibold" href="https://my.hesabix.ir/profile/dashboard">{{ userFullName
+                      <a class="text-white fw-semibold" href="https://app.hesabix.ir/profile/dashboard">{{ userFullName
                         }}</a>
                       <div class="text-white-75 fs-sm">{{ userEmail }}</div>
                     </div>
@@ -400,12 +400,13 @@ export default {
             </a>
             <ul class="nav-main-submenu">
               <li class="nav-main-item">
-                <RouterLink class="nav-main-link" to="/acc/persons/list">
+                <RouterLink class="nav-main-link" to="/acc/plugin/repservice/order/list">
                   <span class="nav-main-link-name">
                     <i class="fa fa-list"></i>
-                   درخواست‌ها
+                    درخواست‌ها
                   </span>
-                  <RouterLink to="/acc/persons/mod/" class="nav-main-link-badge badge rounded-pill bg-primary">+
+                  <RouterLink to="/acc/plugin/repservice/order/mod/"
+                    class="nav-main-link-badge badge rounded-pill bg-primary">+
                   </RouterLink>
                 </RouterLink>
               </li>
@@ -678,7 +679,7 @@ export default {
               </li>
               <li v-if="permissions.sell" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/sell/list/">
-                  <span class="nav-main-link-name"> 
+                  <span class="nav-main-link-name">
                     <i class="fa-brands fa-shopify"></i>
                     فاکتورهای فروش</span>
                   <router-link to="/acc/sell/mod/"
@@ -891,8 +892,7 @@ export default {
           <i class="fa fa-fw fa-bars"></i>
         </button>
         <!-- END Toggle Sidebar -->
-        <b class="ms-3 text-light">
-          <i class="fa fa-shop"></i>
+        <b class="ms-1 text-light">
           {{ this.business.name }}
         </b>
       </div>
@@ -901,54 +901,32 @@ export default {
       <!-- Right Section -->
       <div>
         <notification />
-
-        <div class="dropdown d-inline-block">
-          <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm me-1 btn-alt-secondary"
-            data-bs-toggle="dropdown" id="page-header-service-dropdown" type="button">
-            <i class="fa fa-fw fa-cogs mx-1"></i>
-            <span class="d-none d-sm-inline-block">سرویس‌ها</span>
-            <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
-          </button>
-          <div aria-labelledby="page-header-service-dropdown" class="dropdown-menu dropdown-menu-end p-0"
-            style="width:20rem">
-            <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3"> سرویس‌ها </div>
-            <div class="row p-1">
-              <div class="col-12">
-                <archive_modal />
-              </div>
-              <div class="col-12">
-                <hr>
-                <smsPanel />
-              </div>
-            </div>
-          </div>
-        </div>
         <!-- User Dropdown -->
-        <div class="dropdown d-inline-block">
-          <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm me-1 btn-alt-secondary"
+        <div class="dropdown d-inline-block me-1">
+          <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm me-1 btn-alt-secondary rounded-circle"
             data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
-            <i class="fa fa-fw fa-user d-sm-none"></i>
-            <span class="d-none d-sm-inline-block">{{ userFullName }}</span>
-            <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
+            <i class="fa-regular fa-user"></i>
           </button>
           <div aria-labelledby="page-header-user-dropdown" class="dropdown-menu dropdown-menu-end p-0">
-            <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3"> گزینه های کاربر </div>
+            <div class="bg-primary-dark rounded-top fw-semibold text-white text-center px-1 py-2">
+              {{ userFullName }}
+            </div>
             <div class="p-2">
-              <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+              <smsPanel />
+              <div class="dropdown-divider" role="separator"></div>
+              <archive_modal />
+              <div class="dropdown-divider" role="separator"></div>
               <a class="dropdown-item" data-action="side_overlay_toggle" data-toggle="layout" href="/profile/dashboard">
                 <i class="far fa-fw fa-building me-1"></i> پروفایل کاربر </a>
-              <!-- END Side Overlay -->
-
-              <div class="dropdown-divider" role="separator"></div>
               <button class="dropdown-item" @click="this.logout">
                 <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> خروج از حساب </button>
             </div>
           </div>
         </div>
         <!-- END User Dropdown -->
-        <button class="btn btn-sm btn-alt-secondary" data-action="side_overlay_toggle" data-toggle="layout"
-          type="button">
-          <i class="far fa-fw fa-list-alt"></i>
+        <button class="btn btn-sm me-1 btn-alt-secondary rounded-circle d-none d-sm-block float-end"
+          data-action="side_overlay_toggle" data-toggle="layout" type="button">
+          <i class="far text-primary fa-list-alt"></i>
         </button>
       </div>
       <!-- END Right Section -->

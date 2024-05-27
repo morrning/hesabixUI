@@ -38,11 +38,11 @@ export default {
 
 <template>
   <div class="dropdown d-inline-block">
-    <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-alt-success me-2" data-bs-toggle="dropdown" id="page-header-notifications-dropdown" type="button">
-      <i class="fa fa-fw fa-bell"></i>
+    <button aria-expanded="false" aria-haspopup="true" class="btn text-warning me-2 btn-sm btn-alt-secondary rounded-circle" data-bs-toggle="dropdown" id="page-header-notifications-dropdown" type="button">
+      <i class="fa fa-bell"></i>
     </button>
     <div aria-labelledby="page-header-notifications-dropdown" class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" style="">
-      <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3"> اعلان ها </div>
+      <div class="bg-primary-dark rounded-top fw-semibold text-white text-center py-2 px-3"> اعلان ها </div>
       <ul v-if="items === undefined" class="nav-items my-2">
         <li>
           <div class="d-flex text-dark py-2 text-center">

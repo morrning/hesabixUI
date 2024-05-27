@@ -22,21 +22,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <b class="text-primary">
-    <i class="fa fa-message"></i>
-    پیامک</b>
-  <div class="">اعتبار :
+  <div class="">
+    <router-link class="btn btn-link btn-sm" to="/acc/sms/panel">
+          <i class="fa fa-plus"></i>
+    </router-link>
+    اعتبار :
     <span class="text-primary-dark">{{ this.$filters.formatNumber(smsCharge)}}</span>
     ریال
-  </div>
-  <div class="d-flex text-dark py-2 text-center">
-    <div class="flex-grow-1 fs-sm pe-2">
-      <div class="fw-semibold">
-        <router-link class="btn btn-sm btn-primary" to="/acc/sms/panel">
-          افزایش اعتبار
-        </router-link>
-      </div>
-    </div>
   </div>
 </template>
 
