@@ -2,19 +2,24 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+        <button @click="this.$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         قبض تحویل
       </h3>
       <div class="block-options">
         <span class="form-check form-switch  form-check-inline">
-                <input v-model="data.sms" class="form-check-input" type="checkbox">
-                <label class="form-check-label"> پیامک</label>
+          <input :disabled="this.data.person.mobile == ''" v-model="data.sms" class="form-check-input" type="checkbox">
+          <label class="form-check-label"> پیامک</label>
         </span>
-        <button @click="save()" type="button" class="btn btn-sm btn-alt-primary">
+        <button :disabled="isLoading" @click="save()" type="button" class="btn btn-sm btn-alt-primary">
+          <div v-show="this.isLoading" class="spinner-grow spinner-grow-sm me-2" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
           <i class="fa fa-floppy-disk"></i>
-          ثبت</button>
+          ثبت
+        </button>
       </div>
     </div>
     <div class="block-content py-3 vl-parent px-0">
@@ -36,8 +41,8 @@
               </div>
               <div class="block-content pt-1 px-1">
                 <p>
-                  <date-picker class="my-0 py-0" v-model="data.date" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
-                    :min="year.start" :max="year.end" />
+                  <date-picker class="my-0 py-0" v-model="data.date" format="jYYYY-jMM-jDD"
+                    display-format="jYYYY-jMM-jDD" :min="year.start" :max="year.end" />
                 </p>
               </div>
             </div>
@@ -50,8 +55,9 @@
                   مشتری
                 </h3>
                 <div class="block-options">
-                  <quickView :code="this.data.person.code"></quickView>
-                  <quickAdd :code="this.data.person.code"></quickAdd>
+                  <quickView v-if="this.data.person != null && this.data.person.code != '0'"
+                    :code="this.data.person.code"></quickView>
+                  <quickAdd :code="'0'"></quickAdd>
                 </div>
               </div>
               <div class="block-content pt-1 px-1">
@@ -62,27 +68,13 @@
                   </template>
                   <template v-slot:option="option">
                     <div class="row mb-1">
-                      <div class="col-12">
+                      <div class="col-6">
                         <i class="fa fa-user me-2"></i>
                         {{ option.nikename }}
                       </div>
-                      <div class="col-12">
-                        <div class="row">
-                          <div class="col-6">
-                            <i class="fa fa-phone me-2"></i>
-                            {{ option.mobile }}
-                          </div>
-                          <div class="col-6">
-                            <i class="fa fa-bars"></i>
-                            تراز:
-                            {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
-          parseInt(option.bd))) }}
-                            <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
-                              بدهکار </span>
-                            <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
-                              بستانکار </span>
-                          </div>
-                        </div>
+                      <div v-if="option.mobile != ''" class="col-6">
+                        <i class="fa fa-phone me-2 text-success"></i>
+                        {{ option.mobile }}
                       </div>
                     </div>
                   </template>
@@ -106,8 +98,8 @@
                 </div>
               </div>
               <div class="block-content pt-1 px-1">
-                <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name"
-                  v-model="data.commodity" class="">
+                <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name" v-model="data.commodity"
+                  class="">
                   <template #no-options="{ search, searching, loading }">
                     وردی یافت نشد!
                   </template>
@@ -117,22 +109,9 @@
                         <i class="fa fa-box me-1"></i>
                         {{ option.name }}
                       </div>
-                      <div class="col-12">
-                        <small v-if="option.khadamat == false">
-                          <i class="fa fa-store me-1"></i>
-                          <small class="text-danger">
-                            موجودی:
-                          </small>
-                          <label style="direction: ltr;">
-                            {{ option.count }}
-                          </label>
-                          {{ option.unit }}
-                        </small>
-                      </div>
                     </div>
                   </template>
                 </v-select>
-
               </div>
             </div>
           </div>
@@ -243,15 +222,20 @@ export default {
         des: ''
       },
       data: {
+        update: '',
         date: '',
         des: '',
-        person: '',
-        pelak:'',
-        serial:'',
-        sms:true,
+        person: {
+          nikename: '',
+          mobile: '',
+          code: '0'
+        },
+        pelak: '',
+        serial: '',
+        sms: true,
         commodity: {
-          id:'',
-          name:'',
+          id: '',
+          name: '',
           unit: '',
           unitData: {
             name: '',
@@ -262,11 +246,6 @@ export default {
       year: '',
       persons: [],
       commodity: [],
-      headers: [
-        { text: "کالا", value: "commodity.name" },
-        { text: "شرح", value: "count" },
-        { text: "عملیات", value: "operation" },
-      ],
     }
   },
   mounted() {
@@ -290,19 +269,6 @@ export default {
         loading(false);
       });
     },
-    deleteItem(index) {
-      Swal.fire({
-        text: 'آیا برای حذف این مورد مطمئن هستید؟',
-        showCancelButton: true,
-        confirmButtonText: 'بله',
-        cancelButtonText: `خیر`,
-      }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
-          this.items.splice(index - 1, 1);
-        }
-      })
-    },
     loadData() {
       //load year
       axios.get('/api/year/get').then((response) => {
@@ -324,25 +290,75 @@ export default {
       //load commodities
       axios.get('/api/commodity/list/search').then((response) => {
         this.commodity = response.data;
-        if (response.data.length != 0) {
-          this.data.commodity = response.data[0];
-        }
       });
-      //load commodity units
-      axios.get('/api/commodity/units').then((response) => {
-        this.units = response.data;
-      });
-
       //load data for edit document
     },
     save() {
       let canSubmit = true;
+      this.isLoading = true;
+      if (this.data.commodity == null || this.data.commodity.id == '' || this.data.commodity.id == undefined) {
+        Swal.fire({
+          text: 'کالا انتخاب نشده است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+        canSubmit = false;
+      }
+      else if (this.data.person == null || this.data.person.code == '0' || this.data.person.code == undefined) {
+        Swal.fire({
+          text: 'شخص انتخاب نشده است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+        canSubmit = false;
+      }
+      if (canSubmit == true) {
+        axios.post("/api/plug/repservice/order/mod", this.data).then((response) => {
+          this.isLoading = false;
+          if (response.data.code == '0') {
+            Swal.fire({
+              text: 'درخواست ثبت شد.',
+              icon: 'success',
+              confirmButtonText: 'قبول'
+            }).then((res) => {
+              this.$router.push('/acc/plugin/repservice/order/list')
+            });
+          }
+          else if (response.data.code == '11') {
+            Swal.fire({
+              text: ' درخواست ثبت شد.اما به دلیل کمبود اعتبار پیامک ارسال نشد.',
+              icon: 'warning',
+              confirmButtonText: 'قبول'
+            }).then((res) => {
+              this.$router.push('/acc/plugin/repservice/order/list')
+            });
+          }
+          else {
+            Swal.fire({
+              text: response.data.message,
+              icon: 'error',
+              confirmButtonText: 'قبول'
+            });
+          }
+        })
+      }
+      else {
+        this.isLoading = false;
+      }
     }
 
   },
   watch: {
     'desSubmit.id': function () {
       this.data.des = this.desSubmit.des;
+    },
+    'data.person': function () {
+      if (this.data.person.mobile == '') {
+        this.data.sms = false;
+      }
+      else {
+        this.data.sms = true;
+      }
     },
   }
 }

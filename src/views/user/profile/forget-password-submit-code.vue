@@ -1,81 +1,89 @@
 <script lang="ts">
 import axios from 'axios';
 import Swal from "sweetalert2";
-import {getApiUrl, getSiteName} from "../../../../hesabixConfig"
+import { getApiUrl, getSiteName } from "../../../../hesabixConfig"
 
 export default {
   name: "forget-password-submit-code",
   props: {
     email: [String]
   },
-  data: ()=>{return{
-    siteName:'',
-    email:'',
-    code: '',
-    isCoutDown: false,
-    timer: 300000,
-    user:{
-      mobile: ''
-    },
-    loading:false
-  }},
-  methods:{
-    goToMainSite(){
+  data: () => {
+    return {
+      siteName: '',
+      email: '',
+      code: '',
+      isCoutDown: false,
+      timer: 300000,
+      user: {
+        mobile: ''
+      },
+      loading: false
+    }
+  },
+  methods: {
+    goToMainSite() {
       window.location.href = getApiUrl();
     },
-    loadData(){
+    loadData() {
       this.isCoutDown = false;
-      if(localStorage.getItem('forget-password-id')){
+      if (localStorage.getItem('forget-password-id')) {
         this.email = localStorage.getItem('forget-password-id')!;
       }
     },
-    jumpback(){
+    jumpback() {
       this.$router.push('/user/forget-password')
     },
-    changeCutdown(){
+    startCountdown: function () {
       this.isCoutDown = true;
     },
-    sendActive(){
-      if(this.code.toString().length !== 6){
+    onCountdownEnd: function () {
+      this.isCoutDown = false;
+    },
+    changeCutdown() {
+      this.isCoutDown = true;
+    },
+    sendActive() {
+      if (this.code.toString().length !== 6) {
         Swal.fire({
           title: 'خطا',
           text: 'کد وارد شده اشتباه است.',
           icon: 'error',
           confirmButtonText: 'قبول'
-        }).then((res)=>{
+        }).then((res) => {
           this.code = '';
         });
       }
-      else{
+      else {
         this.loading = true;
-        axios.post('/api/user/reset/password/send-to-sms/' + this.email,{code:this.code.toString()}).then((response)=>{
+        axios.post('/api/user/reset/password/send-to-sms/' + this.email, { code: this.code.toString() }).then((response) => {
           this.loading = false;
-          if(response.data.result == 'ok'){
+          if (response.data.result == 'ok') {
             Swal.fire({
               text: 'کلمه عبور جدید به پست الکترونیکی و موبایل شما ارسال شد.',
               icon: 'success',
               confirmButtonText: 'ورود به حساب کاربری'
-            }).then((res)=>{
+            }).then((res) => {
               this.$router.push('/user/login');
             });
           }
-          else if(response.data.result == 'expired'){
+          else if (response.data.result == 'expired') {
             Swal.fire({
               title: 'خطا',
               text: 'کد وارد شده منقضی شده است. لطفا دوباره سعی نمایید.',
               icon: 'error',
               confirmButtonText: 'قبول'
-            }).then((res)=>{
+            }).then((res) => {
               this.$router.push('/user/forget-password')
             });
           }
-          else{
+          else {
             Swal.fire({
               title: 'خطا',
               text: 'کد وارد شده اشتباه است.',
               icon: 'error',
               confirmButtonText: 'قبول'
-            }).then((res)=>{
+            }).then((res) => {
               this.code = '';
             });
           }
@@ -87,7 +95,7 @@ export default {
   mounted() {
     this.loadData();
   },
-  created(){
+  created() {
     this.siteName = getSiteName();
   }
 }
@@ -108,7 +116,7 @@ export default {
                 <a class="link-fx fw-bold fs-1" href="/">
                   <span class="text-primary">{{ siteName }}</span>
                 </a>
-                <p class="text-uppercase fw-bold fs-sm text-muted">  تغییر کلمه عبور </p>
+                <p class="text-uppercase fw-bold fs-sm text-muted"> تغییر کلمه عبور </p>
               </div>
               <div class="alert alert-info">
                 برای بازیابی کلمه عبور کد ارسالی به شماره موبایل و یا پست الکترونیکی خود را وارد کنید.
@@ -119,16 +127,19 @@ export default {
                   <input class="form-control" type="text" v-model="code">
                   <label>کد ارسالی به ایمیل و موبایل</label>
                 </div>
-                <button type="button" class="btn btn-secondary float-end" :disabled="!isCoutDown" @click="jumpback()">
-                  <vue-countdown v-if="!isCoutDown" :time="timer" @end="changeCutdown" v-slot="{ totalSeconds }">ارسال مجدد تا {{ totalSeconds }} ثانیه دیگر</vue-countdown>
-                  <span v-else>ارسال مجدد یا تغییر شماره</span>
+                <button type="button" class="btn btn-secondary  float-end" :disabled="isCoutDown" @click="jumpback()">
+                  <vue-countdown v-if="isCoutDown" :time="timer" :autoStart="true" @start="onCountdownEnd" @end="onCountdownEnd" v-slot="{ totalSeconds }">
+                    مجدد تا {{ totalSeconds }} ثانیه دیگر
+                  </vue-countdown>
+                  <span v-else>Fetch Verification Code</span>
                 </button>
                 <div class="float-start">
                   <button :disabled="loading" type="submit" class="btn btn-primary">
                     <div v-show="loading" class="spinner-border spinner-border-sm text-white" role="status">
                       <span class="visually-hidden">صبر کنید ...</span>
                     </div>
-                    <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> پیامک کلمه عبور جدید  </button>
+                    <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> پیامک کلمه عبور جدید
+                  </button>
                 </div>
               </form>
             </div>
@@ -147,6 +158,4 @@ export default {
   </main>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
