@@ -44,34 +44,30 @@
         <div>
           <!-- User Dropdown -->
           <div class="dropdown d-inline-block">
-            <button aria-expanded="false" aria-haspopup="true" class="btn btn-alt-secondary bg-primary-lighter"
+            <button aria-expanded="false" aria-haspopup="true" class="btn btn-link rounded-circle"
               data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
-              <vue-gravatar class="img-avatar img-avatar32 img-avatar-thumb" :email="this.user.email" :size="32" />
-              <i class="fa fa-fw fa-angle-down ms-1"></i>
+              <i class="fa-solid fa-user text-white"></i>
             </button>
             <div aria-labelledby="page-header-user-dropdown"
               class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0">
               <div class="rounded-top fw-semibold text-center p-3 border-bottom bg-body-light">
-                <div class="mb-2">
-                  <vue-gravatar class="img-avatar img-avatar48 img-avatar-thumb" :email="this.user.email" :size="48" />
-                </div>
                 <RouterLink to="/profile/dashboard" class="fw-semibold">{{ user.fullname }}</RouterLink>
                 <div class="fs-sm">{{ user.email }}</div>
               </div>
               <div class="p-2">
                 <RouterLink class="dropdown-item" to="/profile/business">
-                  <i class="fa fa-fw fa-cog text-gray me-1"></i>
+                  <i class="fa fa-fw fa-cog me-1 text-success"></i>
                   کسب و کارها
                   <span class="badge text-bg-danger float-end">{{ this.business_count }}</span>
                 </RouterLink>
                 <RouterLink class="dropdown-item" to="/profile/business">
-                  <i class="fa fa-fw fa-user text-gray me-1"></i>
+                  <i class="fa fa-fw fa-user text-success me-1"></i>
                   تنظیمات حساب
                 </RouterLink>
               </div>
               <div class="p-2">
                 <span @click="logout" class="dropdown-item mb-0">
-                  <i class="fa fa-fw fa-arrow-alt-circle-left text-gray me-1"></i>
+                  <i class="fa fa-fw fa-arrow-alt-circle-left text-danger me-1"></i>
                   خروج از {{ siteName }}
                 </span>
               </div>
