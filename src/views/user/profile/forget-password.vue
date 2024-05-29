@@ -2,18 +2,20 @@
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useVuelidate } from '@vuelidate/core'
-import { required , email} from '@vuelidate/validators'
-import {getApiUrl, getSiteName} from "../../../../hesabixConfig"
+import { required, email } from '@vuelidate/validators'
+import { getApiUrl, getSiteName } from "../../../../hesabixConfig"
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "login",
-  data: ()=>{return{
-    siteName:'',
-    email:'',
-    loading:  false
-  }},
+  data: () => {
+    return {
+      siteName: '',
+      email: '',
+      loading: false
+    }
+  },
   methods: {
-    async submit () {
+    async submit() {
       if (this.email.length === 0) {
         // notify user form is invalid
         Swal.fire({
@@ -25,46 +27,57 @@ export default {
       }
       else {
         this.loading = true;
-        axios.post( '/api/user/forget/password/send-code', {
+        axios.post('/api/user/forget/password/send-code', {
           email: this.email,
         })
-            .then((response)=>{
-              this.loading = false
-              if(response.data.result == true){
-                Swal.fire({
-                  title: 'ارسال کد بازیابی کلمه عبور',
-                  text: 'کد بازیابی کلمه عبور به پست الکترونیکی و تلفن همراه شما ارسال شد.',
-                  icon: 'success',
-                  confirmButtonText: 'قبول'
-                });
-                localStorage.setItem('forget-password-id', response.data.id)
-              }
-              else if(response.data.result == 'send before'){
-                Swal.fire({
-                  title: 'خطا',
-                  text: 'کد فعال سازی قبلا ارسال شده است لطفا چند دقیقه دیگر مجددا سعی نمایید.',
-                  icon: 'error',
-                  confirmButtonText: 'قبول'
-                });
-              }
-              this.$router.push('/user/forget-password-submit-code');
-            }).catch(function (error) {
-              this.loading = false
+          .then((response) => {
+            this.loading = false
+            if (response.data.result == true) {
               Swal.fire({
-                    title: 'خطا',
-                    text: 'کاربری با این مشخصات یافت نشد.',
-                    icon: 'error',
-                    confirmButtonText: 'قبول'
-                  });
+                title: 'ارسال کد بازیابی کلمه عبور',
+                text: 'کد بازیابی کلمه عبور به پست الکترونیکی و تلفن همراه شما ارسال شد.',
+                icon: 'success',
+                confirmButtonText: 'قبول'
+              });
+              localStorage.setItem('forget-password-id', response.data.id);
+              this.$router.push('/user/forget-password-submit-code');
+            }
+            else if (response.data.result == 'send before') {
+              Swal.fire({
+                title: 'خطا',
+                text: 'کد فعال سازی قبلا ارسال شده است لطفا چند دقیقه دیگر مجددا سعی نمایید.',
+                icon: 'error',
+                confirmButtonText: 'قبول'
+              });
+              this.$router.push('/user/forget-password-submit-code');
+            }
+            else if (response.data.result == '404') {
+              this.loading = false;
+              Swal.fire({
+                title: 'خطا',
+                text: 'کاربری با این مشخصات یافت نشد.',
+                icon: 'error',
+                confirmButtonText: 'قبول'
+              });
               this.email = '';
+            }
+          }).catch(function (error) {
+            this.loading = false;
+            Swal.fire({
+              title: 'خطا',
+              text: 'کاربری با این مشخصات یافت نشد.',
+              icon: 'error',
+              confirmButtonText: 'قبول'
             });
+            this.email = '';
+          });
       }
     }
   },
   created() {
     this.siteName = getSiteName();
-    axios.post('/api/user/check/login').then((response)=>{
-      if(response.data.result == true){
+    axios.post('/api/user/check/login').then((response) => {
+      if (response.data.result == true) {
         this.$router.push('/profile/business')
       }
     })
@@ -127,6 +140,4 @@ export default {
 </template>
 
 
-<style scoped>
-
-</style>
+<style scoped></style>

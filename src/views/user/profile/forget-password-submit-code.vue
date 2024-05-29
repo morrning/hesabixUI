@@ -127,12 +127,6 @@ export default {
                   <input class="form-control" type="text" v-model="code">
                   <label>کد ارسالی به ایمیل و موبایل</label>
                 </div>
-                <button type="button" class="btn btn-secondary  float-end" :disabled="isCoutDown" @click="jumpback()">
-                  <vue-countdown v-if="isCoutDown" :time="timer" :autoStart="true" @start="onCountdownEnd" @end="onCountdownEnd" v-slot="{ totalSeconds }">
-                    مجدد تا {{ totalSeconds }} ثانیه دیگر
-                  </vue-countdown>
-                  <span v-else>Fetch Verification Code</span>
-                </button>
                 <div class="float-start">
                   <button :disabled="loading" type="submit" class="btn btn-primary">
                     <div v-show="loading" class="spinner-border spinner-border-sm text-white" role="status">

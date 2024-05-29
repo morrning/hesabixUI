@@ -117,10 +117,6 @@ export default defineComponent({
                   <input class="form-control" type="text" v-model="code">
                   <label>کد ارسالی به ایمیل و موبایل</label>
                 </div>
-                <button type="button" class="btn btn-secondary float-end" :disabled="!isCoutDown" @click="loadData()">
-                  <vue-countdown v-if="!isCoutDown" :time="timer" @end="changeCutdown" v-slot="{ totalSeconds }">ارسال مجدد تا {{ totalSeconds }} ثانیه دیگر</vue-countdown>
-                  <span v-else>ارسال مجدد</span>
-                </button>
                 <div class="float-start">
                   <button type="submit" class="btn btn-primary" @click="sendActive()">
                     <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> تایید  </button>
