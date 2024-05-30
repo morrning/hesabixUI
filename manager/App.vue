@@ -275,8 +275,6 @@ export default {
             </button>
             <div aria-labelledby="page-header-user-dropdown" class="dropdown-menu dropdown-menu-end dropdown-menu-lg p-0">
               <div class="bg-primary rounded-top fw-semibold text-white text-center p-3">
-                <vue-gravatar class="img-avatar img-avatar-thumb" :email="this.userInfo.email" :size="128" />
-
                 <div class="pt-2">
                   <a class="text-white fw-semibold" href="/">{{this.userInfo.fullname}}</a>
                 </div>

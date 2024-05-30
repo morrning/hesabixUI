@@ -5,7 +5,6 @@ import axios from "axios";
 
 import 'vue3-tel-input/dist/vue3-tel-input.css'
 // @ts-ignore
-import VueGravatar from "vue3-gravatar";
 import VueCountdown from '@chenfengyuan/vue-countdown';
 import Vue3EasyDataTable from "vue3-easy-data-table";
 import Vue3PersianDatetimePicker from 'vue3-persian-datetime-picker';
@@ -20,7 +19,6 @@ app.config.globalProperties.$API_URL = getApiUrl();
 axios.defaults.baseURL = app.config.globalProperties.$API_URL;
 
 app.use(router)
-app.use(VueGravatar)
 //global methods
 app.config.globalProperties.$filters = {
     formatNumber(value: string) {

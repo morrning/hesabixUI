@@ -174,13 +174,6 @@ export default {
               <div class="bg-image" style="background-image: url('/img/bg_side_overlay_header.jpg');">
                 <div class="bg-primary-op">
                   <div class="content-header">
-                    <!-- User Avatar -->
-                    <a class="img-link me-1" href="https://app.hesabix.ir/profile/dashboard">
-                      <vue-gravatar class="img-avatar img-avatar32 img-avatar-thumb" :email="this.userEmail"
-                        :size="32" />
-                    </a>
-                    <!-- END User Avatar -->
-
                     <!-- User Info -->
                     <div class="ms-2">
                       <a class="text-white fw-semibold" href="https://app.hesabix.ir/profile/dashboard">{{ userFullName
@@ -888,7 +881,8 @@ export default {
       <div>
         <!-- Toggle Sidebar -->
         <!-- Layout API, functionality initialized in Template._uiApiLayout()-->
-        <button class=" btn btn-sm btn-alt-info me-1 float-start" data-action="sidebar_toggle" data-toggle="layout" type="button">
+        <button class=" btn btn-sm btn-alt-info me-1 float-start" data-action="sidebar_toggle" data-toggle="layout"
+          type="button">
           <i class="fa fa-fw fa-bars"></i>
         </button>
         <!-- END Toggle Sidebar -->

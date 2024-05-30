@@ -4,7 +4,6 @@ import router from './router'
 import axios from "axios";
 
 // @ts-ignore
-import VueGravatar from "vue3-gravatar";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 import {LoadingPlugin} from 'vue-loading-overlay';
@@ -56,7 +55,6 @@ axios.interceptors.response.use(function(response) {
     return Promise.reject(error);
 });
 app.use(router)
-app.use(VueGravatar)
 app.use(money)
 app.use(LoadingPlugin)
 app.use(Vue3PersianDatetimePicker, {

@@ -18,7 +18,12 @@
               <h6 class="mb-0">{{item.name}}</h6>
               <p class="mb-0 opacity-75">{{item.legal_name}}   توسط   {{item.owner}}</p>
             </div>
-            <small class="opacity-50 text-nowrap">رایگان</small>
+            <small class="text-nowrap">
+              <button type="button" class="btn btn-sm btn-primary" title="ورود به کسب و کار">
+                <i class="fa fa-door-open pe-2"></i>
+                ورود
+              </button>
+            </small>
           </div>
         </div>
         <router-link to="/profile/new-business" v-if="contents.length === 0">

@@ -100,8 +100,8 @@ export default {
       { text: "تاریخ", value: "date" },
       { text: "شرح", value: "des"},
       { text: "تفضیل", value: "ref" },
-      { text: "بدهکار", value: "bd"},
-      { text: "بستانکار", value: "bs"},
+      { text: "واریز", value: "bd"},
+      { text: "برداشت", value: "bs"},
     ]
   }},
   mounted() {

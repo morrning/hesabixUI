@@ -2,15 +2,77 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+        <button @click="this.$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         درخواست‌ها
       </h3>
       <div class="block-options">
-        <router-link to="/acc/plugin/mod/" class="btn btn-sm btn-primary ms-2">
-          <span class="fa fa-plus fw-bolder"></span>
-        </router-link>
+        <div class="dropdown-center">
+          <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
+            id="dropdown-align-center-alt-primary" type="button">
+            <i class="fa-solid fa-ellipsis"></i>
+          </button>
+          <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end" style="">
+            <router-link class="dropdown-item" to="/acc/plugin/repservice/order/mod/">
+              <i class="fa fa-plus text-success pe-2"></i>
+              درخواست جدید
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="changeSingleStateModal" tabindex="-1" aria-labelledby="changeSingleStateModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="changeSingleStateModalLabel">تغییر وضعیت درخواست</h1>
+            <div class="block-options">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-12 col-md-12 mb-2">
+                <span class="form-check form-switch  form-check-inline">
+                  <input :disabled="this.singleChangeStateSelected.person.mobile == ''"
+                    v-model="singleChangeStateSelected.sms" class="form-check-input" type="checkbox">
+                  <label class="form-check-label">ارسال پیامک</label>
+                </span>
+              </div>
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">مشتری</span>
+                  <input type="text" readonly="readonly" class="form-control"
+                    v-model="singleChangeStateSelected.person.nikename">
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 mb-2">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">کالا</span>
+                  <input type="text" readonly="readonly" class="form-control"
+                    v-model="singleChangeStateSelected.commodity.name">
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-12 mb-2">
+                <div class="input-group">
+                  <label class="input-group-text bg-success text-light">وضعیت</label>
+                  <select class="form-select">
+                    <option v-for="item in orderStates" selected>{{ item.label }}</option>
+                  </select>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
+            <button type="button" class="btn btn-primary">ثبت</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
@@ -22,21 +84,14 @@
               <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
             </div>
           </div>
-          <div class="col-sm-12 col-md-12 border rounded mb-2 px-2 py-1">
-            <div v-for="(item, index) in types" class="form-check form-check-inline">
-              <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
-                type="checkbox">
-              <label class="form-check-label">{{ item.label }}</label>
-            </div>
-          </div>
-          <EasyDataTable :table-class-name="tableClassName" v-model:items-selected="itemsSelected" multi-sort show-index
-            alternating :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
+          <EasyDataTable v-model:items-selected="itemsSelected" multi-sort show-index alternating
+            :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
             header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
             emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
             <template #item-operation="{ code }">
               <div class="dropdown-center">
-                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link"
-                  data-bs-toggle="dropdown" id="dropdown-align-center-alt-primary" type="button">
+                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
+                  id="dropdown-align-center-alt-primary" type="button">
                   <i class="fa-solid fa-ellipsis"></i>
                 </button>
                 <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
@@ -45,17 +100,54 @@
                     <i class="fa fa-eye text-success pe-2"></i>
                     مشاهده
                   </router-link>
-                  <router-link class="dropdown-item" :to="'/acc/persons/mod/' + code">
+                  <router-link class="dropdown-item" :to="'/acc/plugin/repservice/order/mod/' + code">
                     <i class="fa fa-edit pe-2"></i>
                     ویرایش
                   </router-link>
+                  <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                    data-bs-target="#changeSingleStateModal" :data-bs-whatever="code">
+                    <i class="fa-solid fa-bolt pe-2"></i>
+                    تغییر وضعیت
+                  </button>
                 </div>
               </div>
             </template>
-            <template #item-nikename="{ nikename, code }">
-              <router-link :to="'/acc/persons/card/view/' + code">
-                {{ nikename }}
+            <template #item-person="{ person }">
+              <router-link :to="'/acc/persons/card/view/' + person.code">
+                {{ person.nikename }}
               </router-link>
+            </template>
+            <template #item-commodity="{ commodity }">
+              {{ commodity.name }}
+            </template>
+            <template #item-state="{ state }">
+              {{ state.label }}
+            </template>
+            <template #expand="{ des, motaleghat, serial, pelak }">
+              <div class="row my-1">
+                <div class="col">
+                  <strong>شرح: </strong>
+                  {{ des }}
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col">
+                  <strong>متعلقات: </strong>
+                  {{ motaleghat }}
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col">
+                  <strong>پلاک: </strong>
+                  {{ pelak }}
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col">
+                  <strong>سریال: </strong>
+                  {{ serial }}
+                </div>
+              </div>
             </template>
           </EasyDataTable>
         </div>
@@ -73,7 +165,7 @@ import * as XLSX from 'xlsx';
 export default {
   name: "list",
   components: {
-    
+
   },
   watch: {
     'importWindowsState.submited'(newValue, oldValue) {
@@ -81,6 +173,16 @@ export default {
       if (newValue) {
         this.loadData();
       }
+    },
+    'singleChangeStateSelected.code'(newValue, oldValue) {
+      this.items.forEach((item) => {
+        if (item.code == newValue) {
+          this.singleChangeStateSelected = item;
+          if (this.singleChangeStateSelected.person.mobile == '') {
+            this.singleChangeStateSelected.sms = false;
+          }
+        }
+      });
     }
   },
   data: () => {
@@ -88,7 +190,16 @@ export default {
       importWindowsState: {
         submited: false
       },
-      
+      orderStates: [],
+      singleChangeStateSelected: {
+        code: 0,
+        person: {
+          nikename: ''
+        },
+        commodity: {
+          name: ''
+        }
+      },
       searchValue: '',
       loading: ref(true),
       orgItems: [],
@@ -97,83 +208,28 @@ export default {
       itemsSelected: [],
       headers: [
         { text: "عملیات", value: "operation" },
+        { text: "تاریخ", value: "date", sortable: true, width: 100 },
         { text: "کد", value: "code" },
-        { text: "نام مستعار", value: "nikename", sortable: true, width: 150 },
-        { text: "تراز حساب", value: "balance", sortable: true, width: 100 },
-        { text: "وضعیت حساب", value: "status", sortable: true, width: 110 },
-        { text: "بستانکار", value: "bs", sortable: true, width: 100 },
-        { text: "بدهکار", value: "bd", sortable: true, width: 100 },
-        { text: "نام و نام خانوادگی", value: "name", sortable: true, width: 150 },
-        { text: "دسترسی سریع", value: "speedAccess", width: 100 },
-        { text: "تاریخ تولد/ثبت", value: "birthday", sortable: true, width: 150 },
-        { text: "شرکت", value: "company", sortable: true, width: 100 },
-        { text: "شناسه ملی", value: "shenasemeli", sortable: true, width: 100 },
-        { text: "کد اقتصادی", value: "codeeghtesadi", sortable: true, width: 100 },
-        { text: "شماره ثبت", value: "sabt", sortable: true, width: 100 },
-        { text: "کشور", value: "keshvar", sortable: true, width: 100 },
-        { text: "استان", value: "ostan", sortable: true, width: 100 },
-        { text: "شهر", value: "shahr", sortable: true, width: 100 },
-        { text: "کد پستی", value: "postalcode", sortable: true, width: 100 },
-        { text: "تلفن", value: "tel", width: 100 },
-        { text: "موبایل", value: "mobile", width: 100 },
-        { text: "موبایل دوم", value: "mobile2", width: 100 },
-        { text: "ایمیل", value: "email", sortable: true, width: 100 },
-        { text: "وب سایت", value: "website", sortable: true, width: 100 },
-        { text: "فکس", value: "fax", sortable: true, width: 100 },
+        { text: "مشتری", value: "person", sortable: true, width: 150 },
+        { text: "کالا", value: "commodity", sortable: true, width: 150 },
+        { text: "وضعیت", value: "state", sortable: true, width: 150 },
       ]
     }
   },
   methods: {
-    filterTable() {
-      this.loading = true;
-      let calcItems = [];
-      let isAll = true;
-      let selectedTypes = [];
-      this.types.forEach((item) => {
-        if (item.checked == true) {
-          isAll = false;
-          selectedTypes.push(item);
-        }
-      });
-      if (isAll) {
-        this.items = this.orgItems;
-      }
-      else {
-        this.orgItems.forEach((item) => {
-          item.types.forEach((itemB) => {
-            selectedTypes.forEach((st) => {
-              if (st.code == itemB.code && itemB.checked == true) {
-                let existBefore = false;
-                calcItems.forEach((ri) => {
-                  if (item.code == ri.code) {
-                    existBefore = true;
-                  }
-                })
-                if (existBefore == false) {
-                  calcItems.push(item);
-                }
-
-              }
-            });
-          });
-        });
-        this.items = calcItems;
-      }
-
-      this.loading = false;
-    },
     loadData() {
-      axios.get('/api/person/list')
+      axios.get('/api/plug/repservice/order/list')
         .then((response) => {
           this.items = response.data;
-          this.orgItems = response.data;
           this.loading = false;
         });
-      axios.post('/api/person/types/get')
+      axios.get('/api/plug/repservice/order/state/list')
         .then((response) => {
-          this.types = response.data;
-          this.isLoading = false;
+          this.orderStates = response.data;
         });
+    },
+    changeStateSingle() {
+
     },
     deleteItem(code) {
       Swal.fire({
@@ -274,8 +330,24 @@ export default {
       }
     }
   },
-  beforeMount() {
+  mounted() {
     this.loadData();
+    const changeStateSingleModal = document.getElementById('changeSingleStateModal')
+    if (changeStateSingleModal) {
+      changeStateSingleModal.addEventListener('show.bs.modal', event => {
+        // Button that triggered the modal
+        const button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        this.singleChangeStateSelected.code = button.getAttribute('data-bs-whatever');
+        // If necessary, you could initiate an Ajax request here
+        // and then do the updating in a callback.
+
+        // Update the modal's content.
+        const modalTitle = changeStateSingleModal.querySelector('.modal-title')
+        modalTitle.textContent = `تغییر وضعیت درخواست  ${this.singleChangeStateSelected.code}`
+
+      })
+    }
   }
 }
 </script>
