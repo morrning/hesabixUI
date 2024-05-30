@@ -57,15 +57,13 @@
                 </div>
               </div>
               <div class="col-sm-12 col-md-12 mb-2">
-                <div class="input-group">
+                <div class="input-group input-group-sm">
                   <label class="input-group-text bg-success text-light">وضعیت</label>
-                  <select class="form-select">
-                    <option v-for="item in orderStates" selected>{{ item.label }}</option>
+                  <select v-model="singleChangeStateSelected.state" class="form-select">
+                    <option v-for="item in orderStates" :value="item">{{ item.label }}</option>
                   </select>
                 </div>
               </div>
-
-
             </div>
           </div>
           <div class="modal-footer">
@@ -84,7 +82,7 @@
               <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
             </div>
           </div>
-          <EasyDataTable v-model:items-selected="itemsSelected" multi-sort show-index alternating
+          <EasyDataTable multi-sort show-index alternating
             :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
             header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
             emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
@@ -108,6 +106,10 @@
                     data-bs-target="#changeSingleStateModal" :data-bs-whatever="code">
                     <i class="fa-solid fa-bolt pe-2"></i>
                     تغییر وضعیت
+                  </button>
+                  <button type="button" class="dropdown-item" @click="deleteItem(code)">
+                    <i class="fa fa-trash text-danger pe-2"></i>
+                     حذف
                   </button>
                 </div>
               </div>
@@ -168,12 +170,6 @@ export default {
 
   },
   watch: {
-    'importWindowsState.submited'(newValue, oldValue) {
-      this.importWindowsState.submited = false;
-      if (newValue) {
-        this.loadData();
-      }
-    },
     'singleChangeStateSelected.code'(newValue, oldValue) {
       this.items.forEach((item) => {
         if (item.code == newValue) {
@@ -187,9 +183,6 @@ export default {
   },
   data: () => {
     return {
-      importWindowsState: {
-        submited: false
-      },
       orderStates: [],
       singleChangeStateSelected: {
         code: 0,
@@ -202,10 +195,8 @@ export default {
       },
       searchValue: '',
       loading: ref(true),
-      orgItems: [],
       types: [],
       items: [],
-      itemsSelected: [],
       headers: [
         { text: "عملیات", value: "operation" },
         { text: "تاریخ", value: "date", sortable: true, width: 100 },
@@ -233,17 +224,14 @@ export default {
     },
     deleteItem(code) {
       Swal.fire({
-        text: 'آیا برای حذف شخص مطمئن هستید؟',
+        text: 'آیا برای حذف درخواست مطمئن هستید؟',
         showCancelButton: true,
         confirmButtonText: 'بله',
         cancelButtonText: `خیر`,
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          axios.post('/api/business/delete/user', {
-            'code': code
-          }
-          ).then((response) => {
+          axios.get('/api/repservice/order/remove/' + code).then((response) => {
             if (response.data.result == 1) {
               let index = 0;
               for (let z = 0; z < this.items.length; z++) {
@@ -253,7 +241,7 @@ export default {
                 }
               }
               Swal.fire({
-                text: 'شخص با موفقیت حذف شد.',
+                text: 'درخواست با موفقیت حذف شد.',
                 icon: 'success',
                 confirmButtonText: 'قبول'
               });
@@ -262,73 +250,6 @@ export default {
         }
       })
     },
-    excellOutput(AllItems = true) {
-      if (AllItems) {
-        axios({
-          method: 'get',
-          url: '/api/person/list/excel',
-          responseType: 'arraybuffer',
-        }).then((response) => {
-          var FILE = window.URL.createObjectURL(new Blob([response.data]));
-          var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-          var fileLink = document.createElement('a');
-
-          fileLink.href = fileURL;
-          fileLink.setAttribute('download', 'persons-list.xlsx');
-          document.body.appendChild(fileLink);
-          fileLink.click();
-        })
-      }
-      else {
-        if (this.itemsSelected.length === 0) {
-          Swal.fire({
-            text: 'هیچ آیتمی انتخاب نشده است.',
-            icon: 'info',
-            confirmButtonText: 'قبول'
-          });
-        }
-        else {
-          axios({
-            method: 'post',
-            url: '/api/person/list/excel',
-            responseType: 'arraybuffer',
-            data: { items: this.itemsSelected }
-          }).then((response) => {
-            var FILE = window.URL.createObjectURL(new Blob([response.data]));
-            var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-            var fileLink = document.createElement('a');
-
-            fileLink.href = fileURL;
-            fileLink.setAttribute('download', 'persons-list.xlsx');
-            document.body.appendChild(fileLink);
-            fileLink.click();
-          })
-        }
-      }
-    },
-    print(AllItems = true) {
-      if (AllItems) {
-        axios.post('/api/person/list/print').then((response) => {
-          this.printID = response.data.id;
-          window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
-        })
-      }
-      else {
-        if (this.itemsSelected.length === 0) {
-          Swal.fire({
-            text: 'هیچ آیتمی انتخاب نشده است.',
-            icon: 'info',
-            confirmButtonText: 'قبول'
-          });
-        }
-        else {
-          axios.post('/api/person/list/print', { items: this.itemsSelected }).then((response) => {
-            this.printID = response.data.id;
-            window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
-          })
-        }
-      }
-    }
   },
   mounted() {
     this.loadData();

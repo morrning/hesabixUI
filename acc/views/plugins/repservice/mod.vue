@@ -233,6 +233,7 @@ export default {
         pelak: '',
         serial: '',
         sms: true,
+        motaleghat:'',
         commodity: {
           id: '',
           name: '',

@@ -1,46 +1,54 @@
 <script lang="ts">
-import {defineComponent, ref} from 'vue'
+import { defineComponent, ref } from 'vue'
 import axios from "axios";
 import Swal from "sweetalert2";
 
 export default defineComponent({
   name: "smsSettings",
-  data: ()=>{return {
-    loading: ref(true),
-    form:{
-      plan:'melipayamak',
-      walletpay:'',
-      changePassword:'',
-      recPassword:'',
-      f2a:'',
-      ticketReplay:'',
-      ticketRec:'',
-      fromNum:'',
-      sharefaktor: '',
-      username: '',
-      password: '',
-      token: '',
+  data: () => {
+    return {
+      loading: ref(true),
+      form: {
+        plan: 'melipayamak',
+        walletpay: '',
+        changePassword: '',
+        recPassword: '',
+        f2a: '',
+        ticketReplay: '',
+        ticketRec: '',
+        fromNum: '',
+        sharefaktor: '',
+        username: '',
+        password: '',
+        token: '',
+        plugRepservice: {
+          get: '',
+          getback: '',
+          repaired: '',
+          unrepaired: ''
+        }
+      }
     }
-  }},
-  methods:{
-    loadData(){
-        axios.post('/api/admin/sms/plan/info').then((response)=>{
-          this.form = response.data;
-          this.loading = false;
-        });
+  },
+  methods: {
+    loadData() {
+      axios.post('/api/admin/sms/plan/info').then((response) => {
+        this.form = response.data;
+        this.loading = false;
+      });
 
     },
-    submit(){
-      axios.post('/api/admin/sms/plan/info/save',this.form).then((response)=>{
-          this.loading = false;
-          if(response.data.error == 0){
-            Swal.fire({
-              text: 'تنظیمات با موفقیت ذخیره شد.',
-              icon: 'success',
-              confirmButtonText: 'قبول',
-            });
-          }
-        })
+    submit() {
+      axios.post('/api/admin/sms/plan/info/save', this.form).then((response) => {
+        this.loading = false;
+        if (response.data.error == 0) {
+          Swal.fire({
+            text: 'تنظیمات با موفقیت ذخیره شد.',
+            icon: 'success',
+            confirmButtonText: 'قبول',
+          });
+        }
+      })
 
     }
   },
@@ -54,11 +62,13 @@ export default defineComponent({
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+        <button @click="this.$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fa fa-message px-2"></i>
-        تنظیمات پنل پیامک </h3>
+        تنظیمات پنل پیامک
+      </h3>
       <div class="block-options">
         <button :disabled="this.loading" @click="this.submit()" type="button" class="btn btn-sm btn-primary">
           <div v-show="this.loading" class="spinner-grow spinner-grow-sm me-2" role="status">
@@ -156,11 +166,38 @@ export default defineComponent({
             </div>
           </div>
         </div>
+        <h4 class="text-primary">افزونه تعمیرکاران</h4>
+        <div class="col-sm-12 col-md-12">
+          <div class="row pt-3">
+            <div class="col-sm-12 col-md-4">
+              <div class="form-floating mb-4">
+                <input v-model="form.plugRepservice.get" class="form-control" type="text" :disabled="loading">
+                <label class="form-label"><span class="text-danger"></span>تحویل کالا</label>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <div class="form-floating mb-4">
+                <input v-model="form.plugRepservice.repired" class="form-control" type="text" :disabled="loading">
+                <label class="form-label"><span class="text-danger"></span>اعلام تعمیر کالا</label>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <div class="form-floating mb-4">
+                <input v-model="form.plugRepservice.unrepaired" class="form-control" type="text" :disabled="loading">
+                <label class="form-label"><span class="text-danger"></span>اعلام غیر قابل تعمیر بودن</label>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <div class="form-floating mb-4">
+                <input v-model="form.plugRepservice.getback" class="form-control" type="text" :disabled="loading">
+                <label class="form-label"><span class="text-danger"></span>مرجوعی کالا</label>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
