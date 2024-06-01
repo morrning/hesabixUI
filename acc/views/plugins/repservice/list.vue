@@ -30,7 +30,8 @@
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="changeSingleStateModalLabel">تغییر وضعیت درخواست</h1>
             <div class="block-options">
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close btn-close-change-state" data-bs-dismiss="modal"
+                aria-label="Close"></button>
             </div>
           </div>
           <div class="modal-body">
@@ -68,7 +69,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
-            <button type="button" class="btn btn-primary">ثبت</button>
+            <button @click="changeStateSingle()" type="button" data-bs-dismiss="modal" class="btn btn-primary">ثبت</button>
           </div>
         </div>
       </div>
@@ -82,10 +83,10 @@
               <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
             </div>
           </div>
-          <EasyDataTable multi-sort show-index alternating
-            :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
-            header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
-            emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
+          <EasyDataTable multi-sort show-index alternating :search-value="searchValue" :headers="headers" :items="items"
+            theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
+            rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
+            :loading="loading">
             <template #item-operation="{ code }">
               <div class="dropdown-center">
                 <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
@@ -109,7 +110,7 @@
                   </button>
                   <button type="button" class="dropdown-item" @click="deleteItem(code)">
                     <i class="fa fa-trash text-danger pe-2"></i>
-                     حذف
+                    حذف
                   </button>
                 </div>
               </div>
@@ -220,7 +221,18 @@ export default {
         });
     },
     changeStateSingle() {
-
+      this.loading = true;
+      axios.post('/api/plug/repservice/order/state/change', this.singleChangeStateSelected).then((response) => {
+        this.loading = false;
+        if (response.data.code == '0') {
+          Swal.fire({
+            text: 'وضعیت درخواست به روز شد.',
+            icon: 'success',
+            confirmButtonText: 'قبول'
+          });
+        }
+        this.loadData();
+      });
     },
     deleteItem(code) {
       Swal.fire({
@@ -253,7 +265,7 @@ export default {
   },
   mounted() {
     this.loadData();
-    const changeStateSingleModal = document.getElementById('changeSingleStateModal')
+    const changeStateSingleModal = document.getElementById('changeSingleStateModal');
     if (changeStateSingleModal) {
       changeStateSingleModal.addEventListener('show.bs.modal', event => {
         // Button that triggered the modal

@@ -232,7 +232,7 @@ export default {
         },
         pelak: '',
         serial: '',
-        sms: true,
+        sms: false,
         motaleghat:'',
         commodity: {
           id: '',
@@ -322,7 +322,8 @@ export default {
               icon: 'success',
               confirmButtonText: 'قبول'
             }).then((res) => {
-              this.$router.push('/acc/plugin/repservice/order/list')
+              const changeStateSingleModal = document.getElementById('changeSingleStateModal');
+              changeStateSingleModal.hide();
             });
           }
           else if (response.data.code == '11') {
