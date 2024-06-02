@@ -2,7 +2,8 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+        <button @click="this.$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         کارت حساب اشخاص
@@ -94,8 +95,8 @@
             <div v-if="this.selectedPerson.accounts.length != 0" class="col-sm-12 col-md-6 mb-1">
               <div class="card push">
                 <div class="card-header border-bottom-0 bg-primary-dark text-light">
-                  <h3 class="block-title"> 
-                      حساب‌های بانکی
+                  <h3 class="block-title">
+                    حساب‌های بانکی
                   </h3>
                 </div>
                 <div class="card-body p-0">
@@ -185,18 +186,17 @@ export default {
       listPersons: [],
       itemsSelected: [],
       selectedPerson: {
-        accounts:[]
+        accounts: []
       },
       items: [],
       loading: ref(true),
       headers: [
-        { text: "تاریخ", value: "date" },
-        { text: "شرح", value: "des" },
-        { text: "تفضیل", value: "ref" },
-        { text: "بدهکار", value: "bd" },
-        { text: "بستانکار", value: "bs" },
         { text: "عملیات", value: "operation" },
-
+        { text: "تاریخ", value: "date", 'sortable': true },
+        { text: "شرح", value: "des" },
+        { text: "تفضیل", value: "ref", 'sortable': true },
+        { text: "بدهکار", value: "bd", 'sortable': true },
+        { text: "بستانکار", value: "bs", 'sortable': true },
       ]
     }
   },

@@ -60,7 +60,8 @@ export default defineComponent({
         closeModal() {
             var genericModalEl = document.getElementById('addCommodityModal');
             var modal = bootstrap.Modal.getInstance(genericModalEl);
-            modal.show();
+            if(modal){ modal.show(); }
+            
             var genericModalE2 = document.getElementById('quickComodityAdd');
             var modal2 = bootstrap.Modal.getInstance(genericModalE2);
             modal2.hide();

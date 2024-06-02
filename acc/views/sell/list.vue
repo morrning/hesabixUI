@@ -61,6 +61,11 @@
               <span v-if="status == 'تسویه شده'" class="text-success"><i class="fa fa-check me-2"></i>تسویه شده</span>
               <span v-else class="text-danger"><i class="fa fa-info me-2"></i>تسویه نشده</span>
             </template>
+            <template #item-person="{ person }">
+              <router-link :to="'/acc/persons/card/view/' + person">
+                {{ person }}
+              </router-link>
+            </template>
           </EasyDataTable>
           <div class="container-fluid p-0 mx-0 my-3">
             <a class="block block-rounded block-link-shadow border-start border-success border-3"

@@ -8,7 +8,7 @@
         فاکتور فروش
       </h3>
       <div class="block-options">
-        <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-sm btn-alt-primary">
+        <button :disabled="this.canSubmit != true || isLoading==true" @click="save()" type="button" class="btn btn-sm btn-alt-primary">
           <i class="fa fa-save"></i>
           ثبت
         </button>
@@ -606,6 +606,7 @@ export default {
       })
     },
     loadData() {
+      this.isLoading = true;
       //load year
       axios.get('/api/year/get').then((response) => {
         this.year = response.data;
@@ -618,6 +619,7 @@ export default {
           this.maliyatCheck = false;
         }
         this.maliyatPercent = this.bid.maliyatafzode;
+        this.isLoading = false;
       })
       //load persons
       axios.get('/api/person/list/search').then((response) => {
@@ -692,6 +694,7 @@ export default {
         });
       }
       else {
+        this.isLoading = true;
         axios.post('/api/sell/mod', {
           type: 'sell',
           date: this.data.date,
@@ -700,6 +703,7 @@ export default {
           rows: this.items,
           update: this.$route.params.id
         }).then((response) => {
+          this.isLoading = false;
           if (response.data.code == 0) {
             Swal.fire({
               text: 'فاکتور ثبت شد.',

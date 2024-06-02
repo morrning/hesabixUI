@@ -216,7 +216,7 @@ export default {
   },
   data: () => {
     return {
-      isLoading: false,
+      isLoading: true,
       desSubmit: {
         id: '',
         des: ''
@@ -233,7 +233,7 @@ export default {
         pelak: '',
         serial: '',
         sms: false,
-        motaleghat:'',
+        motaleghat: '',
         commodity: {
           id: '',
           name: '',
@@ -270,20 +270,7 @@ export default {
         loading(false);
       });
     },
-    loadData() {
-      //load year
-      axios.get('/api/year/get').then((response) => {
-        this.year = response.data;
-        this.data.date = response.data.now;
-      })
-      //load business info
-      axios.get('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
-        this.bid = response.data;
-        if (this.bid.maliyatafzode == 0) {
-          this.maliyatCheck = false;
-        }
-        this.maliyatPercent = this.bid.maliyatafzode;
-      })
+    loadData() {      
       //load persons
       axios.get('/api/person/list/search').then((response) => {
         this.persons = response.data;
@@ -293,6 +280,12 @@ export default {
         this.commodity = response.data;
       });
       //load data for edit document
+      if (this.$route.params.id != '') {
+        axios.get('/api/repservice/order/info/' + this.$route.params.id).then((response) => {
+          this.data = response.data;
+        });
+      }
+      this.isLoading = false;
     },
     save() {
       let canSubmit = true;
@@ -322,8 +315,7 @@ export default {
               icon: 'success',
               confirmButtonText: 'قبول'
             }).then((res) => {
-              const changeStateSingleModal = document.getElementById('changeSingleStateModal');
-              changeStateSingleModal.hide();
+              this.$router.push('/acc/plugin/repservice/order/list');
             });
           }
           else if (response.data.code == '11') {

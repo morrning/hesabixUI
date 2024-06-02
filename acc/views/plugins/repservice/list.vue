@@ -95,10 +95,6 @@
                 </button>
                 <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
                   style="">
-                  <router-link class="dropdown-item" :to="'/acc/persons/card/view/' + code">
-                    <i class="fa fa-eye text-success pe-2"></i>
-                    مشاهده
-                  </router-link>
                   <router-link class="dropdown-item" :to="'/acc/plugin/repservice/order/mod/' + code">
                     <i class="fa fa-edit pe-2"></i>
                     ویرایش
