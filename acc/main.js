@@ -6,8 +6,9 @@ import axios from "axios";
 // @ts-ignore
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
-import {LoadingPlugin} from 'vue-loading-overlay';
+import { LoadingPlugin } from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
+import '../public/css/main.css';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 import money from 'v-money3';
@@ -15,7 +16,7 @@ import Vue3PersianDatetimePicker from 'vue3-persian-datetime-picker';
 import NProgress from "nprogress";
 import Swal from "sweetalert2";
 import Uploader from 'vue-media-upload';
-import {getApiUrl} from "../hesabixConfig";
+import { getApiUrl } from "../hesabixConfig";
 const app = createApp(App)
 app.component('EasyDataTable', Vue3EasyDataTable);
 app.component('v-select', vSelect);
@@ -44,7 +45,7 @@ axios.interceptors.response.use(function(response) {
     NProgress.done()
     return response;
 }, function(error) {
-    if(error.code === 404){
+    if (error.code === 404) {
         // Do something with response error
         Swal.fire({
             text: 'اتصال با سرویس دهنده برقرار نشد. لطفا اتصال اینترنت خود را بررسی نمایید.',
@@ -65,7 +66,7 @@ app.use(Vue3PersianDatetimePicker, {
         color: '#0384fc',
         autoSubmit: true,
         clearable: true,
-      }
+    }
 })
 
 //global methods
@@ -75,28 +76,27 @@ app.config.globalProperties.$filters = {
         result = result.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         return result;
     },
-    onlyNumber ($event) {
+    onlyNumber($event) {
         //console.log($event.keyCode); //keyCodes value
         let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
         if ((keyCode < 48 || keyCode > 57)) { // 46 is dot
             $event.preventDefault();
         }
     },
-    getApiUrl(){
+    getApiUrl() {
         return getApiUrl();
     },
-    async isLogin(){
+    async isLogin() {
         let result = await axios.get('/api/user/check/login');
         return result.status === 200;
     }
 }
 
-app.config.globalProperties.app_isLogin =  async () => {
+app.config.globalProperties.app_isLogin = async() => {
     let result = await axios.get('/api/user/check/login');
-    if(result.status === 200){
+    if (result.status === 200) {
         return result.data.result;
-    }
-    else{
+    } else {
         return false;
     }
 }

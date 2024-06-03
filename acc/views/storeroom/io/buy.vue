@@ -224,7 +224,7 @@ export default defineComponent({
       </div>
       <div class="row mt-2">
         <div class="col-sm-12 col-md-12">
-          <EasyDataTable
+          <EasyDataTable table-class-name="customize-table"
               multi-sort
               show-index
               alternating

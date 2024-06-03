@@ -115,7 +115,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-12">
+          <div class="col-sm-12 col-md-6">
             <div class="block block-rounded border">
               <div class="block-header block-header-default py-1">
                 <h3 class="block-title text-primary">
@@ -135,12 +135,7 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="container">
-        <div class="row">
-
-          <div class="col-sm-12 col-md-12 mb-2">
+          <div class="col-sm-12 col-md-6 mb-2">
             <div class="block block-rounded border">
               <div class="block-header block-header-default py-1">
                 <h3 class="block-title text-primary">
@@ -156,7 +151,43 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-6 col-md-6 mb-2">
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6 col-md-4 mb-2">
+            <div class="block block-rounded border">
+              <div class="block-header block-header-default py-1">
+                <h3 class="block-title text-primary">
+                  <i class="fa-regular fa-note-sticky"></i>
+                  مدل
+                </h3>
+                <div class="block-options">
+
+                </div>
+              </div>
+              <div class="block-content p-0">
+                <input v-model="this.data.model" class="form-control" type="text">
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4 mb-2">
+            <div class="block block-rounded border">
+              <div class="block-header block-header-default py-1">
+                <h3 class="block-title text-primary">
+                  <i class="fa-regular fa-note-sticky"></i>
+                  رنگ
+                </h3>
+                <div class="block-options">
+
+                </div>
+              </div>
+              <div class="block-content p-0">
+                <input v-model="this.data.color" class="form-control" type="text">
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4 mb-2">
             <div class="block block-rounded border">
               <div class="block-header block-header-default py-1">
                 <h3 class="block-title text-primary">
@@ -172,7 +203,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-6 col-md-6 mb-2">
+          <div class="col-sm-6 col-md-4 mb-2">
             <div class="block block-rounded border">
               <div class="block-header block-header-default py-1">
                 <h3 class="block-title text-primary">
@@ -224,6 +255,9 @@ export default {
       data: {
         update: '',
         date: '',
+        dateOut: '',
+        color: '',
+        model: '',
         des: '',
         person: {
           nikename: '',
@@ -270,7 +304,13 @@ export default {
         loading(false);
       });
     },
-    loadData() {      
+    loadData() {
+      //load year
+      if (this.$route.params.id == '') {
+        axios.get('/api/year/get').then((response) => {
+          this.data.date = response.data.now;
+        });
+      }
       //load persons
       axios.get('/api/person/list/search').then((response) => {
         this.persons = response.data;

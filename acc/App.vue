@@ -951,7 +951,7 @@ export default {
   <!-- END Main Container -->
 </template>
 
-<style>
+<style global>
 .customize-table {
   --easy-table-header-font-color: #e1e1e1;
   --easy-table-header-background-color: #055bbb;

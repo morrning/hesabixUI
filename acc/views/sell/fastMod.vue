@@ -290,7 +290,7 @@ export default defineComponent({
           </div>
         </div>
         <div class="col-sm-12 col-md-9">
-          <EasyDataTable
+          <EasyDataTable table-class-name="customize-table"
               show-index
               alternating
               :headers="headers"

@@ -119,7 +119,7 @@ export default defineComponent({
                 <input v-model="outputSearchValue" class="form-control" type="text" placeholder="جست و جو ...">
               </div>
             </div>
-            <EasyDataTable
+            <EasyDataTable table-class-name="customize-table"
                 multi-sort
                 show-index
                 alternating
@@ -151,7 +151,7 @@ export default defineComponent({
                 <input v-model="inputSearchValue" class="form-control" type="text" placeholder="جست و جو ...">
               </div>
             </div>
-            <EasyDataTable
+            <EasyDataTable table-class-name="customize-table"
                 multi-sort
                 show-index
                 alternating

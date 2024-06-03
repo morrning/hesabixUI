@@ -178,14 +178,12 @@ export default defineComponent({
                         <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
                       </div>
                     </div>
-                    <EasyDataTable
+                    <EasyDataTable table-class-name="customize-table"
                         :headers="paysheaders"
                         :items="paysitems"
                         alternating
-
                         :search-value="payssearchValue"
                         theme-color="#1d90ff"
-                        table-class-name="customize-table"
                         header-text-direction="center"
                         body-text-direction="center"
                         rowsPerPageMessage="تعداد سطر"
@@ -216,14 +214,12 @@ export default defineComponent({
                         <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
                       </div>
                     </div>
-                    <EasyDataTable
+                    <EasyDataTable table-class-name="customize-table"
                         :headers="headers"
                         :items="items"
                         alternating
-
                         :search-value="searchValue"
                         theme-color="#1d90ff"
-                        table-class-name="customize-table"
                         header-text-direction="center"
                         body-text-direction="center"
                         rowsPerPageMessage="تعداد سطر"

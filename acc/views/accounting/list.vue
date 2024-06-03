@@ -17,10 +17,9 @@
               <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
             </div>
           </div>
-          <EasyDataTable
+          <EasyDataTable table-class-name="customize-table"
               show-index
               alternating
-
               :search-value="searchValue"
               :headers="headers"
               :items="items"

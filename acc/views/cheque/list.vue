@@ -34,7 +34,7 @@
                       <input v-model="searchValueInput" class="form-control" type="text" placeholder="جست و جو ...">
                     </div>
                   </div>
-                  <EasyDataTable
+                  <EasyDataTable table-class-name="customize-table"
                       multi-sort
                       show-index
                       alternating
@@ -70,7 +70,7 @@
                       <input v-model="searchValueOutput" class="form-control" type="text" placeholder="جست و جو ...">
                     </div>
                   </div>
-                  <EasyDataTable
+                  <EasyDataTable table-class-name="customize-table"
                       multi-sort
                       show-index
                       alternating

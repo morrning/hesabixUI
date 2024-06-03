@@ -50,7 +50,7 @@
               <label class="form-check-label">{{ item.label }}</label>
             </div>
           </div>
-          <EasyDataTable :table-class-name="tableClassName" v-model:items-selected="itemsSelected" multi-sort show-index
+          <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName" v-model:items-selected="itemsSelected" multi-sort show-index
             alternating :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
             header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
             emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
@@ -149,8 +149,8 @@ export default {
         { text: "عملیات", value: "operation" },
         { text: "کد", value: "code" },
         { text: "نام مستعار", value: "nikename", sortable: true, width: 150 },
-        { text: "تراز حساب", value: "balance", sortable: true, width: 100 },
-        { text: "وضعیت حساب", value: "status", sortable: true, width: 110 },
+        { text: "تراز", value: "balance", sortable: true, width: 100 },
+        { text: "وضعیت", value: "status", sortable: true, width: 110 },
         { text: "بستانکار", value: "bs", sortable: true, width: 100 },
         { text: "بدهکار", value: "bd", sortable: true, width: 100 },
         { text: "نام و نام خانوادگی", value: "name", sortable: true, width: 150 },

@@ -61,7 +61,7 @@ export default defineComponent({
           </div>
         </div>
         <div class="modal-body">
-          <EasyDataTable
+          <EasyDataTable table-class-name="customize-table"
               show-index
               alternating
               :search-value="searchValue"

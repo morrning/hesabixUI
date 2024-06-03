@@ -70,7 +70,7 @@ export default defineComponent({
       <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
     </div>
   </div>
-  <EasyDataTable show-index alternating :search-value="searchValue" :headers="headers" :items="this.$props.items"
+  <EasyDataTable table-class-name="customize-table" show-index alternating :search-value="searchValue" :headers="headers" :items="this.$props.items"
     theme-color="#1d90ff" header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
     emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
     <template #item-operation="{ code, type }">

@@ -139,14 +139,12 @@ export default defineComponent({
                   <input v-model="walletPaysSearchValue" class="form-control" type="text" placeholder="جست و جو ...">
                 </div>
               </div>
-              <EasyDataTable
+              <EasyDataTable table-class-name="customize-table"
                   :headers="walletPaysHeaders"
                   :items="walletPaysItems"
                   alternating
-
                   :search-value="walletPaysSearchValue"
                   theme-color="#1d90ff"
-                  table-class-name="customize-table"
                   header-text-direction="center"
                   body-text-direction="center"
                   rowsPerPageMessage="تعداد سطر"
@@ -179,14 +177,12 @@ export default defineComponent({
                   <input v-model="walletSearchValue" class="form-control" type="text" placeholder="جست و جو ...">
                 </div>
               </div>
-              <EasyDataTable
+              <EasyDataTable table-class-name="customize-table"
                   :headers="walletHeaders"
                   :items="walletItems"
                   alternating
-
                   :search-value="walletSearchValue"
                   theme-color="#1d90ff"
-                  table-class-name="customize-table"
                   header-text-direction="center"
                   body-text-direction="center"
                   rowsPerPageMessage="تعداد سطر"
@@ -219,14 +215,12 @@ export default defineComponent({
                   <input v-model="logSearchValue" class="form-control" type="text" placeholder="جست و جو ...">
                 </div>
               </div>
-              <EasyDataTable
+              <EasyDataTable table-class-name="customize-table"
                   :headers="logHeaders"
                   :items="logItems"
                   alternating
-
                   :search-value="logSearchValue"
                   theme-color="#1d90ff"
-                  table-class-name="customize-table"
                   header-text-direction="center"
                   body-text-direction="center"
                   rowsPerPageMessage="تعداد سطر"

@@ -1,5 +1,5 @@
 <template>
-  <EasyDataTable
+  <EasyDataTable table-class-name="customize-table"
       :headers="headers"
       :items="items"
   />

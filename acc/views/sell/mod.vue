@@ -244,7 +244,7 @@
               <i class="fa fa-plus"></i>
               افزودن ردیف جدید
             </button>
-            <EasyDataTable class="mt-3" v-model:items-selected="itemsSelected" show-index alternating :headers="headers"
+            <EasyDataTable table-class-name="customize-table" class="mt-3" v-model:items-selected="itemsSelected" show-index alternating :headers="headers"
               :items="items" theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
               rowsPerPageMessage="تعداد سطر" emptyMessage="هیچ آیتمی به این فاکتور افزوده نشده است."
               rowsOfPageSeparatorMessage="از">

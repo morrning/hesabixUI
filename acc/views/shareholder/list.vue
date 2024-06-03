@@ -44,7 +44,7 @@
 
       <div class="row">
         <div class="col-sm-12 col-md-12 m-0 p-0">
-          <EasyDataTable
+          <EasyDataTable table-class-name="customize-table"
               show-index
               alternating
               :search-value="searchValue"

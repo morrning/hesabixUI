@@ -49,7 +49,7 @@ export default defineComponent({
               <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
             </div>
           </div>
-          <EasyDataTable
+          <EasyDataTable table-class-name="customize-table"
               multi-sort
               show-index
               alternating

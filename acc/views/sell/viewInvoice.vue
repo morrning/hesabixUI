@@ -551,7 +551,7 @@ export default defineComponent({
             </div>
           </div>
           <b class="ps-2">اقلام</b>
-          <EasyDataTable :headers="mobileHeaders" :items="commoditys" v-model:items-selected="itemsSelected" show-index
+          <EasyDataTable table-class-name="customize-table" :headers="mobileHeaders" :items="commoditys" v-model:items-selected="itemsSelected" show-index
             alternating :search-value="searchValue" theme-color="#1d90ff" header-text-direction="center"
             body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
             rowsOfPageSeparatorMessage="از" :loading="loading">

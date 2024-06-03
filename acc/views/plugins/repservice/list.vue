@@ -69,7 +69,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
-            <button @click="changeStateSingle()" type="button" data-bs-dismiss="modal" class="btn btn-primary">ثبت</button>
+            <button @click="changeStateSingle()" type="button" data-bs-dismiss="modal"
+              class="btn btn-primary">ثبت</button>
           </div>
         </div>
       </div>
@@ -83,10 +84,17 @@
               <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
             </div>
           </div>
-          <EasyDataTable multi-sort show-index alternating :search-value="searchValue" :headers="headers" :items="items"
-            theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
-            rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
-            :loading="loading">
+          <div class="col-sm-12 col-md-12 border rounded mb-2 px-2 py-1">
+            <div v-for="(item, index) in orderStates" class="form-check form-check-inline">
+              <input @change="filterTable()" v-model="orderStates[index].checked" checked="" class="form-check-input"
+                type="checkbox">
+              <label class="form-check-label">{{ item.label }}</label>
+            </div>
+          </div>
+          <EasyDataTable table-class-name="customize-table" multi-sort show-index alternating
+            :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
+            header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
+            emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
             <template #item-operation="{ code }">
               <div class="dropdown-center">
                 <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
@@ -122,29 +130,43 @@
             <template #item-state="{ state }">
               {{ state.label }}
             </template>
-            <template #expand="{ des, motaleghat, serial, pelak }">
-              <div class="row my-1">
-                <div class="col">
-                  <strong>شرح: </strong>
-                  {{ des }}
+            <template #expand="{ des, motaleghat, serial, pelak, model, color }">
+              <div class="container text-start">
+                <div class="row my-1">
+                  <div class="col">
+                    <strong>شرح: </strong>
+                    {{ des }}
+                  </div>
                 </div>
-              </div>
-              <div class="row mb-1">
-                <div class="col">
-                  <strong>متعلقات: </strong>
-                  {{ motaleghat }}
+                <div class="row mb-1">
+                  <div class="col">
+                    <strong>متعلقات: </strong>
+                    {{ motaleghat }}
+                  </div>
                 </div>
-              </div>
-              <div class="row mb-1">
-                <div class="col">
-                  <strong>پلاک: </strong>
-                  {{ pelak }}
+                <div class="row mb-1">
+                  <div class="col">
+                    <strong>پلاک: </strong>
+                    {{ pelak }}
+                  </div>
                 </div>
-              </div>
-              <div class="row mb-1">
-                <div class="col">
-                  <strong>سریال: </strong>
-                  {{ serial }}
+                <div class="row mb-1">
+                  <div class="col">
+                    <strong>سریال: </strong>
+                    {{ serial }}
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <div class="col">
+                    <strong>مدل: </strong>
+                    {{ model }}
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <div class="col">
+                    <strong>رنگ: </strong>
+                    {{ color }}
+                  </div>
                 </div>
               </div>
             </template>
@@ -192,23 +214,60 @@ export default {
       },
       searchValue: '',
       loading: ref(true),
-      types: [],
       items: [],
+      orgItems: [],
       headers: [
         { text: "عملیات", value: "operation" },
-        { text: "تاریخ", value: "date", sortable: true, width: 100 },
         { text: "کد", value: "code" },
         { text: "مشتری", value: "person", sortable: true, width: 150 },
         { text: "کالا", value: "commodity", sortable: true, width: 150 },
+        { text: "تاریخ", value: "date", sortable: true, width: 100 },
         { text: "وضعیت", value: "state", sortable: true, width: 150 },
+        { text: "تاریخ تحویل", value: "dateOut", sortable: true, width: 100 },
       ]
     }
   },
   methods: {
+    filterTable() {
+      this.loading = true;
+      let calcItems = [];
+      let isAll = true;
+      let selectedTypes = [];
+      this.orderStates.forEach((item) => {
+        if (item.checked == true) {
+          isAll = false;
+          selectedTypes.push(item);
+        }
+      });
+      if (isAll) {
+        this.items = this.orgItems;
+      }
+      else {
+        this.orgItems.forEach((item) => {
+          selectedTypes.forEach((st) => {
+            if (st.code == item.state.code) {
+              let existBefore = false;
+              calcItems.forEach((ri) => {
+                if (item.state.code == ri.code) {
+                  existBefore = true;
+                }
+              })
+              if (existBefore == false) {
+                calcItems.push(item);
+              }
+            }
+          });
+        });
+        this.items = calcItems;
+      }
+
+      this.loading = false;
+    },
     loadData() {
       axios.get('/api/plug/repservice/order/list')
         .then((response) => {
           this.items = response.data;
+          this.orgItems = response.data;
           this.loading = false;
         });
       axios.get('/api/plug/repservice/order/state/list')
