@@ -2,14 +2,32 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+        <button @click="this.$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fa fa-book"></i>
         فاکتورهای فروش
       </h3>
       <div class="block-options">
-        <router-link to="/acc/sell/mod/" class="block-options-item">
+        <div class="dropdown-center block-options-item">
+          <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
+            id="dropdown-align-center-alt-primary" type="button">
+            <i class="fa-solid fa-ellipsis"></i>
+          </button>
+          <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end" style="">
+            <button v-for="item in types" class="dropdown-item" @click="changeLabel(item.code)">
+              <i class="fa fa-undo text-dark pe-2"></i>
+              تغییر به
+               {{ item.label }}
+            </button>
+            <button class="dropdown-item text-danger" @click="changeLabel('clear')">
+              <i class="fa fa-undo pe-2"></i>
+              حذف برچسب‌ها
+            </button>
+          </div>
+        </div>
+        <router-link to="/acc/sell/mod/" type="button" class="block-options-item">
           <span class="fa fa-plus fw-bolder"></span>
         </router-link>
       </div>
@@ -23,14 +41,21 @@
               <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
             </div>
           </div>
-          <EasyDataTable table-class-name="customize-table" v-model:items-selected="itemsSelected" show-index alternating :search-value="searchValue"
-            :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
-            body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-            rowsOfPageSeparatorMessage="از" :loading="loading">
+          <div class="col-sm-12 col-md-12 border rounded mb-2 px-2 py-1">
+            <div v-for="(item, index) in types" class="form-check form-check-inline">
+              <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
+                type="checkbox">
+              <label class="form-check-label">{{ item.label }}</label>
+            </div>
+          </div>
+          <EasyDataTable table-class-name="customize-table" v-model:items-selected="itemsSelected" show-index
+            alternating :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
+            header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
+            emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
             <template #item-operation="{ code, type }">
               <div class="dropdown-center">
-                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link"
-                  data-bs-toggle="dropdown" id="dropdown-align-center-alt-primary" type="button">
+                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
+                  id="dropdown-align-center-alt-primary" type="button">
                   <i class="fa-solid fa-ellipsis"></i>
                 </button>
                 <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
@@ -120,6 +145,9 @@ export default {
       sumTotal: 0,
       itemsSelected: [],
       searchValue: '',
+      types: [
+
+      ],
       loading: ref(true),
       items: [],
       headers: [
@@ -130,12 +158,17 @@ export default {
         { text: "تاریخ", value: "date", sortable: true },
         { text: "مبلغ", value: "amount", sortable: true },
         { text: "شرح", value: "des", sortable: true },
-        { text: "ثبت کننده", value: "submitter", sortable: true },
       ]
     }
   },
   methods: {
     loadData() {
+      axios.post('/api/invoice/types', {
+        type: 'sell'
+      }).then((response) => {
+        this.types = response.data;
+      });
+
       axios.post('/api/accounting/search', {
         type: 'sell'
       })
