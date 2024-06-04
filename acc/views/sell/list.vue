@@ -62,8 +62,13 @@
               <span v-else class="text-danger"><i class="fa fa-info me-2"></i>تسویه نشده</span>
             </template>
             <template #item-person="{ person }">
-              <router-link :to="'/acc/persons/card/view/' + person">
-                {{ person }}
+              <router-link :to="'/acc/persons/card/view/' + person.code">
+                {{ person.nikename }}
+              </router-link>
+            </template>
+            <template #item-code="{ code }">
+              <router-link :to="'/acc/sell/view/' + code">
+                {{ code }}
               </router-link>
             </template>
           </EasyDataTable>
@@ -119,12 +124,12 @@ export default {
       items: [],
       headers: [
         { text: "عملیات", value: "operation" },
-        { text: "شماره سند", value: "code", sortable: true },
+        { text: "فاکتور", value: "code", sortable: true },
+        { text: "خریدار", value: "person", sortable: true },
         { text: "وضعیت", value: "status", sortable: true },
         { text: "تاریخ", value: "date", sortable: true },
-        { text: "شرح", value: "des", sortable: true },
-        { text: "خریدار", value: "person", sortable: true },
         { text: "مبلغ", value: "amount", sortable: true },
+        { text: "شرح", value: "des", sortable: true },
         { text: "ثبت کننده", value: "submitter", sortable: true },
       ]
     }

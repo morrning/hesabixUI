@@ -2,10 +2,10 @@
     text-align: center;
     --easy-table-header-font-size: 14px;
     --easy-table-header-height: 50px;
-    --easy-table-header-item-padding: 0px 7px;
+    --easy-table-header-item-padding: px 7px;
     --easy-table-body-row-height: 50px;
     --easy-table-body-row-font-size: 14px;
-    --easy-table-body-item-padding: 1px 1px;
+    --easy-table-body-item-padding: 10px 5px;
     --easy-table-footer-font-size: 14px;
     --easy-table-footer-padding: 0px 0px;
     --easy-table-footer-height: 50px;
