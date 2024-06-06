@@ -99,6 +99,10 @@
               <label v-if="khadamat == false">کالا و اقلام فیزیکی</label>
               <label v-else>خدمات</label>
             </template>
+            <template #item-withoutTax="{ withoutTax }">
+              <i v-if="withoutTax == false || withoutTax == null" class="fa fa-check text-success"></i>
+              <i v-else class="fa fa-close text-danger"></i>
+            </template>
             <template #item-commodityCountCheck="{ commodityCountCheck }">
               <i v-if="commodityCountCheck == true" class="fa fa-check text-success"></i>
               <i v-else class="fa fa-close text-danger"></i>
@@ -148,6 +152,7 @@ export default {
         { text: "واحد شمارش", value: "unit", sortable: true, width: 100 },
         { text: "موجودی", value: "count", sortable: true, width: 150 },
         { text: "دسترسی سریع", value: "speedAccess", width: 100 },
+        { text: "مالیات", value: "withoutTax", width: 100 },
         { text: "دسته‌بندی", value: "cat", sortable: true, width: 100 },
         { text: "قیمت خرید", value: "priceBuy", sortable: true, width: 100 },
         { text: "قیمت فروش", value: "priceSell", sortable: true, width: 100 },

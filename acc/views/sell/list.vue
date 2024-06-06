@@ -16,10 +16,10 @@
             <i class="fa-solid fa-ellipsis"></i>
           </button>
           <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end" style="">
-            <button v-for="item in types" class="dropdown-item" @click="changeLabel(item.code)">
+            <button v-for="item in types" class="dropdown-item" @click="changeLabel(item)">
               <i class="fa fa-undo text-dark pe-2"></i>
               تغییر به
-               {{ item.label }}
+              {{ item.label }}
             </button>
             <button class="dropdown-item text-danger" @click="changeLabel('clear')">
               <i class="fa fa-undo pe-2"></i>
@@ -79,12 +79,16 @@
                 </div>
               </div>
             </template>
+            <template #item-label="{ label }">
+              <span v-if="label">{{ label.label }}</span>
+            </template>
             <template #item-des="{ des }">
               {{ des.replace("فاکتور فروش:", "") }}
             </template>
-            <template #item-status="{ status }">
-              <span v-if="status == 'تسویه شده'" class="text-success"><i class="fa fa-check me-2"></i>تسویه شده</span>
-              <span v-else class="text-danger"><i class="fa fa-info me-2"></i>تسویه نشده</span>
+            <template #item-relatedDocsCount="{ relatedDocsCount,relatedDocsPays }">
+              <span v-if="relatedDocsCount != '0'" class="text-success"><i class="fa fa-money"></i>
+              {{ this.$filters.formatNumber(relatedDocsPays) }}
+              </span>
             </template>
             <template #item-person="{ person }">
               <router-link :to="'/acc/persons/card/view/' + person.code">
@@ -145,23 +149,96 @@ export default {
       sumTotal: 0,
       itemsSelected: [],
       searchValue: '',
-      types: [
-
-      ],
+      types: [],
       loading: ref(true),
       items: [],
+      orgItems: [],
       headers: [
         { text: "عملیات", value: "operation" },
         { text: "فاکتور", value: "code", sortable: true },
-        { text: "خریدار", value: "person", sortable: true },
-        { text: "وضعیت", value: "status", sortable: true },
         { text: "تاریخ", value: "date", sortable: true },
+        { text: "خریدار", value: "person", sortable: true },
+        { text: "مبلغ", value: "amount", sortable: true },
+        { text: "پرداختی", value: "relatedDocsCount", sortable: true },
+        { text: "برچسب", value: "label", width: 100 },
         { text: "مبلغ", value: "amount", sortable: true },
         { text: "شرح", value: "des", sortable: true },
       ]
     }
   },
   methods: {
+    changeLabel(label){
+      if(this.itemsSelected.length == 0){
+        Swal.fire({
+                text: 'هیچ موردی انتخاب نشده است.',
+                icon: 'warning',
+                confirmButtonText: 'قبول'
+              });
+      }
+      else{
+        this.loading = true;
+        axios.post('/api/sell/label/change', {
+            'items': this.itemsSelected,
+            'label':label
+          }
+          ).then((response) => {
+            this.loading == false;
+            if (response.data.code == 0) {
+              Swal.fire({
+                text: 'فاکتور‌ها با موفقیت ویرایش شد.',
+                icon: 'success',
+                confirmButtonText: 'قبول'
+              });
+            }
+            else if (response.data.result == 2) {
+              Swal.fire({
+                text: response.data.message,
+                icon: 'warning',
+                confirmButtonText: 'قبول'
+              });
+            }
+            this.loadData();
+          })
+      }
+    },
+    filterTable() {
+      this.loading = true;
+      let calcItems = [];
+      let isAll = true;
+      let selectedTypes = [];
+      this.types.forEach((item) => {
+        if (item.checked == true) {
+          isAll = false;
+          selectedTypes.push(item);
+        }
+      });
+      if (isAll) {
+        this.items = this.orgItems;
+      }
+      else {
+        this.orgItems.forEach((item) => {
+          selectedTypes.forEach((st) => {
+            if (item.label) {
+              if (st.code == item.label.code) {
+                let existBefore = false;
+                calcItems.forEach((ri) => {
+                  if (item.label.code == ri.code) {
+                    existBefore = true;
+                  }
+                })
+                if (existBefore == false) {
+                  calcItems.push(item);
+                }
+              }
+            }
+
+          });
+        });
+        this.items = calcItems;
+      }
+
+      this.loading = false;
+    },
     loadData() {
       axios.post('/api/invoice/types', {
         type: 'sell'
@@ -169,11 +246,12 @@ export default {
         this.types = response.data;
       });
 
-      axios.post('/api/accounting/search', {
+      axios.post('/api/sell/docs/search', {
         type: 'sell'
       })
         .then((response) => {
           this.items = response.data;
+          this.orgItems = response.data;
           this.items.forEach((item) => {
             item.amount = this.$filters.formatNumber(item.amount);
             this.sumTotal += parseInt(item.amount.replaceAll(",", ''));

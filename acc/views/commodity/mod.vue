@@ -17,7 +17,7 @@
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
       <div class="container">
         <div class="row py-3">
-          <div class="col-sm-12 col-md-12">
+          <div class="col-sm-12 col-md-12 mb-1">
             <div>
               <label class="me-4 text-primary">نوع کالا یا خدمات</label>
               <div class="form-check form-check-inline">
@@ -30,11 +30,19 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-12 mb-3">
+          <div class="col-sm-6 col-md-6 mb-1">
             <div class="space-y-2">
               <div class="form-check form-switch">
                 <input v-model="this.data.speedAccess" class="form-check-input" type="checkbox">
-                <label class="form-check-label">دسترسی سریع (در صدور فاکتور سریع فروش و سایر افزونه‌ها استفاده می شود)</label>
+                <label class="form-check-label">دسترسی سریع</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 mb-1">
+            <div class="space-y-2">
+              <div class="form-check form-switch">
+                <input v-model="this.data.withoutTax" class="form-check-input" type="checkbox">
+                <label class="form-check-label">معاف از مالیات</label>
               </div>
             </div>
           </div>
@@ -145,7 +153,8 @@ export default {
       commodityCountCheck:false,
       minOrderCount:1,
       dayLoading:0,
-      speedAccess:false
+      speedAccess:false,
+      withoutTax:false
     },
     listCats:[],
     currencyConfig:{
