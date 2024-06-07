@@ -80,14 +80,18 @@
               </div>
             </template>
             <template #item-label="{ label }">
-              <span v-if="label">{{ label.label }}</span>
+              <span v-if="label">
+                <span v-if="label.code == 'payed'" class="text-success">{{ label.label }}</span>
+                <span v-if="label.code == 'returned'" class="text-danger">{{ label.label }}</span>
+                <span v-if="label.code == 'accepted'" class="text-info">{{ label.label }}</span>
+              </span>
             </template>
             <template #item-des="{ des }">
               {{ des.replace("فاکتور فروش:", "") }}
             </template>
-            <template #item-relatedDocsCount="{ relatedDocsCount,relatedDocsPays }">
+            <template #item-relatedDocsCount="{ relatedDocsCount, relatedDocsPays }">
               <span v-if="relatedDocsCount != '0'" class="text-success"><i class="fa fa-money"></i>
-              {{ this.$filters.formatNumber(relatedDocsPays) }}
+                {{ this.$filters.formatNumber(relatedDocsPays) }}
               </span>
             </template>
             <template #item-person="{ person }">
@@ -161,44 +165,44 @@ export default {
         { text: "مبلغ", value: "amount", sortable: true },
         { text: "پرداختی", value: "relatedDocsCount", sortable: true },
         { text: "برچسب", value: "label", width: 100 },
-        { text: "مبلغ", value: "amount", sortable: true },
         { text: "شرح", value: "des", sortable: true },
       ]
     }
   },
   methods: {
-    changeLabel(label){
-      if(this.itemsSelected.length == 0){
+    changeLabel(label) {
+      if (this.itemsSelected.length == 0) {
         Swal.fire({
-                text: 'هیچ موردی انتخاب نشده است.',
-                icon: 'warning',
-                confirmButtonText: 'قبول'
-              });
+          text: 'هیچ موردی انتخاب نشده است.',
+          icon: 'warning',
+          confirmButtonText: 'قبول'
+        });
       }
-      else{
+      else {
         this.loading = true;
         axios.post('/api/sell/label/change', {
-            'items': this.itemsSelected,
-            'label':label
+          'items': this.itemsSelected,
+          'label': label
+        }
+        ).then((response) => {
+          this.loading == false;
+          if (response.data.code == 0) {
+            Swal.fire({
+              text: 'فاکتور‌ها با موفقیت ویرایش شد.',
+              icon: 'success',
+              confirmButtonText: 'قبول'
+            });
+            this.itemsSelected = [];
           }
-          ).then((response) => {
-            this.loading == false;
-            if (response.data.code == 0) {
-              Swal.fire({
-                text: 'فاکتور‌ها با موفقیت ویرایش شد.',
-                icon: 'success',
-                confirmButtonText: 'قبول'
-              });
-            }
-            else if (response.data.result == 2) {
-              Swal.fire({
-                text: response.data.message,
-                icon: 'warning',
-                confirmButtonText: 'قبول'
-              });
-            }
-            this.loadData();
-          })
+          else if (response.data.result == 2) {
+            Swal.fire({
+              text: response.data.message,
+              icon: 'warning',
+              confirmButtonText: 'قبول'
+            });
+          }
+          this.loadData();
+        })
       }
     },
     filterTable() {
