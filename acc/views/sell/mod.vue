@@ -506,7 +506,12 @@ export default {
         this.sumTax = 0;
         this.items.forEach((item) => {
           this.sumTotal += parseFloat(item.sumTotal);
-          this.sumTax += parseFloat(item.tax);
+          if(item.commodity.withoutTax == true){
+            item.tax = 0;
+          }
+          else{
+            this.sumTax += parseFloat(item.tax);
+          }
         })
       },
       deep: true

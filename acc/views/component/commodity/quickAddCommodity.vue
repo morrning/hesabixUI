@@ -35,7 +35,8 @@ export default defineComponent({
                 commodityCountCheck: false,
                 minOrderCount: 1,
                 dayLoading: 0,
-                speedAccess: false
+                speedAccess: false,
+                withoutTax:false
             },
             listCats: [],
             currencyConfig: {
@@ -60,8 +61,8 @@ export default defineComponent({
         closeModal() {
             var genericModalEl = document.getElementById('addCommodityModal');
             var modal = bootstrap.Modal.getInstance(genericModalEl);
-            if(modal){ modal.show(); }
-            
+            if (modal) { modal.show(); }
+
             var genericModalE2 = document.getElementById('quickComodityAdd');
             var modal2 = bootstrap.Modal.getInstance(genericModalE2);
             modal2.hide();
@@ -155,6 +156,14 @@ export default defineComponent({
                                         <input v-model="this.data.speedAccess" class="form-check-input" type="checkbox">
                                         <label class="form-check-label">دسترسی سریع (در صدور فاکتور سریع فروش و سایر
                                             افزونه‌ها استفاده می شود)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 mb-1">
+                                <div class="space-y-2">
+                                    <div class="form-check form-switch">
+                                        <input v-model="this.data.withoutTax" class="form-check-input" type="checkbox">
+                                        <label class="form-check-label">معاف از مالیات</label>
                                     </div>
                                 </div>
                             </div>
