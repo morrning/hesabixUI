@@ -347,6 +347,9 @@ export default {
             else if (item.date.includes(this.searchValue)) {
               temp.push(item)
             }
+            else if (item.des.includes(this.searchValue)) {
+              temp.push(item)
+            }
             else if (item.code.includes(this.searchValue)) {
               temp.push(item)
             }
