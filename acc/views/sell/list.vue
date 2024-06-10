@@ -49,9 +49,9 @@
             </div>
           </div>
           <EasyDataTable table-class-name="customize-table" v-model:items-selected="itemsSelected" show-index
-            alternating :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
-            header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
-            emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
+            alternating :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
+            body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+            rowsOfPageSeparatorMessage="از" :loading="loading">
             <template #item-operation="{ code, type }">
               <div class="dropdown-center">
                 <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
@@ -332,6 +332,34 @@ export default {
         });
       },
       deep: true
+    },
+    searchValue: {
+      handler: function (val, oldVal) {
+        if (this.searchValue == '') {
+          this.items = this.orgItems;
+        }
+        else {
+          let temp = [];
+          this.orgItems.forEach((item) => {
+            if (item.person.nikename.includes(this.searchValue)) {
+              temp.push(item)
+            }
+            else if (item.date.includes(this.searchValue)) {
+              temp.push(item)
+            }
+            else if (item.code.includes(this.searchValue)) {
+              temp.push(item)
+            }
+            else if (item.label) {
+              if (item.label.label.includes(this.searchValue)) {
+                temp.push(item)
+              }
+            }
+          });
+          this.items = temp;
+        }
+      },
+      deep: false
     }
   }
 }
