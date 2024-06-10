@@ -94,6 +94,11 @@
                 {{ this.$filters.formatNumber(relatedDocsPays) }}
               </span>
             </template>
+            <template #item-amount="{ amount }">
+              <span class="text-dark">
+                {{ this.$filters.formatNumber(amount) }}
+              </span>
+            </template>
             <template #item-person="{ person }">
               <router-link :to="'/acc/persons/card/view/' + person.code">
                 {{ person.nikename }}
@@ -257,8 +262,7 @@ export default {
           this.items = response.data;
           this.orgItems = response.data;
           this.items.forEach((item) => {
-            item.amount = this.$filters.formatNumber(item.amount);
-            this.sumTotal += parseInt(item.amount.replaceAll(",", ''));
+            this.sumTotal += parseInt(item.amount);
           })
           this.loading = false;
         })
@@ -345,6 +349,9 @@ export default {
               temp.push(item)
             }
             else if (item.date.includes(this.searchValue)) {
+              temp.push(item)
+            }
+            else if (item.amount.toString().includes(this.searchValue)) {
               temp.push(item)
             }
             else if (item.des.includes(this.searchValue)) {
