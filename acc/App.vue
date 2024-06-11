@@ -713,8 +713,6 @@ export default {
                     <i class="fa fa-book-open"></i>
                     اسناد حسابداری
                   </span>
-                  <router-link to="/acc/sell/mod/"
-                    class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </router-link>
               </li>
               <li class="nav-main-item">

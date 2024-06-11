@@ -39,9 +39,21 @@
             <div class="input-group input-group-sm">
               <span class="input-group-text"><i class="fa fa-search"></i></span>
               <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
+              <button class="btn btn-outline-success dropdown-toggle d-block d-sm-none" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fa fa-filter"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <div v-for="(item, index) in types" class="form-check">
+                  <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
+                    type="checkbox">
+                  <label class="form-check-label">{{ item.label }}</label>
+                </div>
+              </ul>
+
             </div>
           </div>
-          <div class="col-sm-12 col-md-12 border rounded mb-2 px-2 py-1">
+          <div class="col-sm-12 col-md-12 border rounded mb-2 px-2 py-1 d-none d-sm-block">
             <div v-for="(item, index) in types" class="form-check form-check-inline">
               <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
                 type="checkbox">

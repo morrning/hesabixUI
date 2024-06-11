@@ -2,13 +2,15 @@
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+        <button @click="this.$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         فاکتور فروش
       </h3>
       <div class="block-options">
-        <button :disabled="this.canSubmit != true || isLoading==true" @click="save()" type="button" class="btn btn-sm btn-alt-primary">
+        <button :disabled="this.canSubmit != true || isLoading == true" @click="save()" type="button"
+          class="btn btn-sm btn-alt-primary">
           <i class="fa fa-save"></i>
           ثبت
         </button>
@@ -227,7 +229,7 @@
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
               <button class="btn btn-success" @click="addItem">
                 <i class="fa fa-save"></i>
-                افزودن به فاکتور
+                افزودن
               </button>
             </div>
           </div>
@@ -244,10 +246,10 @@
               <i class="fa fa-plus"></i>
               افزودن ردیف جدید
             </button>
-            <EasyDataTable table-class-name="customize-table" class="mt-3" v-model:items-selected="itemsSelected" show-index alternating :headers="headers"
-              :items="items" theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
-              rowsPerPageMessage="تعداد سطر" emptyMessage="هیچ آیتمی به این فاکتور افزوده نشده است."
-              rowsOfPageSeparatorMessage="از">
+            <EasyDataTable table-class-name="customize-table" class="mt-3" v-model:items-selected="itemsSelected"
+              show-index alternating :headers="headers" :items="items" theme-color="#1d90ff"
+              header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
+              emptyMessage="هیچ آیتمی به این فاکتور افزوده نشده است." rowsOfPageSeparatorMessage="از">
               <template #item-operation="{ index }">
                 <span class="text-danger px-1" @click="deleteItem(index)">
                   <i class="fa fa-trash"></i>
@@ -275,9 +277,9 @@
                 {{ count }} {{ commodity.unit }}
               </template>
             </EasyDataTable>
-            <div class="row mt-1">
-              <div class="col-sm-12 col-md-3">
-                <div class="input-group input-group-sm mb-3">
+            <div class="row mt-2">
+              <div class="col-sm-12 col-md-4">
+                <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     <input v-model="maliyatCheck" class="form-check-input mt-0 me-2" type="checkbox"
                       aria-label="Checkbox for following text input">
@@ -288,8 +290,26 @@
                     class="form-control" v-model.number="maliyatPercent" />
                 </div>
               </div>
+              <div class="col-sm-12 col-md-4">
+                <div class="input-group input-group-sm mb-2">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    تخفیف
+                  </span>
+                  <money3 v-bind="currencyConfig" aria-label="تخفیف روی فاکتور" class="form-control"
+                    v-model.number="data.discountAll" />
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4">
+                <div class="input-group input-group-sm mb-2">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    حمل و نقل
+                  </span>
+                  <money3 v-bind="currencyConfig" aria-label="مالیات بر ارزش افزوده" class="form-control"
+                    v-model.number="data.transferCost" />
+                </div>
+              </div>
             </div>
-            <div class="container-fluid p-0 mx-0 my-3">
+            <div class="container-fluid p-0 mx-0 mt-2">
               <a class="block block-rounded block-link-shadow border-start border-success border-3"
                 href="javascript:void(0)">
                 <div class="block-content block-content-full block-content-sm bg-body-light">
@@ -318,7 +338,7 @@
                     <div class="col-sm-12 col-md-4">
                       <span class="text-dark">
                         <i class="fa fa-list-dots"></i>
-                        مبلغ کل:
+                        جمع کل:
                       </span>
                       <span class="text-primary">
                         {{ this.$filters.formatNumber(this.sumTotal) }}
@@ -428,7 +448,9 @@ export default {
       data: {
         date: '',
         des: '',
-        person: ''
+        person: '',
+        transferCost: 0,
+        discountAll: 0
       },
       year: '',
       persons: [],
@@ -502,19 +524,21 @@ export default {
     },
     items: {
       handler: function (val, oldVal) {
-        this.sumTotal = 0;
-        this.sumTax = 0;
-        this.items.forEach((item) => {
-          this.sumTotal += parseFloat(item.sumTotal);
-          if(item.commodity.withoutTax == true){
-            item.tax = 0;
-          }
-          else{
-            this.sumTax += parseFloat(item.tax);
-          }
-        })
+        this.calcInvoice();
       },
       deep: true
+    },
+    'data.transferCost': {
+      handler: function (val, oldVal) {
+        this.calcInvoice();
+      },
+      deep: false
+    },
+    'data.discountAll': {
+      handler: function (val, oldVal) {
+        this.calcInvoice();
+      },
+      deep: false
     },
     'data.person': {
       handler: function (val, oldVal) {
@@ -551,8 +575,29 @@ export default {
     },
     calc() {
       this.itemData.sumWithoutTax = (this.itemData.price * this.itemData.count) - this.itemData.discount;
-      this.itemData.tax = (((this.itemData.price * this.itemData.count) - this.itemData.discount) * (this.maliyatPercent)) / 100;;
-      this.itemData.sumTotal = (((parseFloat(this.itemData.price) * parseFloat(this.itemData.count)) - parseFloat(this.itemData.discount)) * (100 + parseFloat(this.maliyatPercent))) / 100;
+      if (this.itemData.commodity.withoutTax) {
+        this.itemData.tax = 0;
+        this.itemData.sumTotal = (parseFloat(this.itemData.price) * parseFloat(this.itemData.count)) - parseFloat(this.itemData.discount);
+      }
+      else {
+        this.itemData.tax = (((this.itemData.price * this.itemData.count) - this.itemData.discount) * (this.maliyatPercent)) / 100;
+        this.itemData.sumTotal = (((parseFloat(this.itemData.price) * parseFloat(this.itemData.count)) - parseFloat(this.itemData.discount)) * (100 + parseFloat(this.maliyatPercent))) / 100;
+      }
+    },
+    calcInvoice() {
+      this.sumTotal = 0;
+      this.sumTax = 0;
+      this.items.forEach((item) => {
+        this.sumTotal += parseFloat(item.sumTotal);
+        if (item.commodity.withoutTax == true) {
+          item.tax = 0;
+        }
+        else {
+          this.sumTax += parseFloat(item.tax);
+        }
+      });
+      this.sumTotal += this.data.transferCost;
+      this.sumTotal -= this.data.discountAll;
     },
     addItem() {
       if (this.itemData.count == 0) {
@@ -660,6 +705,8 @@ export default {
           this.data.date = response.data.date;
           this.data.des = response.data.des;
           this.data.person = response.data.person;
+          this.data.transferCost = response.data.transferCost
+          this.data.discountAll = response.data.discountAll
           response.data.rows.forEach((item, key) => {
             if (item.commodity != null) {
               this.items.push({
@@ -706,6 +753,8 @@ export default {
           des: this.data.des,
           buyer: this.data.person,
           rows: this.items,
+          discountAll:this.data.discountAll,
+          transferCost:this.data.transferCost,
           update: this.$route.params.id
         }).then((response) => {
           this.isLoading = false;
