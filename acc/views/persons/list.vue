@@ -70,6 +70,10 @@
                     <i class="fa fa-edit pe-2"></i>
                     ویرایش
                   </router-link>
+                  <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger">
+                    <i class="fa fa-trash pe-2"></i>
+                    حذف
+                  </button>
                 </div>
               </div>
             </template>
@@ -234,10 +238,7 @@ export default {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          axios.post('/api/business/delete/user', {
-            'code': code
-          }
-          ).then((response) => {
+          axios.post('/api/person/delete/' + code ).then((response) => {
             if (response.data.result == 1) {
               let index = 0;
               for (let z = 0; z < this.items.length; z++) {
@@ -249,6 +250,13 @@ export default {
               Swal.fire({
                 text: 'شخص با موفقیت حذف شد.',
                 icon: 'success',
+                confirmButtonText: 'قبول'
+              });
+            }
+            else if (response.data.result == 2) {
+              Swal.fire({
+                text: 'شخص  به دلیل داشتن تراکنش مرتبط قابل حذف نیست.',
+                icon: 'warning',
                 confirmButtonText: 'قبول'
               });
             }

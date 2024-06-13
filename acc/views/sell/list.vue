@@ -25,6 +25,11 @@
               <i class="fa fa-undo pe-2"></i>
               حذف برچسب‌ها
             </button>
+            <hr class="dropdown-divider">
+            <button class="dropdown-item text-danger" @click="deleteItems()">
+              <i class="fa fa-trash pe-2"></i>
+              حذف گروهی
+            </button>
           </div>
         </div>
         <router-link to="/acc/sell/mod/" type="button" class="block-options-item">
@@ -39,8 +44,8 @@
             <div class="input-group input-group-sm">
               <span class="input-group-text"><i class="fa fa-search"></i></span>
               <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
-              <button class="btn btn-outline-success dropdown-toggle d-block d-sm-none" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
+              <button class="btn btn-outline-success dropdown-toggle d-block d-sm-none" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-filter"></i>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
@@ -111,6 +116,16 @@
                 {{ this.$filters.formatNumber(amount) }}
               </span>
             </template>
+            <template #item-transferCost="{ transferCost }">
+              <span class="text-dark">
+                {{ this.$filters.formatNumber(transferCost) }}
+              </span>
+            </template>
+            <template #item-discountAll="{ discountAll }">
+              <span class="text-dark">
+                {{ this.$filters.formatNumber(discountAll) }}
+              </span>
+            </template>
             <template #item-person="{ person }">
               <router-link :to="'/acc/persons/card/view/' + person.code">
                 {{ person.nikename }}
@@ -179,6 +194,8 @@ export default {
         { text: "فاکتور", value: "code", sortable: true },
         { text: "تاریخ", value: "date", sortable: true },
         { text: "خریدار", value: "person", sortable: true },
+        { text: "تخفیف", value: "discountAll", sortable: true },
+        { text: "حمل و نقل", value: "transferCost", sortable: true },
         { text: "مبلغ", value: "amount", sortable: true },
         { text: "پرداختی", value: "relatedDocsCount", sortable: true },
         { text: "برچسب", value: "label", width: 100 },
@@ -296,6 +313,50 @@ export default {
           }
         });
     },
+    deleteItems() {
+      if (this.itemsSelected.length == 0) {
+        Swal.fire({
+          text: 'هیچ موردی انتخاب نشده است.',
+          icon: 'warning',
+          confirmButtonText: 'قبول'
+        });
+      }
+      else {
+        Swal.fire({
+          text: 'آیا برای حذف این مورد مطمئن هستید؟ تمامی اسناد پرداخت و حواله های انبار همراه فاکتور نیز حذف خواهند شد.',
+          showCancelButton: true,
+          confirmButtonText: 'بله',
+          cancelButtonText: `خیر`,
+          icon: 'warning'
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            this.loading = true;
+            axios.post('/api/accounting/remove/group', {
+              'items': this.itemsSelected
+            }
+            ).then((response) => {
+              this.loading = false;
+              if (response.data.result == 1) {
+                this.loadData();
+                Swal.fire({
+                  text: 'فاکتور ها با موفقیت حذف شد.',
+                  icon: 'success',
+                  confirmButtonText: 'قبول'
+                });
+              }
+              else if (response.data.result == 2) {
+                Swal.fire({
+                  text: response.data.message,
+                  icon: 'warning',
+                  confirmButtonText: 'قبول'
+                });
+              }
+            })
+          }
+        })
+      }
+    },
     deleteItem(code) {
       Swal.fire({
         text: 'آیا برای حذف این مورد مطمئن هستید؟ تمامی اسناد پرداخت و حواله های انبار همراه فاکتور نیز حذف خواهند شد.',
@@ -344,7 +405,9 @@ export default {
       handler: function (val, oldVal) {
         this.sumSelected = 0;
         this.itemsSelected.forEach((item) => {
-          this.sumSelected += parseInt(item.amount.replaceAll(",", ""))
+          if (typeof item.amount.valueOf() === "string") {
+            this.sumSelected += parseInt(item.amount.replaceAll(",", ""))
+          }
         });
       },
       deep: true

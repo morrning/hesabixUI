@@ -66,6 +66,8 @@ export default defineComponent({
       totalRec: 0,
       totalDiscount: 0,
       totalTax: 0,
+      transferCost:0,
+      discountAll:0,
       mobileHeaders: [
         { text: "کالا", value: "commodity.name" },
         { text: "تعداد", value: "count" },
@@ -98,6 +100,8 @@ export default defineComponent({
 
       axios.get('/api/sell/get/info/' + this.$route.params.id).then((response) => {
         this.person = response.data.person;
+        this.discountAll = response.data.discountAll;
+        this.transferCost = response.data.transferCost;
         response.data.rows.forEach((item) => {
           if (item.commodity != null) {
             this.totalTax += parseInt(item.tax);
@@ -402,7 +406,6 @@ export default defineComponent({
             <thead>
               <tr class="text-center table-header">
                 <th style="width:80px">ردیف</th>
-                <th>کد کالا</th>
                 <th>کالا/خدمات</th>
                 <th>شرح</th>
                 <th>تعداد / مقدار</th>
@@ -415,8 +418,8 @@ export default defineComponent({
             <tbody>
               <tr v-for="(commodity, index) in commoditys" class="text-center">
                 <td>{{ index + 1 }}</td>
-                <td>{{ commodity.commodity.code }}</td>
-                <td>{{ commodity.commodity.name }}</td>
+                <td>
+                  {{ commodity.commodity.code }} - {{ commodity.commodity.name }}</td>
                 <td>{{ commodity.des }}</td>
                 <td>{{ commodity.count }} {{ commodity.commodity.unit }}</td>
                 <td>{{ this.$filters.formatNumber(commodity.price) }}</td>
@@ -433,6 +436,12 @@ export default defineComponent({
                   <span v-show="parseInt(this.item.doc.amount) <= parseInt(this.totalRec)">(تسویه شده)</span>
                   <span class="text-decoration-underline text-danger"
                     v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec)">(تسویه نشده)</span>
+                </th>
+                <th colspan="2" class="text-right border-dark">حمل و نقل:
+                  {{ this.$filters.formatNumber(this.transferCost) }} ریال
+                </th>
+                <th colspan="2" class="text-right border-dark"> تخفیف کل فاکتور:
+                  {{ this.$filters.formatNumber(this.discountAll) }} ریال
                 </th>
                 <th colspan="6" class="text-right border-end-0">جمع کل:
                   {{ this.$filters.formatNumber(this.item.doc.amount) }} ریال
@@ -619,7 +628,14 @@ export default defineComponent({
             <div class="col-6">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">تخفیف</span>
-                <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.totalDiscount)"
+                <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.discountAll)"
+                  class="form-control" aria-describedby="inputGroup-sizing-sm">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">هزینه حمل و نقل</span>
+                <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.transferCost)"
                   class="form-control" aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
