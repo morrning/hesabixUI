@@ -5,7 +5,8 @@
         <button type="button" @click="this.$router.back()" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
-        مشخصات کالا و خدمات </h3>
+        مشخصات کالا و خدمات
+      </h3>
       <div class="block-options">
         <button @click="save()" type="button" class="btn btn-sm btn-alt-primary">
           <i class="fa fa-save me-1"></i>
@@ -14,7 +15,7 @@
       </div>
     </div>
     <div class="block-content py-3 vl-parent">
-      <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
+      <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false" />
       <div class="container">
         <div class="row py-3">
           <div class="col-sm-12 col-md-12 mb-1">
@@ -65,8 +66,8 @@
           <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
               <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceBuy" />
-            <label class="form-label">قیمت خرید</label>
-          </div>
+              <label class="form-label">قیمت خرید</label>
+            </div>
             <div class="form-floating mb-4">
               <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceSell" />
               <label class="form-label">قیمت فروش</label>
@@ -78,6 +79,19 @@
               <option v-for="(item, index) in listCats" :value="item.id">{{item.name}}</option>
             </select>
           </div>
+          <div class="row mx-0 px-0">
+            <div class="col-sm-12 col-md-12">
+              <div class="form-floating mb-4">
+                <input placeholder="بارکد‌ها را با ; از هم جدا کنید" v-model="data.barcodes" class="form-control" type="text">
+                <label class="form-label">
+                   بارکد‌ها
+                  <small class="text-danger">
+                    (بارکد‌ها را با ; از هم جدا کنید)
+                  </small>
+                </label>
+              </div>
+            </div>
+          </div>
           <div class="col-sm-12 col-md-12">
             <div class="form-floating mb-4">
               <input v-model="data.des" class="form-control" type="text">
@@ -86,7 +100,8 @@
           </div>
           <div class="col-sm-12 col-md-12">
             <b class="text-primary-dark me-3">موجودی کالا</b>
-            <label class="text-muted">تنظیمات بخش موجودی کالا تنها برای نوع کالا اعمال می‌شود و برای نوع خدمات نادیده گرفته می‌شود.</label>
+            <label class="text-muted">تنظیمات بخش موجودی کالا تنها برای نوع کالا اعمال می‌شود و برای نوع خدمات نادیده
+              گرفته می‌شود.</label>
             <div class="space-y-2">
               <div class="form-check form-switch">
                 <input v-model="data.commodityCountCheck" class="form-check-input" type="checkbox">
@@ -96,19 +111,23 @@
             <div class="row">
               <div class="col-sm-12 col-md-4 mt-2">
                 <div class="form-floating mb-4">
-                  <input v-model="data.minOrderCount" @blur="(event)=>{if(this.data.minOrderCount==='' || this.data.minOrderCount===0){this.data.minOrderCount = 1}}" @keypress="this.$filters.onlyNumber($event)" class="form-control" type="number" min="1">
+                  <input v-model="data.minOrderCount"
+                    @blur="(event) => { if (this.data.minOrderCount === '' || this.data.minOrderCount === 0) { this.data.minOrderCount = 1 } }"
+                    @keypress="this.$filters.onlyNumber($event)" class="form-control" type="number" min="1">
                   <label class="form-label">حداقل سفارش</label>
                 </div>
               </div>
               <div class="col-sm-12 col-md-4 mt-2">
                 <div class="form-floating mb-4">
-                  <input v-model="data.orderPoint" @keypress="this.$filters.onlyNumber($event)" class="form-control" type="number" min="1">
+                  <input v-model="data.orderPoint" @keypress="this.$filters.onlyNumber($event)" class="form-control"
+                    type="number" min="1">
                   <label class="form-label">نقطه سفارش</label>
                 </div>
               </div>
               <div class="col-sm-12 col-md-4 mt-2">
                 <div class="form-floating mb-4">
-                  <input v-model="data.dayLoading" @keypress="this.$filters.onlyNumber($event)" class="form-control" type="number">
+                  <input v-model="data.dayLoading" @keypress="this.$filters.onlyNumber($event)" class="form-control"
+                    type="number">
                   <label class="form-label">زمان انتظار(روز)</label>
                 </div>
               </div>
@@ -125,7 +144,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
-import {Money3} from "v-money3";
+import { Money3 } from "v-money3";
 import Treeselect from 'vue3-treeselect'
 // import the styles
 import 'vue3-treeselect/dist/vue3-treeselect.css'
@@ -133,28 +152,30 @@ import 'vue3-treeselect/dist/vue3-treeselect.css'
 export default {
   name: "mod",
   components: {
-    Treeselect:Treeselect,
+    Treeselect: Treeselect,
     Loading,
     Money3
   },
-  data: ()=>{return{
-    isLoading: false,
-    units:'',
-    data: {
-      name: '',
-      priceSell: 0,
-      priceBuy: 0,
-      des: '',
-      unit: 'عدد',
-      code: 0,
-      khadamat: false,
-      cat:null,
-      orderPoint:0,
-      commodityCountCheck:false,
-      minOrderCount:1,
-      dayLoading:0,
-      speedAccess:false,
-      withoutTax:false
+  data: () => {
+    return {
+      isLoading: false,
+      units: '',
+      data: {
+        name: '',
+        priceSell: 0,
+        priceBuy: 0,
+        des: '',
+        unit: 'عدد',
+        code: 0,
+        khadamat: false,
+        cat: null,
+        orderPoint: 0,
+        commodityCountCheck: false,
+        minOrderCount: 1,
+        dayLoading: 0,
+        speedAccess: false,
+        withoutTax: false,
+        barcodes: ''
     },
     listCats:[],
     currencyConfig:{

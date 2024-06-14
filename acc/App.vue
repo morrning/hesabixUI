@@ -779,8 +779,7 @@ export default {
             </ul>
           </li>
           <li class="nav-main-heading">سرویس‌ها</li>
-          <li class="nav-main-item">
-          <li v-if="permissions.owner" class="nav-main-link-name">
+          <li v-if="permissions.owner" class="nav-main-item">
             <router-link class="nav-main-link" to="/acc/sms/panel">
               <i class="nav-main-link-icon fa fa-message"></i>
               <span class="nav-main-link-name">
@@ -788,6 +787,13 @@ export default {
               </span>
             </router-link>
           </li>
+          <li v-if="permissions.owner" class="nav-main-item">
+            <router-link class="nav-main-link" to="/acc/printers/list">
+              <i class="nav-main-link-icon fa fa-print"></i>
+              <span class="nav-main-link-name">
+                چاپگر‌های ابری
+              </span>
+            </router-link>
           </li>
           <li
             v-show="permissions.owner || permissions.archiveUpload || permissions.archiveMod || permissions.archiveDelete"
