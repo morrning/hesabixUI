@@ -13,6 +13,7 @@ export default defineComponent({
   data: () => {
     return {
       canPrint: true,
+      update: 0,
       commodity: [],
       selectedCommodity:null,
       tempID: '',
@@ -207,7 +208,14 @@ export default defineComponent({
           rows: outItems,
           update: ''
         }).then((response) => {
+          this.update = response.data.doc.code;
           this.loading = false;
+          if (this.canPrint) {
+            axios.post('/api/sell/posprinter/invoice', { code: this.update, posprint: 1 }).then((response) => {
+              this.printID = response.data.id;
+              window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
+            })
+          }
           outItems = [];
           outItems.push({
             bs: bd,
@@ -315,7 +323,7 @@ export default defineComponent({
       <div class="block-options">
         <span class="form-check form-switch  form-check-inline">
           <input :disabled="this.loading" v-model="canPrint" class="form-check-input" type="checkbox">
-          <label class="form-check-label">چاپ ابری</label>
+          <label class="form-check-label">چاپ</label>
         </span>
         <button @click="newPage()" type="button" class="btn btn-sm btn-warning me-2">
           <i class="fa fa-plus"></i>
