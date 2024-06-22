@@ -16,9 +16,10 @@
       <div class="col-12">
         <div class="row items-push">
           <div v-show="permissions.wallet" class="col-6 col-lg-3">
-            <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0 bg-info text-light" to="/acc/wallet/view">
+            <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0 bg-info text-light"
+              to="/acc/wallet/view">
               <div class="block-content py-5">
-                <div class="fs-3 fw-semibold  mb-1">{{ this.$filters.formatNumber(wallet.deposit) }}  ریال</div>
+                <div class="fs-3 fw-semibold  mb-1">{{ this.$filters.formatNumber(wallet.deposit) }} ریال</div>
                 <p class="fw-semibold fs-sm  text-uppercase mb-0">
                   <i class="fa fa-wallet"></i>
                   <br>
@@ -89,24 +90,32 @@
           </div>
           <div v-show="permissions.sell" class="col-6 col-lg-3">
             <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0" to="/acc/sell/list">
-              <div class="block-content py-5">
+              <div class="block-content ribbon ribbon-success py-5">
+                <div class="ribbon-box">
+                  امروز
+                  {{ this.$filters.formatNumber(stat.sells_today) }}
+                </div>
                 <div class="fs-3 fw-semibold mb-1 text-primary">{{ this.$filters.formatNumber(stat.sells_total) }}</div>
                 <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
                   <i class="fa-solid fa-money-bill-trend-up"></i>
                   <br>
-                   فروش
+                  فروش کل
                 </p>
               </div>
             </router-link>
           </div>
           <div v-show="permissions.buy" class="col-6 col-lg-3">
             <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0" to="/acc/buy/list/">
-              <div class="block-content py-5">
+              <div class="block-content ribbon ribbon-success py-5">
+                <div class="ribbon-box">
+                  امروز
+                  {{ this.$filters.formatNumber(stat.buys_today) }}
+                </div>
                 <div class="fs-3 fw-semibold mb-1 text-primary">{{ this.$filters.formatNumber(stat.buys_total) }}</div>
                 <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
                   <i class="fa fa-cart-shopping"></i>
                   <br>
-                   خرید
+                  خرید
                 </p>
               </div>
             </router-link>

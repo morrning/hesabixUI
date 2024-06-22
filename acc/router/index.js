@@ -10,6 +10,12 @@ const router = createRouter({
             component: HomeView
         },
         {
+            path: '/acc/business/printtemplates',
+            name: 'business_printtemplates',
+            component: () =>
+                import ('../views/printers/templates.vue')
+        },
+        {
             path: '/acc/printers/list',
             name: 'printers_list',
             component: () =>
