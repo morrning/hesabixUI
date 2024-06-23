@@ -760,7 +760,7 @@ export default {
                     تاریخچه رویدادها </span>
                 </router-link>
               </li>
-              <li v-if="permissions.owner" class="nav-main-item">
+              <li v-if="permissions.owner && 1==3" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/business/printtemplates">
                   <span class="nav-main-link-name">
                     <i class="fa fa-print"></i>

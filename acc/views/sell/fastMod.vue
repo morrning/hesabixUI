@@ -13,9 +13,10 @@ export default defineComponent({
   data: () => {
     return {
       canPrint: true,
+      canPrintCashdeskRecp: true,
       update: 0,
       commodity: [],
-      selectedCommodity:null,
+      selectedCommodity: null,
       tempID: '',
       year: {},
       data: {
@@ -210,8 +211,12 @@ export default defineComponent({
         }).then((response) => {
           this.update = response.data.doc.code;
           this.loading = false;
-          if (this.canPrint) {
-            axios.post('/api/sell/posprinter/invoice', { code: this.update, posprint: 1 }).then((response) => {
+          if (this.canPrint || this.canPrintCashdeskRecp) {
+            axios.post('/api/sell/posprinter/invoice', { 
+              code: this.update,
+              posPrint: this.canPrint,
+              posPrintRecp: this.canPrintCashdeskRecp
+            }).then((response) => {
               this.printID = response.data.id;
               window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
             })
@@ -298,7 +303,7 @@ export default defineComponent({
     },
     'selectedCommodity': {
       handler: function (val, oldVal) {
-        if(this.selectedCommodity != null){
+        if (this.selectedCommodity != null) {
           this.commoditySpeedAccess.push(this.selectedCommodity);
           this.selectedCommodity = null;
         }
@@ -321,18 +326,51 @@ export default defineComponent({
         فاکتور سریع
       </h3>
       <div class="block-options">
-        <span class="form-check form-switch  form-check-inline">
-          <input :disabled="this.loading" v-model="canPrint" class="form-check-input" type="checkbox">
-          <label class="form-check-label">چاپ</label>
+        <span class="d-block d-sm-none">
+          <div class="dropdown-center block-options-item">
+            <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
+              id="dropdown-align-center-alt-primary" type="button">
+              <i class="fa-solid fa-ellipsis"></i>
+            </button>
+            <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
+              style="">
+              <button @click="newPage()" type="button" class="dropdown-item text-warning me-2">
+                <i class="fa fa-plus"></i>
+                جدید
+              </button>
+              <span class="form-check form-switch  form-check-inline">
+                <input :disabled="this.loading" v-model="canPrintCashdeskRecp" class="form-check-input" type="checkbox">
+                <label class="form-check-label">قبض صندوق</label>
+              </span>
+              <span class="form-check form-switch  form-check-inline">
+                <input :disabled="this.loading" v-model="canPrint" class="form-check-input" type="checkbox">
+                <label class="form-check-label">صورت حساب</label>
+              </span>
+            </div>
+          </div>
+          <button :disabled="this.loading" @click="save()" type="button" class="btn btn-sm btn-primary ms-2">
+            <i class="fa fa-save"></i>
+            ثبت
+          </button>
         </span>
-        <button @click="newPage()" type="button" class="btn btn-sm btn-warning me-2">
-          <i class="fa fa-plus"></i>
-          جدید
-        </button>
-        <button :disabled="this.loading" @click="save()" type="button" class="btn btn-sm btn-primary">
-          <i class="fa fa-save"></i>
-          ثبت
-        </button>
+        <span class="d-none d-sm-block">
+          <span class="form-check form-switch  form-check-inline">
+            <input :disabled="this.loading" v-model="canPrint" class="form-check-input" type="checkbox">
+            <label class="form-check-label">صورت حساب</label>
+          </span>
+          <span class="form-check form-switch  form-check-inline">
+            <input :disabled="this.loading" v-model="canPrintCashdeskRecp" class="form-check-input" type="checkbox">
+            <label class="form-check-label">قبض صندوق</label>
+          </span>
+          <button @click="newPage()" type="button" class="btn btn-sm btn-warning me-2">
+            <i class="fa fa-plus"></i>
+            جدید
+          </button>
+          <button :disabled="this.loading" @click="save()" type="button" class="btn btn-sm btn-primary">
+            <i class="fa fa-save"></i>
+            ثبت
+          </button>
+        </span>
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
@@ -351,11 +389,12 @@ export default defineComponent({
               </div>
             </div>
             <div class="card-body p-0">
-              <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name" v-model="selectedCommodity" class="rounded-0 m-1">
+              <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name"
+                v-model="selectedCommodity" class="rounded-0 m-1">
                 <template #no-options="{ search, searching, loading }">
                   وردی یافت نشد!
                 </template>
-                
+
               </v-select>
               <ul class="list-group rounded-0">
                 <button @click="addFastItem(cm)" v-for="cm in this.commoditySpeedAccess"
