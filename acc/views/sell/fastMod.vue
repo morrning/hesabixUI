@@ -266,16 +266,16 @@ export default defineComponent({
               update: '',
               related: response.data.doc.code
             }).then((response) => {
-              
+
             });
           }
           Swal.fire({
-                text: 'فاکتور ثبت شد.',
-                icon: 'success',
-                confirmButtonText: 'قبول'
-              }).then(() => {
-                this.newPage(false);
-              });
+            text: 'فاکتور ثبت شد.',
+            icon: 'success',
+            confirmButtonText: 'قبول'
+          }).then(() => {
+            this.newPage(false);
+          });
         })
       }
     },
