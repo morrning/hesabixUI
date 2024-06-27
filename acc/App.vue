@@ -780,7 +780,7 @@ export default {
                 <router-link class="nav-main-link" to="/acc/business/apis">
                   <span class="nav-main-link-name">
                     <i class="fa fa-plug-circle-xmark"></i>
-                    دسترسی توسعه دهندگان
+                    توکن‌های دسترسی
                   </span>
                 </router-link>
               </li>

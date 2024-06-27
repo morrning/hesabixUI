@@ -4,16 +4,22 @@ import {ref} from "vue";
 import axios from "axios";
 import Swal from "sweetalert2";
 import quickAddCommodity from "../component/commodity/quickAddCommodity.vue";
+import quickView from "../component/person/quickView.vue";
+import quickAdd from "../component/person/quickAdd.vue";
 
 export default defineComponent({
   name: "fastMod",
   components: {
-    quickAddCommodity
+    quickAddCommodity,
+    quickView,
+    quickAdd,
   },
   data: () => {
     return {
+      canSubmitRecpDoc: true,
+      canPdf: true,
       canPrint: true,
-      canPrintCashdeskRecp: true,
+      canPrintCashdeskRecp: false,
       update: 0,
       commodity: [],
       selectedCommodity: null,
@@ -40,7 +46,9 @@ export default defineComponent({
       },
       units: [],
       persons: [],
-      person: null,
+      person: {
+        nikename: ''
+      },
       cashdesks: [],
       cashdesk: null,
       commoditySpeedAccess: [],
@@ -58,6 +66,13 @@ export default defineComponent({
     }
   },
   methods: {
+    searchPerson(query, loading) {
+      loading(true);
+      axios.post('/api/person/list/search', { search: query }).then((response) => {
+        this.persons = response.data;
+        loading(false);
+      });
+    },
     searchCommodity(query, loading) {
       loading(true);
       axios.post('/api/commodity/list/search', { search: query }).then((response) => {
@@ -212,50 +227,55 @@ export default defineComponent({
           this.update = response.data.doc.code;
           this.loading = false;
           if (this.canPrint || this.canPrintCashdeskRecp) {
-            axios.post('/api/sell/posprinter/invoice', { 
+            axios.post('/api/sell/posprinter/invoice', {
               code: this.update,
+              pdf: this.canPdf,
               posPrint: this.canPrint,
               posPrintRecp: this.canPrintCashdeskRecp
             }).then((response) => {
-              this.printID = response.data.id;
-              window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
+              if (this.canPdf) {
+                this.printID = response.data.id;
+                window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
+              }
             })
           }
-          outItems = [];
-          outItems.push({
-            bs: bd,
-            bd: 0,
-            type: 'person',
-            id: this.person.id,
-            des: 'دریافت وجه فاکتور',
-            table: 3
-          });
-          outItems.push({
-            bs: 0,
-            bd: bd,
-            type: 'cashdesk',
-            id: this.cashdesk.id,
-            des: 'دریافت وجه فاکتور',
-            table: 121
-          });
-          this.tempID = response.data.doc.code;
-          axios.post('/api/accounting/insert', {
-            type: 'sell_receive',
-            date: this.data.date,
-            des: 'دریافت وجه فاکتور',
-            rows: outItems,
-            update: '',
-            related: response.data.doc.code
-          }).then((response) => {
-            Swal.fire({
-              text: 'فاکتور ثبت شد.',
-              icon: 'success',
-              confirmButtonText: 'قبول'
-            }).then(() => {
-              this.newPage(false);
+          if (this.canSubmitRecpDoc) {
+            outItems = [];
+            outItems.push({
+              bs: bd,
+              bd: 0,
+              type: 'person',
+              id: this.person.id,
+              des: 'دریافت وجه فاکتور',
+              table: 3
             });
-          });
-
+            outItems.push({
+              bs: 0,
+              bd: bd,
+              type: 'cashdesk',
+              id: this.cashdesk.id,
+              des: 'دریافت وجه فاکتور',
+              table: 121
+            });
+            this.tempID = response.data.doc.code;
+            axios.post('/api/accounting/insert', {
+              type: 'sell_receive',
+              date: this.data.date,
+              des: 'دریافت وجه فاکتور',
+              rows: outItems,
+              update: '',
+              related: response.data.doc.code
+            }).then((response) => {
+              
+            });
+          }
+          Swal.fire({
+                text: 'فاکتور ثبت شد.',
+                icon: 'success',
+                confirmButtonText: 'قبول'
+              }).then(() => {
+                this.newPage(false);
+              });
         })
       }
     },
@@ -326,51 +346,14 @@ export default defineComponent({
         فاکتور سریع
       </h3>
       <div class="block-options">
-        <span class="d-block d-sm-none">
-          <div class="dropdown-center block-options-item">
-            <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
-              id="dropdown-align-center-alt-primary" type="button">
-              <i class="fa-solid fa-ellipsis"></i>
-            </button>
-            <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
-              style="">
-              <button @click="newPage()" type="button" class="dropdown-item text-warning me-2">
-                <i class="fa fa-plus"></i>
-                جدید
-              </button>
-              <span class="form-check form-switch  form-check-inline">
-                <input :disabled="this.loading" v-model="canPrintCashdeskRecp" class="form-check-input" type="checkbox">
-                <label class="form-check-label">قبض صندوق</label>
-              </span>
-              <span class="form-check form-switch  form-check-inline">
-                <input :disabled="this.loading" v-model="canPrint" class="form-check-input" type="checkbox">
-                <label class="form-check-label">صورت حساب</label>
-              </span>
-            </div>
-          </div>
-          <button :disabled="this.loading" @click="save()" type="button" class="btn btn-sm btn-primary ms-2">
-            <i class="fa fa-save"></i>
-            ثبت
-          </button>
-        </span>
-        <span class="d-none d-sm-block">
-          <span class="form-check form-switch  form-check-inline">
-            <input :disabled="this.loading" v-model="canPrint" class="form-check-input" type="checkbox">
-            <label class="form-check-label">صورت حساب</label>
-          </span>
-          <span class="form-check form-switch  form-check-inline">
-            <input :disabled="this.loading" v-model="canPrintCashdeskRecp" class="form-check-input" type="checkbox">
-            <label class="form-check-label">قبض صندوق</label>
-          </span>
-          <button @click="newPage()" type="button" class="btn btn-sm btn-warning me-2">
-            <i class="fa fa-plus"></i>
-            جدید
-          </button>
-          <button :disabled="this.loading" @click="save()" type="button" class="btn btn-sm btn-primary">
-            <i class="fa fa-save"></i>
-            ثبت
-          </button>
-        </span>
+        <button @click="newPage()" type="button" class="btn btn-sm btn-warning me-2">
+          <i class="fa fa-plus"></i>
+          جدید
+        </button>
+        <button :disabled="this.loading" @click="save()" type="button" class="btn btn-sm btn-primary">
+          <i class="fa fa-save"></i>
+          ثبت
+        </button>
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
@@ -412,9 +395,14 @@ export default defineComponent({
             <div class="card-header">
               <i class="fa fa-user me-2"></i>
               مشتری
+              <div class="block-options float-end">
+                <quickView :code="this.person.code"></quickView>
+                <quickAdd :code="this.person.code"></quickAdd>
+              </div>
             </div>
             <div class="card-body p-1">
-              <v-select dir="rtl" :options="persons" label="nikename" v-model="person">
+              <v-select :filterable="false" dir="rtl" @search="searchPerson" :options="persons" label="nikename"
+                v-model="person">
                 <template #no-options="{ search, searching, loading }">
                   وردی یافت نشد!
                 </template>
@@ -489,18 +477,86 @@ export default defineComponent({
               </div>
             </a>
           </div>
-          <div class="row mt-2">
-            <div class="col-sm-12 col-md-6 mb-2">
-              <div class="">
-                <label class="form-label">تاریخ:</label>
-                <date-picker class="" v-model="data.date" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
-                  :min="year.start" :max="year.end" />
+          <div class="accordion" id="accordionFlushExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  <i class="fa-solid fa-file-invoice me-2"></i>
+                  جزئیات فاکتور
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-6 mb-2">
+                      <div class="">
+                        <label class="form-label">تاریخ:</label>
+                        <date-picker class="" v-model="data.date" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
+                          :min="year.start" :max="year.end" />
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 mb-2">
+                      <div class="">
+                        <label class="form-label">شرح:</label>
+                        <input class="form-control form-control-sm" v-model="data.des" type="text">
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 mb-2">
+                      <span class="form-check form-switch  form-check-inline">
+                        <input :disabled="this.loading" v-model="canSubmitRecpDoc" class="form-check-input"
+                          type="checkbox">
+                        <label class="form-check-label">
+                          ثبت خودکار سند دریافت وجه فاکتور
+                        </label>
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
-            <div class="col-sm-12 col-md-6 mb-2">
-              <div class="">
-                <label class="form-label">شرح:</label>
-                <input class="form-control" v-model="data.des" type="text">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                  <i class="fa fa-print me-2"></i>
+                  تنظیمات چاپ
+                </button>
+              </h2>
+              <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-4">
+                      <span class="form-check form-switch  form-check-inline">
+                        <input :disabled="this.loading" v-model="canPrint" class="form-check-input" type="checkbox">
+                        <label class="form-check-label">
+                          <i class="fa-solid fa-cloud me-1"></i>
+                          صورت حساب
+                        </label>
+                      </span>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                      <span class="form-check form-switch  form-check-inline">
+                        <input :disabled="this.loading" v-model="canPrintCashdeskRecp" class="form-check-input"
+                          type="checkbox">
+                        <label class="form-check-label">
+                          <i class="fa-solid fa-cloud me-1"></i>
+                          قبض صندوق
+                        </label>
+                      </span>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                      <span class="form-check form-switch  form-check-inline">
+                        <input :disabled="this.loading" v-model="canPdf" class="form-check-input" type="checkbox">
+                        <label class="form-check-label">
+                          <i class="fa-regular fa-file-pdf me-1"></i>
+                          خروجی PDF
+                        </label>
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

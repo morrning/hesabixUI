@@ -408,6 +408,9 @@ export default {
           if (typeof item.amount.valueOf() === "string") {
             this.sumSelected += parseInt(item.amount.replaceAll(",", ""))
           }
+          else{
+            this.sumSelected += item.amount;
+          }
         });
       },
       deep: true
