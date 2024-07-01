@@ -753,6 +753,13 @@ export default {
                     تنظیمات کسب‌و‌کار </span>
                 </router-link>
               </li>
+              <li v-if="permissions.settings && this.isPluginActive('accpro')" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/business/avatar">
+                  <span class="nav-main-link-name">
+                    <i class="fa-solid fa-user-tie"></i>
+                    نمایه کسب‌و‌کار </span>
+                </router-link>
+              </li>
               <li v-if="permissions.log" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/business/logs">
                   <span class="nav-main-link-name">

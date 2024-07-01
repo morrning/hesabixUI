@@ -224,6 +224,12 @@ const router = createRouter({
                 import ('../views/settings/bussiness.vue'),
         },
         {
+            path: '/acc/business/avatar',
+            name: 'business_avatar',
+            component: () =>
+                import ('../views/settings/avatar.vue'),
+        },
+        {
             path: '/acc/business/logs',
             name: 'business_logs',
             component: () =>
