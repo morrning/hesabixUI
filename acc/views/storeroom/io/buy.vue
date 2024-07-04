@@ -182,7 +182,7 @@ export default defineComponent({
       <div class="row">
         <div class="col-sm-12 col-md-4">
           <label class="form-label">تاریخ</label>
-          <date-picker class="" v-model="this.ticket.date" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
+          <date-picker class="" v-model="this.ticket.date" format="jYYYY/jMM/jDD" display-format="jYYYY/jMM/jDD"
             :min="year.start" :max="year.end" />
         </div>
         <div class="col-sm-12 col-md-4">

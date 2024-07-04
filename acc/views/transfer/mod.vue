@@ -19,7 +19,7 @@
           <div class="col-sm-12 col-md-6">
             <div class="form-control">
               <label class="form-label">تاریخ:</label>
-              <date-picker class="" v-model="this.date" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
+              <date-picker class="" v-model="this.date" format="jYYYY/jMM/jDD" display-format="jYYYY/jMM/jDD"
                 :min="this.year.start" :max="this.year.end" />
             </div>
           </div>

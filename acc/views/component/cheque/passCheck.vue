@@ -97,8 +97,8 @@ export default defineComponent({
                 <date-picker
                     class=""
                     v-model="passDate"
-                    format="jYYYY-jMM-jDD"
-                    display-format="jYYYY-jMM-jDD"
+                    format="jYYYY/jMM/jDD"
+                    display-format="jYYYY/jMM/jDD"
                     :min="year.start"
                     :max="year.end"
                   

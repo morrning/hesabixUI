@@ -193,8 +193,8 @@ export default defineComponent({
             <date-picker
                 class=""
                 v-model="order.date"
-                format="jYYYY-jMM-jDD"
-                display-format="jYYYY-jMM-jDD"
+                format="jYYYY/jMM/jDD"
+                display-format="jYYYY/jMM/jDD"
                 :min="year.start"
                 :max="year.end"
                 
@@ -205,8 +205,8 @@ export default defineComponent({
             <date-picker
                 class=""
                 v-model="order.dateDeliver"
-                format="jYYYY-jMM-jDD"
-                display-format="jYYYY-jMM-jDD"
+                format="jYYYY/jMM/jDD"
+                display-format="jYYYY/jMM/jDD"
                 :min="year.start"
                 :max="year.end"
                 

@@ -41,8 +41,8 @@
               </div>
               <div class="block-content pt-1 px-1">
                 <p>
-                  <date-picker class="my-0 py-0" v-model="data.date" format="jYYYY-jMM-jDD"
-                    display-format="jYYYY-jMM-jDD" :min="year.start" :max="year.end" />
+                  <date-picker class="my-0 py-0" v-model="data.date" format="jYYYY/jMM/jDD"
+                    display-format="jYYYY/jMM/jDD" :min="year.start" :max="year.end" />
                 </p>
               </div>
             </div>

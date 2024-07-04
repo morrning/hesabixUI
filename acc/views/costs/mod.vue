@@ -21,7 +21,7 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12 col-md-6 mb-2">
-            <date-picker class="form-control" v-model="data.date" format="jYYYY-jMM-jDD" display-format="jYYYY-jMM-jDD"
+            <date-picker class="form-control" v-model="data.date" format="jYYYY/jMM/jDD" display-format="jYYYY/jMM/jDD"
               :min="year.start" :max="year.end" />
           </div>
           <div class="col-sm-12 col-md-6 mb-2">

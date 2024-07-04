@@ -192,7 +192,7 @@
                           <span class="text-danger">*</span>
                           شروع سال مالی
                         </label>
-                        <date-picker class="" v-model="content.year.startShamsi" format="jYYYY-jMM-jDD"
+                        <date-picker class="" v-model="content.year.startShamsi" format="jYYYY/jMM/jDD"
                           display-format="jYYYY/jMM/jDD" />
                       </div>
                     </div>
@@ -202,7 +202,7 @@
                           <span class="text-danger">*</span>
                           اتمام سال مالی
                         </label>
-                        <date-picker class="" v-model="content.year.endShamsi" format="jYYYY-jMM-jDD"
+                        <date-picker class="" v-model="content.year.endShamsi" format="jYYYY/jMM/jDD"
                           display-format="jYYYY/jMM/jDD" :min="content.year.startShamsi" />
                       </div>
                     </div>
