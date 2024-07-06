@@ -9,9 +9,12 @@ export default defineComponent({
     props: {
         code: String,
     },
+    components: {
+        Loading
+    },
     data: () => {
         return {
-            isLoading: false,
+            isLoading: true,
             account: {
                 name: '',
                 cardNum: '',
@@ -19,6 +22,29 @@ export default defineComponent({
                 accountNum: ''
             },
             person: {
+                nikename: '',
+                name: '',
+                des: '',
+                tel: '',
+                mobile: '',
+                mobile2: '',
+                address: '',
+                company: '',
+                shenasemeli: '',
+                codeeghtesadi: '',
+                sabt: '',
+                keshvar: '',
+                ostan: '',
+                shahr: '',
+                postalcode: '',
+                email: '',
+                website: '',
+                fax: '',
+                code: 0,
+                types: [],
+                accounts: [],
+            },
+            personPattern: {
                 nikename: '',
                 name: '',
                 des: '',
@@ -113,6 +139,7 @@ export default defineComponent({
                             var genericModalEl = document.getElementById('quickPersonAdd')
                             var modal = bootstrap.Modal.getInstance(genericModalEl)
                             modal.hide()
+                            this.person = {...this.personPattern}
                         });
                     }
                 })
@@ -135,6 +162,7 @@ export default defineComponent({
     <div class="modal modal-lg fade" id="quickPersonAdd" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="quickPersonAddLabel" aria-hidden="true">
         <div class="modal-dialog">
+            <Loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
             <div class="modal-content">
                 <div class="modal-header bg-primary-light text-white">
                     <h1 class="modal-title fs-5" id="quickPersonAddLabel">
@@ -393,7 +421,7 @@ export default defineComponent({
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button @click="save()" type="button" class="btn btn-alt-primary">
+                    <button :disabled="isLoading" @click="save()" type="button" class="btn btn-alt-primary">
                         <i class="fa fa-floppy-disk"></i>
                         ثبت</button>
                 </div>

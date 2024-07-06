@@ -163,6 +163,16 @@ export default defineComponent({
       }
 
 
+    },
+    printInvoice(pdf = true,cloudePrinters=true) {
+      axios.post('/api/sell/print/invoice', { 
+        'code': this.$route.params.id,
+        'pdf': pdf,
+        'printers':cloudePrinters
+       }).then((response) => {
+        this.printID = response.data.id;
+        window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
+      });
     }
   },
   mounted() {
@@ -177,7 +187,8 @@ export default defineComponent({
   <div class="block block-content-full">
     <div class="block-header block-header-default bg-gray-light" id="hide-on-print">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+        <button @click="this.$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fas fa-file-invoice-dollar"></i>
@@ -227,7 +238,7 @@ export default defineComponent({
           </div>
         </div>
         <button class="btn btn-sm btn-primary mx-2"
-          onclick="document.getElementById('hide-on-print').classList.add('d-none');Dashmix.helpers('dm-print');"
+         @click="printInvoice()"
           type="button">
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ فاکتور</span>
@@ -560,10 +571,11 @@ export default defineComponent({
             </div>
           </div>
           <b class="ps-2">اقلام</b>
-          <EasyDataTable table-class-name="customize-table" :headers="mobileHeaders" :items="commoditys" v-model:items-selected="itemsSelected" show-index
-            alternating :search-value="searchValue" theme-color="#1d90ff" header-text-direction="center"
-            body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-            rowsOfPageSeparatorMessage="از" :loading="loading">
+          <EasyDataTable table-class-name="customize-table" :headers="mobileHeaders" :items="commoditys"
+            v-model:items-selected="itemsSelected" show-index alternating :search-value="searchValue"
+            theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
+            rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
+            :loading="loading">
             <template #item-sumTotal="{ sumTotal }">
               {{ this.$filters.formatNumber(sumTotal) }}
             </template>

@@ -9,10 +9,10 @@
         تاریخچه رویدادها </h3>
 
     </div>
-    <div class="block-content pb-3 p-0">
+    <div class="block-content pt-0">
       <div class="row">
         <div class="col-sm-12 col-md-12">
-          <div class="my-2">
+          <div class="my-1">
             <div class="input-group input-group-sm">
               <span class="input-group-text"><i class="fa fa-search"></i></span>
               <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">

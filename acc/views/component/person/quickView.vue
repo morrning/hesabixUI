@@ -1,14 +1,20 @@
 <script lang="ts">
 import axios from 'axios';
 import { defineComponent } from 'vue'
+import Loading from "vue-loading-overlay";
+import 'vue-loading-overlay/dist/css/index.css';
 
 export default defineComponent({
   name: "quickView",
   props: {
     code: String,
   },
+  components:{
+    Loading
+  },
   data: () => {
     return {
+      isLoading:true,
       selectedPerson: {
         accounts:[]
       }
@@ -16,7 +22,9 @@ export default defineComponent({
   },
   methods: {
     loadData() {
+      this.isLoading = true;
       axios.post('/api/person/info/' + this.$props.code).then((response) => {
+        this.isLoading = false;
         this.selectedPerson = response.data;
       });
     }
@@ -48,6 +56,7 @@ export default defineComponent({
           </div>
         </div>
         <div class="modal-body">
+          <Loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
           <div class="row">
             <div class="col-sm-12 col-md-6 mb-2">
               <div class="fw-bold mb-2">کد حسابداری: <small class="text-primary">{{ selectedPerson.code }}</small>

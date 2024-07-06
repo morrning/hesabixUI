@@ -14,6 +14,7 @@
       </div>
     </div>
     <div class="block-content">
+      <loading color="blue" loader="dots" v-model:active="loading" :is-full-page="false"/>
       <div class="row">
         <div class="col-sm-12 col-md-12 my-3">
           <div class="row">
@@ -66,13 +67,15 @@
 <script>
 
 import axios from "axios";
+import Swal from "sweetalert2";
 import { ref } from "vue";
 import { getApiUrl, getSiteName } from "../../../hesabixConfig"
+import Loading from "vue-loading-overlay";
 
 export default {
   name: "avatar",
   components: {
-
+    Loading
   },
   data: () => {
     return {
@@ -90,7 +93,7 @@ export default {
         })
     },
     save() {
-      alert();
+      this.loading = true;
       const formData = new FormData();
       formData.append('bytes', this.file);
       axios.post('/api/avatar/post',
@@ -100,12 +103,38 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         }
-      ).then(function (data) {
-        console.log(data.data);
-      })
-        .catch(function () {
-          console.log('FAILURE!!');
-        });
+      ).then((response) => {
+        this.loading = false;
+        if (response.data == 'e') {
+          Swal.fire({
+            text: 'فرمت فایل اشتباه است.',
+            icon: 'warning',
+            confirmButtonText: 'قبول'
+          })
+        }
+        else if (response.data == 's') {
+          Swal.fire({
+            text: 'حجم فایل ارسال باید کمتر از یک مگابایت باشد.',
+            icon: 'warning',
+            confirmButtonText: 'قبول'
+          })
+        }
+        else if (response.data == 'is') {
+          Swal.fire({
+            text: 'سایز تصویر نامناسب است و طول و عرض آن باید کمتر از 512 پیکسل باشد.',
+            icon: 'warning',
+            confirmButtonText: 'قبول'
+          })
+        }
+        else {
+          Swal.fire({
+            text: 'نمایه با موفقیت تغییر یافت.',
+            icon: 'success',
+            confirmButtonText: 'قبول'
+          });
+          this.loadData();
+        }
+      });
     },
     getImgSrc() {
       return getApiUrl() + '/api/avatar/get/file/' + this.lastImg;
