@@ -493,13 +493,13 @@ export default {
         this.maliyatPercent = this.bid.maliyatafzode;
       }
     },
-    'maliyatPercent': function () {
+    'maliyatPercent': function (newVal) {
       if (this.maliyatPercent == '') {
         this.maliyatPercent = 0;
       }
       this.items.forEach((item, index) => {
         item.sumWithoutTax = (item.price * item.count) - item.discount;
-        item.tax = (((item.price * item.count) - item.discount) * (this.maliyatPercent)) / 100;;
+        item.tax = (((item.price * item.count) - item.discount) * (newVal)) / 100;
         item.sumTotal = (((parseFloat(item.price) * parseFloat(item.count)) - parseFloat(item.discount)) * (100 + parseFloat(this.maliyatPercent))) / 100;
       })
     },

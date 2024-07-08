@@ -85,6 +85,10 @@
                     <i class="fa fa-eye text-info pe-2"></i>
                     مشاهده فاکتور
                   </router-link>
+                  <button class="dropdown-item" @click="printInvoice(code)">
+                    <i class="fa fa-file-pdf pe-2"></i>
+                    خروجی PDF
+                  </button>
                   <button type="button" @click="canEditItem(code)" class="dropdown-item">
                     <i class="fa fa-edit pe-2"></i>
                     ویرایش
@@ -356,6 +360,17 @@ export default {
           }
         })
       }
+    },
+    printInvoice(code= 0,pdf = true,cloudePrinters=true) {
+      this.loading = true;
+      axios.post('/api/sell/print/invoice', { 
+        'code': code,
+        'pdf': pdf,
+        'printers':cloudePrinters
+       }).then((response) => {
+        this.loading = false;
+        window.open(this.$API_URL + '/front/print/' + response.data.id, '_blank', 'noreferrer');
+      });
     },
     deleteItem(code) {
       Swal.fire({

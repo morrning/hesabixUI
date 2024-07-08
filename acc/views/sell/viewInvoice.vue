@@ -6,7 +6,6 @@ import rec from "../component/rec.vue";
 import recList from "../component/recList.vue";
 import ArchiveUpload from "../component/archive/archiveUpload.vue";
 import type { Header, Item } from "vue3-easy-data-table";
-
 import { getApiUrl } from "/hesabixConfig";
 export default defineComponent({
   name: "viewInvoice",
@@ -40,7 +39,7 @@ export default defineComponent({
       },
       recModal: {},
       recListModal: {},
-      loading: ref(false),
+      loading: ref(true),
       shortlink_url: '',
       copy_label: 'کپی',
       send_message_label: 'ارسال',
@@ -84,6 +83,7 @@ export default defineComponent({
       this.copy_label = 'کپی شد !';
     },
     loadData() {
+      this.loading = true;
       this.commoditys = [];
       axios.post('/api/accounting/doc/get', { 'code': this.$route.params.id }).then((response) => {
         this.item = response.data;
@@ -126,6 +126,7 @@ export default defineComponent({
       });
       axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
         this.bid = response.data;
+        this.loading = false;
       });
     },
     sendSMS() {
@@ -237,14 +238,8 @@ export default defineComponent({
             </div>
           </div>
         </div>
-        <button class="btn btn-sm btn-primary mx-2"
-         @click="printInvoice()"
-          type="button">
-          <i class="si si-printer me-1"></i>
-          <span class="d-none d-sm-inline-block">چاپ فاکتور</span>
-        </button>
         <!-- Button trigger modal -->
-        <button v-show="this.bid.shortlinks" type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
+        <button v-show="this.bid.shortlinks" type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal"
           data-bs-target="#exampleModal">
           <i class="fas fa-share-nodes"></i>
           <span class="d-none d-sm-inline-block">اشتراک گذاری</span>
@@ -313,218 +308,25 @@ export default defineComponent({
 
       </div>
     </div>
-    <div class="block-content pt-1 pb-3 d-none d-sm-block">
-      <div class="c-print container-xl">
-        <div class="row">
-          <div class="col-3 text-center"></div>
-          <div class="col-6 text-center">
-            <h3 class="font-weight-bold">{{ this.bid.legal_name }}</h3>
-            <h5 class="">صورتحساب فروش کالا و خدمات</h5>
-          </div>
-          <div class="col-3 text-right">
-            <p>شماره سفارش: {{ item.doc.code }}</p>
-            <p>تاریخ سفارش: {{ item.doc.date }}</p>
-          </div>
-        </div>
-        <div class="row">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th class="text-center table-header" colspan="11">مشخصات فروشنده</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="11" class="text-right py-0">
-                  <div class="row">
-                    <div class="col-6">
-                      <p>
-                        <b>نام: </b>
-                        {{ this.bid.legal_name }}
-                      </p>
-                      <p>
-                        <b>آدرس: </b>
-                        استان {{ this.bid.ostan }}، شهر {{ this.bid.shahrestan }}، {{ this.bid.address }}
-                      </p>
-                    </div>
-                    <div class="col-3">
-                      <p>
-                        <b>شماره اقتصادی: </b>
-                        {{ this.bid.codeeqtesadi }}
-                      </p>
-                      <p>
-                        <b>کد پستی:</b>
-                        {{ this.bid.postalcode }}
-                      </p>
-                    </div>
-                    <div class="col-3">
-                      <p>
-                        <b>شماره ثبت / شناسه ملی: </b>
-                        {{ this.bid.shomaresabt }}
-                      </p>
-                      <p>
-                        <b>تلفن / نمابر:</b>
-                        {{ this.bid.tel }}
-                      </p>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-            <thead>
-              <tr>
-                <th class="text-center table-header" colspan="11">مشخصات خریدار</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="11" class="text-right py-0">
-                  <div class="row">
-                    <div class="col-6">
-                      <p>
-                        <b>نام شخص حقیقی / حقوقی:</b>
-                        {{ this.person.nikename }}
-                      </p>
-                      <p>
-                        <b>آدرس:</b>
-                        {{ this.person.address }}
-                      </p>
-                    </div>
-                    <div class="col-3">
-                      <p>
-                        <b>شماره اقتصادی: </b>
-                        {{ this.person.codeeghtesadi }}
-                      </p>
-                      <p>
-                        <b>کد پستی: </b>
-                        {{ this.person.postalcode }}
-                      </p>
-                    </div>
-                    <div class="col-3">
-                      <p>
-                        <b>شماره ثبت: </b>
-                        {{ this.person.shomaresabt }}
-                      </p>
-                      <p>
-                        <b>تلفن / نمابر : </b>
-                        {{ this.person.tel }}
-                      </p>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-            <thead>
-              <tr class="text-center table-header">
-                <th style="width:80px">ردیف</th>
-                <th>کالا/خدمات</th>
-                <th>شرح</th>
-                <th>تعداد / مقدار</th>
-                <th>مبلغ واحد</th>
-                <th>تخفیف</th>
-                <th>مالیات</th>
-                <th>مبلغ کل</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(commodity, index) in commoditys" class="text-center">
-                <td>{{ index + 1 }}</td>
-                <td>
-                  {{ commodity.commodity.code }} - {{ commodity.commodity.name }}</td>
-                <td>{{ commodity.des }}</td>
-                <td>{{ commodity.count }} {{ commodity.commodity.unit }}</td>
-                <td>{{ this.$filters.formatNumber(commodity.price) }}</td>
-                <td>{{ this.$filters.formatNumber(commodity.discount) }}</td>
-                <td>{{ this.$filters.formatNumber(commodity.tax) }}</td>
-                <td>{{ this.$filters.formatNumber(parseInt(commodity.bs)) }}</td>
-              </tr>
-              <tr class="bg-light border border-dark border-2">
-                <th colspan="2" class="text-right border-0">جمع دریافت‌ها:
-                  {{ this.$filters.formatNumber(this.totalRec) }} ریال
-                </th>
-                <th colspan="1" class="text-right border-end-0">مانده فاکتور:
-                  {{ this.$filters.formatNumber(parseInt(this.item.doc.amount) - parseInt(this.totalRec)) }} ریال
-                  <span v-show="parseInt(this.item.doc.amount) <= parseInt(this.totalRec)">(تسویه شده)</span>
-                  <span class="text-decoration-underline text-danger"
-                    v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec)">(تسویه نشده)</span>
-                </th>
-                <th colspan="2" class="text-right border-dark">حمل و نقل:
-                  {{ this.$filters.formatNumber(this.transferCost) }} ریال
-                </th>
-                <th colspan="2" class="text-right border-dark"> تخفیف کل فاکتور:
-                  {{ this.$filters.formatNumber(this.discountAll) }} ریال
-                </th>
-                <th colspan="6" class="text-right border-end-0">جمع کل:
-                  {{ this.$filters.formatNumber(this.item.doc.amount) }} ریال
-                </th>
-              </tr>
-              <tr>
-                <th colspan="3" class="text-right">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="text-center">لیست دریافت‌ها</div>
-                      </div>
-                      <div class="col-12">
-                        <div v-show="this.item.relatedDocs.length != 0" class="row">
-                          <div class="col-sm-12 col-md-3 text-center">شماره سند</div>
-                          <div class="col-sm-12 col-md-3 text-center">تاریخ</div>
-                          <div class="col-sm-12 col-md-3 text-center">مبلغ</div>
-                          <div class="col-sm-12 col-md-3 text-center">نوع</div>
-                        </div>
-                        <div v-show="this.item.relatedDocs.length == 0" class="row">
-                          <b class="text-danger col-sm-12 col-md-12 text-center">هیچ سند دریافتی ثبت نشده است.</b>
-                        </div>
-                      </div>
-                      <div class="col-12" v-for="rd in this.item.relatedDocs">
-                        <div class="row">
-                          <div class="col-sm-12 col-md-3 text-center">
-                            <router-link :to="'/acc/accounting/view/' + rd.code">
-                              <span class="text-success fa fa-eye"></span>
-                            </router-link>
-                            {{ rd.code }}
-                          </div>
-                          <div class="col-sm-12 col-md-3 text-center">{{ rd.date }}</div>
-                          <div class="col-sm-12 col-md-3 text-center">{{ this.$filters.formatNumber(rd.amount) }} ریال
-                          </div>
-                          <div v-if="rd.type === 'walletPay'" class="col-sm-12 col-md-3 text-center">پرداخت آنلاین</div>
-                          <div v-else class="col-sm-12 col-md-3 text-center">سند حسابداری</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </th>
-                <th colspan="6" class="text-right">توضیحات:{{ this.item.doc.des.replace("فاکتور فروش:", "") }}</th>
-              </tr>
-              <tr style="padding: 60px 0;">
-                <td colspan="3" class="text-right"> امضا خریدار</td>
-                <td colspan="6" class="text-right">مهر و امضا فروشنده</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="block-content py-2 px-2 d-block d-sm-none">
+    <div class="block-content py-2 mt-2">
       <div class="row">
         <div class="col-12">
           <div class="row">
-            <div class="col-6">
+            <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">شماره</span>
                 <input type="text" readonly="readonly" v-model="item.doc.code" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">تاریخ</span>
                 <input type="text" readonly="readonly" v-model="item.doc.date" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
-            <div class="col-12">
+            <div class="col-sm-12 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">شرح</span>
                 <input type="text" readonly="readonly" v-model="item.doc.des" class="form-control"
@@ -534,35 +336,35 @@ export default defineComponent({
           </div>
           <b class="ps-2">خریدار</b>
           <div class="row">
-            <div class="col-6">
+            <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">نام</span>
                 <input type="text" readonly="readonly" v-model="person.nikename" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">موبایل</span>
                 <input type="text" readonly="readonly" v-model="person.mobile" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">تلفن</span>
                 <input type="text" readonly="readonly" v-model="person.tel" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-sm-6 col-md-3">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">کد پستی</span>
                 <input type="text" readonly="readonly" v-model="person.postalcode" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
-            <div class="col-12">
+            <div class="col-sm-12 col-md-9">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">آدرس</span>
                 <input type="text" readonly="readonly" v-model="person.address" class="form-control"
@@ -572,7 +374,7 @@ export default defineComponent({
           </div>
           <b class="ps-2">اقلام</b>
           <EasyDataTable table-class-name="customize-table" :headers="mobileHeaders" :items="commoditys"
-            v-model:items-selected="itemsSelected" show-index alternating :search-value="searchValue"
+            show-index alternating
             theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
             rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
             :loading="loading">
@@ -612,14 +414,14 @@ export default defineComponent({
             </template>
           </EasyDataTable>
           <div class="row pt-2">
-            <div class="col-6">
+            <div class="col-sm-6 col-md-6">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">جمع کل</span>
                 <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.item.doc.amount)"
                   class="form-control" aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-sm-6 col-md-6">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">وضعیت</span>
                 <input v-if="parseInt(this.item.doc.amount) <= parseInt(this.totalRec)" type="text" readonly="readonly"
@@ -630,21 +432,21 @@ export default defineComponent({
             </div>
           </div>
           <div class="row">
-            <div class="col-6">
+            <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">مالیات</span>
                 <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.totalTax)"
                   class="form-control" aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">تخفیف</span>
                 <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.discountAll)"
                   class="form-control" aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">هزینه حمل و نقل</span>
                 <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.transferCost)"
@@ -656,30 +458,39 @@ export default defineComponent({
             <div class="block-header block-header-default">
               <h3 class="block-title">دریافت‌ها</h3>
               <div class="block-options">
-                <button class="btn-block-option" data-action="state_toggle" data-action-mode="demo"
-                  data-toggle="block-option" type="button">
-
-                </button>
               </div>
             </div>
             <div class="block-content p-0">
               <table v-if="item.relatedDocs.length != 0"
                 class="table border-0 table-borderless table-striped table-vcenter fs-sm">
+                <thead class="bg-primary text-light">
+                  <tr class="text-center">
+                    <th>مشاهده</th>
+                    <th>شماره</th>
+                    <th>تاریخ</th>
+                    <th>مبلغ</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  <tr v-for="rd in item.relatedDocs">
+                  <tr v-for="rd in item.relatedDocs" class="text-center">
                     <td>
                       <router-link :to="'/acc/accounting/view/' + rd.code">
                         <span class="text-success fa fa-eye"></span>
                       </router-link>
                     </td>
-                    <td class="fw-semibold text-center" style="width: 100px;">
+                    <td class="fw-semibold" style="width: 100px;">
                       {{ rd.code }}
                     </td>
-                    <td class="fw-semibold text-center">
+                    <td class="fw-semibold">
                       {{ rd.date }}
                     </td>
-                    <td class="fw-semibold text-end">
+                    <td class="fw-semibold">
                       {{ this.$filters.formatNumber(rd.amount) }}
+                    </td>
+                  </tr>
+                  <tr v-if="item.relatedDocs.length == 0" class="text-center">
+                    <td colspan="4">
+                      سند پرداختی تاکنون ثبت نشده است.
                     </td>
                   </tr>
                 </tbody>
