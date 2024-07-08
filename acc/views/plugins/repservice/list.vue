@@ -92,7 +92,7 @@
             </div>
           </div>
           <EasyDataTable table-class-name="customize-table" multi-sort show-index alternating
-            :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
+           :headers="headers" :items="items" theme-color="#1d90ff"
             header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
             emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
             <template #item-operation="{ code }">
@@ -198,6 +198,9 @@ export default {
           }
         }
       });
+    },
+    'searchValue'(newValue, oldValue) {
+      this.searchTable();
     }
   },
   data: () => {
@@ -261,6 +264,40 @@ export default {
         this.items = calcItems;
       }
 
+      this.loading = false;
+    },
+    searchTable() {
+      this.loading = true;
+      let calcItems = [];
+      let isAll = false;
+      if(this.searchValue == ''){isAll = true;}
+      if (isAll) {
+        this.items = this.orgItems;
+      }
+      else {
+        this.orgItems.forEach((item) => {
+          let addItem = false;
+          if(item.commodity.name.includes(this.searchValue)){
+            addItem = true
+          }
+          else if(item.person.nikename.includes(this.searchValue)){
+            addItem = true
+          }
+          else if(item.des.includes(this.searchValue)){
+            addItem = true
+          }
+          else if(item.state.label.includes(this.searchValue)){
+            addItem = true
+          }
+          else if(item.date.includes(this.searchValue)){
+            addItem = true
+          }
+          if(addItem){
+            calcItems.push(item);
+          }
+        });
+        this.items = calcItems;
+      }
       this.loading = false;
     },
     loadData() {
