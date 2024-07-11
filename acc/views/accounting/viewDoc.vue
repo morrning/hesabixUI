@@ -9,6 +9,12 @@
       <div class="block-options">
         <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="accounting" cat="accounting"></archive-upload>
         <documentLogButton :doc-code="this.$route.params.id" />
+        <button type="button" class="btn btn-sm btn-warning text-light me-2" data-bs-toggle="modal" data-bs-target="#notesModal">
+          <span class="badge text-bg-dark me-2">{{ this.notes.count }}</span>
+          <i class="fa-regular fa-note-sticky me-1"></i>
+          <span class="d-none d-sm-inline-block">یاداشت‌‌ها</span>
+        </button>
+        <notes :stat="notes" :code="this.$route.params.id" typeNote="accounting" />
         <button class="btn btn-sm btn-primary mx-2" onclick="Dashmix.helpers('dm-print');" type="button">
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ سند</span>
@@ -89,15 +95,20 @@ import {ref} from "vue";
 import Loading from "vue-loading-overlay";
 import ArchiveUpload from "../component/archive/archiveUpload.vue";
 import documentLogButton from "../component/documentLogButton.vue";
+import notes from "../component/notes.vue";
 
 export default {
   name: "viewDoc",
   components: {
     ArchiveUpload,
     Loading,
-    documentLogButton
+    documentLogButton,
+    notes
   },
   data: ()=>{return {
+    notes: {
+      count: 0
+    },
     isLoading: true,
     item:{
       doc:{
