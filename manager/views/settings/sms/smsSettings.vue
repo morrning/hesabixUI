@@ -25,7 +25,9 @@ export default defineComponent({
           get: '',
           getback: '',
           repaired: '',
-          unrepaired: ''
+          unrepaired: '',
+          creating: '',
+          created: ''
         }
       }
     }
@@ -191,6 +193,18 @@ export default defineComponent({
               <div class="form-floating mb-4">
                 <input v-model="form.plugRepservice.getback" class="form-control" type="text" :disabled="loading">
                 <label class="form-label"><span class="text-danger"></span>مرجوعی کالا</label>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <div class="form-floating mb-4">
+                <input v-model="form.plugRepservice.creating" class="form-control" type="text" :disabled="loading">
+                <label class="form-label"><span class="text-danger"></span>در حال ساخت</label>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <div class="form-floating mb-4">
+                <input v-model="form.plugRepservice.created" class="form-control" type="text" :disabled="loading">
+                <label class="form-label"><span class="text-danger"></span>اعلام پایان ساخت</label>
               </div>
             </div>
           </div>

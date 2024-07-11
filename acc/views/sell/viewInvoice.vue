@@ -7,12 +7,14 @@ import recList from "../component/recList.vue";
 import ArchiveUpload from "../component/archive/archiveUpload.vue";
 import type { Header, Item } from "vue3-easy-data-table";
 import { getApiUrl } from "/hesabixConfig";
+import notes from '../component/notes.vue';
 export default defineComponent({
   name: "viewInvoice",
   components: {
     ArchiveUpload,
     rec: rec,
-    recList: recList
+    recList: recList,
+    notes
   },
   watch: {
     'PayWindowsState.submited'(newValue, oldValue) {
@@ -31,6 +33,9 @@ export default defineComponent({
   },
   data: () => {
     return {
+      notes:{
+        count:0
+      },
       PayWindowsState: {
         submited: false
       },
@@ -198,6 +203,12 @@ export default defineComponent({
       <div class="block-options">
         <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="sell"
           cat="sell"></archive-upload>
+        <button type="button" class="btn btn-sm btn-warning text-light me-2" data-bs-toggle="modal" data-bs-target="#notesModal">
+          <span class="badge text-bg-dark me-2">{{ this.notes.count }}</span>
+          <i class="fa-regular fa-note-sticky me-1"></i>
+          <span class="d-none d-sm-inline-block">یاداشت‌‌ها</span>
+        </button>
+        <notes :stat="notes" :code="this.$route.params.id" typeNote="sell" />
         <!-- Button trigger modal -->
         <button v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec)" type="button"
           class="btn btn-sm btn-danger" @click="this.recModal.show()">
@@ -305,7 +316,10 @@ export default defineComponent({
             </div>
           </div>
         </div>
-
+        <button class="btn btn-sm btn-primary mx-2" @click="printInvoice()" type="button">
+          <i class="si si-printer me-1"></i>
+          <span class="d-none d-sm-inline-block">چاپ فاکتور</span>
+        </button>
       </div>
     </div>
     <div class="block-content py-2 mt-2">
@@ -373,9 +387,8 @@ export default defineComponent({
             </div>
           </div>
           <b class="ps-2">اقلام</b>
-          <EasyDataTable table-class-name="customize-table" :headers="mobileHeaders" :items="commoditys"
-            show-index alternating
-            theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
+          <EasyDataTable table-class-name="customize-table" :headers="mobileHeaders" :items="commoditys" show-index
+            alternating theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
             rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
             :loading="loading">
             <template #item-sumTotal="{ sumTotal }">

@@ -99,7 +99,7 @@
                 <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
                   <i class="fa-solid fa-money-bill-trend-up"></i>
                   <br>
-                  فروش کل
+                  فروش
                 </p>
               </div>
             </router-link>
@@ -116,6 +116,38 @@
                   <i class="fa fa-cart-shopping"></i>
                   <br>
                   خرید
+                </p>
+              </div>
+            </router-link>
+          </div>
+          <div v-show="permissions.persons" class="col-6 col-lg-3">
+            <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0" to="/acc/sell/list">
+              <div class="block-content ribbon ribbon-success py-5">
+                <div class="ribbon-box">
+                  امروز
+                  {{ this.$filters.formatNumber(stat.recs_today) }}
+                </div>
+                <div class="fs-3 fw-semibold mb-1 text-primary">{{ this.$filters.formatNumber(stat.recs_total) }}</div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  <i class="fa-solid fa-arrow-down"></i>
+                  <br>
+                  دریافت‌ها
+                </p>
+              </div>
+            </router-link>
+          </div>
+          <div v-show="permissions.persons" class="col-6 col-lg-3">
+            <router-link class="block block-rounded block-link-shadow text-center h-100 mb-0" to="/acc/sell/list">
+              <div class="block-content ribbon ribbon-success py-5">
+                <div class="ribbon-box">
+                  امروز
+                  {{ this.$filters.formatNumber(stat.sends_today) }}
+                </div>
+                <div class="fs-3 fw-semibold mb-1 text-primary">{{ this.$filters.formatNumber(stat.sends_total) }}</div>
+                <p class="fw-semibold fs-sm text-muted text-uppercase mb-0">
+                  <i class="fa-solid fa-arrow-up"></i>
+                  <br>
+                  پرداخت‌ها
                 </p>
               </div>
             </router-link>

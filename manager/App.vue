@@ -211,6 +211,12 @@ export default {
               </router-link>
             </li>
             <li class="nav-main-item">
+              <router-link class="nav-main-link active" to="/manager/logs/list">
+                <i class="nav-main-link-icon fa fa-list"></i>
+                <span class="nav-main-link-name">تاریخچه سیستم</span>
+              </router-link>
+            </li>
+            <li class="nav-main-item">
               <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu"
                  data-toggle="submenu" href="#">
                 <i class="nav-main-link-icon fa fa-cogs"></i>

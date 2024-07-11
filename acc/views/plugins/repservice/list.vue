@@ -75,6 +75,29 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="historyModalModalLabel">تاریخچه</h1>
+            <div class="block-options">
+              <button type="button" class="btn-close btn-close-change-state" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+          </div>
+          <div class="modal-body">
+            <EasyDataTable table-class-name="customize-table" multi-sort show-index alternating :headers="logHeaders"
+              :items="logItems" theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
+              rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+              rowsOfPageSeparatorMessage="از" :loading="loading">
+            </EasyDataTable>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="block-content pt-1 pb-3">
       <div class="row">
         <div class="col-sm-12 col-md-12 m-0 p-0">
@@ -91,10 +114,10 @@
               <label class="form-check-label">{{ item.label }}</label>
             </div>
           </div>
-          <EasyDataTable table-class-name="customize-table" multi-sort show-index alternating
-           :headers="headers" :items="items" theme-color="#1d90ff"
-            header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
-            emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
+          <EasyDataTable table-class-name="customize-table" multi-sort show-index alternating :headers="headers"
+            :items="items" theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
+            rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
+            :loading="loading">
             <template #item-operation="{ code }">
               <div class="dropdown-center">
                 <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
@@ -111,6 +134,11 @@
                     data-bs-target="#changeSingleStateModal" :data-bs-whatever="code">
                     <i class="fa-solid fa-bolt pe-2"></i>
                     تغییر وضعیت
+                  </button>
+                  <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#historyModal"
+                    @click="changeItem(code)" :data-bs-whatever="code">
+                    <i class="fa fa-list pe-2"></i>
+                    تاریخچه
                   </button>
                   <button type="button" class="dropdown-item" @click="deleteItem(code)">
                     <i class="fa fa-trash text-danger pe-2"></i>
@@ -181,12 +209,11 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import { ref } from "vue";
-import * as XLSX from 'xlsx';
 
 export default {
   name: "list",
   components: {
-
+    history
   },
   watch: {
     'singleChangeStateSelected.code'(newValue, oldValue) {
@@ -227,10 +254,23 @@ export default {
         { text: "تاریخ", value: "date", sortable: true, width: 100 },
         { text: "وضعیت", value: "state", sortable: true, width: 150 },
         { text: "تاریخ تحویل", value: "dateOut", sortable: true, width: 100 },
+      ],
+      logItems: [],
+      logHeaders: [
+        { text: "تاریخ", value: "date" },
+        { text: "شرح", value: "des" },
+        { text: "ثبت کننده", value: "user" },
       ]
     }
   },
   methods: {
+    changeItem(code) {
+      this.loading = true;
+      axios.post('/api/plug/repservice/order/logs/' + code).then((response) => {
+        this.loading = false;
+        this.logItems = response.data;
+      });
+    },
     filterTable() {
       this.loading = true;
       let calcItems = [];

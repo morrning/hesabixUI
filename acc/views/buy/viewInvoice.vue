@@ -5,12 +5,14 @@ import Swal from "sweetalert2";
 import send from "../component/send.vue";
 import recList from "../component/recList.vue";
 import ArchiveUpload from "../component/archive/archiveUpload.vue";
+import notes from '../component/notes.vue';
 export default defineComponent({
   name: "viewInvoice",
   components:{
     ArchiveUpload,
     send:send,
-    recList:recList
+    recList: recList,
+    notes
   },
   watch: {
     'PayWindowsState.submited'(newValue, oldValue) {
@@ -27,23 +29,27 @@ export default defineComponent({
       }
     }
   },
-  data:()=>{return{
-    PayWindowsState:{
-      submited:false
-    },
-    recListWindowsState:{
-      submited:false
-    },
-    recModal:{},
-    recListModal:{},
-    loading:ref(true),
-    shortlink_url:'',
-    copy_label:'کپی',
-    send_message_label: 'ارسال',
-    bid:{
-      legal_name:'',
-    },
-    item: {
+  data: () => {
+    return {
+      notes: {
+        count: 0
+      },
+      PayWindowsState: {
+        submited: false
+      },
+      recListWindowsState: {
+        submited: false
+      },
+      recModal: {},
+      recListModal: {},
+      loading: ref(true),
+      shortlink_url: '',
+      copy_label: 'کپی',
+      send_message_label: 'ارسال',
+      bid: {
+        legal_name: '',
+      },
+      item: {
         doc: {
           id: 0,
           date: null,
@@ -62,14 +68,15 @@ export default defineComponent({
       totalSend: 0,
       totalDiscount: 0,
       totalTax: 0,
-      transferCost:0,
-      discountAll:0,
+      transferCost: 0,
+      discountAll: 0,
       mobileHeaders: [
         { text: "کالا", value: "commodity.name" },
         { text: "تعداد", value: "count" },
         { text: "مبلغ کل", value: "sumTotal" },
       ]
-  }},
+    }
+  },
   methods: {
     copyToCliboard() {
       navigator.clipboard.writeText(this.shortlink_url);
@@ -116,13 +123,13 @@ export default defineComponent({
         this.bid = response.data;
       });
     },
-    printInvoice(pdf = true,cloudePrinters=true) {
+    printInvoice(pdf = true, cloudePrinters = true) {
       this.loading = true;
-      axios.post('/api/buy/print/invoice', { 
+      axios.post('/api/buy/print/invoice', {
         'code': this.$route.params.id,
         'pdf': pdf,
-        'printers':cloudePrinters
-       }).then((response) => {
+        'printers': cloudePrinters
+      }).then((response) => {
         this.loading = false;
         this.printID = response.data.id;
         window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
@@ -131,8 +138,8 @@ export default defineComponent({
   },
   mounted() {
     this.loadData();
-    this.recModal =  new bootstrap.Modal(document.getElementById('rec-modal'))
-    this.recListModal =  new bootstrap.Modal(document.getElementById('rec-list-modal'))
+    this.recModal = new bootstrap.Modal(document.getElementById('rec-modal'))
+    this.recListModal = new bootstrap.Modal(document.getElementById('rec-list-modal'))
   }
 })
 </script>
@@ -150,6 +157,13 @@ export default defineComponent({
       </h3>
       <div class="block-options">
         <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="buy" cat="buy"></archive-upload>
+        <button type="button" class="btn btn-sm btn-warning text-light me-2" data-bs-toggle="modal"
+          data-bs-target="#notesModal">
+          <span class="badge text-bg-dark me-2">{{ this.notes.count }}</span>
+          <i class="fa-regular fa-note-sticky me-1"></i>
+          <span class="d-none d-sm-inline-block">یاداشت‌‌ها</span>
+        </button>
+        <notes :stat="notes" :code="this.$route.params.id" typeNote="buy" />
         <!-- Button trigger modal -->
         <button v-show="parseInt(this.item.doc.amount) <= parseInt(this.totalSend)" type="button"
           class="btn btn-sm btn-success" disabled="disabled">
@@ -283,9 +297,8 @@ export default defineComponent({
             </div>
           </div>
           <b class="ps-2">اقلام</b>
-          <EasyDataTable table-class-name="customize-table" :headers="mobileHeaders" :items="commoditys"
-            show-index alternating
-            theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
+          <EasyDataTable table-class-name="customize-table" :headers="mobileHeaders" :items="commoditys" show-index
+            alternating theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
             rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
             :loading="loading">
             <template #item-sumTotal="{ sumTotal }">

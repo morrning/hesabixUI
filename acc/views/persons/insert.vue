@@ -122,37 +122,37 @@
             <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="form-floating mb-4">
-                  <input v-model="person.mobile" class="form-control" type="text">
+                  <input style="direction: ltr;" v-model="person.mobile" class="form-control" type="text">
                   <label class="form-label">تلفن همراه</label>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
                 <div class="form-floating mb-4">
-                  <input v-model="person.mobile2" class="form-control" type="text">
+                  <input style="direction: ltr;" v-model="person.mobile2" class="form-control" type="text">
                   <label class="form-label">تلفن همراه دوم</label>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
                 <div class="form-floating mb-4">
-                  <input v-model="person.tel" class="form-control" type="text">
+                  <input style="direction: ltr;" v-model="person.tel" class="form-control" type="text">
                   <label class="form-label">تلفن</label>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
                 <div class="form-floating mb-4">
-                  <input v-model="person.fax" class="form-control" type="text">
+                  <input style="direction: ltr;" v-model="person.fax" class="form-control" type="text">
                   <label class="form-label">فکس</label>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
                 <div class="form-floating mb-4">
-                  <input v-model="person.email" class="form-control" type="text">
+                  <input style="direction: ltr;" v-model="person.email" class="form-control" type="text">
                   <label class="form-label">پست الکترونیکی</label>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
                 <div class="form-floating mb-4">
-                  <input v-model="person.website" class="form-control" type="text">
+                  <input style="direction: ltr;" v-model="person.website" class="form-control" type="text">
                   <label class="form-label">وب سایت</label>
                 </div>
               </div>
