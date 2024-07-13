@@ -159,7 +159,6 @@ export default {
 </script>
 
 <template>
-
   <aside id="side-overlay" data-simplebar="init">
     <div class="simplebar-wrapper" style="margin: 0px;">
       <div class="simplebar-height-auto-observer-wrapper">
