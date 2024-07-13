@@ -47,19 +47,19 @@
               <div class="row">
                 <div class="col-sm-12 col-md-6 mb-2">
                   <div class="form-floating">
-                    <input v-model="content.shenasemeli" type="number" class="form-control">
+                    <input v-model="content.shenasemeli" type="text" class="form-control">
                     <label class="form-label">شناسه ملی</label>
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-6 mb-2">
                   <div class="form-floating">
-                    <input v-model="content.codeeqtesadi" type="number" class="form-control">
+                    <input v-model="content.codeeqtesadi" type="text" class="form-control">
                     <label class="form-label">کد اقتصادی</label>
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-6 mb-2">
                   <div class="form-floating">
-                    <input v-model="content.shomaresabt" type="number" class="form-control">
+                    <input v-model="content.shomaresabt" type="text" class="form-control">
                     <label class="form-label">شماره ثبت</label>
                   </div>
                 </div>
