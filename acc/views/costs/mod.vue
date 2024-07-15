@@ -8,8 +8,34 @@
         هزینه
       </h3>
       <div class="block-options">
-        <archive-upload v-if="this.$route.params.id != ''" :docid="this.$route.params.id" doctype="cost" cat="cost"></archive-upload>
-
+        <archive-upload v-if="this.$route.params.id != ''" :docid="this.$route.params.id" doctype="cost"
+          cat="cost"></archive-upload>
+          <div class="dropdown me-2">
+                  <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-danger dropdown-toggle"
+                    data-bs-toggle="dropdown" type="button"> افزودن حساب </button>
+                  <div aria-labelledby="dropdown-dropup-secondary" class="border border-danger dropdown-menu" style="">
+                    <button @click="addItem()" type="button" class="dropdown-item">
+                      <i class="fa fa-plus"></i>
+                      مرکز هزینه
+                    </button>
+                    <button @click="addBank()" type="button" class="dropdown-item">
+                      <i class="fa fa-bank"></i>
+                      حساب بانکی
+                    </button>
+                    <button @click="addCashdesk()" type="button" class="dropdown-item" href="javascript:void(0)">
+                      <i class="fa fa-money-bill-wheat"></i>
+                      صندوق
+                    </button>
+                    <button @click="addSalary()" type="button" class="dropdown-item" href="javascript:void(0)">
+                      <i class="fa fa-dot-circle"></i>
+                      تنخواه گردان
+                    </button>
+                    <button @click="addPerson()" type="button" class="dropdown-item" href="javascript:void(0)">
+                      <i class="fa fa-person"></i>
+                      شخص
+                    </button>
+                  </div>
+                </div>
         <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-sm btn-alt-primary">
           <i class="fa fa-save"></i>
           ثبت
@@ -19,28 +45,29 @@
     <div class="block-content py-3 px-0 vl-parent">
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false" />
       <div class="container">
-        <div class="row">
-          <div class="col-sm-12 col-md-6 mb-2">
-            <date-picker class="form-control" v-model="data.date" format="jYYYY/jMM/jDD" display-format="jYYYY/jMM/jDD"
+        <div class="row mb-2 px-1">
+          <div class="col-sm-12 col-md-6">
+            <date-picker class="" v-model="data.date" format="jYYYY/jMM/jDD" display-format="jYYYY/jMM/jDD"
               :min="year.start" :max="year.end" />
           </div>
-          <div class="col-sm-12 col-md-6 mb-2">
-            <div class="alert alert-sm alert-info">
-              <i class="fa fa-info-circle me-2"></i>
-              دکمه ثبت بعد از صفر بودن مبلغ باقی مانده و تکمیل شدن حساب‌ها فعال می شود
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-12">
-            <div class="form-floating mb-2">
-              <input v-model="data.des" class="form-control" type="text">
-              <label class="form-label">شرح</label>
-            </div>
+          <div class="col-sm-12 col-md-6">
+            <input placeholder="شرح" v-model="data.des" class="form-control form-control-sm" type="text">
           </div>
         </div>
+        <div class="row border border-danger rounded-1 mx-1 mb-2">
+              <div class="col-6">
+                  مجموع :
+                  <span class="text-danger">{{ $filters.formatNumber(sum) }}</span>
+                </div>
+                <div class="col-6">
+                  باقی‌مانده:
+                  <span class="text-danger">{{ $filters.formatNumber(balance) }}</span>
+                </div>
+            </div>
         <div class="row">
-          <div class="col-sm-12 col-md-6 px-1" v-for="(item, index) in costs">
+          <div class="col-sm-12 col-md-12" v-for="(item, index) in costs">
             <div class="block block-rounded border border-gray">
-              <div class="block-header bg-default-dark">
+              <div class="block-header bg-default-dark py-1">
                 <h3 class="block-title">
                   <small class="text-white">
                     <span class="text-danger mx-2">{{ index + 1 }}</span>
@@ -55,37 +82,29 @@
                 </span>
               </div>
               <div class="block-content-sm mx-2">
-                <div class="row">
-                  <div class="col-sm-12 col-md-12">
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12">
+                <div class="row mb-1">
+                      <div class="col-sm-12 col-md-4">
                         <small class="mb-2">مرکز هزینه</small>
                         <treeselect :disable-branch-nodes="true" v-model="item.id" :multiple="false"
                           :options="listscosts" placeholder="انتخاب  مرکز هزینه" noOptionsText="آیتمی انتخاب نشده است."
                           noChildrenText="فاقد زیرمجموعه" noResultsText="موردی یافت نشد" />
                       </div>
-                      <div class="col-sm-12 col-md-12">
+                      <div class="col-sm-12 col-md-4">
                         <small class="mb-2">مبلغ</small>
-                        <money3 @change="calc()" class="form-control" v-model="item.amount" v-bind="currencyConfig">
+                        <money3 @change="calc()" class="form-control form-control-sm" v-model="item.amount" v-bind="currencyConfig">
                         </money3>
                       </div>
-                    </div>
+                      <div class="col-sm-12 col-md-4">
+                    <small>شرح</small>
+                    <input v-model="item.des" type="text" class="form-control form-control-sm">
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12 col-md-12">
-                    <div class="form-floating my-2">
-                      <input v-model="item.des" type="text" class="form-control">
-                      <label>شرح</label>
                     </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-6 px-1" v-for="(item, index) in banks">
+          <div class="col-sm-12 col-md-12 mt-2" v-for="(item, index) in banks">
             <div class="block block-rounded border border-gray">
-              <div class="block-header bg-warning">
+              <div class="block-header bg-light py-1">
                 <h3 class="block-title">
                   <small class="text-black">
                     <span class="mx-2">{{ index + 1 }}</span>
@@ -94,16 +113,14 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button title="حذف" class="btn-block-option text-white ps-2" @click="removeBank(index)">
+                  <button title="حذف" class="btn-block-option text-danger ps-2" @click="removeBank(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
               </div>
               <div class="block-content-sm mx-2">
-                <div class="row">
-                  <div class="col-sm-12 col-md-12">
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12">
+                <div class="row mb-1">
+                      <div class="col-sm-12 col-md-4">
                         <small class="mb-2">بانک</small>
                         <v-select dir="rtl" :options="listBanks" label="name" v-model="item.id"
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
@@ -113,28 +130,22 @@
                           </template>
                         </v-select>
                       </div>
-                      <div class="col-sm-12 col-md-12">
+                      <div class="col-sm-12 col-md-4">
                         <small class="mb-2">مبلغ</small>
-                        <money3 @change="calc()" class="form-control" v-model="item.amount" v-bind="currencyConfig">
+                        <money3 @change="calc()" class="form-control form-control-sm" v-model="item.amount" v-bind="currencyConfig">
                         </money3>
                       </div>
+                      <div class="col-sm-12 col-md-4">
+                        <small>شرح</small>
+                        <input v-model="item.des" type="text" class="form-control form-control-sm">
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12 col-md-12">
-                    <div class="form-floating my-2">
-                      <input v-model="item.des" type="text" class="form-control">
-                      <label>شرح</label>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-6 px-1" v-for="(item, index) in salarys">
+          <div class="col-sm-12 col-md-12 " v-for="(item, index) in salarys">
             <div class="block block-rounded border border-gray">
-              <div class="block-header bg-info">
+              <div class="block-header bg-light py-1">
                 <h3 class="block-title">
                   <small class="text-black">
                     <span class="mx-2">{{ index + 1 }}</span>
@@ -143,18 +154,16 @@
                   </small>
                 </h3>
                 <span class="block-options">
-                  <button title="حذف" class="btn-block-option text-white ps-2" @click="removeSalary(index)">
+                  <button title="حذف" class="btn-block-option text-danger ps-2" @click="removeSalary(index)">
                     <i class="fa fa-trash"></i>
                   </button>
                 </span>
               </div>
               <div class="block-content-sm mx-2">
-                <div class="row">
-                  <div class="col-sm-12 col-md-12">
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12">
+                <div class="row mb-1">
+                      <div class="col-sm-12 col-md-4">
                         <small class="mb-2">تنخواه گردان</small>
-                        <v-select @change="alert()" dir="rtl" :options="listSalarys" label="name" v-model="item.id"
+                        <v-select dir="rtl" :options="listSalarys" label="name" v-model="item.id"
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
                           @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
@@ -162,28 +171,22 @@
                           </template>
                         </v-select>
                       </div>
-                      <div class="col-sm-12 col-md-12">
+                      <div class="col-sm-12 col-md-4">
                         <small class="mb-2">مبلغ</small>
-                        <money3 @change="calc()" class="form-control" v-model="item.amount" v-bind="currencyConfig">
+                        <money3 @change="calc()" class="form-control form-control-sm" v-model="item.amount" v-bind="currencyConfig">
                         </money3>
                       </div>
+                       <div class="col-sm-12 col-md-4">
+                        <small>شرح</small>
+                          <input v-model="item.des" type="text" class="form-control form-control-sm">
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12 col-md-12">
-                    <div class="form-floating my-2">
-                      <input v-model="item.des" type="text" class="form-control">
-                      <label>شرح</label>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-6 px-1" v-for="(item, index) in cashdesks">
+          <div class="col-sm-12 col-md-12 " v-for="(item, index) in cashdesks">
             <div class="block block-rounded border border-gray">
-              <div class="block-header bg-light">
+              <div class="block-header bg-light py-1">
                 <h3 class="block-title">
                   <small class="text-black">
                     <span class="mx-2">{{ index + 1 }}</span>
@@ -198,12 +201,10 @@
                 </span>
               </div>
               <div class="block-content-sm mx-2">
-                <div class="row">
-                  <div class="col-sm-12 col-md-12">
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12">
+                <div class="row mb-1">
+                      <div class="col-sm-12 col-md-4">
                         <small class="mb-2">صندوق</small>
-                        <v-select @change="alert()" dir="rtl" :options="listCashdesks" label="name" v-model="item.id"
+                        <v-select dir="rtl" :options="listCashdesks" label="name" v-model="item.id"
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
                           @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
@@ -211,28 +212,22 @@
                           </template>
                         </v-select>
                       </div>
-                      <div class="col-sm-12 col-md-12">
+                      <div class="col-sm-12 col-md-4">
                         <small class="mb-2">مبلغ</small>
-                        <money3 @change="calc()" class="form-control" v-model="item.amount" v-bind="currencyConfig">
+                        <money3 @change="calc()" class="form-control form-control-sm" v-model="item.amount" v-bind="currencyConfig">
                         </money3>
                       </div>
+                       <div class="col-sm-12 col-md-4">
+                        <small>شرح</small>
+                          <input v-model="item.des" type="text" class="form-control form-control-sm">
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12 col-md-12">
-                    <div class="form-floating my-2">
-                      <input v-model="item.des" type="text" class="form-control">
-                      <label>شرح</label>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-6 px-1" v-for="(item, index) in persons">
+          <div class="col-sm-12 col-md-12 " v-for="(item, index) in persons">
             <div class="block block-rounded border border-gray">
-              <div class="block-header bg-light">
+              <div class="block-header bg-light py-1">
                 <h3 class="block-title">
                   <small class="text-black">
                     <span class="mx-2">{{ index + 1 }}</span>
@@ -248,12 +243,9 @@
                 </span>
               </div>
               <div class="block-content-sm mx-2">
-                <div class="row">
-                  <div class="col-sm-12 col-md-12">
-                    <div class="row">
-                      <div class="col-sm-12 col-md-12">
+               <div class="row mb-1">
+                      <div class="col-sm-12 col-md-4">
                         <small class="mb-2">شخص</small>
-
                         <v-select :filterable="false" @search="searchPerson" class="" dir="rtl" :options="listPersons"
                           label="nikename" v-model="item.id">
                           <template v-slot:option="option">
@@ -284,74 +276,16 @@
                           </template>
                         </v-select>
                       </div>
-                      <div class="col-sm-12 col-md-12">
+                      <div class="col-sm-12 col-md-4">
                         <small class="mb-2">مبلغ</small>
-                        <money3 @change="calc()" class="form-control" v-model="item.amount" v-bind="currencyConfig">
+                        <money3 @change="calc()" class="form-control form-control-sm" v-model="item.amount" v-bind="currencyConfig">
                         </money3>
                       </div>
+                      <div class="col-sm-12 col-md-4">
+                        <small>شرح</small>
+                        <input v-model="item.des" type="text" class="form-control form-control-sm">
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12 col-md-12">
-                    <div class="form-floating my-2">
-                      <input v-model="item.des" type="text" class="form-control">
-                      <label>شرح</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12 text-end">
-            <div class="row">
-              <div class="col-6 text-end">
-                <button @click="addItem()" class="btn btn-primary mx-1">
-                  <i class="fa fa-plus"></i>
-                  افزودن آیتم
-                </button>
-              </div>
-              <div class="col-6 text-start">
-                <div class="dropdown dropup">
-                  <button aria-expanded="false" aria-haspopup="true" class="btn btn-danger dropdown-toggle"
-                    data-bs-toggle="dropdown" id="dropdown-dropup-secondary" type="button"> افزودن حساب </button>
-                  <div aria-labelledby="dropdown-dropup-secondary" class="border border-danger dropdown-menu" style="">
-                    <button @click="addBank()" type="button" class="dropdown-item">
-                      <i class="fa fa-bank"></i>
-                      حساب بانکی
-                    </button>
-                    <button @click="addCashdesk()" type="button" class="dropdown-item" href="javascript:void(0)">
-                      <i class="fa fa-money-bill-wheat"></i>
-                      صندوق
-                    </button>
-                    <button @click="addSalary()" type="button" class="dropdown-item" href="javascript:void(0)">
-                      <i class="fa fa-dot-circle"></i>
-                      تنخواه گردان
-                    </button>
-                    <button @click="addPerson()" type="button" class="dropdown-item" href="javascript:void(0)">
-                      <i class="fa fa-person"></i>
-                      شخص
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="container border border-danger rounded-2 my-3 p-3">
-          <div class="row">
-            <div class="row">
-              <div class="col-12 border-bottom border-danger">
-                مجموع دریافت‌ها:
-                <span class="text-danger">{{ $filters.formatNumber(sum) }}</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12 border-top border-danger">
-                باقی‌مانده:
-                <span class="text-danger">{{ $filters.formatNumber(balance) }}</span>
               </div>
             </div>
           </div>
@@ -601,6 +535,18 @@ export default {
       });
     },
     save() {
+      let haszero = false;
+      this.costs.forEach((item) => {
+        if (item.amount == null || item.amount == 0) {
+          Swal.fire({
+          text: 'مبلغ صفر نامعتبر است',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+        haszero =  true;
+        }
+      })
+
       if (this.costs.length == 0) {
         Swal.fire({
           text: 'انتخاب حداقل یک مرکز هزینه الزامی است.',
@@ -649,7 +595,7 @@ export default {
           confirmButtonText: 'قبول'
         });
       }
-      if (personOK && sideOK) {
+      if (personOK && sideOK && ! haszero) {
         //going to save in api
         //save costs pattern
         let rows = [];
