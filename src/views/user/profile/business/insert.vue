@@ -308,11 +308,11 @@ export default {
   watch: {
     'content.year.start': {
       handler: function (val, oldVal) {
-       let year = this.content.year.start.split('-');
+       let year = this.content.year.start.split('/');
        year[0] = parseInt(year[0]) + 1;
-       this.content.year.end = year.join('-');
+       this.content.year.end = year.join('/');
        year.reverse();
-       this.content.year.label = "سال مالی منتهی به " + year.join('-');
+       this.content.year.label = "سال مالی منتهی به " + year.join('/');
       },
       deep: true
     },

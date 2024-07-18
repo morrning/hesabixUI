@@ -209,7 +209,7 @@
             </div>
           </div>
         </div>
-        <div v-show="this.isPluginActive('accpro')" class="row mt-2">
+        <div v-show="this.isPluginActive('repservice')" class="row mt-2">
           <b>افزونه تعمیرکاران</b>
           <div class="col-sm-12 col-md-4">
             <div class="space-y-2">

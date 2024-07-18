@@ -1,4 +1,51 @@
 <template>
+  <!-- Modal -->
+  <div class="modal modal-lg fade" id="pricesModal" tabindex="-1" aria-labelledby="pricesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-primary-dark" id="pricesModalLabel">
+            سایر قیمت‌های فروش
+          </h1>
+          <div class="block-options">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-12 col-md-12" v-for="price in data.prices">
+              <div class="row">
+                <div class="col-sm-6 col-md-6">
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" readonly="readonly"
+                      v-model="price.list.label">
+                    <label for="floatingInput">لیست</label>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6">
+                  <div class="form-floating mb-3">
+                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="price.priceSell" />
+                    <label for="floatingInput">قیمت فروش</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-12" v-if="data.prices.length == 0 && this.isLoading == false">
+              <h5 class="text-danger">تاکنون هیچ لیست قیمتی ایجاد نشده است.برای ثبت قیمت‌های فرعی ابتدا یک لیست ایجاد
+                کنید.</h5>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            <i class="fa fa-save me-2"></i>
+            ثبت
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="block block-content-full ">
     <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
@@ -68,23 +115,30 @@
               <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceBuy" />
               <label class="form-label">قیمت خرید</label>
             </div>
-            <div class="form-floating mb-4">
-              <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceSell" />
-              <label class="form-label">قیمت فروش</label>
+            <div class="input-group mb-3">
+              <button  v-if="isPluginActive('accpro')" class="input-group-text bg-alt-primary" type="button" title="لیست قیمت‌ها" data-bs-toggle="modal"
+                data-bs-target="#pricesModal">
+                <i class="fa fa-list"></i>
+              </button>
+              <div class="form-floating">
+                <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceSell" />
+                <label class="form-label">قیمت فروش</label>
+              </div>
             </div>
           </div>
           <div class="col-sm-12 col-md-12 mb-4">
             <small class="mb-2">دسته بندی</small>
             <select class="form-select" aria-label="دسته‌بندی" v-model="this.data.cat">
-              <option v-for="(item, index) in listCats" :value="item.id">{{item.name}}</option>
+              <option v-for="(item, index) in listCats" :value="item.id">{{ item.name }}</option>
             </select>
           </div>
           <div class="row mx-0 px-0">
             <div class="col-sm-12 col-md-12">
               <div class="form-floating mb-4">
-                <input placeholder="بارکد‌ها را با ; از هم جدا کنید" v-model="data.barcodes" class="form-control" type="text">
+                <input placeholder="بارکد‌ها را با ; از هم جدا کنید" v-model="data.barcodes" class="form-control"
+                  type="text">
                 <label class="form-label">
-                   بارکد‌ها
+                  بارکد‌ها
                   <small class="text-danger">
                     (بارکد‌ها را با ; از هم جدا کنید)
                   </small>
@@ -159,7 +213,9 @@ export default {
   data: () => {
     return {
       isLoading: false,
+      plugins:[],
       units: '',
+      priceList: [],
       data: {
         name: '',
         priceSell: 0,
@@ -175,41 +231,66 @@ export default {
         dayLoading: 0,
         speedAccess: false,
         withoutTax: false,
-        barcodes: ''
-    },
-    listCats:[],
-    currencyConfig:{
-      masked: false,
-      prefix: '',
-      suffix: 'ریال',
-      thousands: ',',
-      decimal: '.',
-      precision: 0,
-      disableNegative: false,
-      disabled: false,
-      min: 0,
-      max: null,
-      allowBlank: false,
-      minimumNumberOfCharacters: 0,
-      shouldRound: true,
-      focusOnRight: false,
-    },
-  }},
+        barcodes: '',
+        prices: []
+      },
+      listCats: [],
+      currencyConfig: {
+        masked: false,
+        prefix: '',
+        suffix: 'ریال',
+        thousands: ',',
+        decimal: '.',
+        precision: 0,
+        disableNegative: false,
+        disabled: false,
+        min: 0,
+        max: null,
+        allowBlank: false,
+        minimumNumberOfCharacters: 0,
+        shouldRound: true,
+        focusOnRight: false,
+      },
+    }
+  },
   mounted() {
     this.loadData(this.$route.params.id);
   },
-  beforeRouteUpdate(to,from){
+  beforeRouteUpdate(to, from) {
     this.loadData(to.params.id);
   },
   methods: {
+    isPluginActive(plugName) {
+      return this.plugins[plugName] !== undefined;
+    },
     loadData(id = '') {
       this.isLoading = true;
+      //get active plugins
+      axios.post('/api/plugin/get/actives',).then((response) => {
+        this.plugins = response.data;
+      });
+
       axios.post('/api/commodity/units').then((response) => {
         this.units = response.data;
       });
+
+      if (id == '') {
+        axios.get('/api/commodity/pricelist/list').then((response) => {
+          this.priceList = response.data;
+          this.priceList.forEach((item) => {
+            this.data.prices.push({
+              id: 0,
+              priceBuy: 0,
+              priceSell: 0,
+              list: item
+            });
+          });
+        });
+      }
+
       axios.post('/api/commodity/cat/get/line').then((response) => {
         this.listCats = response.data;
-        if(!this.$route.params.id){
+        if (!this.$route.params.id) {
           this.data.cat = response.data[1]
         }
       });
@@ -218,6 +299,10 @@ export default {
         this.isLoading = true;
         axios.post('/api/commodity/info/' + id).then((response) => {
           this.data = response.data;
+          if (this.data.prices.length == 0) {
+            console.log(this.priceList);
+            this.data.prices = this.priceList;
+          }
         });
       }
       this.isLoading = false;

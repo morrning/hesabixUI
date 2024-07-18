@@ -513,6 +513,16 @@ export default {
                     دسته‌بندی‌ها</span>
                 </router-link>
               </li>
+              <li v-if="permissions.commodity && this.isPluginActive('accpro')" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/commodity/pricelist/list/">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list"></i>
+                    لیست‌های قیمت
+                  </span>
+                  <router-link to="/acc/commodity/pricelist/mod/"
+                    class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </router-link>
+              </li>
               <li class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/commodity/drop/list">
                   <span class="nav-main-link-name">

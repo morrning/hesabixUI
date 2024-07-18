@@ -73,7 +73,7 @@
                             <i class="fa fa-bars"></i>
                             تراز:
                             {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
-          parseInt(option.bd))) }}
+  parseInt(option.bd))) }}
                             <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                               بدهکار </span>
                             <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
@@ -129,6 +129,12 @@
             <div class="modal-header">
               <h1 class="modal-title text-primary fs-5" id="addCommodityModalLabel">افزودن اقلام فاکتور</h1>
               <div class="block-options">
+                <span class="float-start me-3" v-if="isPluginActive('accpro')">
+                  <select v-model="selectedPriceList" class="form-select form-select-sm border border-danger"
+                    aria-label="Small select example">
+                    <option v-for="pl in priceList" :value="pl">{{ pl.label }}</option>
+                  </select>
+                </span>
                 <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
             </div>
@@ -204,9 +210,18 @@
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-3 mb-2">
-                    <div class="form-floating mb-3">
-                      <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
-                      <label for="floatingInput">قیمت واحد</label>
+                    <div class="input-group mb-3">
+                      <div  v-if="isPluginActive('accpro')" class="form-floating">
+                        <select v-model="selectedPriceList" class="form-select"
+                          aria-label="Small select example">
+                          <option v-for="pl in priceList" :value="pl">{{ pl.label }}</option>
+                        </select>
+                        <label for="floatingInputGroup1">لیست قیمت</label>
+                      </div>
+                      <div class="form-floating mb-3">
+                        <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
+                        <label for="floatingInput">قیمت واحد</label>
+                      </div>
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-3 mb-2">
@@ -363,10 +378,8 @@ import { ref } from "vue";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
-import Treeselect from 'vue3-treeselect'
 import quickView from "../component/person/quickView.vue";
 // import the styles
-import 'vue3-treeselect/dist/vue3-treeselect.css'
 import { Money3 } from "v-money3";
 import quickAdd from "../component/person/quickAdd.vue";
 import quickAddCommodity from "../component/commodity/quickAddCommodity.vue";
@@ -377,7 +390,6 @@ export default {
   components: {
     Money3,
     Loading,
-    Treeselect,
     quickView,
     quickAdd,
     quickAddCommodity,
@@ -385,6 +397,9 @@ export default {
   },
   data: () => {
     return {
+      priceList: [],
+      selectedPriceList: '',
+      plugins: {},
       maliyatCheck: true,
       maliyatPercent: 0,
       bid: {
@@ -452,7 +467,7 @@ export default {
         transferCost: 0,
         discountAll: 0
       },
-      year: '',
+      year: {},
       persons: [],
       commodity: [],
       units: [],
@@ -559,6 +574,9 @@ export default {
     this.loadData(to.params.id);
   },
   methods: {
+    isPluginActive(plugName) {
+      return this.plugins[plugName] !== undefined;
+    },
     searchPerson(query, loading) {
       loading(true);
       axios.post('/api/person/list/search', { search: query }).then((response) => {
@@ -657,6 +675,14 @@ export default {
     },
     loadData() {
       this.isLoading = true;
+
+      axios.get('/api/commodity/pricelist/list')
+        .then((response) => {
+          this.priceList = response.data;
+          if (this.priceList.length != 0) {
+            this.selectedPriceList = this.priceList[0];
+          }
+        });
       //load year
       axios.get('/api/year/get').then((response) => {
         this.year = response.data;
@@ -683,14 +709,10 @@ export default {
         }
         else {
           Swal.fire({
-            text: 'برای ثبت فاکتور خرید ابتدا یک کالای جدید تعریف کنید.',
+            text: 'برای ثبت فاکتور ابتدا یک کالای جدید تعریف کنید.',
             icon: 'warning',
             confirmButtonText: 'تعریف کالای جدید'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.$router.push('/acc/commodity/mod/');
-            }
-          });
+          })
         }
       });
       //load commodity units
@@ -698,8 +720,12 @@ export default {
         this.units = response.data;
       });
 
-      //load data for edit document
+      //get active plugins
+      axios.post('/api/plugin/get/actives',).then((response) => {
+        this.plugins = response.data;
+      });
 
+      //load data for edit document
       if (this.$route.params.id != '') {
         axios.get('/api/sell/get/info/' + this.$route.params.id).then((response) => {
           this.data.date = response.data.date;

@@ -260,6 +260,29 @@ const router = createRouter({
                 import ('../views/commodity/cat/list.vue'),
         },
         {
+            path: '/acc/commodity/pricelist/list',
+            name: 'commodity_pricelist_list',
+            component: () =>
+                import ('../views/commodity/priceList/list.vue'),
+        },
+        {
+            path: '/acc/commodity/pricelist/mod/:id?',
+            name: 'commodity_pricelist_mod',
+            component: () =>
+                import ('../views/commodity/priceList/mod.vue'),
+        },
+        {
+            path: '/acc/commodity/pricelist/view/:id?',
+            name: 'commodity_pricelist_view',
+            component: () =>
+                import ('../views/commodity/priceList/view.vue'),
+        }, {
+            path: '/acc/commodity/pricelist/list/mod/:id?',
+            name: 'commodity_pricelist_list_mod',
+            component: () =>
+                import ('../views/commodity/priceList/pricelistedit.vue'),
+        },
+        {
             path: '/acc/commodity/drop/list',
             name: 'commodity_drop_list',
             component: () =>
