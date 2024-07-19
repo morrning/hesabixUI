@@ -129,12 +129,6 @@
             <div class="modal-header">
               <h1 class="modal-title text-primary fs-5" id="addCommodityModalLabel">افزودن اقلام فاکتور</h1>
               <div class="block-options">
-                <span class="float-start me-3" v-if="isPluginActive('accpro')">
-                  <select v-model="selectedPriceList" class="form-select form-select-sm border border-danger"
-                    aria-label="Small select example">
-                    <option v-for="pl in priceList" :value="pl">{{ pl.label }}</option>
-                  </select>
-                </span>
                 <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
             </div>
@@ -398,7 +392,10 @@ export default {
   data: () => {
     return {
       priceList: [],
-      selectedPriceList: '',
+      selectedPriceList: {
+        id: 0,
+        label: 'پیشفرض'
+      },
       plugins: {},
       maliyatCheck: true,
       maliyatPercent: 0,
@@ -523,7 +520,18 @@ export default {
     },
     'itemData.commodity': function (newVal, oldVal) {
       if (newVal != '') {
-        this.itemData.price = this.itemData.commodity.priceSell;
+        //fetch price
+        if(this.selectedPriceList.id == 0){
+          this.itemData.price = this.itemData.commodity.priceSell;
+        }
+        else{
+          const arr = Array.from(this.itemData.commodity.prices);
+          arr.forEach((item)=>{
+            if(item.list.id == this.selectedPriceList.id){
+              this.itemData.price = item.priceSell;
+            }
+          });
+        }
         this.unitConfig.precision = this.itemData.commodity.unitData.floatNumber;
       }
       this.itemData.des = this.itemData.commodity.des;
@@ -534,6 +542,22 @@ export default {
         this.itemsSelected.forEach((item) => {
           this.sumSelected += parseFloat(item.sumTotal);
         })
+      },
+      deep: true
+    },
+    selectedPriceList: {
+      handler: function (val, oldVal) {
+        if(this.selectedPriceList.id == 0){
+          this.itemData.price = this.itemData.commodity.priceSell;
+        }
+        else{
+          const arr = Array.from(this.itemData.commodity.prices);
+          arr.forEach((item)=>{
+            if(item.list.id == this.selectedPriceList.id){
+              this.itemData.price = item.priceSell;
+            }
+          });
+        }
       },
       deep: true
     },
@@ -679,9 +703,10 @@ export default {
       axios.get('/api/commodity/pricelist/list')
         .then((response) => {
           this.priceList = response.data;
-          if (this.priceList.length != 0) {
-            this.selectedPriceList = this.priceList[0];
-          }
+          this.priceList.push({
+            id: 0,
+            label: 'پیشفرض'
+          });
         });
       //load year
       axios.get('/api/year/get').then((response) => {

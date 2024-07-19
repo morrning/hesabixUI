@@ -276,15 +276,21 @@ export default {
 
       if (id == '') {
         axios.get('/api/commodity/pricelist/list').then((response) => {
-          this.priceList = response.data;
-          this.priceList.forEach((item) => {
-            this.data.prices.push({
-              id: 0,
-              priceBuy: 0,
-              priceSell: 0,
-              list: item
+          if (response.data.length == 0) {
+            this.data.prices = [];
+          }
+          else {
+            this.priceList = response.data;
+            this.priceList.forEach((item) => {
+              this.data.prices.push({
+                id: 0,
+                priceBuy: 0,
+                priceSell: 0,
+                list: item
+              });
             });
-          });
+          }
+
         });
       }
 
