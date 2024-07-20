@@ -14,13 +14,4 @@
     --easy-table-rows-per-page-selector-z-index: 1;
 }
 
-#fixed-header {
-    top: 0px;
-    left: 0;
-    right: 0;
-    z-index: 1030;
-    min-width: 320px;
-    max-width: 100%;
-    width: auto;
-    position: sticky;
-}
+#fixed-header {}
