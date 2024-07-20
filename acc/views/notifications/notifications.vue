@@ -34,7 +34,7 @@ export default defineComponent({
 
 <template>
   <div class="block block-content-full">
-    <div class="block-header block-header-default bg-gray-light" >
+    <div id="fixed-header" class="block-header block-header-default bg-gray-light" >
       <h3 class="block-title text-primary-dark">
         <i class="fa fa-bell"></i>
         اعلان‌ها

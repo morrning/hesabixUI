@@ -1,6 +1,6 @@
 <template>
   <div class="block block-content-full ">
-    <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
+    <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
         <i class="mx-2 fa fa-cash-register"></i>
         درآمدها

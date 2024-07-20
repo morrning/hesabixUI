@@ -31,7 +31,7 @@ export default defineComponent({
 
 <template>
   <div class="block block-content-full ">
-    <div class="block-header block-header-default bg-gray-light pt-2 pb-1">
+    <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
         <a @click.prevent="this.$router.back()" class="btn text-warning mx-2 px-2">
           <i class="fa fw-bold fa-arrow-right"></i>
