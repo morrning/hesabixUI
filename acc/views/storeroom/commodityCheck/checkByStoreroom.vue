@@ -67,7 +67,7 @@ export default defineComponent({
     </div>
     <div class="block-content pt-1 pb-3 dm-print">
       <div class="row">
-        <div id="hide-on-print" class="col-sm-12 col-md-12 px-0 mb-2">
+        <div  class="col-sm-12 col-md-12 px-0 mb-2">
           <div class="form-control">
             <label class="form-label">
               انبار :

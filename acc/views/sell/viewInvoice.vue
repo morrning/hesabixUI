@@ -191,7 +191,7 @@ export default defineComponent({
 
 <template>
   <div class="block block-content-full">
-    <div id="fixed-header" class="block-header block-header-default bg-gray-light" id="hide-on-print">
+    <div id="fixed-header" class="block-header block-header-default bg-gray-light" >
       <h3 class="block-title text-primary-dark">
         <button @click="this.$router.back()" type="button"
           class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
