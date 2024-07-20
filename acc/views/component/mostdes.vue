@@ -3,19 +3,45 @@ import axios from 'axios';
 import { defineComponent } from 'vue'
 import Swal from "sweetalert2";
 import { ref } from 'vue';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
 
 export default defineComponent({
   name: "mostdes",
+  components: {
+    Loading
+  },
   props: {
     submitData: Object,
     type: String
+  },
+  watch: {
+    search: {
+      handler: function (val, oldVal) {
+        if (val == '') {
+          this.items = this.orgItems;
+        }
+        else {
+          const temp = [];
+          this.orgItems.forEach((item) => {
+            if (item.des.includes(val)) {
+              temp.push(item);
+            }
+          });
+          this.items = temp.slice();
+        }
+      },
+      deep: false
+    },
   },
   data: () => {
     return {
       loading: ref(false),
       items: [],
+      orgItems: [],
       des: '',
-      selected: 0
+      selected: 0,
+      search: ''
     }
   },
   methods: {
@@ -24,7 +50,9 @@ export default defineComponent({
       axios.post('/api/mostdes/list', {
         type: this.$props.type
       }).then((response) => {
-        this.items = response.data;
+        this.items = response.data.slice();
+        this.orgItems = response.data.slice();
+        this.search = '';
         this.loading = false;
       });
     },
@@ -87,7 +115,7 @@ export default defineComponent({
   <!-- Modal -->
   <div class="modal modal-lg fade" id="mostDesModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="mostDesModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header bg-primary-light text-white">
           <h1 class="modal-title fs-5" id="mostDesModalLabel">شرح‌های تکراری</h1>
@@ -96,12 +124,12 @@ export default defineComponent({
           </div>
         </div>
         <div class="modal-body">
-          <div class="input-group mb-3">
-            <input v-model="des" type="text" class="form-control" placeholder="شرح" aria-label="افزودن شرح پرتکرار"
-              aria-describedby="button-addon1">
-            <button :disabled="this.loading" @click="save()" class="btn btn-outline-success" type="button"
-              id="button-addon1">ثبت</button>
-
+          <Loading color="blue" loader="dots" v-model:active="loading" :is-full-page="false" />
+          <div class="input-group mb-1" v-if="orgItems.length > 6">
+            <span class="input-group-text">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <input type="text" v-model="search" class="form-control" placeholder="جست و جو">
           </div>
 
           <ul :disabled="this.loading" class="list-group">
@@ -118,10 +146,19 @@ export default defineComponent({
 
             </li>
           </ul>
-          <div v-if="items.length == 0">
+          <div v-if="items.length == 0 && loading == false">
             موردی یافت نشد
           </div>
         </div>
+        <div class="modal-footer">
+          <div class="input-group mb-1">
+            <input v-model="des" type="text" class="form-control" placeholder="افزودن شرح پرتکرار جدید" aria-label="افزودن شرح پرتکرار"
+              aria-describedby="button-addon1">
+            <button :disabled="this.loading" @click="save()" class="btn btn-outline-success" type="button"
+              id="button-addon1">افزودن</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
