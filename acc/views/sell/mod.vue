@@ -663,6 +663,13 @@ export default {
           confirmButtonText: 'قبول'
         });
       }
+      else if (this.itemData.sumTotal == 0) {
+        Swal.fire({
+          text: 'جمع کل صفر شده است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
       else {
         this.items.push(this.itemData);
         this.itemData = {
