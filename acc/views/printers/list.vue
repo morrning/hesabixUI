@@ -16,7 +16,7 @@
         </button>
 
         <!-- Modal -->
-        <div class="modal fade" id="PrintNewModal" tabindex="-1" aria-labelledby="printerModalLabel" aria-hidden="true">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="PrintNewModal" tabindex="-1" aria-labelledby="printerModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">

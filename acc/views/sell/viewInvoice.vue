@@ -216,7 +216,7 @@ export default defineComponent({
           <span class="d-none d-sm-inline-block">ثبت دریافت</span>
         </button>
         <!-- Modal -->
-        <div class="modal fade" id="rec-modal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="rec-modal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
           <rec ref="submitPay" :windowsState="this.PayWindowsState" :person="this.person.id"
             :original-doc="this.item.doc.code" :total-amount="parseInt(this.item.doc.amount) - parseInt(this.totalRec)">
           </rec>
@@ -226,7 +226,7 @@ export default defineComponent({
           <span class="d-none d-sm-inline-block">دریافت‌ها</span>
         </button>
         <!-- Modal -->
-        <div class="modal fade" id="rec-list-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="rec-list-modal" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
@@ -256,7 +256,7 @@ export default defineComponent({
           <span class="d-none d-sm-inline-block">اشتراک گذاری</span>
         </button>
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">

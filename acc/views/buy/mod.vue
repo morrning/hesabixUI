@@ -122,7 +122,7 @@
       </div>
       <quickAddCommodity></quickAddCommodity>
       <!-- Modal -->
-      <div class="modal modal-xl fade" id="addCommodityModal" tabindex="-1" aria-labelledby="addCommodityModalLabel"
+      <div class="modal modal-xl fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addCommodityModal" tabindex="-1" aria-labelledby="addCommodityModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">

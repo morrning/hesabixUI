@@ -1,6 +1,6 @@
 <template>
   <!-- Modal -->
-  <div class="modal modal-lg fade" id="pricesModal" tabindex="-1" aria-labelledby="pricesModalLabel" aria-hidden="true">
+  <div class="modal modal-lg fade" data-bs-backdrop="static" data-bs-keyboard="false" id="pricesModal" tabindex="-1" aria-labelledby="pricesModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">

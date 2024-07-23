@@ -119,7 +119,7 @@ export default defineComponent({
           <span class="d-none d-sm-inline-block">پرداخت وجه</span>
         </button>
         <!-- Modal -->
-        <div class="modal fade" id="rec-modal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="rec-modal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
@@ -145,7 +145,7 @@ export default defineComponent({
           <span class="d-none d-sm-inline-block">پرداخت‌ها</span>
         </button>
         <!-- Modal -->
-        <div class="modal fade" id="rec-list-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="rec-list-modal" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">

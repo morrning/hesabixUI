@@ -118,7 +118,7 @@ export default defineComponent({
     <span class="d-none d-sm-inline-block">آرشیو</span>
   </button>
   <!-- Modal -->
-  <div class="modal modal-lg fade" id="archiveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal modal-lg fade" data-bs-backdrop="static" data-bs-keyboard="false" id="archiveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">

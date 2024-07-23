@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="modal fade" id="changeSingleStateModal" tabindex="-1" aria-labelledby="changeSingleStateModalLabel"
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="changeSingleStateModal" tabindex="-1" aria-labelledby="changeSingleStateModalLabel"
       aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -75,7 +75,7 @@
         </div>
       </div>
     </div>
-    <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalModalLabel" aria-hidden="true">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="historyModal" tabindex="-1" aria-labelledby="historyModalModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">

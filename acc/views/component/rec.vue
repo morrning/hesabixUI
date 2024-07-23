@@ -277,7 +277,7 @@ export default defineComponent({
 
 <template>
 
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel1">
