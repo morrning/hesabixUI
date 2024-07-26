@@ -34,21 +34,39 @@ export default defineComponent({
         codeeqtesadi:'',
         keshvar:'',
         ostan:'',
-        shahr:''
-      }
+        shahr: ''
+      },
     },
+    headers: [
+      { text: "کالا", value: "commodity" },
+      { text: "تعداد", value: "count" },
+      { text: "مورد نیاز", value: "hesabdariCount" },
+      { text: "باقی‌مانده", value: "remain" },
+    ]
 
-  }},
-  methods:{
-    loadData(){
-      axios.post('/api/storeroom/tickets/info/' + this.$route.params.id).then((response)=> {
+  }
+  },
+  methods: {
+    loadData() {
+      this.loading = true;
+      axios.post('/api/storeroom/tickets/info/' + this.$route.params.id).then((response) => {
         this.item.ticket = response.data.ticket;
         this.item.person = response.data.person;
         this.item.transferType = response.data.transferType;
         this.item.rows = response.data.commodities;
+        this.loading = false;
       });
       axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
         this.bid = response.data;
+      });
+    },
+    printInvoice() {
+      axios.post('/api/storeroom/print/ticket', {
+        'code': this.$route.params.id,
+        'type': this.item.ticket.type
+      }).then((response) => {
+        this.printID = response.data.id;
+        window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
       });
     }
   },
@@ -60,109 +78,113 @@ export default defineComponent({
 
 <template>
   <div class="block block-content-full">
-    <div id="fixed-header" class="block-header block-header-default bg-gray-light"  >
+    <div id="fixed-header" class="block-header block-header-default bg-gray-light">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+        <button @click="this.$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fas fa-file-invoice-dollar"></i>
-        مشاهده و چاپ حواله انبار</h3>
+        مشاهده و چاپ حواله انبار
+      </h3>
       <div class="block-options">
-        <button class="btn btn-sm btn-primary mx-2" onclick="document.getElementById('hide-on-print').classList.add('d-none');Dashmix.helpers('dm-print');" type="button">
+        <button class="btn btn-sm btn-primary mx-2" @click="printInvoice()" type="button">
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ</span>
         </button>
       </div>
     </div>
     <div class="block-content pt-1 pb-3">
-      <div class="c-print container-xl">
-        <div class="row">
-          <div class="col-3 text-center"></div>
-          <div class="col-6 text-center">
-            <h3 class="font-weight-bold">{{ this.bid.legal_name }}</h3>
-            <h5 class=""> {{this.item.ticket.typeString}} انبار</h5>
-          </div>
-          <div class="col-3 text-right">
-            <p>شماره حواله: {{item.ticket.code}}</p>
-            <p>تاریخ حواله: {{item.ticket.date}}</p>
+      <b class="ps-2">اطلاعات حواله انبار</b>
+      <div class="row">
+        <div class="col-sm-6 col-md-2">
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">شماره</span>
+            <input type="text" readonly="readonly" v-model="item.ticket.code" class="form-control"
+              aria-describedby="inputGroup-sizing-sm">
           </div>
         </div>
-        <div class="row">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th class="text-center table-header" colspan="11">مشخصات شخص</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td colspan="11" class="text-right py-0">
-                <div class="row">
-                  <div class="col-6">
-                    <p>
-                      <b>نام شخص حقیقی / حقوقی:</b>
-                      {{ this.item.person.nikename }}</p>
-                    <p>
-                      <b>آدرس:</b>
-                      <span v-show="this.item.person.keshvar">{{ this.item.person.keshvar + ' ' }}</span>
-                      <span v-show="this.item.person.ostan">{{ this.item.person.ostan + ' ' }}</span>
-                      <span v-show="this.item.person.shahr">{{ this.item.person.shahr + ' ' }}</span>
-                      <span v-show="this.item.person.address">{{ this.item.person.address }}</span>
-                    </p>
-                  </div>
-                  <div class="col-3">
-                    <p>
-                      <b>شماره اقتصادی: </b>
-                      {{ this.item.person.codeeghtesadi }}</p>
-                    <p>
-                      <b>کد پستی: </b>
-                      {{ this.item.person.postalcode }}</p>
-                  </div>
-                  <div class="col-3">
-                    <p>
-                      <b>شماره ثبت: </b>
-                      {{ this.item.person.sabt }}</p>
-                    <p>
-                      <b>تلفن / نمابر : </b>
-                      {{ this.item.person.tel }}</p>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            </tbody>
-            <thead>
-            <tr class="text-center table-header">
-              <th style="width:80px">ردیف</th>
-              <th>کد کالا</th>
-              <th>کالا/خدمات</th>
-              <th>واحد</th>
-              <th>شرح</th>
-              <th>تعداد مورد نیاز</th>
-              <th>تعدادثبت شده</th>
-              <th>باقی مانده تعداد</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(commodity, index) in item.rows" class="text-center">
-              <td>{{ index + 1 }}</td>
-              <td>{{ commodity.commodity.code }}</td>
-              <td>{{ commodity.commodity.name }}</td>
-              <td>{{ commodity.commodity.unit.name }}</td>
-              <td>{{ commodity.des }}</td>
-              <td>{{ commodity.hesabdariCount }}</td>
-              <td>{{ commodity.count }}</td>
-              <td>{{ commodity.remain }}</td>
-
-            </tr>
-            <tr style="padding: 60px 0;">
-              <td colspan=6 class="text-right"> امضا  مسئول انبار:
-                {{this.item.ticket.storeroom.manager}}
-              </td>
-            </tr>
-            </tbody>
-          </table>
+        <div class="col-sm-6 col-md-2">
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">نوع</span>
+            <input type="text" readonly="readonly" v-model="item.ticket.typeString" class="form-control"
+              aria-describedby="inputGroup-sizing-sm">
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-2">
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">تاریخ</span>
+            <input type="text" readonly="readonly" v-model="item.ticket.date" class="form-control"
+              aria-describedby="inputGroup-sizing-sm">
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">شرح</span>
+            <input type="text" readonly="readonly" v-model="item.ticket.des" class="form-control"
+              aria-describedby="inputGroup-sizing-sm">
+          </div>
         </div>
       </div>
+      <b class="ps-2">طرف حساب</b>
+      <div class="row">
+        <div class="col-sm-6 col-md-4">
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">نام</span>
+            <input type="text" readonly="readonly" v-model="item.person.nikename" class="form-control"
+              aria-describedby="inputGroup-sizing-sm">
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">موبایل</span>
+            <input type="text" readonly="readonly" v-model="item.person.mobile" class="form-control"
+              aria-describedby="inputGroup-sizing-sm">
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">تلفن</span>
+            <input type="text" readonly="readonly" v-model="item.person.tel" class="form-control"
+              aria-describedby="inputGroup-sizing-sm">
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">کد پستی</span>
+            <input type="text" readonly="readonly" v-model="item.person.postalcode" class="form-control"
+              aria-describedby="inputGroup-sizing-sm">
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-9">
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">آدرس</span>
+            <input type="text" readonly="readonly" v-model="item.person.address" class="form-control"
+              aria-describedby="inputGroup-sizing-sm">
+          </div>
+        </div>
+      </div>
+      <b class="ps-2">اقلام</b>
+      <EasyDataTable table-class-name="customize-table" :headers="headers" :items="item.rows" show-index alternating
+        theme-color="#1d90ff" header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
+        emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
+        <template #item-count="{ count, commodity }">
+          {{ count }} {{ commodity.unit.name }}
+        </template>
+        <template #item-commodity="{ commodity }">
+          {{ commodity.code }} {{ commodity.name }}
+        </template>
+        <template #expand="{ des, referal }">
+          <div class="p-1 m-0 text-start">
+            شرح
+            :
+            {{ des }}
+            <br />
+            ارجاع:
+            {{ referal }}
+          </div>
+        </template>
+      </EasyDataTable>
     </div>
   </div>
 
