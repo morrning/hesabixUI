@@ -6,7 +6,7 @@
         اطلاعات کسب و کار
       </h3>
       <div class="block-options">
-        <button @click="submit()" type="submit" class="btn-success btn mt-2">
+        <button @click="submit()" type="submit" class="btn-success btn btn-sm mx-2">
           <i class="fa fa-save me-2"></i>
           ذخیره تغییرات
         </button>

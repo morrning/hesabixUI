@@ -224,6 +224,12 @@ const router = createRouter({
                 import ('../views/settings/bussiness.vue'),
         },
         {
+            path: '/acc/business/printoptions',
+            name: 'print_settings',
+            component: () =>
+                import ('../views/settings/print.vue'),
+        },
+        {
             path: '/acc/business/avatar',
             name: 'business_avatar',
             component: () =>

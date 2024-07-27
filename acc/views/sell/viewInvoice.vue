@@ -33,8 +33,15 @@ export default defineComponent({
   },
   data: () => {
     return {
-      notes:{
-        count:0
+      printOptions: {
+        pays: true,
+        note: true,
+        bidInfo: true,
+        taxInfo: true,
+        discountInfo: true
+      },
+      notes: {
+        count: 0
       },
       PayWindowsState: {
         submited: false
@@ -70,8 +77,8 @@ export default defineComponent({
       totalRec: 0,
       totalDiscount: 0,
       totalTax: 0,
-      transferCost:0,
-      discountAll:0,
+      transferCost: 0,
+      discountAll: 0,
       mobileHeaders: [
         { text: "کالا", value: "commodity.name" },
         { text: "تعداد", value: "count" },
@@ -133,6 +140,10 @@ export default defineComponent({
         this.bid = response.data;
         this.loading = false;
       });
+      axios.get("/api/printers/options/info").then((response) => {
+        this.isLoading = false;
+        this.printOptions = response.data.sell;
+      })
     },
     sendSMS() {
       this.loading = true;
@@ -170,12 +181,13 @@ export default defineComponent({
 
 
     },
-    printInvoice(pdf = true,cloudePrinters=true) {
-      axios.post('/api/sell/print/invoice', { 
+    printInvoice(pdf = true, cloudePrinters = true) {
+      axios.post('/api/sell/print/invoice', {
         'code': this.$route.params.id,
         'pdf': pdf,
-        'printers':cloudePrinters
-       }).then((response) => {
+        'printers': cloudePrinters,
+        'printOptions': this.printOptions
+      }).then((response) => {
         this.printID = response.data.id;
         window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
       });
@@ -190,8 +202,53 @@ export default defineComponent({
 </script>
 
 <template>
+  <!-- Print Modal -->
+  <div class="modal fade" id="printModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="printModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary-light text-white">
+          <h1 class="modal-title fs-5" id="printModalLabel">چاپ فاکتور</h1>
+          <div class="block-options">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="modal-body">
+        <p>برای تغییر تنظیمات پیشفرض به بخش تنظیمات چاپ مراجعه نمایید</p>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.bidInfo" type="checkbox">
+            <label class="form-check-label">اطلاعات کسب‌وکار</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.pays" type="checkbox">
+            <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.note" type="checkbox">
+            <label class="form-check-label">یاداشت پایین فاکتور</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.taxInfo" type="checkbox">
+            <label class="form-check-label">مالیات به تفکیک اقلام</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.discountInfo" type="checkbox">
+            <label class="form-check-label">تخفیف به تفکیک اقلام</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary mx-2" @click="printInvoice()" type="button">
+            <i class="si si-printer me-1"></i>
+            <span class="">چاپ</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Print Modal -->
+
   <div class="block block-content-full">
-    <div id="fixed-header" class="block-header block-header-default bg-gray-light" >
+    <div id="fixed-header" class="block-header block-header-default bg-gray-light">
       <h3 class="block-title text-primary-dark">
         <button @click="this.$router.back()" type="button"
           class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
@@ -203,7 +260,8 @@ export default defineComponent({
       <div class="block-options">
         <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="sell"
           cat="sell"></archive-upload>
-        <button type="button" class="btn btn-sm btn-warning text-light me-2" data-bs-toggle="modal" data-bs-target="#notesModal">
+        <button type="button" class="btn btn-sm btn-warning text-light me-2" data-bs-toggle="modal"
+          data-bs-target="#notesModal">
           <span class="badge text-bg-dark me-2">{{ this.notes.count }}</span>
           <i class="fa-regular fa-note-sticky me-1"></i>
           <span class="d-none d-sm-inline-block">یاداشت‌‌ها</span>
@@ -216,7 +274,8 @@ export default defineComponent({
           <span class="d-none d-sm-inline-block">ثبت دریافت</span>
         </button>
         <!-- Modal -->
-        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="rec-modal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="rec-modal" tabindex="-1"
+          aria-labelledby="exampleModalLabel1" aria-hidden="true">
           <rec ref="submitPay" :windowsState="this.PayWindowsState" :person="this.person.id"
             :original-doc="this.item.doc.code" :total-amount="parseInt(this.item.doc.amount) - parseInt(this.totalRec)">
           </rec>
@@ -226,7 +285,8 @@ export default defineComponent({
           <span class="d-none d-sm-inline-block">دریافت‌ها</span>
         </button>
         <!-- Modal -->
-        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="rec-list-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="rec-list-modal" tabindex="-1"
+          aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
@@ -256,7 +316,8 @@ export default defineComponent({
           <span class="d-none d-sm-inline-block">اشتراک گذاری</span>
         </button>
         <!-- Modal -->
-        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="exampleModal" tabindex="-1"
+          aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -316,7 +377,8 @@ export default defineComponent({
             </div>
           </div>
         </div>
-        <button class="btn btn-sm btn-primary mx-2" @click="printInvoice()" type="button">
+        <!-- print trigger modal -->
+        <button type="button" class="btn btn-sm btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#printModal">
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ فاکتور</span>
         </button>
