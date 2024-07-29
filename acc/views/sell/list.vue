@@ -1,4 +1,48 @@
 <template>
+   <!-- Print Modal -->
+   <div class="modal fade" id="printModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="printModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary-light text-white">
+          <h1 class="modal-title fs-5" id="printModalLabel">چاپ فاکتور</h1>
+          <div class="block-options">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="modal-body">
+        <p>برای تغییر تنظیمات پیشفرض به بخش تنظیمات چاپ مراجعه نمایید</p>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.bidInfo" type="checkbox">
+            <label class="form-check-label">اطلاعات کسب‌وکار</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.pays" type="checkbox">
+            <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.note" type="checkbox">
+            <label class="form-check-label">یاداشت پایین فاکتور</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.taxInfo" type="checkbox">
+            <label class="form-check-label">مالیات به تفکیک اقلام</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.discountInfo" type="checkbox">
+            <label class="form-check-label">تخفیف به تفکیک اقلام</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary mx-2" @click="printInvoice()" type="button">
+            <i class="si si-printer me-1"></i>
+            <span class="">چاپ</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Print Modal -->
   <div class="block block-content-full ">
     <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
@@ -85,7 +129,7 @@
                     <i class="fa fa-eye text-info pe-2"></i>
                     مشاهده فاکتور
                   </router-link>
-                  <button class="dropdown-item" @click="printInvoice(code)">
+                  <button class="dropdown-item" @click="printOptions.selectedPrintCode = code" data-bs-toggle="modal" data-bs-target="#printModal">
                     <i class="fa fa-file-pdf pe-2"></i>
                     خروجی PDF
                   </button>
@@ -185,6 +229,14 @@ export default {
   name: "list",
   data: () => {
     return {
+      printOptions: {
+        pays: true,
+        note: true,
+        bidInfo: true,
+        taxInfo: true,
+        discountInfo: true,
+        selectedPrintCode: 0
+      },
       sumSelected: 0,
       sumTotal: 0,
       itemsSelected: [],
@@ -282,6 +334,10 @@ export default {
       this.loading = false;
     },
     loadData() {
+      axios.get("/api/printers/options/info").then((response) => {
+        this.printOptions = response.data.sell;
+      });
+
       axios.post('/api/invoice/types', {
         type: 'sell'
       }).then((response) => {
@@ -361,12 +417,13 @@ export default {
         })
       }
     },
-    printInvoice(code= 0,pdf = true,cloudePrinters=true) {
+    printInvoice(pdf = true,cloudePrinters=true) {
       this.loading = true;
       axios.post('/api/sell/print/invoice', { 
-        'code': code,
+        'code': this.printOptions.selectedPrintCode,
         'pdf': pdf,
-        'printers':cloudePrinters
+        'printers':cloudePrinters,
+        'printOptions': this.printOptions
        }).then((response) => {
         this.loading = false;
         window.open(this.$API_URL + '/front/print/' + response.data.id, '_blank', 'noreferrer');

@@ -570,6 +570,18 @@ const router = createRouter({
                 import ('../views/storeroom/io/sell.vue'),
         },
         {
+            path: '/acc/storeroom/new/ticket/rfbuy/:doc/:storeID',
+            name: 'storeroom_new_ticket_rfbuy',
+            component: () =>
+                import ('../views/storeroom/io/rfbuy.vue'),
+        },
+        {
+            path: '/acc/storeroom/new/ticket/rfsell/:doc/:storeID',
+            name: 'storeroom_new_ticket_rfsell',
+            component: () =>
+                import ('../views/storeroom/io/rfsell.vue'),
+        },
+        {
             path: '/acc/storeroom/list',
             name: 'storeroom_list',
             component: () =>

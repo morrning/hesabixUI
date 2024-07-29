@@ -183,13 +183,13 @@ export default defineComponent({
                 </label>
               </div>
               <div>
-                <div class="form-check d-none">
+                <div class="form-check">
                   <input v-model="this.item.type" value="rfbuy" class="form-check-input" type="radio">
                   <label class="form-check-label">
                     حواله برای فاکتور برگشت از خرید
                   </label>
                 </div>
-                <div class="form-check d-none">
+                <div class="form-check">
                   <input v-model="this.item.type" value="rfsell" class="form-check-input" type="radio">
                   <label class="form-check-label">
                     حواله برای فاکتور برگشت از فروش

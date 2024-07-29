@@ -31,6 +31,13 @@ export default defineComponent({
   },
   data: () => {
     return {
+      printOptions: {
+        pays: true,
+        note: true,
+        bidInfo: true,
+        taxInfo: true,
+        discountInfo: true
+      },
       notes: {
         count: 0
       },
@@ -116,19 +123,23 @@ export default defineComponent({
               table: 120
             });
           }
-
         });
       });
       axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
         this.bid = response.data;
       });
+      axios.get("/api/printers/options/info").then((response) => {
+        this.isLoading = false;
+        this.printOptions = response.data.sell;
+      })
     },
     printInvoice(pdf = true, cloudePrinters = true) {
       this.loading = true;
       axios.post('/api/buy/print/invoice', {
         'code': this.$route.params.id,
         'pdf': pdf,
-        'printers': cloudePrinters
+        'printers': cloudePrinters,
+        'printOptions': this.printOptions
       }).then((response) => {
         this.loading = false;
         this.printID = response.data.id;
@@ -145,6 +156,51 @@ export default defineComponent({
 </script>
 
 <template>
+   <!-- Print Modal -->
+   <div class="modal fade" id="printModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="printModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary-light text-white">
+          <h1 class="modal-title fs-5" id="printModalLabel">چاپ فاکتور</h1>
+          <div class="block-options">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="modal-body">
+        <p>برای تغییر تنظیمات پیشفرض به بخش تنظیمات چاپ مراجعه نمایید</p>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.bidInfo" type="checkbox">
+            <label class="form-check-label">اطلاعات کسب‌وکار</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.pays" type="checkbox">
+            <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.note" type="checkbox">
+            <label class="form-check-label">یاداشت پایین فاکتور</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.taxInfo" type="checkbox">
+            <label class="form-check-label">مالیات به تفکیک اقلام</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.discountInfo" type="checkbox">
+            <label class="form-check-label">تخفیف به تفکیک اقلام</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary mx-2" @click="printInvoice()" type="button">
+            <i class="si si-printer me-1"></i>
+            <span class="">چاپ</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Print Modal -->
+
   <div class="block block-content-full">
     <div id="fixed-header" class="block-header block-header-default bg-gray-light" >
       <h3 class="block-title text-primary-dark">
@@ -226,7 +282,8 @@ export default defineComponent({
             </div>
           </div>
         </div>
-        <button class="btn btn-sm btn-primary mx-2" @click="printInvoice()" type="button">
+         <!-- print trigger modal -->
+        <button type="button" class="btn btn-sm btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#printModal">
           <i class="si si-printer me-1"></i>
           <span class="d-none d-sm-inline-block">چاپ فاکتور</span>
         </button>
