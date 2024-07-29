@@ -238,7 +238,8 @@ export default {
           noteString: '',
           bidInfo: true,
           taxInfo: true,
-          discountInfo: true
+          discountInfo: true,
+          paper: 'A4-L',
         },
         buy: {
           pays: true,
@@ -246,7 +247,8 @@ export default {
           noteString: '',
           bidInfo: true,
           taxInfo: true,
-          discountInfo: true
+          discountInfo: true,
+          paper: 'A4-L',
         },
         rfbuy: {
           pays: true,
@@ -254,7 +256,8 @@ export default {
           noteString: '',
           bidInfo: true,
           taxInfo: true,
-          discountInfo: true
+          discountInfo: true,
+          paper: 'A4-L',
         },
         rfsell: {
           pays: true,
@@ -262,7 +265,8 @@ export default {
           noteString: '',
           bidInfo: true,
           taxInfo: true,
-          discountInfo: true
+          discountInfo: true,
+          paper: 'A4-L',
         }
       }
     }
