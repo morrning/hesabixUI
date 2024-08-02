@@ -44,7 +44,7 @@
               <div class="block-header block-header-default py-1">
                 <h3 class="block-title text-primary">
                   <i class="fa fa-person"></i>
-                  مشتری
+                  طرف حساب
                 </h3>
                 <div class="block-options">
                   <quickView :code="this.data.person.code"></quickView>
@@ -798,7 +798,7 @@ export default {
       }
       else if (this.data.person == null || this.data.person == '') {
         Swal.fire({
-          text: 'مشتری انتخاب نشده است.',
+          text: 'طرف حساب انتخاب نشده است.',
           icon: 'warning',
           confirmButtonText: 'قبول'
         });
@@ -809,7 +809,7 @@ export default {
           type: 'sell',
           date: this.data.date,
           des: this.data.des,
-          buyer: this.data.person,
+          person: this.data.person,
           rows: this.items,
           discountAll:this.data.discountAll,
           transferCost:this.data.transferCost,

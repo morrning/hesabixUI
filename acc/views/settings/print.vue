@@ -69,11 +69,24 @@
                         <label class="form-check-label">تخفیف به تفکیک اقلام</label>
                       </div>
                     </div>
-                    <div class="col-sm-12 col-md-12 mb-2">
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-6 mb-2">
                       <div class="form-floating">
                         <textarea v-model="settings.sell.noteString" class="form-control"
                           placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
                         <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 mb-2">
+                      <div class="form-floating">
+                        <select v-model="settings.sell.paper" class="form-select">
+                          <option value="A4-L">A4 افقی</option>
+                          <option value="A4">A4 عمودی</option>
+                          <option value="A5-L">A5 افقی</option>
+                          <option value="A5">A5 عمودی</option>
+                        </select>
+                        <label>سایز کاغذ و حالت چاپ</label>
                       </div>
                     </div>
                   </div>
@@ -112,11 +125,24 @@
                         <label class="form-check-label">تخفیف به تفکیک اقلام</label>
                       </div>
                     </div>
-                    <div class="col-sm-12 col-md-12 mb-2">
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-6 mb-2">
                       <div class="form-floating">
                         <textarea v-model="settings.buy.noteString" class="form-control"
                           placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
                         <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 mb-2">
+                      <div class="form-floating">
+                        <select v-model="settings.buy.paper" class="form-select">
+                          <option value="A4-L">A4 افقی</option>
+                          <option value="A4">A4 عمودی</option>
+                          <option value="A5-L">A5 افقی</option>
+                          <option value="A5">A5 عمودی</option>
+                        </select>
+                        <label>سایز کاغذ و حالت چاپ</label>
                       </div>
                     </div>
                   </div>
@@ -155,11 +181,24 @@
                         <label class="form-check-label">تخفیف به تفکیک اقلام</label>
                       </div>
                     </div>
-                    <div class="col-sm-12 col-md-12 mb-2">
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-6 mb-2">
                       <div class="form-floating">
                         <textarea v-model="settings.rfbuy.noteString" class="form-control"
                           placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
                         <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 mb-2">
+                      <div class="form-floating">
+                        <select v-model="settings.rfbuy.paper" class="form-select">
+                          <option value="A4-L">A4 افقی</option>
+                          <option value="A4">A4 عمودی</option>
+                          <option value="A5-L">A5 افقی</option>
+                          <option value="A5">A5 عمودی</option>
+                        </select>
+                        <label>سایز کاغذ و حالت چاپ</label>
                       </div>
                     </div>
                   </div>
@@ -198,11 +237,24 @@
                         <label class="form-check-label">تخفیف به تفکیک اقلام</label>
                       </div>
                     </div>
-                    <div class="col-sm-12 col-md-12 mb-2">
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-6 mb-2">
                       <div class="form-floating">
                         <textarea v-model="settings.rfsell.noteString" class="form-control"
                           placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
                         <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 mb-2">
+                      <div class="form-floating">
+                        <select v-model="settings.rfsell.paper" class="form-select">
+                          <option value="A4-L">A4 افقی</option>
+                          <option value="A4">A4 عمودی</option>
+                          <option value="A5-L">A5 افقی</option>
+                          <option value="A5">A5 عمودی</option>
+                        </select>
+                        <label>سایز کاغذ و حالت چاپ</label>
                       </div>
                     </div>
                   </div>

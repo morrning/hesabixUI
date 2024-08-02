@@ -1,6 +1,6 @@
 <template>
-   <!-- Print Modal -->
-   <div class="modal fade" id="printModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  <!-- Print Modal -->
+  <div class="modal fade" id="printModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="printModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -11,7 +11,16 @@
           </div>
         </div>
         <div class="modal-body">
-        <p>برای تغییر تنظیمات پیشفرض به بخش تنظیمات چاپ مراجعه نمایید</p>
+          <p class="mb-2">برای تغییر تنظیمات پیشفرض به بخش تنظیمات چاپ مراجعه نمایید</p>
+          <div class="form-floating mb-2">
+            <select v-model="printOptions.paper" class="form-select">
+              <option value="A4-L">A4 افقی</option>
+              <option value="A4">A4 عمودی</option>
+              <option value="A5-L">A5 افقی</option>
+              <option value="A5">A5 عمودی</option>
+            </select>
+            <label>سایز کاغذ و حالت چاپ</label>
+          </div>
           <div class="form-check form-switch">
             <input class="form-check-input" v-model="printOptions.bidInfo" type="checkbox">
             <label class="form-check-label">اطلاعات کسب‌وکار</label>
@@ -129,7 +138,8 @@
                     <i class="fa fa-eye text-info pe-2"></i>
                     مشاهده فاکتور
                   </router-link>
-                  <button class="dropdown-item" @click="printOptions.selectedPrintCode = code" data-bs-toggle="modal" data-bs-target="#printModal">
+                  <button class="dropdown-item" @click="printOptions.selectedPrintCode = code" data-bs-toggle="modal"
+                    data-bs-target="#printModal">
                     <i class="fa fa-file-pdf pe-2"></i>
                     خروجی PDF
                   </button>
@@ -235,7 +245,8 @@ export default {
         bidInfo: true,
         taxInfo: true,
         discountInfo: true,
-        selectedPrintCode: 0
+        selectedPrintCode: 0,
+        paper:  'A4-L'
       },
       sumSelected: 0,
       sumTotal: 0,

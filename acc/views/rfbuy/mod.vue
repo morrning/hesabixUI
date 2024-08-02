@@ -2,13 +2,15 @@
   <div class="block block-content-full ">
     <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+        <button @click="this.$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         فاکتور برگشت از خرید
       </h3>
       <div class="block-options">
-        <button :disabled="this.canSubmit != true" @click="save()" type="button" class="btn btn-sm btn-alt-primary">
+        <button :disabled="this.canSubmit != true || isLoading == true" @click="save()" type="button"
+          class="btn btn-sm btn-alt-primary">
           <i class="fa fa-save"></i>
           ثبت
         </button>
@@ -42,7 +44,7 @@
               <div class="block-header block-header-default py-1">
                 <h3 class="block-title text-primary">
                   <i class="fa fa-person"></i>
-                  تامین کننده
+                  طرف حساب
                 </h3>
                 <div class="block-options">
                   <quickView :code="this.data.person.code"></quickView>
@@ -71,7 +73,7 @@
                             <i class="fa fa-bars"></i>
                             تراز:
                             {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
-          parseInt(option.bd))) }}
+  parseInt(option.bd))) }}
                             <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                               بدهکار </span>
                             <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
@@ -120,8 +122,8 @@
       </div>
       <quickAddCommodity></quickAddCommodity>
       <!-- Modal -->
-      <div class="modal modal-xl fade"  data-bs-backdrop="static" data-bs-keyboard="false" id="addCommodityModal" tabindex="-1" aria-labelledby="addCommodityModalLabel"
-        aria-hidden="true">
+      <div class="modal modal-xl fade" id="addCommodityModal" tabindex="-1" aria-labelledby="addCommodityModalLabel"
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -133,7 +135,7 @@
             <div class="modal-body">
               <div class="container">
                 <div class="row">
-                  <div class="col-sm-12 col-md-5 mb-2">
+                  <div class="col-sm-12 col-md-5 mb-0">
                     <div class="block block-rounded border">
                       <div class="block-header block-header-default py-1">
                         <h3 class="block-title text-primary">
@@ -179,19 +181,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-2 mb-2">
-                    <label class="form-label">تعداد</label>
-                    <input class="form-control" type="number" min="1" v-model="this.itemData.count" />
-                  </div>
-                  <div class="col-sm-12 col-md-2 mb-2">
-                    <label class="form-label">قیمت واحد</label>
-                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
-                  </div>
-                  <div class="col-sm-12 col-md-3 mb-2">
-                    <label class="form-label">قیمت کل</label>
-                    <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.bs" />
-                  </div>
-                  <div class="col-sm-12 col-md-12 mb-2">
+                  <div class="col-sm-12 col-md-7 mb-2">
                     <div class="block block-rounded border">
                       <div class="block-header block-header-default py-1">
                         <h3 class="block-title text-primary">
@@ -199,12 +189,46 @@
                           شرح
                         </h3>
                         <div class="block-options">
-                          
+
                         </div>
                       </div>
                       <div class="block-content p-0">
                         <input v-model="this.itemData.des" class="form-control" type="text">
                       </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 mb-2">
+                    <div class="form-floating mb-3">
+                      <money3 v-bind="unitConfig" class="form-control" v-model.number="this.itemData.count" />
+                      <label for="floatingInput">{{ itemData.commodity.unitData.name }}</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 mb-2">
+                    <div class="input-group mb-3">
+                      <div  v-if="isPluginActive('accpro')" class="form-floating">
+                        <select v-model="selectedPriceList" class="form-select"
+                          aria-label="Small select example">
+                          <option v-for="pl in priceList" :value="pl">{{ pl.label }}</option>
+                        </select>
+                        <label for="floatingInputGroup1">لیست قیمت</label>
+                      </div>
+                      <div class="form-floating mb-3">
+                        <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
+                        <label for="floatingInput">قیمت واحد</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 mb-2">
+                    <div class="form-floating mb-3">
+                      <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.discount" />
+                      <label for="floatingInput">تخفیف</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-3 mb-2">
+                    <div class="form-floating mb-3">
+                      <money3 readonly="readonly" v-bind="currencyConfig" class="form-control"
+                        v-model.number="this.itemData.sumWithoutTax" />
+                      <label for="floatingInput">قیمت کل</label>
                     </div>
                   </div>
                 </div>
@@ -214,7 +238,7 @@
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
               <button class="btn btn-success" @click="addItem">
                 <i class="fa fa-save"></i>
-                افزودن به فاکتور
+                افزودن
               </button>
             </div>
           </div>
@@ -231,39 +255,102 @@
               <i class="fa fa-plus"></i>
               افزودن ردیف جدید
             </button>
-            <EasyDataTable table-class-name="customize-table" class="mt-3" v-model:items-selected="itemsSelected" show-index alternating :headers="headers"
-              :items="items" theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
-              rowsPerPageMessage="تعداد سطر" emptyMessage="هیچ آیتمی به این فاکتور افزوده نشده است."
-              rowsOfPageSeparatorMessage="از">
+            <EasyDataTable table-class-name="customize-table" class="mt-3" v-model:items-selected="itemsSelected"
+              show-index alternating :headers="headers" :items="items" theme-color="#1d90ff"
+              header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
+              emptyMessage="هیچ آیتمی به این فاکتور افزوده نشده است." rowsOfPageSeparatorMessage="از">
               <template #item-operation="{ index }">
                 <span class="text-danger px-1" @click="deleteItem(index)">
                   <i class="fa fa-trash"></i>
                 </span>
               </template>
+              <template #item-sumTotal="{ sumTotal }">
+                {{ this.$filters.formatNumber(sumTotal) }}
+              </template>
+              <template #item-sumWithoutTax="{ sumWithoutTax }">
+                {{ this.$filters.formatNumber(sumWithoutTax) }}
+              </template>
+              <template #item-price="{ price }">
+                {{ this.$filters.formatNumber(price) }}
+              </template>
+              <template #item-commodity.name="{ commodity }">
+                {{ commodity.code }} - {{ commodity.name }}
+              </template>
+              <template #item-tax="{ tax }">
+                {{ this.$filters.formatNumber(tax) }}
+              </template>
+              <template #item-discount="{ discount }">
+                {{ this.$filters.formatNumber(discount) }}
+              </template>
+              <template #item-count="{ count, commodity }">
+                {{ count }} {{ commodity.unit }}
+              </template>
             </EasyDataTable>
-            <div class="container-fluid p-0 mx-0 my-3">
+            <div class="row mt-2">
+              <div class="col-sm-12 col-md-4">
+                <div class="input-group input-group-sm mb-2">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    <input v-model="maliyatCheck" class="form-check-input mt-0 me-2" type="checkbox"
+                      aria-label="Checkbox for following text input">
+                    مالیات
+                    %
+                  </span>
+                  <money3 :disabled="!maliyatCheck" v-bind="unitConfig" aria-label="مالیات بر ارزش افزوده"
+                    class="form-control" v-model.number="maliyatPercent" />
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4">
+                <div class="input-group input-group-sm mb-2">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    تخفیف
+                  </span>
+                  <money3 v-bind="currencyConfig" aria-label="تخفیف روی فاکتور" class="form-control"
+                    v-model.number="data.discountAll" />
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4">
+                <div class="input-group input-group-sm mb-2">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    حمل و نقل
+                  </span>
+                  <money3 v-bind="currencyConfig" aria-label="مالیات بر ارزش افزوده" class="form-control"
+                    v-model.number="data.transferCost" />
+                </div>
+              </div>
+            </div>
+            <div class="container-fluid p-0 mx-0 mt-2">
               <a class="block block-rounded block-link-shadow border-start border-success border-3"
                 href="javascript:void(0)">
                 <div class="block-content block-content-full block-content-sm bg-body-light">
                   <div class="row">
-                    <div class="col-sm-6 com-md-6">
+                    <div class="col-sm-12 col-md-4">
                       <span class="text-dark">
                         <i class="fa fa-list-dots"></i>
-                        مبلغ کل:
+                        مالیات:
                       </span>
                       <span class="text-primary">
-                        {{ this.$filters.formatNumber(this.sumTotal) }}
+                        {{ this.$filters.formatNumber(this.sumTax) }}
                         ریال
                       </span>
                     </div>
 
-                    <div class="col-sm-6 com-md-6">
+                    <div class="col-sm-12 col-md-4">
                       <span class="text-dark">
                         <i class="fa fa-list-check"></i>
                         جمع مبلغ موارد انتخابی:
                       </span>
                       <span class="text-primary">
                         {{ this.$filters.formatNumber(this.sumSelected) }}
+                        ریال
+                      </span>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                      <span class="text-dark">
+                        <i class="fa fa-list-dots"></i>
+                        جمع کل:
+                      </span>
+                      <span class="text-primary">
+                        {{ this.$filters.formatNumber(this.sumTotal) }}
                         ریال
                       </span>
                     </div>
@@ -285,20 +372,18 @@ import { ref } from "vue";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
-import Treeselect from 'vue3-treeselect'
 import quickView from "../component/person/quickView.vue";
 // import the styles
-import 'vue3-treeselect/dist/vue3-treeselect.css'
 import { Money3 } from "v-money3";
 import quickAdd from "../component/person/quickAdd.vue";
 import quickAddCommodity from "../component/commodity/quickAddCommodity.vue";
 import mostdes from "../component/mostdes.vue";
+import { format, unformat } from "v-money3";
 export default {
   name: "mod",
   components: {
     Money3,
     Loading,
-    Treeselect,
     quickView,
     quickAdd,
     quickAddCommodity,
@@ -306,22 +391,35 @@ export default {
   },
   data: () => {
     return {
-      desSubmit:{
-        id:'',
-        des:''
+      priceList: [],
+      selectedPriceList: {
+        id: 0,
+        label: 'پیشفرض'
+      },
+      plugins: {},
+      maliyatCheck: true,
+      maliyatPercent: 0,
+      bid: {
+        maliyatafzode: 0
+      },
+      desSubmit: {
+        id: '',
+        des: ''
       },
       sumSelected: 0,
+      sumTax: 0,
       sumTotal: 0,
       itemsSelected: [],
       items: [],
       headers: [
-        { text: "کد کالا", value: "commodity.code" },
         { text: "کالا", value: "commodity.name" },
         { text: "شرح", value: "des" },
-        { text: "واحد", value: "commodity.unit" },
-        { text: "تعداد", value: "count" },
+        { text: "تعداد/مقدار", value: "count" },
         { text: "مبلغ واحد", value: "price" },
-        { text: "مبلغ کل", value: "bs" },
+        { text: "تخفیف", value: "discount" },
+        { text: "مالیات", value: "tax" },
+        { text: "جمع بدون مالیات", value: "sumWithoutTax" },
+        { text: "مبلغ کل", value: "sumTotal" },
         { text: "عملیات", value: "operation" },
       ],
       selectedPersonWithDet: {},
@@ -337,34 +435,55 @@ export default {
         thousands: ',',
         decimal: '.',
         precision: 0,
-        disableNegative: false,
+        disableNegative: true,
         disabled: false,
         min: 0,
         max: null,
         allowBlank: false,
-        minimumNumberOfCharacters: 0,
-        shouldRound: true,
-        focusOnRight: false,
+        minimumNumberOfCharacters: 1,
+        shouldRound: false,
+        focusOnRight: true,
+      },
+      unitConfig: {
+        masked: false,
+        prefix: '',
+        suffix: '',
+        thousands: ',',
+        decimal: '.',
+        precision: 0,
+        disableNegative: true,
+        disabled: false,
+        allowBlank: false,
+        shouldRound: false,
+        focusOnRight: true,
       },
       data: {
         date: '',
         des: '',
-        person: ''
+        person: '',
+        transferCost: 0,
+        discountAll: 0
       },
-      year: '',
+      year: {},
       persons: [],
       commodity: [],
       units: [],
       itemData: {
-        commodity: '',
-        count: 1,
-        price: 0,
-        bs: 0,
-        bd: 0,
-        type: 'commodity',
         id: 0,
+        commodity: {
+          unit: '',
+          unitData: {
+            name: '',
+            floatNumber: 0
+          }
+        },
+        count: 0,
+        price: 0,
+        sumTotal: 0,
+        sumWithoutTax: 0,
+        tax: 0,
         des: '',
-        table: 120
+        discount: 0,
       }
     }
   },
@@ -375,12 +494,45 @@ export default {
     'itemData.price': function () {
       this.calc();
     },
+    'itemData.discount': function () {
+      this.calc();
+    },
+    'maliyatCheck': function (item) {
+      if (item === false) {
+        this.maliyatPercent = 0;
+      }
+      else {
+        this.maliyatPercent = this.bid.maliyatafzode;
+      }
+    },
+    'maliyatPercent': function (newVal) {
+      if (this.maliyatPercent == '') {
+        this.maliyatPercent = 0;
+      }
+      this.items.forEach((item, index) => {
+        item.sumWithoutTax = (item.price * item.count) - item.discount;
+        item.tax = (((item.price * item.count) - item.discount) * (newVal)) / 100;
+        item.sumTotal = (((parseFloat(item.price) * parseFloat(item.count)) - parseFloat(item.discount)) * (100 + parseFloat(this.maliyatPercent))) / 100;
+      })
+    },
     'itemData.count': function () {
       this.calc();
     },
     'itemData.commodity': function (newVal, oldVal) {
       if (newVal != '') {
-        this.itemData.price = this.itemData.commodity.priceSell.valueOf();
+        //fetch price
+        if(this.selectedPriceList.id == 0){
+          this.itemData.price = this.itemData.commodity.priceSell;
+        }
+        else{
+          const arr = Array.from(this.itemData.commodity.prices);
+          arr.forEach((item)=>{
+            if(item.list.id == this.selectedPriceList.id){
+              this.itemData.price = item.priceSell;
+            }
+          });
+        }
+        this.unitConfig.precision = this.itemData.commodity.unitData.floatNumber;
       }
       this.itemData.des = this.itemData.commodity.des;
     },
@@ -388,19 +540,44 @@ export default {
       handler: function (val, oldVal) {
         this.sumSelected = 0;
         this.itemsSelected.forEach((item) => {
-          this.sumSelected += parseInt(item.bs.replaceAll(',', ''));
+          this.sumSelected += parseFloat(item.sumTotal);
         })
+      },
+      deep: true
+    },
+    selectedPriceList: {
+      handler: function (val, oldVal) {
+        if(this.selectedPriceList.id == 0){
+          this.itemData.price = this.itemData.commodity.priceSell;
+        }
+        else{
+          const arr = Array.from(this.itemData.commodity.prices);
+          arr.forEach((item)=>{
+            if(item.list.id == this.selectedPriceList.id){
+              this.itemData.price = item.priceSell;
+            }
+          });
+        }
       },
       deep: true
     },
     items: {
       handler: function (val, oldVal) {
-        this.sumTotal = 0;
-        this.items.forEach((item) => {
-          this.sumTotal += parseInt(item.bs.replaceAll(',', ''));
-        })
+        this.calcInvoice();
       },
       deep: true
+    },
+    'data.transferCost': {
+      handler: function (val, oldVal) {
+        this.calcInvoice();
+      },
+      deep: false
+    },
+    'data.discountAll': {
+      handler: function (val, oldVal) {
+        this.calcInvoice();
+      },
+      deep: false
     },
     'data.person': {
       handler: function (val, oldVal) {
@@ -411,6 +588,9 @@ export default {
       deep: true
     },
   },
+  mounted() {
+
+  },
   beforeMount() {
     this.loadData();
   },
@@ -418,6 +598,9 @@ export default {
     this.loadData(to.params.id);
   },
   methods: {
+    isPluginActive(plugName) {
+      return this.plugins[plugName] !== undefined;
+    },
     searchPerson(query, loading) {
       loading(true);
       axios.post('/api/person/list/search', { search: query }).then((response) => {
@@ -433,7 +616,30 @@ export default {
       });
     },
     calc() {
-      this.itemData.bs = this.itemData.price.valueOf() * this.itemData.count.valueOf()
+      this.itemData.sumWithoutTax = (this.itemData.price * this.itemData.count) - this.itemData.discount;
+      if (this.itemData.commodity.withoutTax) {
+        this.itemData.tax = 0;
+        this.itemData.sumTotal = (parseFloat(this.itemData.price) * parseFloat(this.itemData.count)) - parseFloat(this.itemData.discount);
+      }
+      else {
+        this.itemData.tax = (((this.itemData.price * this.itemData.count) - this.itemData.discount) * (this.maliyatPercent)) / 100;
+        this.itemData.sumTotal = (((parseFloat(this.itemData.price) * parseFloat(this.itemData.count)) - parseFloat(this.itemData.discount)) * (100 + parseFloat(this.maliyatPercent))) / 100;
+      }
+    },
+    calcInvoice() {
+      this.sumTotal = 0;
+      this.sumTax = 0;
+      this.items.forEach((item) => {
+        this.sumTotal += parseFloat(item.sumTotal);
+        if (item.commodity.withoutTax == true) {
+          item.tax = 0;
+        }
+        else {
+          this.sumTax += parseFloat(item.tax);
+        }
+      });
+      this.sumTotal += this.data.transferCost;
+      this.sumTotal -= this.data.discountAll;
     },
     addItem() {
       if (this.itemData.count == 0) {
@@ -457,21 +663,25 @@ export default {
           confirmButtonText: 'قبول'
         });
       }
+      else if (this.itemData.sumTotal == 0) {
+        Swal.fire({
+          text: 'جمع کل صفر شده است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
       else {
-        this.itemData.price = this.$filters.formatNumber(this.itemData.price);
-        this.itemData.count = this.$filters.formatNumber(this.itemData.count);
-        this.itemData.bs = this.$filters.formatNumber(this.itemData.bs);
         this.items.push(this.itemData);
         this.itemData = {
+          id: 0,
           commodity: this.commodity[0],
-          count: 1,
+          count: 0,
           price: 0,
-          bs: 0,
-          bd: 0,
-          type: 'commodity',
-          id: this.commodity[0].id,
+          sumTotal: 0,
+          sumWithoutTax: 0,
+          tax: 0,
           des: '',
-          table: 120
+          discount: 0,
         }
         Swal.fire({
           text: 'آیتم به فاکتور افزوده شد.',
@@ -495,10 +705,29 @@ export default {
       })
     },
     loadData() {
+      this.isLoading = true;
+
+      axios.get('/api/commodity/pricelist/list')
+        .then((response) => {
+          this.priceList = response.data;
+          this.priceList.push({
+            id: 0,
+            label: 'پیشفرض'
+          });
+        });
       //load year
       axios.get('/api/year/get').then((response) => {
         this.year = response.data;
         this.data.date = response.data.now;
+      })
+      //load business info
+      axios.get('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
+        this.bid = response.data;
+        if (this.bid.maliyatafzode == 0) {
+          this.maliyatCheck = false;
+        }
+        this.maliyatPercent = this.bid.maliyatafzode;
+        this.isLoading = false;
       })
       //load persons
       axios.get('/api/person/list/search').then((response) => {
@@ -512,14 +741,10 @@ export default {
         }
         else {
           Swal.fire({
-            text: 'برای ثبت فاکتور خرید ابتدا یک کالای جدید تعریف کنید.',
+            text: 'برای ثبت فاکتور ابتدا یک کالای جدید تعریف کنید.',
             icon: 'warning',
             confirmButtonText: 'تعریف کالای جدید'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.$router.push('/acc/commodity/mod/');
-            }
-          });
+          })
         }
       });
       //load commodity units
@@ -527,25 +752,35 @@ export default {
         this.units = response.data;
       });
 
-      //load data for edit document
+      //get active plugins
+      axios.post('/api/plugin/get/actives',).then((response) => {
+        this.plugins = response.data;
+      });
 
+      //load data for edit document
       if (this.$route.params.id != '') {
-        axios.get('/api/sell/get/info/' + this.$route.params.id).then((response) => {
+        axios.get('/api/rfbuy/get/info/' + this.$route.params.id).then((response) => {
           this.data.date = response.data.date;
           this.data.des = response.data.des;
           this.data.person = response.data.person;
+          this.data.transferCost = response.data.transferCost
+          this.data.discountAll = response.data.discountAll
           response.data.rows.forEach((item, key) => {
             if (item.commodity != null) {
               this.items.push({
                 commodity: item.commodity,
                 count: item.commodity_count,
-                price: this.$filters.formatNumber(parseInt(parseInt(item.bs) / parseInt(item.commodity_count))),
-                bs: this.$filters.formatNumber(item.bs),
-                bd: this.$filters.formatNumber(item.bd),
+                price: parseInt((parseInt(item.bs) - parseInt(item.tax) + parseInt(item.discount) ) / parseInt(item.commodity_count)),
+                bs: item.bs,
+                bd: item.bd,
                 type: 'commodity',
                 id: item.commodity.id,
                 des: item.des,
-                table: 120
+                discount: item.discount,
+                tax: item.tax,
+                sumWithoutTax: item.bs - item.tax,
+                sumTotal: item.bs,
+                table: 53
               });
             }
           });
@@ -563,41 +798,41 @@ export default {
       }
       else if (this.data.person == null || this.data.person == '') {
         Swal.fire({
-          text: 'تامین کننده انتخاب نشده است.',
+          text: 'طرف حساب انتخاب نشده است.',
           icon: 'warning',
           confirmButtonText: 'قبول'
         });
       }
       else {
-        // add kharidar
-        let bd = 0;
-        this.items.forEach((item) => {
-          bd = bd + parseInt(item.bs.replace(/,(?=\d{3})/g, ''));
-        })
-        this.items.push({
-          commodity: this.commodity[0],
-          bs: 0,
-          bd: bd,
-          type: 'person',
-          id: this.data.person.id,
-          des: 'برگشت از خرید به تامین کننده',
-          table: 3
-        });
-        axios.post('/api/accounting/insert', {
+        this.isLoading = true;
+        axios.post('/api/rfbuy/mod', {
           type: 'rfbuy',
           date: this.data.date,
           des: this.data.des,
+          person: this.data.person,
           rows: this.items,
+          discountAll:this.data.discountAll,
+          transferCost:this.data.transferCost,
           update: this.$route.params.id
         }).then((response) => {
-          this.items.pop();
-          Swal.fire({
-            text: 'فاکتور ثبت شد.',
-            icon: 'success',
-            confirmButtonText: 'قبول'
-          }).then(() => {
-            this.$router.push('/acc/rfbuy/list')
-          });
+          this.isLoading = false;
+          if (response.data.code == 0) {
+            Swal.fire({
+              text: 'فاکتور ثبت شد.',
+              icon: 'success',
+              confirmButtonText: 'قبول'
+            }).then(() => {
+              this.$router.push('/acc/rfbuy/list')
+            });
+          }
+          else{
+            Swal.fire({
+              text: response.data.message,
+              icon: 'error',
+              confirmButtonText: 'قبول'
+            })
+          }
+
         })
       }
       this.canSubmit = true;

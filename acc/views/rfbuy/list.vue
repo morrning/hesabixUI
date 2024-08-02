@@ -1,224 +1,234 @@
 <template>
   <!-- Print Modal -->
   <div class="modal fade" id="printModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-   aria-labelledby="printModalLabel" aria-hidden="true">
-   <div class="modal-dialog">
-     <div class="modal-content">
-       <div class="modal-header bg-primary-light text-white">
-         <h1 class="modal-title fs-5" id="printModalLabel">چاپ فاکتور</h1>
-         <div class="block-options">
-           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-         </div>
-       </div>
-       <div class="modal-body">
-       <p>برای تغییر تنظیمات پیشفرض به بخش تنظیمات چاپ مراجعه نمایید</p>
-         <div class="form-check form-switch">
-           <input class="form-check-input" v-model="printOptions.bidInfo" type="checkbox">
-           <label class="form-check-label">اطلاعات کسب‌وکار</label>
-         </div>
-         <div class="form-check form-switch">
-           <input class="form-check-input" v-model="printOptions.pays" type="checkbox">
-           <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
-         </div>
-         <div class="form-check form-switch">
-           <input class="form-check-input" v-model="printOptions.note" type="checkbox">
-           <label class="form-check-label">یاداشت پایین فاکتور</label>
-         </div>
-         <div class="form-check form-switch">
-           <input class="form-check-input" v-model="printOptions.taxInfo" type="checkbox">
-           <label class="form-check-label">مالیات به تفکیک اقلام</label>
-         </div>
-         <div class="form-check form-switch">
-           <input class="form-check-input" v-model="printOptions.discountInfo" type="checkbox">
-           <label class="form-check-label">تخفیف به تفکیک اقلام</label>
-         </div>
-       </div>
-       <div class="modal-footer">
-         <button class="btn btn-primary mx-2" @click="printInvoice()" type="button">
-           <i class="si si-printer me-1"></i>
-           <span class="">چاپ</span>
-         </button>
-       </div>
-     </div>
-   </div>
- </div>
- <!-- End Print Modal -->
- <div class="block block-content-full ">
-   <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
-     <h3 class="block-title text-primary-dark">
-       <button @click="this.$router.back()" type="button"
-         class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
-         <i class="fa fw-bold fa-arrow-right"></i>
-       </button>
-       <i class="fa fa-book"></i>
-       فاکتورهای برگشت از خرید
-     </h3>
-     <div class="block-options">
-       <div class="dropdown-center block-options-item">
-         <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
-           id="dropdown-align-center-alt-primary" type="button">
-           <i class="fa-solid fa-ellipsis"></i>
-         </button>
-         <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end" style="">
-           <button v-for="item in types" class="dropdown-item" @click="changeLabel(item)">
-             <i class="fa fa-undo text-dark pe-2"></i>
-             تغییر به
-             {{ item.label }}
-           </button>
-           <button class="dropdown-item text-danger" @click="changeLabel('clear')">
-             <i class="fa fa-undo pe-2"></i>
-             حذف برچسب‌ها
-           </button>
-           <hr class="dropdown-divider">
-           <button class="dropdown-item text-danger" @click="deleteItems()">
-             <i class="fa fa-trash pe-2"></i>
-             حذف گروهی
-           </button>
-         </div>
-       </div>
-       <router-link to="/acc/rfbuy/mod/" type="button" class="block-options-item">
-         <span class="fa fa-plus fw-bolder"></span>
-       </router-link>
-     </div>
-   </div>
-   <div class="block-content pt-1 pb-3">
-     <div class="row">
-       <div class="col-sm-12 col-md-12 m-0 p-0">
-         <div class="mb-1">
-           <div class="input-group input-group-sm">
-             <span class="input-group-text"><i class="fa fa-search"></i></span>
-             <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
-             <button class="btn btn-outline-success dropdown-toggle d-block d-sm-none" type="button"
-               data-bs-toggle="dropdown" aria-expanded="false">
-               <i class="fa fa-filter"></i>
-             </button>
-             <ul class="dropdown-menu dropdown-menu-end">
-               <div v-for="(item, index) in types" class="form-check">
-                 <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
-                   type="checkbox">
-                 <label class="form-check-label">{{ item.label }}</label>
-               </div>
-             </ul>
+    aria-labelledby="printModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary-light text-white">
+          <h1 class="modal-title fs-5" id="printModalLabel">چاپ فاکتور</h1>
+          <div class="block-options">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <p class="mb-2">برای تغییر تنظیمات پیشفرض به بخش تنظیمات چاپ مراجعه نمایید</p>
+          <div class="form-floating mb-2">
+            <select v-model="printOptions.paper" class="form-select">
+              <option value="A4-L">A4 افقی</option>
+              <option value="A4">A4 عمودی</option>
+              <option value="A5-L">A5 افقی</option>
+              <option value="A5">A5 عمودی</option>
+            </select>
+            <label>سایز کاغذ و حالت چاپ</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.bidInfo" type="checkbox">
+            <label class="form-check-label">اطلاعات کسب‌وکار</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.pays" type="checkbox">
+            <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.note" type="checkbox">
+            <label class="form-check-label">یاداشت پایین فاکتور</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.taxInfo" type="checkbox">
+            <label class="form-check-label">مالیات به تفکیک اقلام</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" v-model="printOptions.discountInfo" type="checkbox">
+            <label class="form-check-label">تخفیف به تفکیک اقلام</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary mx-2" @click="printInvoice()" type="button">
+            <i class="si si-printer me-1"></i>
+            <span class="">چاپ</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Print Modal -->
+  <div class="block block-content-full ">
+    <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
+      <h3 class="block-title text-primary-dark">
+        <button @click="this.$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+          <i class="fa fw-bold fa-arrow-right"></i>
+        </button>
+        <i class="fa fa-book"></i>
+        فاکتورهای برگشت از خرید
+      </h3>
+      <div class="block-options">
+        <div class="dropdown-center block-options-item">
+          <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
+            id="dropdown-align-center-alt-primary" type="button">
+            <i class="fa-solid fa-ellipsis"></i>
+          </button>
+          <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end" style="">
+            <button v-for="item in types" class="dropdown-item" @click="changeLabel(item)">
+              <i class="fa fa-undo text-dark pe-2"></i>
+              تغییر به
+              {{ item.label }}
+            </button>
+            <button class="dropdown-item text-danger" @click="changeLabel('clear')">
+              <i class="fa fa-undo pe-2"></i>
+              حذف برچسب‌ها
+            </button>
+            <hr class="dropdown-divider">
+            <button class="dropdown-item text-danger" @click="deleteItems()">
+              <i class="fa fa-trash pe-2"></i>
+              حذف گروهی
+            </button>
+          </div>
+        </div>
+        <router-link to="/acc/rfbuy/mod/" type="button" class="block-options-item">
+          <span class="fa fa-plus fw-bolder"></span>
+        </router-link>
+      </div>
+    </div>
+    <div class="block-content pt-1 pb-3">
+      <div class="row">
+        <div class="col-sm-12 col-md-12 m-0 p-0">
+          <div class="mb-1">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text"><i class="fa fa-search"></i></span>
+              <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
+              <button class="btn btn-outline-success dropdown-toggle d-block d-sm-none" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-filter"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <div v-for="(item, index) in types" class="form-check">
+                  <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
+                    type="checkbox">
+                  <label class="form-check-label">{{ item.label }}</label>
+                </div>
+              </ul>
 
-           </div>
-         </div>
-         <div class="col-sm-12 col-md-12 border rounded mb-2 px-2 py-1 d-none d-sm-block">
-           <div v-for="(item, index) in types" class="form-check form-check-inline">
-             <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
-               type="checkbox">
-             <label class="form-check-label">{{ item.label }}</label>
-           </div>
-         </div>
-         <EasyDataTable table-class-name="customize-table" v-model:items-selected="itemsSelected" show-index
-           alternating :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
-           body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-           rowsOfPageSeparatorMessage="از" :loading="loading">
-           <template #item-operation="{ code, type }">
-             <div class="dropdown-center">
-               <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
-                 id="dropdown-align-center-alt-primary" type="button">
-                 <i class="fa-solid fa-ellipsis"></i>
-               </button>
-               <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
-                 style="">
-                 <router-link class="dropdown-item" :to="'/acc/accounting/view/' + code">
-                   <i class="fa fa-file text-success pe-2"></i>
-                   سند حسابداری
-                 </router-link>
-                 <router-link class="dropdown-item" :to="'/acc/rfbuy/view/' + code">
-                   <i class="fa fa-eye text-info pe-2"></i>
-                   مشاهده فاکتور
-                 </router-link>
-                 <button class="dropdown-item" @click="printOptions.selectedPrintCode = code" data-bs-toggle="modal" data-bs-target="#printModal">
-                   <i class="fa fa-file-pdf pe-2"></i>
-                   خروجی PDF
-                 </button>
-                 <button type="button" @click="canEditItem(code)" class="dropdown-item">
-                   <i class="fa fa-edit pe-2"></i>
-                   ویرایش
-                 </button>
-                 <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger">
-                   <i class="fa fa-trash pe-2"></i>
-                   حذف
-                 </button>
-               </div>
-             </div>
-           </template>
-           <template #item-label="{ label }">
-             <span v-if="label">
-               <span v-if="label.code == 'payed'" class="text-success">{{ label.label }}</span>
-               <span v-if="label.code == 'returned'" class="text-danger">{{ label.label }}</span>
-               <span v-if="label.code == 'accepted'" class="text-info">{{ label.label }}</span>
-             </span>
-           </template>
-           <template #item-des="{ des }">
-             {{ des.replace("فاکتور برگشت از خرید:", "") }}
-           </template>
-           <template #item-relatedDocsCount="{ relatedDocsCount, relatedDocsPays }">
-             <span v-if="relatedDocsCount != '0'" class="text-success"><i class="fa fa-money"></i>
-               {{ this.$filters.formatNumber(relatedDocsPays) }}
-             </span>
-           </template>
-           <template #item-amount="{ amount }">
-             <span class="text-dark">
-               {{ this.$filters.formatNumber(amount) }}
-             </span>
-           </template>
-           <template #item-transferCost="{ transferCost }">
-             <span class="text-dark">
-               {{ this.$filters.formatNumber(transferCost) }}
-             </span>
-           </template>
-           <template #item-discountAll="{ discountAll }">
-             <span class="text-dark">
-               {{ this.$filters.formatNumber(discountAll) }}
-             </span>
-           </template>
-           <template #item-person="{ person }">
-             <router-link :to="'/acc/persons/card/view/' + person.code">
-               {{ person.nikename }}
-             </router-link>
-           </template>
-           <template #item-code="{ code }">
-             <router-link :to="'/acc/rfbuy/view/' + code">
-               {{ code }}
-             </router-link>
-           </template>
-         </EasyDataTable>
-         <div class="container-fluid p-0 mx-0 my-3">
-           <a class="block block-rounded block-link-shadow border-start border-success border-3"
-             href="javascript:void(0)">
-             <div class="block-content block-content-full block-content-sm bg-body-light">
-               <div class="row">
-                 <div class="col-sm-6 com-md-6">
-                   <span class="text-dark">
-                     <i class="fa fa-list-dots"></i>
-                     مبلغ کل:
-                   </span>
-                   <span class="text-primary">
-                     {{ this.$filters.formatNumber(this.sumTotal) }}
-                     ریال
-                   </span>
-                 </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12 border rounded mb-2 px-2 py-1 d-none d-sm-block">
+            <div v-for="(item, index) in types" class="form-check form-check-inline">
+              <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
+                type="checkbox">
+              <label class="form-check-label">{{ item.label }}</label>
+            </div>
+          </div>
+          <EasyDataTable table-class-name="customize-table" v-model:items-selected="itemsSelected" show-index
+            alternating :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
+            body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+            rowsOfPageSeparatorMessage="از" :loading="loading">
+            <template #item-operation="{ code, type }">
+              <div class="dropdown-center">
+                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
+                  id="dropdown-align-center-alt-primary" type="button">
+                  <i class="fa-solid fa-ellipsis"></i>
+                </button>
+                <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
+                  style="">
+                  <router-link class="dropdown-item" :to="'/acc/accounting/view/' + code">
+                    <i class="fa fa-file text-success pe-2"></i>
+                    سند حسابداری
+                  </router-link>
+                  <router-link class="dropdown-item" :to="'/acc/rfbuy/view/' + code">
+                    <i class="fa fa-eye text-info pe-2"></i>
+                    مشاهده فاکتور
+                  </router-link>
+                  <button class="dropdown-item" @click="printOptions.selectedPrintCode = code" data-bs-toggle="modal"
+                    data-bs-target="#printModal">
+                    <i class="fa fa-file-pdf pe-2"></i>
+                    خروجی PDF
+                  </button>
+                  <button type="button" @click="canEditItem(code)" class="dropdown-item">
+                    <i class="fa fa-edit pe-2"></i>
+                    ویرایش
+                  </button>
+                  <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger">
+                    <i class="fa fa-trash pe-2"></i>
+                    حذف
+                  </button>
+                </div>
+              </div>
+            </template>
+            <template #item-label="{ label }">
+              <span v-if="label">
+                <span v-if="label.code == 'payed'" class="text-success">{{ label.label }}</span>
+                <span v-if="label.code == 'returned'" class="text-danger">{{ label.label }}</span>
+                <span v-if="label.code == 'accepted'" class="text-info">{{ label.label }}</span>
+              </span>
+            </template>
+            <template #item-des="{ des }">
+              {{ des.replace("فاکتور برگشت از خرید:", "") }}
+            </template>
+            <template #item-relatedDocsCount="{ relatedDocsCount, relatedDocsPays }">
+              <span v-if="relatedDocsCount != '0'" class="text-success"><i class="fa fa-money"></i>
+                {{ this.$filters.formatNumber(relatedDocsPays) }}
+              </span>
+            </template>
+            <template #item-amount="{ amount }">
+              <span class="text-dark">
+                {{ this.$filters.formatNumber(amount) }}
+              </span>
+            </template>
+            <template #item-transferCost="{ transferCost }">
+              <span class="text-dark">
+                {{ this.$filters.formatNumber(transferCost) }}
+              </span>
+            </template>
+            <template #item-discountAll="{ discountAll }">
+              <span class="text-dark">
+                {{ this.$filters.formatNumber(discountAll) }}
+              </span>
+            </template>
+            <template #item-person="{ person }">
+              <router-link :to="'/acc/persons/card/view/' + person.code">
+                {{ person.nikename }}
+              </router-link>
+            </template>
+            <template #item-code="{ code }">
+              <router-link :to="'/acc/rfbuy/view/' + code">
+                {{ code }}
+              </router-link>
+            </template>
+          </EasyDataTable>
+          <div class="container-fluid p-0 mx-0 my-3">
+            <a class="block block-rounded block-link-shadow border-start border-success border-3"
+              href="javascript:void(0)">
+              <div class="block-content block-content-full block-content-sm bg-body-light">
+                <div class="row">
+                  <div class="col-sm-6 com-md-6">
+                    <span class="text-dark">
+                      <i class="fa fa-list-dots"></i>
+                      مبلغ کل:
+                    </span>
+                    <span class="text-primary">
+                      {{ this.$filters.formatNumber(this.sumTotal) }}
+                      ریال
+                    </span>
+                  </div>
 
-                 <div class="col-sm-6 com-md-6">
-                   <span class="text-dark">
-                     <i class="fa fa-list-check"></i>
-                     جمع مبلغ موارد انتخابی:
-                   </span>
-                   <span class="text-primary">
-                     {{ this.$filters.formatNumber(this.sumSelected) }}
-                     ریال
-                   </span>
-                 </div>
-               </div>
-             </div>
-           </a>
-         </div>
-       </div>
-     </div>
-   </div>
- </div>
+                  <div class="col-sm-6 com-md-6">
+                    <span class="text-dark">
+                      <i class="fa fa-list-check"></i>
+                      جمع مبلغ موارد انتخابی:
+                    </span>
+                    <span class="text-primary">
+                      {{ this.$filters.formatNumber(this.sumSelected) }}
+                      ریال
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -235,7 +245,8 @@ export default {
        bidInfo: true,
        taxInfo: true,
        discountInfo: true,
-       selectedPrintCode: 0
+       selectedPrintCode: 0,
+       paper:  'A4-L'
      },
      sumSelected: 0,
      sumTotal: 0,
