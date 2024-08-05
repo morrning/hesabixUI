@@ -34,6 +34,10 @@
                 <button class="nav-link" id="rfsell-tab" data-bs-toggle="tab" data-bs-target="#rfsell" type="button"
                   role="tab" aria-controls="home" aria-selected="true"> برگشت از فروش</button>
               </li>
+              <li v-if="isPluginActive('repservice')" class="nav-item" role="presentation">
+                <button class="nav-link" id="repservice-tab" data-bs-toggle="tab" data-bs-target="#repservice" type="button"
+                  role="tab" aria-controls="home" aria-selected="true">تعمیرکاران</button>
+              </li>
             </ul>
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -260,6 +264,30 @@
                   </div>
                 </div>
               </div>
+              <div class="tab-pane fade" id="repservice" role="tabpanel" aria-labelledby="repservice-tab">
+                <div class="p-md-4">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-6 mb-2">
+                      <div class="form-floating">
+                        <textarea v-model="settings.repservice.noteString" class="form-control"
+                          placeholder="این نوشته در پایین قبض چاپ خواهد شد" style="height: 100px"></textarea>
+                        <label for="floatingTextarea2">قوانین تعمیرگاه</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 mb-2">
+                      <div class="form-floating">
+                        <select v-model="settings.repservice.paper" class="form-select">
+                          <option value="A4-L">A4 افقی</option>
+                          <option value="A4">A4 عمودی</option>
+                          <option value="A5-L">A5 افقی</option>
+                          <option value="A5">A5 عمودی</option>
+                        </select>
+                        <label>سایز کاغذ و حالت چاپ</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </form>
         </div>
@@ -318,6 +346,10 @@ export default {
           bidInfo: true,
           taxInfo: true,
           discountInfo: true,
+          paper: 'A4-L',
+        },
+        repservice: {
+          noteString: '',
           paper: 'A4-L',
         }
       }

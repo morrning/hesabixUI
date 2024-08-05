@@ -135,6 +135,16 @@
                     <i class="fa-solid fa-bolt pe-2"></i>
                     تغییر وضعیت
                   </button>
+                  <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                    @click="printInvoice(code)">
+                    <i class="fa-solid fa-print pe-2"></i>
+                    چاپ قبض رسید
+                  </button>
+                  <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                    data-bs-target="#changeSingleStateModal" :data-bs-whatever="code">
+                    <i class="fa-solid fa-bolt pe-2"></i>
+                    تغییر وضعیت
+                  </button>
                   <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#historyModal"
                     @click="changeItem(code)" :data-bs-whatever="code">
                     <i class="fa fa-list pe-2"></i>
@@ -393,6 +403,15 @@ export default {
           })
         }
       })
+    },
+    printInvoice(code) {
+      this.loading = true;
+      axios.post('/api/repservice/print/invoice', { 
+        'code': this.printOptions.selectedPrintCode,
+       }).then((response) => {
+        this.loading = false;
+        window.open(this.$API_URL + '/front/print/' + response.data.id, '_blank', 'noreferrer');
+      });
     },
   },
   mounted() {
