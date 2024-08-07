@@ -119,7 +119,7 @@
             rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
             :loading="loading">
             <template #item-operation="{ code }">
-              <div class="dropdown-center">
+              <div class="dropdown-center" style="z-index: 1000;">
                 <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
                   id="dropdown-align-center-alt-primary" type="button">
                   <i class="fa-solid fa-ellipsis"></i>
@@ -407,7 +407,7 @@ export default {
     printInvoice(code) {
       this.loading = true;
       axios.post('/api/repservice/print/invoice', { 
-        'code': this.printOptions.selectedPrintCode,
+        'code': code
        }).then((response) => {
         this.loading = false;
         window.open(this.$API_URL + '/front/print/' + response.data.id, '_blank', 'noreferrer');

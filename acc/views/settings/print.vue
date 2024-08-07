@@ -378,6 +378,9 @@ export default {
     axios.get("/api/printers/options/info").then((response) => {
       this.isLoading = false;
       this.settings = response.data;
+      if(this.settings.repservice.paper == null || this.settings.repservice.paper == ''){
+        this.settings.repservice.paper = 'A5-L';
+      }
     });
     //get active plugins
     axios.post('/api/plugin/get/actives',).then((response) => {

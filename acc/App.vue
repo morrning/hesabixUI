@@ -30,7 +30,10 @@ export default {
         title: '',
         body: ''
       },
-      timeNow: ''
+      timeNow: '',
+      system:{
+        footer:''
+      }
     }
   },
   async beforeMount() {
@@ -146,6 +149,9 @@ export default {
     });
     axios.post('/api/general/get/time').then((response) => {
       this.timeNow = response.data.timeNow;
+    });
+    axios.post('/api/system/get/data').then((response) => {
+      this.system = response.data;
     });
   },
   components: {
@@ -984,6 +990,7 @@ export default {
     <!-- END Page Content -->
   </main>
   <!-- END Main Container -->
+  <div class="d-none d-sm-block" v-html="system.footer"></div>
 </template>
 
 <style global>
