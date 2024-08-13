@@ -109,19 +109,11 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import { ref } from "vue";
-import download from 'downloadjs';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
-
-/* load 'fs' for readFile and writeFile support */
-import * as fs from 'fs';
-XLSX.set_fs(fs);
 
 /* load the codepage support library for extended support with older formats  */
 import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs';
 import HelpBtn from "../component/helpBtn.vue";
 import importExcel from "../component/importModal/person-import-excel.vue";
-XLSX.set_cptable(cpexcel);
 
 export default {
   name: "list",

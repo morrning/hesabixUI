@@ -200,12 +200,6 @@
               </div>
               <div class="col-12 mb-2">
                 <div class="input-group mb-3">
-                  <div v-if="isPluginActive('accpro')" class="form-floating">
-                    <select v-model="selectedPriceList" class="form-select" aria-label="Small select example">
-                      <option v-for="pl in priceList" :value="pl">{{ pl.label }}</option>
-                    </select>
-                    <label for="floatingInputGroup1">لیست قیمت</label>
-                  </div>
                   <div class="form-floating mb-3">
                     <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
                     <label for="floatingInput">قیمت واحد</label>
