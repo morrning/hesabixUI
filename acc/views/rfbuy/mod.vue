@@ -121,126 +121,117 @@
         </div>
       </div>
       <quickAddCommodity></quickAddCommodity>
-      <!-- Modal -->
-      <div class="modal modal-xl fade" id="addCommodityModal" tabindex="-1" aria-labelledby="addCommodityModalLabel"
-        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title text-primary fs-5" id="addCommodityModalLabel">افزودن اقلام فاکتور</h1>
-              <div class="block-options">
-                <button type="button" class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-            </div>
-            <div class="modal-body">
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm-12 col-md-5 mb-0">
-                    <div class="block block-rounded border">
-                      <div class="block-header block-header-default py-1">
-                        <h3 class="block-title text-primary">
-                          <i class="fa fa-box pe-2"></i>
-                          کالا و خدمات
-                        </h3>
-                        <div class="block-options">
-                          <!-- Button trigger modal -->
-                          <button title="افزودن کالا/خدمات جدید" type="button" class="btn-block-option"
-                            data-bs-toggle="modal" data-bs-target="#quickComodityAdd">
-                            <i class="fa fa-plus"></i>
-                          </button>
+      <!-- offcanvas -->
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasBottomLabel">افزودن اقلام فاکتور</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 mb-0">
+                <div class="block block-rounded border">
+                  <div class="block-header block-header-default py-1">
+                    <h3 class="block-title text-primary">
+                      <i class="fa fa-box pe-2"></i>
+                      کالا و خدمات
+                    </h3>
+                    <div class="block-options">
+                      <!-- Button trigger modal -->
+                      <button title="افزودن کالا/خدمات جدید" type="button" class="btn-block-option"
+                        data-bs-toggle="modal" data-bs-target="#quickComodityAdd">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="block-content pt-1 px-1">
+                    <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name"
+                      v-model="itemData.commodity" class="">
+                      <template #no-options="{ search, searching, loading }">
+                        وردی یافت نشد!
+                      </template>
+                      <template v-slot:option="option">
+                        <div class="row mb-1">
+                          <div class="col-12">
+                            <i class="fa fa-box me-1"></i>
+                            {{ option.name }}
+                          </div>
+                          <div class="col-12">
+                            <small v-if="option.khadamat == false">
+                              <i class="fa fa-store me-1"></i>
+                              <small class="text-danger">
+                                موجودی:
+                              </small>
+                              <label style="direction: ltr;">
+                                {{ option.count }}
+                              </label>
+                              {{ option.unit }}
+                            </small>
+                          </div>
                         </div>
-                      </div>
-                      <div class="block-content pt-1 px-1">
-                        <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name"
-                          v-model="itemData.commodity" class="">
-                          <template #no-options="{ search, searching, loading }">
-                            وردی یافت نشد!
-                          </template>
-                          <template v-slot:option="option">
-                            <div class="row mb-1">
-                              <div class="col-12">
-                                <i class="fa fa-box me-1"></i>
-                                {{ option.name }}
-                              </div>
-                              <div class="col-12">
-                                <small v-if="option.khadamat == false">
-                                  <i class="fa fa-store me-1"></i>
-                                  <small class="text-danger">
-                                    موجودی:
-                                  </small>
-                                  <label style="direction: ltr;">
-                                    {{ option.count }}
-                                  </label>
-                                  {{ option.unit }}
-                                </small>
-                              </div>
-                            </div>
-                          </template>
-                        </v-select>
+                      </template>
+                    </v-select>
 
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-7 mb-2">
-                    <div class="block block-rounded border">
-                      <div class="block-header block-header-default py-1">
-                        <h3 class="block-title text-primary">
-                          <i class="fa-regular fa-note-sticky"></i>
-                          شرح
-                        </h3>
-                        <div class="block-options">
-
-                        </div>
-                      </div>
-                      <div class="block-content p-0">
-                        <input v-model="this.itemData.des" class="form-control" type="text">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 mb-2">
-                    <div class="form-floating mb-3">
-                      <money3 v-bind="unitConfig" class="form-control" v-model.number="this.itemData.count" />
-                      <label for="floatingInput">{{ itemData.commodity.unitData.name }}</label>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 mb-2">
-                    <div class="input-group mb-3">
-                      <div  v-if="isPluginActive('accpro')" class="form-floating">
-                        <select v-model="selectedPriceList" class="form-select"
-                          aria-label="Small select example">
-                          <option v-for="pl in priceList" :value="pl">{{ pl.label }}</option>
-                        </select>
-                        <label for="floatingInputGroup1">لیست قیمت</label>
-                      </div>
-                      <div class="form-floating mb-3">
-                        <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
-                        <label for="floatingInput">قیمت واحد</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 mb-2">
-                    <div class="form-floating mb-3">
-                      <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.discount" />
-                      <label for="floatingInput">تخفیف</label>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-3 mb-2">
-                    <div class="form-floating mb-3">
-                      <money3 readonly="readonly" v-bind="currencyConfig" class="form-control"
-                        v-model.number="this.itemData.sumWithoutTax" />
-                      <label for="floatingInput">قیمت کل</label>
-                    </div>
                   </div>
                 </div>
               </div>
+              <div class="col-12 mb-2">
+                <div class="block block-rounded border">
+                  <div class="block-header block-header-default py-1">
+                    <h3 class="block-title text-primary">
+                      <i class="fa-regular fa-note-sticky"></i>
+                      شرح
+                    </h3>
+                    <div class="block-options">
+
+                    </div>
+                  </div>
+                  <div class="block-content p-0">
+                    <input v-model="this.itemData.des" class="form-control" type="text">
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mb-2">
+                <div class="form-floating mb-3">
+                  <money3 v-bind="unitConfig" class="form-control" v-model.number="this.itemData.count" />
+                  <label v-if="itemData.commodity" for="floatingInput">{{ itemData.commodity.unitData.name }}</label>
+                </div>
+              </div>
+              <div class="col-12 mb-2">
+                <div class="input-group mb-3">
+                  <div v-if="isPluginActive('accpro')" class="form-floating">
+                    <select v-model="selectedPriceList" class="form-select" aria-label="Small select example">
+                      <option v-for="pl in priceList" :value="pl">{{ pl.label }}</option>
+                    </select>
+                    <label for="floatingInputGroup1">لیست قیمت</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.itemData.price" />
+                    <label for="floatingInput">قیمت واحد</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mb-2">
+                <div class="form-floating mb-3">
+                  <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.itemData.discount" />
+                  <label for="floatingInput">تخفیف</label>
+                </div>
+              </div>
+              <div class="col-12 mb-2">
+                <div class="form-floating mb-3">
+                  <money3 readonly="readonly" v-bind="currencyConfig" class="form-control"
+                    v-model.number="this.itemData.sumWithoutTax" />
+                  <label for="floatingInput">قیمت کل</label>
+                </div>
+              </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
-              <button class="btn btn-success" @click="addItem">
-                <i class="fa fa-save"></i>
-                افزودن
-              </button>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-success" @click="addItem">
+              <i class="fa fa-save"></i>
+              افزودن
+            </button>
           </div>
         </div>
       </div>
@@ -249,9 +240,8 @@
           <div class="col-12">
             <span class="text-primary"> اقلام فاکتور </span>
             <span class="text-secondary">({{ items.length }} قلم)</span>
-            <!-- Button trigger modal add commodity -->
-            <button type="button" class="btn btn-sm float-end btn-primary" data-bs-toggle="modal"
-              data-bs-target="#addCommodityModal">
+            <!-- Button trigger convas add commodity -->
+            <button class="btn btn-sm float-end btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">
               <i class="fa fa-plus"></i>
               افزودن ردیف جدید
             </button>
@@ -519,7 +509,7 @@ export default {
       this.calc();
     },
     'itemData.commodity': function (newVal, oldVal) {
-      if (newVal != '') {
+      if (newVal != '' && newVal != undefined) {
         //fetch price
         if(this.selectedPriceList.id == 0){
           this.itemData.price = this.itemData.commodity.priceSell;
@@ -533,8 +523,8 @@ export default {
           });
         }
         this.unitConfig.precision = this.itemData.commodity.unitData.floatNumber;
+        this.itemData.des = this.itemData.commodity.des;
       }
-      this.itemData.des = this.itemData.commodity.des;
     },
     itemsSelected: {
       handler: function (val, oldVal) {
