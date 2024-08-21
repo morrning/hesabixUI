@@ -250,9 +250,12 @@
               header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
               emptyMessage="هیچ آیتمی به این فاکتور افزوده نشده است." rowsOfPageSeparatorMessage="از">
               <template #item-operation="{ index }">
-                <span class="text-danger px-1" @click="deleteItem(index)">
+                <button title="حذف" class="btn btn-sm text-danger px-1" @click="deleteItem(index)">
                   <i class="fa fa-trash"></i>
-                </span>
+                </button>
+                <button title="ویرایش" class="btn btn-sm text-info px-1" @click="editItem(index)">
+                  <i class="fa fa-edit"></i>
+                </button>
               </template>
               <template #item-sumTotal="{ sumTotal }">
                 {{ this.$filters.formatNumber(sumTotal) }}
