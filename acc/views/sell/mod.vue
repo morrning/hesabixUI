@@ -316,12 +316,6 @@
               </div>
               <div class="col-12 mb-2">
                 <div class="input-group mb-3">
-                  <div v-if="isPluginActive('accpro')" class="form-floating">
-                    <select v-model="selectedPriceList" class="form-select" aria-label="Small select example">
-                      <option v-for="pl in priceList" :value="pl">{{ pl.label }}</option>
-                    </select>
-                    <label for="floatingInputGroup1">لیست قیمت</label>
-                  </div>
                   <div class="form-floating mb-3">
                     <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.editItemData.price" />
                     <label for="floatingInput">قیمت واحد</label>
@@ -629,19 +623,7 @@ export default {
       this.editCalc();
     },
     'editItemData.commodity': function (newVal, oldVal) {
-      if (newVal != '' && newVal != undefined) {
-        //fetch price
-        if (this.selectedPriceList.id == 0) {
-          this.editItemData.price = this.editItemData.commodity.priceSell;
-        }
-        else {
-          const arr = Array.from(this.editItemData.commodity.prices);
-          arr.forEach((item) => {
-            if (item.list.id == this.selectedPriceList.id) {
-              this.editItemData.price = item.priceSell;
-            }
-          });
-        }
+      if (newVal != '' && newVal != undefined) {        
         this.unitConfig.precision = this.editItemData.commodity.unitData.floatNumber;
         this.editItemData.des = this.editItemData.commodity.des;
       }

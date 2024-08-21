@@ -121,7 +121,7 @@
         </div>
       </div>
       <quickAddCommodity></quickAddCommodity>
-      <!-- offcanvas -->
+      <!-- offcanvas add item -->
       <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="offcanvasBottomLabel">افزودن اقلام فاکتور</h5>
@@ -229,6 +229,116 @@
           </div>
         </div>
       </div>
+
+      <!-- offcanvas edit item -->
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEdit" aria-labelledby="offcanvasBottomLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasBottomLabel">ویرایش</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 mb-0">
+                <div class="block block-rounded border">
+                  <div class="block-header block-header-default py-1">
+                    <h3 class="block-title text-primary">
+                      <i class="fa fa-box pe-2"></i>
+                      کالا و خدمات
+                    </h3>
+                    <div class="block-options">
+                      <!-- Button trigger modal -->
+                      <button title="افزودن کالا/خدمات جدید" type="button" class="btn-block-option"
+                        data-bs-toggle="modal" data-bs-target="#quickComodityAdd">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="block-content pt-1 px-1">
+                    <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name"
+                      v-model="editItemData.commodity" class="">
+                      <template #no-options="{ search, searching, loading }">
+                        وردی یافت نشد!
+                      </template>
+                      <template v-slot:option="option">
+                        <div class="row mb-1">
+                          <div class="col-12">
+                            <i class="fa fa-box me-1"></i>
+                            {{ option.name }}
+                          </div>
+                          <div class="col-12">
+                            <small v-if="option.khadamat == false">
+                              <i class="fa fa-store me-1"></i>
+                              <small class="text-danger">
+                                موجودی:
+                              </small>
+                              <label style="direction: ltr;">
+                                {{ option.count }}
+                              </label>
+                              {{ option.unit }}
+                            </small>
+                          </div>
+                        </div>
+                      </template>
+                    </v-select>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mb-2">
+                <div class="block block-rounded border">
+                  <div class="block-header block-header-default py-1">
+                    <h3 class="block-title text-primary">
+                      <i class="fa-regular fa-note-sticky"></i>
+                      شرح
+                    </h3>
+                    <div class="block-options">
+
+                    </div>
+                  </div>
+                  <div class="block-content p-0">
+                    <input v-model="this.editItemData.des" class="form-control" type="text">
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mb-2">
+                <div class="form-floating mb-3">
+                  <money3 v-bind="unitConfig" class="form-control" v-model.number="this.editItemData.count" />
+                  <label v-if="editItemData.commodity" for="floatingInput">{{ editItemData.commodity.unitData.name
+                    }}</label>
+                </div>
+              </div>
+              <div class="col-12 mb-2">
+                <div class="input-group mb-3">
+                  <div class="form-floating mb-3">
+                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.editItemData.price" />
+                    <label for="floatingInput">قیمت واحد</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mb-2">
+                <div class="form-floating mb-3">
+                  <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.editItemData.discount" />
+                  <label for="floatingInput">تخفیف</label>
+                </div>
+              </div>
+              <div class="col-12 mb-2">
+                <div class="form-floating mb-3">
+                  <money3 readonly="readonly" v-bind="currencyConfig" class="form-control"
+                    v-model.number="this.editItemData.sumWithoutTax" />
+                  <label for="floatingInput">قیمت کل</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-success" @click="doEditeItem">
+              <i class="fa fa-save"></i>
+              ویرایش
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="container">
         <div class="row">
           <div class="col-12">
@@ -247,7 +357,8 @@
                 <button title="حذف" class="btn btn-sm text-danger px-1" @click="deleteItem(index)">
                   <i class="fa fa-trash"></i>
                 </button>
-                <button title="ویرایش" class="btn btn-sm text-info px-1" @click="editItem(index)">
+                <button title="ویرایش" class="btn btn-sm text-info px-1" @click="editItem(index)"
+                  data-bs-toggle="offcanvas" data-bs-target="#offcanvasEdit" aria-controls="offcanvasBottom">
                   <i class="fa fa-edit"></i>
                 </button>
               </template>
@@ -395,6 +506,7 @@ export default {
       sumTotal: 0,
       itemsSelected: [],
       items: [],
+      plugins: {},
       headers: [
         { text: "کالا", value: "commodity.name" },
         { text: "شرح", value: "des" },
@@ -468,10 +580,43 @@ export default {
         tax: 0,
         des: '',
         discount: 0,
+      },
+      editItemData: {
+        index: 0,
+        id: 0,
+        commodity: {
+          unit: '',
+          unitData: {
+            name: '',
+            floatNumber: 0
+          }
+        },
+        count: 0,
+        price: 0,
+        sumTotal: 0,
+        sumWithoutTax: 0,
+        tax: 0,
+        des: '',
+        discount: 0,
       }
     }
   },
   watch: {
+    'editItemData.price': function () {
+      this.editCalc();
+    },
+    'editItemData.discount': function () {
+      this.editCalc();
+    },
+    'editItemData.count': function () {
+      this.editCalc();
+    },
+    'editItemData.commodity': function (newVal, oldVal) {
+      if (newVal != '' && newVal != undefined) {
+        this.unitConfig.precision = this.editItemData.commodity.unitData.floatNumber;
+        this.editItemData.des = this.editItemData.commodity.des;
+      }
+    },
     'desSubmit.id': function () {
       this.data.des = this.desSubmit.des;
     },
@@ -555,6 +700,9 @@ export default {
     this.loadData(to.params.id);
   },
   methods: {
+    isPluginActive(plugName) {
+      return this.plugins[plugName] !== undefined;
+    },
     searchPerson(query, loading) {
       loading(true);
       axios.post('/api/person/list/search', { search: query }).then((response) => {
@@ -569,6 +717,48 @@ export default {
         loading(false);
       });
     },
+    editItem(index) {
+      this.editItemData = {... this.items[index - 1]};
+      this.editItemData.index = index;
+    },
+    doEditeItem() {
+      if (this.editItemData.count == 0) {
+        Swal.fire({
+          text: 'تعداد صفر نامعتبر است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      else if (this.editItemData.price == 0) {
+        Swal.fire({
+          text: 'قیمت صفر نامعتبر است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      else if (this.editItemData.commodity == '' || this.editItemData.commodity == undefined) {
+        Swal.fire({
+          text: 'کالایی انتخاب نشده است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      else if (this.editItemData.sumTotal == 0) {
+        Swal.fire({
+          text: 'جمع کل صفر شده است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      else {
+        this.items[this.editItemData.index -1] = this.editItemData;
+        Swal.fire({
+          text: 'آیتم فاکتور ویرایش شد.',
+          icon: 'success',
+          confirmButtonText: 'قبول'
+        });
+      }
+    },
     calc() {
       this.itemData.sumWithoutTax = (this.itemData.price * this.itemData.count) - this.itemData.discount;
       if (this.itemData.commodity.withoutTax) {
@@ -578,6 +768,17 @@ export default {
       else {
         this.itemData.tax = (((this.itemData.price * this.itemData.count) - this.itemData.discount) * (this.maliyatPercent)) / 100;
         this.itemData.sumTotal = (((parseFloat(this.itemData.price) * parseFloat(this.itemData.count)) - parseFloat(this.itemData.discount)) * (100 + parseFloat(this.maliyatPercent))) / 100;
+      }
+    },
+    editCalc() {
+      this.editItemData.sumWithoutTax = (this.editItemData.price * this.editItemData.count) - this.editItemData.discount;
+      if (this.editItemData.commodity.withoutTax) {
+        this.editItemData.tax = 0;
+        this.editItemData.sumTotal = (parseFloat(this.editItemData.price) * parseFloat(this.editItemData.count)) - parseFloat(this.editItemData.discount);
+      }
+      else {
+        this.editItemData.tax = (((this.editItemData.price * this.editItemData.count) - this.editItemData.discount) * (this.maliyatPercent)) / 100;
+        this.editItemData.sumTotal = (((parseFloat(this.editItemData.price) * parseFloat(this.editItemData.count)) - parseFloat(this.editItemData.discount)) * (100 + parseFloat(this.maliyatPercent))) / 100;
       }
     },
     calcInvoice() {
@@ -693,7 +894,10 @@ export default {
       axios.get('/api/commodity/units').then((response) => {
         this.units = response.data;
       });
-
+      //get active plugins
+      axios.post('/api/plugin/get/actives',).then((response) => {
+              this.plugins = response.data;
+      });
       //load data for edit document
 
       if (this.$route.params.id != '') {
