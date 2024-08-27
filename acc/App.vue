@@ -988,9 +988,10 @@ export default {
       <RouterView />
     </div>
     <!-- END Page Content -->
+    <div class="d-none d-sm-block" v-html="system.footer"></div>
   </main>
   <!-- END Main Container -->
-  <div class="d-none d-sm-block" v-html="system.footer"></div>
+
 </template>
 
 <style global>
