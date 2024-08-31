@@ -69,6 +69,30 @@ export default {
     this.siteName = getSiteName();
   },
   methods: {
+    deleteBusiness(){
+      Swal.fire({
+        text: 'آیا برای حذف این کسب‌و‌کار مطمئن هستید؟ بعد از تایید این عملیات کسب و کار شما به مدت یک ماه در پایگاه داده آرشیو و بعد از آن به صورت دائم حذف خواهد شد',
+        showCancelButton: true,
+        confirmButtonText: 'بله',
+        cancelButtonText: `خیر`,
+        icon: 'warning'
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          axios.post('/api/business/delete').then((response) => {
+            if (response.data.code == 0) {
+              Swal.fire({
+                text: 'کسب و کار با موفقیت حذف شد. به پروفایل کاربری باز می گردید.',
+                icon: 'success',
+                confirmButtonText: 'قبول'
+              }).then((res) => {
+                document.location = '/';
+              });
+            }
+          })
+        }
+      })
+    },
     exitBusiness() {
       Swal.fire({
         text: 'آیا برای خروج و ترک کسب‌و‌کار مطمئن هستید؟ ترک کسب و کار موجب قطع دسترسی شما خواهد شد و تنها از طریق مالک کسب‌و‌کار قابل بازیابی است.',
@@ -812,6 +836,14 @@ export default {
                     توکن‌های دسترسی
                   </span>
                 </router-link>
+              </li>
+              <li v-if="permissions.owner" class="nav-main-item">
+                <a href="javascript://void" class="nav-main-link" @click="deleteBusiness()">
+                  <span class="nav-main-link-name text-danger">
+                    <i class="fa fa-trash"></i>
+                    حذف کسب‌و‌کار
+                  </span>
+                </a>
               </li>
             </ul>
           </li>
