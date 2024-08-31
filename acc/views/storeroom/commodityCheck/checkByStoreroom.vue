@@ -10,6 +10,7 @@ export default defineComponent({
     searchValue: '',
     loading : ref(true),
     items:[],
+    orgItems:[],
     headers: [
       { text: "کد", value: "commodity.code" },
       { text: "دسته بندی", value: "commodity.cat.name", sortable: true},
@@ -22,6 +23,11 @@ export default defineComponent({
       { text: "وضعیت", value: "operation"},
     ]
   }},
+  watch:{
+    'searchValue'(newValue, oldValue) {
+      this.searchTable();
+    }
+  },
   methods: {
     loadData(){
       this.loading = true;
@@ -39,9 +45,38 @@ export default defineComponent({
       axios.post('/api/storeroom/commodity/list/' + this.storeroom.id)
           .then((response)=>{
             this.items = response.data;
+            this.orgItems = response.data;
             this.loading = false;
           });
-    }
+    },
+    searchTable() {
+      this.loading = true;
+      let calcItems = [];
+      let isAll = false;
+      if(this.searchValue == ''){isAll = true;}
+      if (isAll) {
+        this.items = this.orgItems;
+      }
+      else {
+        this.orgItems.forEach((item) => {
+          let addItem = false;
+          if(item.commodity.name.includes(this.searchValue)){
+            addItem = true
+          }
+          else if(item.commodity.cat.name.includes(this.searchValue)){
+            addItem = true
+          }
+          else if(item.commodity.unit.name.includes(this.searchValue)){
+            addItem = true
+          }
+          if(addItem){
+            calcItems.push(item);
+          }
+        });
+        this.items = calcItems;
+      }
+      this.loading = false;
+    },
   },
   beforeMount() {
     this.loadData();
@@ -97,7 +132,6 @@ export default defineComponent({
               multi-sort
               show-index
               alternating
-              :search-value="searchValue"
               :headers="headers"
               :items="items"
               theme-color="#1d90ff"

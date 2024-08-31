@@ -6,8 +6,8 @@ export function getApiUrl() {
     This set for access user interface to API.
     If this be wrong user interface not functioning probably.
      */
-    //return 'https://hesabix.ir';
-    return 'http://localhost';
+    return 'https://hesabix.ir';
+    //return 'http://localhost';
 }
 
 export function getSiteName() {
