@@ -31,6 +31,8 @@ export default defineComponent({
         },
         plugAccpro: {
           sharefaktor: '',
+          storeroomSmsBarbari: '',
+          storeroomSmsOther: ''
         }
       }
     }
@@ -171,13 +173,26 @@ export default defineComponent({
             </div>
           </div>
         </div>
-        <h4 class="text-primary">افزونه حسسابداری پیشرفته</h4>
+        <h4 class="text-primary">افزونه حسابداری پیشرفته</h4>
         <div class="col-sm-12 col-md-12">
           <div class="row pt-3">
             <div class="col-sm-12 col-md-4">
               <div class="form-floating mb-4">
                 <input v-model="form.plugAccpro.sharefaktor" class="form-control" type="text" :disabled="loading">
                 <label class="form-label"><span class="text-danger"></span>ارسال فاکتور فروش</label>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <div class="form-floating mb-4">
+                <input v-model="form.plugAccpro.storeroomSmsOther" class="form-control" type="text" :disabled="loading">
+                <label class="form-label"><span class="text-danger"></span>ارسال تیکت انبار سایر</label>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <div class="form-floating mb-4">
+                <input v-model="form.plugAccpro.storeroomSmsBarbari" class="form-control" type="text"
+                  :disabled="loading">
+                <label class="form-label"><span class="text-danger"></span>ارسال تیکت انبار باربری</label>
               </div>
             </div>
           </div>
