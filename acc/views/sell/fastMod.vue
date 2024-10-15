@@ -372,7 +372,7 @@ export default defineComponent({
               </div>
             </div>
             <div class="card-body p-0">
-              <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name"
+              <v-select dir="rtl" @search="searchCommodity" :filterable="false" :options="commodity" label="name"
                 v-model="selectedCommodity" class="rounded-0 m-1">
                 <template #no-options="{ search, searching, loading }">
                   وردی یافت نشد!
