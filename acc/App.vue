@@ -12,7 +12,7 @@ import archive_modal from './views/component/archive/archive_modal.vue';
 import Loading from "vue-loading-overlay";
 import smsPanel from "./views/component/smsPanel.vue";
 import 'vue-loading-overlay/dist/css/index.css';
-import { getSiteName } from "../hesabixConfig"
+import { getApiUrl, getSiteName } from "../hesabixConfig"
 export default {
 
   data() {
@@ -30,6 +30,7 @@ export default {
         title: '',
         body: ''
       },
+      apiUrl:'',
       timeNow: '',
       system:{
         footer:''
@@ -63,7 +64,8 @@ export default {
           this.plugins = response.data;
         });
       }
-    })
+    });
+    this.apiUrl = getApiUrl();
   },
   created() {
     this.siteName = getSiteName();
@@ -352,7 +354,7 @@ export default {
           <span class="smini-visible"> Hesab<span class="opacity-75">ix</span>
           </span>
           <span class="smini-hidden"><span class="text-light">
-              <img alt="hesabix" style="max-height:25px" src="/assets/media/favicons/favw.png" />
+              <img class="rounded-circle border" style="max-height:35px;background:white;" :src="apiUrl + '/front/avatar/file/get/' + business.id" :alt="business.name" />
               {{ siteName }}
             </span>
           </span>
