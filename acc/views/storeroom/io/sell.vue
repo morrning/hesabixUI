@@ -14,6 +14,7 @@ export default defineComponent({
   data: () => {
     return {
       loading: false,
+      plugins: [],
       doc: {},
       ticket: {
         type: 'output',
@@ -26,7 +27,9 @@ export default defineComponent({
         store: {},
         person: {},
         transferType: {},
-        referral: ''
+        referral: '',
+        sms: false,
+        senderTel: 0
       },
       transferTypes: [],
       year: {},
@@ -96,14 +99,27 @@ export default defineComponent({
           ticket: this.ticket,
           items: this.items
         }).then((resp) => {
-          Swal.fire({
-            text: 'حواله انبار با موفقیت ثبت شد.',
-            icon: 'success',
-            confirmButtonText: 'قبول'
-          }).then((response) => {
-            this.$router.push('/acc/storeroom/tickets/list');
-            this.loading = false;
-          });
+          if (resp.data.result == 0) {
+            Swal.fire({
+              text: 'حواله انبار با موفقیت ثبت شد.',
+              icon: 'success',
+              confirmButtonText: 'قبول'
+            }).then((response) => {
+              this.$router.push('/acc/storeroom/tickets/list');
+              this.loading = false;
+            });
+          }
+          else if(resp.data.result == 2){
+            Swal.fire({
+              text: 'حواله انبار با موفقیت ثبت شد اما به دلیل کمبود اعتبار،پیامک به مشتری ارسال نشد.لطفا برای ارسال پیامک حساب خود را شارژ نمایید..',
+              icon: 'success',
+              confirmButtonText: 'قبول'
+            }).then((response) => {
+              this.$router.push('/acc/storeroom/tickets/list');
+              this.loading = false;
+            });
+          }
+
         });
       }
     },
@@ -147,7 +163,14 @@ export default defineComponent({
       axios.get('/api/storeroom/transfertype/list').then((response) => {
         this.transferTypes = response.data;
         this.ticket.transferType = response.data[0];
-      })
+      });
+      //load plugins
+      axios.post('/api/plugin/get/actives',).then((response) => {
+        this.plugins = response.data;
+      });
+    },
+    isPluginActive(plugName) {
+      return this.plugins[plugName] !== undefined;
     },
   },
   mounted() {
@@ -168,6 +191,11 @@ export default defineComponent({
         حواله خروج از انبار
       </h3>
       <div class="block-options">
+        <span v-if="isPluginActive('accpro')" class="form-check form-switch  form-check-inline">
+          <input :disabled="this.ticket.person.mobile == ''" v-model="ticket.sms" class="form-check-input"
+            type="checkbox">
+          <label class="form-check-label"> پیامک</label>
+        </span>
         <button @click="autofill()" class="btn btn-sm btn-outline-primary">
           <i class="fa fa-list-check me-2"></i>
           تکمیل خودکار
@@ -203,23 +231,27 @@ export default defineComponent({
         </div>
       </div>
       <div class="row mt-1">
-        <div class="col-sm-12 col-md-3">
-          <label class="form-label">حمل و نقل</label>
-          <input v-model="this.ticket.transfer" type="text" class="form-control">
-        </div>
-        <div class="col-sm-12 col-md-3">
-          <label class="form-label">تحویل</label>
-          <input v-model="this.ticket.receiver" type="text" class="form-control">
-        </div>
-        <div class="col-sm-12 col-md-3">
+        <div class="col-sm-12 col-md-2">
           <label class="form-label">روش تحویل</label>
           <select class="form-select" v-model="ticket.transferType">
             <option v-for="transferType in transferTypes" :value="transferType">{{ transferType.name }}</option>
           </select>
         </div>
         <div class="col-sm-12 col-md-3">
-          <label class="form-label">شماره پیگیری</label>
+          <label class="form-label">حمل‌و‌نقل/نام باربری</label>
+          <input v-model="this.ticket.transfer" type="text" class="form-control">
+        </div>
+        <div class="col-sm-12 col-md-2">
+          <label class="form-label">تحویل گیرنده</label>
+          <input v-model="this.ticket.receiver" type="text" class="form-control">
+        </div>
+        <div class="col-sm-12 col-md-3">
+          <label class="form-label">شماره پیگیری/قبض</label>
           <input v-model="this.ticket.referral" type="text" class="form-control">
+        </div>
+        <div class="col-sm-12 col-md-2">
+          <label class="form-label">تلفن تحویل دهنده</label>
+          <input v-model="this.ticket.senderTel" type="text" class="form-control">
         </div>
       </div>
       <div class="row mt-2">
@@ -229,7 +261,8 @@ export default defineComponent({
             rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
             :loading="this.loading">
             <template #item-commdityCount="{ index, commdityCount, ticketCount }">
-              <input @blur="(event) => { if (this.items[index - 1].ticketCount === '') { this.items[index - 1].ticketCount = 0 } }"
+              <input
+                @blur="(event) => { if (this.items[index - 1].ticketCount === '') { this.items[index - 1].ticketCount = 0 } }"
                 @keypress="isNumber($event)" class="form-control form-control-sm" type="number" min="0"
                 :max="this.items[index - 1].remain" v-model="this.items[index - 1].ticketCount" />
             </template>
