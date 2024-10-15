@@ -12,7 +12,7 @@
     <div class="block-content p-0">
       <div class="list-group m-0 p-0" v-show="!loading">
         <div v-for="item in contents" @click="runBid(item.id)" class="list-group-item list-group-item-action d-flex gap-3 rounded-0" aria-current="true">
-          <img src="/img/icons/business.png" alt="twbs" class="rounded-circle flex-shrink-0" width="50" height="50">
+          <img :src="apiurl + '/front/avatar/file/get/' + item.id" :alt="item.name" class="rounded-circle border flex-shrink-0" width="50" height="50">
           <div class="d-flex gap-2 w-100 justify-content-between">
             <div>
               <h6 class="mb-0">{{item.name}}</h6>
@@ -43,6 +43,7 @@
 
 <script>
 import axios from "axios";
+import { getApiUrl } from "/hesabixConfig";
 import {ref} from "vue";
 import Loading from "vue-loading-overlay";
 
@@ -52,9 +53,11 @@ export default {
   data: ()=>{ return {
     loading: ref(true),
     contents: [],
+    apiurl:'',
   }},
   methods:{
     loadData(){
+      this.apiurl = getApiUrl();
       axios.post('/api/business/list').then((response)=>{
         this.contents = response.data;
         this.loading = false;

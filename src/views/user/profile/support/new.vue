@@ -11,12 +11,14 @@
         </router-link>
       </div>
     </div>
-    <div class="block-content mt-0">
+    <div class="block-content mt-0 mb-4 pb-4">
       <div class="container">
         <div class="row">
-          <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-12">
             <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
-
+            <div class="alert alert-info">
+              ما به صورت پیشفرض به اطلاعات هیچ یک از کسب‌و‌کارها دسترسی نداریم و انجام فرایند رفع مشکلات که لازمه آن دسترسی به اطلاعات شماست که با دعوت کاربر پشتیبانی با ایمیل support@hesabix.ir امکان‌پذیر است.لذا از شما تقاضا می شود بعد از ارسال درخواست پشتیبانی دسترسی‌های لازم را برای کاربر پشتیبانی فعال نمایید.این کار به کاهش زمان پاسخگویی کمک خواهد کرد.
+            </div>
             <div class="form-floating mb-4">
               <input v-model="this.item.title" class="form-control" type="text">
               <label class="form-label"><span class="text-danger">  *  </span> عنوان درخواست </label>
@@ -29,7 +31,7 @@
 
             </div>
             <div class="form-floating mb-4">
-              <textarea v-model="this.item.body" class="form-control" type="text" />
+              <textarea v-model="this.item.body" class="form-control" type="text" style="height: 200px" />
               <label class="form-label"><span class="text-danger">  *  </span>متن درخواست</label>
             </div>
             <button @click="save()" :disabled="isLoading" type="button" class="btn btn-alt-primary mb-4">ثبت درخواست</button>
