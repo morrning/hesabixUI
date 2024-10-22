@@ -354,7 +354,7 @@ export default {
           <span class="smini-visible"> Hesab<span class="opacity-75">ix</span>
           </span>
           <span class="smini-hidden"><span class="text-light">
-              <img class="rounded-circle border" style="max-height:35px;background:white;" :src="apiUrl + '/front/avatar/file/get/' + business.id" :alt="business.name" />
+              <img class="rounded-circle border img-fluid" style="max-width:35px; max-height:35px;background:white;" :src="apiUrl + '/front/avatar/file/get/' + business.id" :alt="business.name" />
               {{ siteName }}
             </span>
           </span>

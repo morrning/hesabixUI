@@ -227,6 +227,7 @@
                         <div class="form-check form-switch">
                           <input v-model="content.shortlinks" class="form-check-input" type="checkbox">
                           <label class="form-check-label">فعال‌سازی پیوند‌های یکتا</label>
+                          <br>
                           <label class="text-muted">این قابلیت برای تولید پیوند‌های یکتا برای ارسال به مشتری جهت مشاهده
                             فاکتورها است.</label>
                         </div>
@@ -241,6 +242,7 @@
                           <input @change="checkBanksExist()" v-model="content.walletEnabled" class="form-check-input"
                             type="checkbox">
                           <label class="form-check-label">فعال‌سازی دریافت آنلاین از طریق کیف پول</label>
+                          <br>
                           <label class="text-muted">با فعال سازی این قابلیت قادر خواهید بود مبالغ فاکتورهای ثبت شده را
                             به صورت آنلاین از مشتریان خود دریافت کنید.</label>
                         </div>
@@ -261,6 +263,33 @@
                           شماره شبا و شماره کارت و
                           ... به درستی تکمیل شده باشد در غیر این صورت تراکنش با خطا مواجه خواهد شد.</label>
 
+                      </div>
+                    </div>
+                  </div>
+                  <h3 class="text-primary">کالا و خدمات</h3>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-8 mb-2">
+                      <div class="space-y-2">
+                        <div class="form-check form-switch">
+                          <input v-model="content.updateBuyPrice" class="form-check-input" type="checkbox">
+                          <label class="form-check-label">به روز رسانی قیمت خرید هنگام صدور فاکتور</label>
+                          <br>
+                          <label class="text-muted">با صدور فاکتور خرید یا برگشت از خرید قیمت خرید کالا و خدمات به
+                            روزرسانی خواهد
+                            شد.</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-8 mb-2">
+                      <div class="space-y-2">
+                        <div class="form-check form-switch">
+                          <input v-model="content.updateSellPrice" class="form-check-input" type="checkbox">
+                          <label class="form-check-label">به روز رسانی قیمت فروش هنگام صدور فاکتور</label>
+                          <br>
+                          <label class="text-muted">با صدور فاکتور فروش یا برگشت از فروش قیمت خرید کالا و خدمات به
+                            روزرسانی خواهد
+                            شد.</label>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -322,7 +351,9 @@ export default {
         shortlinks: false,
         walletEnabled: false,
         walletMatchBank: '',
-        year: {}
+        year: {},
+        updateSellPrice: false,
+        updateBuyPrice: false
       },
       listBanks: [],
     }
@@ -387,7 +418,9 @@ export default {
           'shortlinks': this.content.shortlinks,
           'walletEnabled': this.content.walletEnabled,
           'walletMatchBank': this.content.walletMatchBank,
-          'year': this.content.year
+          'year': this.content.year,
+          'commodityUpdateBuyPriceAuto': this.content.updateBuyPrice,
+          'commodityUpdateSellPriceAuto': this.content.updateSellPrice,
         })
           .then((response) => {
             if (response.data.result == 1) {
