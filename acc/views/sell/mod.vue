@@ -9,6 +9,11 @@
         فاکتور فروش
       </h3>
       <div class="block-options">
+        <span class="form-check form-switch  form-check-inline">
+          <input :disabled="this.selectedPersonWithDet.mobile == '' || this.selectedPersonWithDet.mobile == undefined" v-model="sms" class="form-check-input"
+            type="checkbox">
+          <label class="form-check-label"> پیامک</label>
+        </span>
         <button :disabled="this.canSubmit != true || isLoading == true" @click="save()" type="button"
           class="btn btn-sm btn-alt-primary">
           <i class="fa fa-save"></i>
@@ -73,7 +78,7 @@
                             <i class="fa fa-bars"></i>
                             تراز:
                             {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
-                            parseInt(option.bd))) }}
+                              parseInt(option.bd))) }}
                             <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                               بدهکار </span>
                             <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
@@ -87,7 +92,7 @@
                 <span v-if="selectedPersonWithDet.bs != undefined" class="text-info ms-2">
                   تراز:
                   {{ this.$filters.formatNumber(Math.abs(parseInt(this.selectedPersonWithDet.bs) -
-                  parseInt(this.selectedPersonWithDet.bd))) }}
+                    parseInt(this.selectedPersonWithDet.bd))) }}
                   <span class="text-danger"
                     v-if="parseInt(this.selectedPersonWithDet.bs) - parseInt(this.selectedPersonWithDet.bd) < 0">
                     بدهکار </span>
@@ -609,7 +614,8 @@ export default {
         tax: 0,
         des: '',
         discount: 0,
-      }
+      },
+      sms: false
     }
   },
   watch: {
@@ -623,7 +629,7 @@ export default {
       this.editCalc();
     },
     'editItemData.commodity': function (newVal, oldVal) {
-      if (newVal != '' && newVal != undefined) {        
+      if (newVal != '' && newVal != undefined) {
         this.unitConfig.precision = this.editItemData.commodity.unitData.floatNumber;
         this.editItemData.des = this.editItemData.commodity.des;
       }
@@ -756,7 +762,7 @@ export default {
       });
     },
     editItem(index) {
-      this.editItemData = {... this.items[index - 1]};
+      this.editItemData = { ... this.items[index - 1] };
       this.editItemData.index = index;
     },
     doEditeItem() {
@@ -789,7 +795,7 @@ export default {
         });
       }
       else {
-        this.items[this.editItemData.index -1] = this.editItemData;
+        this.items[this.editItemData.index - 1] = this.editItemData;
         Swal.fire({
           text: 'آیتم فاکتور ویرایش شد.',
           icon: 'success',
@@ -950,6 +956,11 @@ export default {
         this.plugins = response.data;
       });
 
+      //load sms settings
+      axios.post('/api/sms/load/settings')
+        .then((response) => {
+          this.sms = response.data.sendAfterSell;
+        });
       //load data for edit document
       if (this.$route.params.id != '') {
         axios.get('/api/sell/get/info/' + this.$route.params.id).then((response) => {
@@ -963,7 +974,7 @@ export default {
               this.items.push({
                 commodity: item.commodity,
                 count: item.commodity_count,
-                price: parseInt((parseInt(item.bs) - parseInt(item.tax) + parseInt(item.discount) ) / parseInt(item.commodity_count)),
+                price: parseInt((parseInt(item.bs) - parseInt(item.tax) + parseInt(item.discount)) / parseInt(item.commodity_count)),
                 bs: item.bs,
                 bd: item.bd,
                 type: 'commodity',
@@ -1004,9 +1015,10 @@ export default {
           des: this.data.des,
           person: this.data.person,
           rows: this.items,
-          discountAll:this.data.discountAll,
-          transferCost:this.data.transferCost,
-          update: this.$route.params.id
+          discountAll: this.data.discountAll,
+          transferCost: this.data.transferCost,
+          update: this.$route.params.id,
+          sms: this.sms
         }).then((response) => {
           this.isLoading = false;
           if (response.data.code == 0) {
@@ -1018,7 +1030,25 @@ export default {
               this.$router.push('/acc/sell/list')
             });
           }
-          else{
+          else if (response.data.result == 1) {
+            Swal.fire({
+              text: 'فاکتور ثبت و پیامک اطلاع رسانی به مشتری ارسال شد.',
+              icon: 'success',
+              confirmButtonText: 'قبول'
+            }).then(() => {
+              this.$router.push('/acc/sell/list')
+            });
+          }
+          else if (response.data.result == 2) {
+            Swal.fire({
+              text: 'فاکتور ثبت ولی به دلیل کمبود اعتبار پیامک اطلاع رسانی به مشتری ارسال نشد..',
+              icon: 'success',
+              confirmButtonText: 'قبول'
+            }).then(() => {
+              this.$router.push('/acc/sell/list')
+            });
+          }
+          else {
             Swal.fire({
               text: response.data.message,
               icon: 'error',
@@ -1026,7 +1056,14 @@ export default {
             })
           }
 
-        })
+        }).catch((response) => {
+          this.isLoading = false;
+          Swal.fire({
+            text: 'اتصال با سرویس دهنده برقرار نشد. لطفا اتصال اینترنت خود را بررسی نمایید.',
+            icon: 'error',
+            confirmButtonText: 'قبول'
+          });
+        });
       }
       this.canSubmit = true;
     }

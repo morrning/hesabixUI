@@ -73,7 +73,7 @@
                             <i class="fa fa-bars"></i>
                             تراز:
                             {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
-          parseInt(option.bd))) }}
+                              parseInt(option.bd))) }}
                             <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                               بدهکار </span>
                             <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
@@ -87,7 +87,7 @@
                 <span v-if="selectedPersonWithDet.bs != undefined" class="text-info ms-2">
                   تراز:
                   {{ this.$filters.formatNumber(Math.abs(parseInt(this.selectedPersonWithDet.bs) -
-          parseInt(this.selectedPersonWithDet.bd))) }}
+                    parseInt(this.selectedPersonWithDet.bd))) }}
                   <span class="text-danger"
                     v-if="parseInt(this.selectedPersonWithDet.bs) - parseInt(this.selectedPersonWithDet.bd) < 0">
                     بدهکار </span>
@@ -345,7 +345,8 @@
             <span class="text-primary"> اقلام فاکتور </span>
             <span class="text-secondary">({{ items.length }} قلم)</span>
             <!-- Button trigger convas add commodity -->
-            <button class="btn btn-sm float-end btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">
+            <button class="btn btn-sm float-end btn-primary" type="button" data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">
               <i class="fa fa-plus"></i>
               افزودن ردیف جدید
             </button>
@@ -718,7 +719,7 @@ export default {
       });
     },
     editItem(index) {
-      this.editItemData = {... this.items[index - 1]};
+      this.editItemData = { ... this.items[index - 1] };
       this.editItemData.index = index;
     },
     doEditeItem() {
@@ -751,7 +752,7 @@ export default {
         });
       }
       else {
-        this.items[this.editItemData.index -1] = this.editItemData;
+        this.items[this.editItemData.index - 1] = this.editItemData;
         Swal.fire({
           text: 'آیتم فاکتور ویرایش شد.',
           icon: 'success',
@@ -896,7 +897,7 @@ export default {
       });
       //get active plugins
       axios.post('/api/plugin/get/actives',).then((response) => {
-              this.plugins = response.data;
+        this.plugins = response.data;
       });
       //load data for edit document
 
@@ -912,7 +913,7 @@ export default {
               this.items.push({
                 commodity: item.commodity,
                 count: item.commodity_count,
-                price: parseInt((parseInt(item.bd) - parseInt(item.tax) + parseInt(item.discount) ) / parseInt(item.commodity_count)),
+                price: parseInt((parseInt(item.bd) - parseInt(item.tax) + parseInt(item.discount)) / parseInt(item.commodity_count)),
                 bs: item.bs,
                 bd: item.bd,
                 type: 'commodity',
@@ -953,8 +954,8 @@ export default {
           des: this.data.des,
           person: this.data.person,
           rows: this.items,
-          discountAll:this.data.discountAll,
-          transferCost:this.data.transferCost,
+          discountAll: this.data.discountAll,
+          transferCost: this.data.transferCost,
           update: this.$route.params.id
         }).then((response) => {
           this.isLoading = false;
@@ -967,7 +968,7 @@ export default {
               this.$router.push('/acc/buy/list')
             });
           }
-          else{
+          else {
             Swal.fire({
               text: response.data.message,
               icon: 'error',
@@ -976,6 +977,14 @@ export default {
           }
 
         })
+          .catch((response) => {
+            this.isLoading = false;
+            Swal.fire({
+              text: 'اتصال با سرویس دهنده برقرار نشد. لطفا اتصال اینترنت خود را بررسی نمایید.',
+              icon: 'error',
+              confirmButtonText: 'قبول'
+            });
+          });
       }
       this.canSubmit = true;
     }
