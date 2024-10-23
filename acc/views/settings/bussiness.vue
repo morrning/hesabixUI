@@ -292,6 +292,17 @@
                         </div>
                       </div>
                     </div>
+                    <div class="col-sm-12 col-md-8 mb-2">
+                      <div class="space-y-2">
+                        <div class="form-floating">
+                          <select class="form-select" v-model="content.profitCalcType">
+                            <option value="lis">بر اساس آخرین قیمت ورود به انبار</option>
+                            <option value="avgis">بر اساس میانگین قیمت ورود به انبار</option>
+                          </select>
+                          <label for="floatingSelect">نحوه محاسبه سود فاکتور</label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -353,7 +364,8 @@ export default {
         walletMatchBank: '',
         year: {},
         updateSellPrice: false,
-        updateBuyPrice: false
+        updateBuyPrice: false,
+        profitCalcType: 'lis'
       },
       listBanks: [],
     }
@@ -421,6 +433,7 @@ export default {
           'year': this.content.year,
           'commodityUpdateBuyPriceAuto': this.content.updateBuyPrice,
           'commodityUpdateSellPriceAuto': this.content.updateSellPrice,
+          'profitCalcType': this.content.profitCalcType
         })
           .then((response) => {
             if (response.data.result == 1) {

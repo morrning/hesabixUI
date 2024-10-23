@@ -264,6 +264,7 @@ export default {
         { text: "تخفیف", value: "discountAll", sortable: true },
         { text: "حمل و نقل", value: "transferCost", sortable: true },
         { text: "مبلغ", value: "amount", sortable: true },
+        { text: "سود فاکتور", value: "profit", sortable: true },
         { text: "پرداختی", value: "relatedDocsCount", sortable: true },
         { text: "برچسب", value: "label", width: 100 },
         { text: "شرح", value: "des", sortable: true },
