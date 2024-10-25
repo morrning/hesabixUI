@@ -39,7 +39,7 @@ export default defineComponent({
         bidInfo: true,
         taxInfo: true,
         discountInfo: true,
-        paper:  'A4-L'
+        paper: 'A4-L'
       },
       notes: {
         count: 0
@@ -65,7 +65,8 @@ export default defineComponent({
           date: null,
           code: null,
           des: '',
-          amount: 0
+          amount: 0,
+          profit: 0
         },
         relatedDocs: [],
         rows: []
@@ -115,6 +116,7 @@ export default defineComponent({
         this.person = response.data.person;
         this.discountAll = response.data.discountAll;
         this.transferCost = response.data.transferCost;
+        this.item.doc.profit = response.data.profit;
         response.data.rows.forEach((item) => {
           if (item.commodity != null) {
             this.totalTax += parseInt(item.tax);
@@ -136,6 +138,7 @@ export default defineComponent({
           }
 
         });
+        console.log(this.item)
       });
       axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
         this.bid = response.data;
@@ -516,12 +519,13 @@ export default defineComponent({
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
-              <div class="input-group input-group-sm mb-3">
+              <div v-if="parseInt(this.item.doc.profit) >= 0" class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">سود فاکتور</span>
-                <input v-if="parseInt(this.item.doc.profit) >= 0" type="text" readonly="readonly"
-                  :value="this.item.doc.profit" class="form-control text-success" aria-describedby="inputGroup-sizing-sm">
-                <input v-else type="text" readonly="readonly" value="تسویه نشده" class="form-control text-danger"
-                  aria-describedby="inputGroup-sizing-sm">
+                <input type="text" readonly="readonly" :value="this.$filters.formatNumber(Math.abs(this.item.doc.profit))" class="form-control text-success">
+              </div>
+              <div v-else class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">زیان فاکتور</span>
+                <input type="text" readonly="readonly" :value="this.$filters.formatNumber(Math.abs(this.item.doc.profit))" class="form-control text-danger">
               </div>
             </div>
           </div>
