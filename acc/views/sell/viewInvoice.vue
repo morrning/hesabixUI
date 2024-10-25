@@ -499,18 +499,27 @@ export default defineComponent({
             </template>
           </EasyDataTable>
           <div class="row pt-2">
-            <div class="col-sm-6 col-md-6">
+            <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">جمع کل</span>
                 <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.item.doc.amount)"
                   class="form-control" aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
-            <div class="col-sm-6 col-md-6">
+            <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">وضعیت</span>
                 <input v-if="parseInt(this.item.doc.amount) <= parseInt(this.totalRec)" type="text" readonly="readonly"
                   value="تسویه شده" class="form-control text-success" aria-describedby="inputGroup-sizing-sm">
+                <input v-else type="text" readonly="readonly" value="تسویه نشده" class="form-control text-danger"
+                  aria-describedby="inputGroup-sizing-sm">
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">سود فاکتور</span>
+                <input v-if="parseInt(this.item.doc.profit) >= 0" type="text" readonly="readonly"
+                  :value="this.item.doc.profit" class="form-control text-success" aria-describedby="inputGroup-sizing-sm">
                 <input v-else type="text" readonly="readonly" value="تسویه نشده" class="form-control text-danger"
                   aria-describedby="inputGroup-sizing-sm">
               </div>

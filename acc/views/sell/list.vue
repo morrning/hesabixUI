@@ -174,6 +174,15 @@
                 {{ this.$filters.formatNumber(amount) }}
               </span>
             </template>
+            <template #item-profit="{ profit }">
+              <span v-if="profit >= 0" class="text-dark">
+                {{ this.$filters.formatNumber(profit) }}
+              </span>
+              <span v-else class="text-danger">
+                {{ this.$filters.formatNumber(Math.abs(profit)) }}
+                 (زیان)
+              </span>
+            </template>
             <template #item-transferCost="{ transferCost }">
               <span class="text-dark">
                 {{ this.$filters.formatNumber(transferCost) }}
