@@ -33,7 +33,7 @@ export default defineComponent({
       this.loading = true;
       axios.post('/api/storeroom/list')
           .then((response)=>{
-            this.storerooms = response.data;
+            this.storerooms = response.data.data;
             this.storerooms.forEach((element)=>{
               element.name = element.name + ' انباردار : ' + element.manager
             });
