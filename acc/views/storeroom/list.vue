@@ -80,7 +80,7 @@ export default {
     loadData(){
       axios.get('/api/storeroom/list/all')
           .then((response)=>{
-            this.items = response.data;
+            this.items = response.data.data;
             this.loading = false;
           })
     },

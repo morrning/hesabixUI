@@ -7,7 +7,8 @@ export function getApiUrl() {
     If this be wrong user interface not functioning probably.
      */
     //return 'https://hesabix.ir';
-    return 'http://localhost';
+    return 'https://next.hesabix.ir';
+    //return 'http://localhost';
 }
 
 export function getSiteName() {

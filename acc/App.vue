@@ -808,6 +808,13 @@ export default {
                     نمایه کسب‌و‌کار </span>
                 </router-link>
               </li>
+              <li v-if="permissions.settings && this.isPluginActive('accpro')" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/business/extramoneys">
+                  <span class="nav-main-link-name">
+                    <i class="fa-solid fa-money-bill"></i>
+                    ارز‌های جانبی</span>
+                </router-link>
+              </li>
               <li v-if="permissions.log" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/business/logs">
                   <span class="nav-main-link-name">
