@@ -80,7 +80,9 @@ export default {
       localStorage.setItem('activeBid', id);
       this.contents.forEach((item)=>{
         if(item.id == id){
-          localStorage.setItem('activeMoney',item.selectedMoney.name)
+          localStorage.setItem('activeMoney',item.selectedMoney.name);
+          localStorage.setItem('activeMoneySymbol',item.selectedMoney.symbol);
+          localStorage.setItem('activeMoneyShortName',item.selectedMoney.shortName);
         }
       })
       axios.post('/api/year/list', {}, {

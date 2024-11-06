@@ -10,11 +10,51 @@
         ارز‌های جانبی
       </h3>
       <div class="block-options">
-
+        <button type="button" class="block-options-item btn btn-link border-0" title="افزودن ارز جدید" data-bs-toggle="modal"
+          data-bs-target="#exampleModal">
+          <span class="fa fa-plus fw-bolder"></span>
+        </button>
       </div>
     </div>
     <div class="block-content p-0">
-      <loading color="blue" loader="dots" v-model:active="loading" :is-full-page="false" />
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <loading color="blue" loader="dots" v-model:active="loadingAdd" :is-full-page="false" />
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">افزودن واحد ارزی جدید</h1>
+              <div class="block-options">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+            </div>
+            <div class="modal-body">
+              <v-select class="mb-1 mx-0" :filterable="true" dir="rtl" :options="moneyAll" label="label"
+                v-model="selectedMoney">
+                <template #no-options="{ search, searching, loading }">
+                  موردی یافت نشد!
+                </template>
+                <template v-slot:option="option">
+                  <div class="row">
+                    <div class="col-12 p-1">
+                      <i class="fa fa-flag me-2"></i>
+                      {{ option.label }} >
+                      {{ option.name }}
+                    </div>
+                  </div>
+                </template>
+              </v-select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>
+              <button type="button" @click="save()" class="btn btn-primary">
+                <i class="fa fa-save me-1"></i>
+                افزودن
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <table class="table table-striped table-vcenter">
         <thead>
           <tr>
@@ -62,9 +102,17 @@ export default {
   data: () => {
     return {
       loading: true,
+      loadingAdd: false,
       moneys: [],
-      bid: {}
+      moneyAll: [],
+      bid: {},
+      selectedMoney: {},
+      showModal: false,
+      modal: ''
     }
+  },
+  mounted() {
+    this.modal = new bootstrap.Modal('#exampleModal');
   },
   methods: {
     loadData() {
@@ -73,10 +121,49 @@ export default {
           this.loading = false;
           this.moneys = response.data.moneys;
           this.bid = response.data;
+          this.selectedMoney = response.data.arzmain;
+        });
+      axios.get('/api/money/get/all')
+        .then((response) => {
+          this.moneyAll = response.data;
         })
     },
     save() {
-      this.loading = true;
+      //this.loading = true;
+      if (this.selectedMoney == null) {
+        Swal.fire({
+          text: 'گذینه‌ای انتخاب نشده است.',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      let canAdd = true;
+      this.moneys.forEach((item) => {
+        if (item.name == this.selectedMoney.name) {
+          canAdd = false;
+          Swal.fire({
+            text: 'این ارز قبلا اضافه شده است.',
+            icon: 'error',
+            confirmButtonText: 'قبول'
+          });
+        }
+      })
+
+      if (canAdd) {
+        this.loadingAdd = true;
+        axios.post('/api/money/add/to/business', {
+          'name': this.selectedMoney.name
+        }).then((response) => {
+          this.loadData();
+          this.loadingAdd = false;
+          this.modal.hide();
+          Swal.fire({
+            text: 'با موفقیت افزوده شد.',
+            icon: 'success',
+            confirmButtonText: 'قبول'
+          });
+        })
+      }
     },
     deleteItem(name) {
       Swal.fire({

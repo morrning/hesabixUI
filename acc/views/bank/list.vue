@@ -80,7 +80,7 @@ export default {
         { text: "عملیات", value: "operation", width: "130" },
         { text: "کد", value: "code", width: "100" },
         { text: "بانک", value: "name", width: "140" },
-        { text: "موجودی(ریال)", value: "balance", width: "140" },
+        { text: "موجودی", value: "balance", width: "140" },
         { text: "صاحب حساب", value: "owner", width: "120" },
         { text: "شماره کارت", value: "cardNum", width: "120" },
         { text: "شبا", value: "shaba", width: "160" },

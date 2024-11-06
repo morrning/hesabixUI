@@ -29,6 +29,7 @@ axios.defaults.baseURL = app.config.globalProperties.$API_URL;
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['activeBid'] = localStorage.getItem('activeBid');
 axios.defaults.headers.common['activeYear'] = localStorage.getItem('activeYear');
+axios.defaults.headers.common['activeMoney'] = localStorage.getItem('activeMoney');
 axios.interceptors.request.use(function(config) {
     // Do something before request is sent
     NProgress.start();
@@ -85,6 +86,13 @@ app.config.globalProperties.$filters = {
     },
     getApiUrl() {
         return getApiUrl();
+    },
+    getActiveMoney() {
+        return {
+            name: localStorage.getItem('activeMoney'),
+            symbol: localStorage.getItem('activeMoneySymbol'),
+            shortName: localStorage.getItem('activeMoneyShortName'),
+        };
     },
     async isLogin() {
         let result = await axios.get('/api/user/check/login');

@@ -207,7 +207,7 @@
                     </span>
                     <span class="text-primary">
                       {{ this.$filters.formatNumber(this.sumTotal) }}
-                      ریال
+                      {{ localStorage.getItem('activeMoneyShortName') }}
                     </span>
                   </div>
 
