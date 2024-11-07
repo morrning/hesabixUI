@@ -59,9 +59,9 @@ export default {
       loading: ref(true),
       contents: [],
       apiurl: '',
-      selectedMoney:{
-        name:'',
-        label:''
+      selectedMoney: {
+        name: '',
+        label: ''
       }
     }
   },
@@ -70,22 +70,23 @@ export default {
       this.apiurl = getApiUrl();
       axios.post('/api/business/list').then((response) => {
         this.contents = response.data;
-        this.contents.forEach((bid)=>{
+        this.contents.forEach((bid) => {
           bid.selectedMoney = bid.arzmain;
         })
         this.loading = false;
       });
     },
-    runBid(id) {
+    async runBid(id) {
       localStorage.setItem('activeBid', id);
-      this.contents.forEach((item)=>{
-        if(item.id == id){
-          localStorage.setItem('activeMoney',item.selectedMoney.name);
-          localStorage.setItem('activeMoneySymbol',item.selectedMoney.symbol);
-          localStorage.setItem('activeMoneyShortName',item.selectedMoney.shortName);
+      this.contents.forEach((item) => {
+        if (item.id == id) {
+          localStorage.setItem('activeMoney', item.selectedMoney.name);
+          localStorage.setItem('activeMoneySymbol', item.selectedMoney.symbol);
+          localStorage.setItem('activeMoneyShortName', item.selectedMoney.shortName);
+          localStorage.setItem('activeMoneyLabel', item.selectedMoney.label);
         }
       })
-      axios.post('/api/year/list', {}, {
+      await axios.post('/api/year/list', {}, {
         headers: {
           activeBid: id
         }

@@ -39,6 +39,10 @@
           </div>
           <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
+              <input readonly="readonly" v-model="data.money.label" class="form-control" type="text">
+              <label class="form-label">نوع ارز</label>
+            </div>
+            <div class="form-floating mb-4">
               <input v-model="data.owner" class="form-control" type="text">
               <label class="form-label">صاحب حساب</label>
             </div>
@@ -87,7 +91,10 @@ export default {
       accountNum: '',
       code: 0,
       posNum: '',
-      owner: ''
+      owner: '',
+      money:{
+        label:''
+      }
     }
   }},
   mounted() {
@@ -102,16 +109,7 @@ export default {
         //load user info
         this.isLoading = true;
         axios.post('/api/bank/info/' + id).then((response) => {
-          this.data.name = response.data.name;
-          this.data.cardNum = response.data.cardNum;
-          this.data.shaba = response.data.shaba;
-          this.data.des = response.data.des;
-          this.data.mobileInternetbank = response.data.mobileInternetBank;
-          this.data.shobe = response.data.shobe;
-          this.data.accountNum = response.data.accountNum;
-          this.data.code = response.data.code;
-          this.data.posNum = response.data.posNum;
-          this.data.owner = response.data.owner;
+          this.data = response.data
           this.isLoading = false;
         });
       } else {
@@ -126,6 +124,7 @@ export default {
         this.data.code = 0;
         this.data.posNum = '';
         this.data.owner = '';
+        this.data.money.label = localStorage.getItem('activeMoneyLabel');
       }
     },
     save() {

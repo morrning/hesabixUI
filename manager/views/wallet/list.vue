@@ -17,7 +17,7 @@ export default defineComponent({
       { text: "صاحب حساب متصل", value: "bankAcOwner"},
       { text: "شبای حساب متصل", value: "bankAcShaba"},
       { text: "کارت متصل", value: "bankAcCardNum"},
-      { text: "پرداخت‌ها(ریال)", value: "totalPays"},
+      { text: "پرداخت‌ها", value: "totalPays"},
       { text: "واریز‌ها(ریال)", value: "totalIncome"},
       { text: "قابل تسویه(ریال)", value: "canDeposit"},
     ]

@@ -244,13 +244,13 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-4">
-                <label>فی هر گرم نقره (ریال)</label>
+                <label>فی هر گرم نقره ({{ this.$filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 @change="calc()" class="form-control" v-model="order.noghreFee" v-bind="currencyConfig"></money3>
                 </div>
               </div>
               <div class="col-sm-12 col-md-4">
-                <label>مبلغ کل نقره مصرفی (ریال)</label>
+                <label>مبلغ کل نقره مصرفی ({{ this.$filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 readonly="readonly" class="form-control" v-model="totalNoghre" v-bind="currencyConfig"></money3>
                 </div>
@@ -266,7 +266,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label class="required">هزینه نگین (ریال)</label>
+                <label class="required">هزینه نگین ({{ this.$filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.neginPrice" v-bind="currencyConfig"></money3>
                 </div>
@@ -291,7 +291,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label class=" required">هزینه تراشکار (ریال)</label>
+                <label class=" required">هزینه تراشکار ({{ this.$filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.tarashPrice" v-bind="currencyConfig"></money3>
                 </div>
@@ -316,7 +316,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label class=" required">هزینه حکاکی (ریال)</label>
+                <label class=" required">هزینه حکاکی ({{ this.$filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.hakakPrice" v-bind="currencyConfig"></money3>
                 </div>
@@ -341,7 +341,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label class=" required">هزینه قلم زن (ریال)</label>
+                <label class=" required">هزینه قلم زن ({{ this.$filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.ghalamPrice" v-bind="currencyConfig"></money3>
                 </div>
@@ -366,7 +366,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label class=" required">هزینه مرصع کار (ریال)</label>
+                <label class=" required">هزینه مرصع کار ({{ this.$filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.morsaPrice" v-bind="currencyConfig"></money3>
                 </div>
@@ -376,13 +376,13 @@ export default defineComponent({
           <div class="col-sm-12 col-md-6 mb-2 border rounded-2">
             <div class="row my-2">
               <div class="col-sm-12 col-md-6">
-                <label class="required">هزینه اجرای مدل (ریال)</label>
+                <label class="required">هزینه اجرای مدل ({{ this.$filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.modelPrice" v-bind="currencyConfig"></money3>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label>سایر هزینه‌ها (ریال)</label>
+                <label>سایر هزینه‌ها ({{ this.$filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.etcPrice" v-bind="currencyConfig"></money3>
                 </div>

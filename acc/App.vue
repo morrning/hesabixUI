@@ -7,6 +7,7 @@ import NProgress from "nprogress/nprogress.js";
 import "nprogress/nprogress.css"
 
 import Year from "./views/component/Year.vue"
+import Currency from './views/component/Currency.vue';
 import Icon from "./views/component/notifications/icon.vue";
 import archive_modal from './views/component/archive/archive_modal.vue';
 import Loading from "vue-loading-overlay";
@@ -185,7 +186,8 @@ export default {
     Year: Year,
     notification: Icon,
     smsPanel: smsPanel,
-    archive_modal: archive_modal
+    archive_modal: archive_modal,
+    Currency:Currency
   }
 }
 </script>
@@ -946,6 +948,7 @@ export default {
           </li>
           <li class="nav-main-item border rounded-3 border-white p-2 mt-4">
             <Year></Year>
+            <Currency></Currency>
           </li>
         </ul>
       </div>

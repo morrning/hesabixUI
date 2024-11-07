@@ -460,7 +460,7 @@ export default defineComponent({
                     </span>
                     <span class="text-primary">
                       {{ this.$filters.formatNumber(this.sumSelected) }}
-                      ریال
+                      {{ this.$filters.getActiveMoney().shortName }}
                     </span>
                   </div>
                   <div class="col-sm-12 col-md-6">
@@ -470,7 +470,7 @@ export default defineComponent({
                     </span>
                     <span class="text-primary">
                       {{ this.$filters.formatNumber(this.sumTotal) }}
-                      ریال
+                      {{ this.$filters.getActiveMoney().shortName }}
                     </span>
                   </div>
                 </div>

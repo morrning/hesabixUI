@@ -136,7 +136,7 @@
                           </span>
                           <span class="text-primary">
                             {{ this.$filters.formatNumber(this.sumMoneyTotal) }}
-                            ریال
+                            {{ this.$filters.getActiveMoney().shortName }}
                           </span>
                         </div>
 
@@ -147,7 +147,7 @@
                           </span>
                           <span class="text-primary">
                             {{ this.$filters.formatNumber(this.sumSelected) }}
-                            ریال
+                            {{ this.$filters.getActiveMoney().shortName }}
                           </span>
                         </div>
                       </div>

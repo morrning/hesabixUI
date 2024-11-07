@@ -17,6 +17,10 @@
         <div class="row">
           <div class="col-sm-12 col-md-6">
             <div class="form-floating mb-4">
+              <input readonly="readonly" v-model="data.money.label" class="form-control" type="text">
+              <label class="form-label">نوع ارز</label>
+            </div>
+            <div class="form-floating mb-4">
               <input v-model="data.name" class="form-control" type="text">
               <label class="form-label"><span class="text-danger">(لازم)</span> نام</label>
             </div>
@@ -50,6 +54,10 @@ export default {
       code: 0,
       name: '',
       des: '',
+      money:{
+        name:'',
+        label:''
+      }
     }
   }},
   mounted() {
@@ -68,6 +76,7 @@ export default {
         //salary is new
         this.data.name = '';
         this.data.des = '';
+        this.data.money.label = localStorage.getItem('activeMoneyLabel');
       }
     },
     save() {

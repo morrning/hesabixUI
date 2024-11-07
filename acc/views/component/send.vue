@@ -315,12 +315,12 @@ export default defineComponent({
       <span class="input-group-text">
         مجموع:
         {{this.$filters.formatNumber(parseInt(this.totalPays))}}
-        ریال
+        {{ this.$filters.getActiveMoney().shortName }}
       </span>
       <span class="input-group-text">
         باقی مانده:
         {{this.$filters.formatNumber(parseInt(this.$props.totalAmount) - parseInt(this.totalPays))}}
-        ریال
+        {{ this.$filters.getActiveMoney().shortName }}
       </span>
       <button @click="submit()" class="btn btn-primary" type="button" >
         <i class="fa fa-save me-2"></i>

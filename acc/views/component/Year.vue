@@ -1,5 +1,5 @@
 <template>
-  <div class="py-2 text-light">
+  <div class="py-1 text-light">
     <i class="fa fa-calendar-days"></i>
     سال مالی</div>
   <select v-model="activeYear" @change="changeyear($event)" class="form-select form-select-sm" >

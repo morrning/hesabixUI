@@ -5,17 +5,23 @@
         <router-link class="text-warning mx-2 px-2" to="/acc/salary/list">
           <i class="fa fw-bold fa-arrow-right"></i>
         </router-link>
-        مشخصات تنخواه‌گردان </h3>
+        مشخصات تنخواه‌گردان
+      </h3>
       <div class="block-options">
-        <archive-upload v-if="this.$route.params.id != ''" :docid="this.$route.params.id" doctype="salary" cat="salary"></archive-upload>
+        <archive-upload v-if="this.$route.params.id != ''" :docid="this.$route.params.id" doctype="salary"
+          cat="salary"></archive-upload>
         <button @click="save()" type="button" class="btn btn-sm btn-alt-primary"><i class="fa fa-save"></i> ثبت</button>
       </div>
     </div>
     <div class="block-content py-3 vl-parent">
-      <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
+      <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false" />
       <div class="container">
         <div class="row">
           <div class="col-sm-12 col-md-6">
+            <div class="form-floating mb-4">
+              <input readonly="readonly" v-model="data.money.label" class="form-control" type="text">
+              <label class="form-label">نوع ارز</label>
+            </div>
             <div class="form-floating mb-4">
               <input v-model="data.name" class="form-control" type="text">
               <label class="form-label"><span class="text-danger">(لازم)</span> نام</label>
@@ -44,14 +50,19 @@ export default {
     Loading,
     archiveUpload
   },
-  data: ()=>{return{
-    isLoading: false,
-    data: {
-      code: 0,
-      name: '',
-      des: '',
+  data: () => {
+    return {
+      isLoading: false,
+      data: {
+        code: 0,
+        name: '',
+        des: '',
+        money: {
+          label: ''
+        }
+      }
     }
-  }},
+  },
   mounted() {
     this.loadData(this.$route.params.id);
   },
@@ -68,6 +79,7 @@ export default {
         //salary is new
         this.data.name = '';
         this.data.des = '';
+        this.data.money.label = localStorage.getItem('activeMoneyLabel');
       }
     },
     save() {
@@ -104,6 +116,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

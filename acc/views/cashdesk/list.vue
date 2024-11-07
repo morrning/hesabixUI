@@ -88,7 +88,7 @@ export default {
       { text: "عملیات", value: "operation", width: "130"},
       { text: "کد", value: "code", width: "100px" },
       { text: "نام صندوق", value: "name", width: "120px"},
-      { text: "موجودی(ریال)", value: "balance", width: "140px"},
+      { text: "موجودی()", value: "balance", width: "140px"},
       { text: "توضیحات", value: "des", width: "150px"},
     ]
   }},

@@ -95,7 +95,7 @@ export default defineComponent({
             <div class="col-sm-12 col-md-4">
               <div class="form-floating mb-4">
                 <input @keypress="this.$filters.onlyNumber($event)" v-model="item.amount" class="form-control" type="number" :disabled="loading">
-                <label class="form-label"><span class="text-danger">(لازم)</span> مبلغ(ریال)</label>
+                <label class="form-label"><span class="text-danger">(لازم)</span> مبلغ({{ this.$filters.getActiveMoney().shortName }})</label>
               </div>
             </div>
             <div class="col-sm-12 col-md-4">
