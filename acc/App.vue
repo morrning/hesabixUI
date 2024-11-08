@@ -732,6 +732,15 @@ export default {
                     class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </router-link>
               </li>
+              <li v-if="permissions.sell && this.isPluginActive('accpro')" class="nav-main-item">
+                <router-link class="nav-main-link" to="/acc/presell/list/">
+                  <span class="nav-main-link-name">
+                    <i class="fa fa-list-check"></i>
+                    پیش‌فاکتورها</span>
+                  <router-link to="/acc/presell/mod/"
+                    class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
+                </router-link>
+              </li>
               <li v-if="permissions.income" class="nav-main-item">
                 <RouterLink class="nav-main-link" to="/acc/incomes/list">
                   <span class="nav-main-link-name">

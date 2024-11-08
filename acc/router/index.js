@@ -373,6 +373,24 @@ const router = createRouter({
                 import ('../views/sell/viewInvoice.vue'),
         },
         {
+            path: '/acc/presell/mod/:id?',
+            name: 'presell_mod',
+            component: () =>
+                import ('../views/presell/mod.vue'),
+        },
+        {
+            path: '/acc/presell/list',
+            name: 'presell_list',
+            component: () =>
+                import ('../views/presell/list.vue'),
+        },
+        {
+            path: '/acc/presell/view/:id?',
+            name: 'presell_view',
+            component: () =>
+                import ('../views/presell/viewInvoice.vue'),
+        },
+        {
             path: '/acc/rfbuy/mod/:id?',
             name: 'rfbuy_mod',
             component: () =>
