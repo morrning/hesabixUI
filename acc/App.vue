@@ -732,7 +732,7 @@ export default {
                     class="nav-main-link-badge badge rounded-pill bg-primary">+</router-link>
                 </router-link>
               </li>
-              <li v-if="permissions.sell && this.isPluginActive('accpro')" class="nav-main-item">
+              <li v-if="permissions.sell && this.isPluginActive('accpro') && 1==2" class="nav-main-item">
                 <router-link class="nav-main-link" to="/acc/presell/list/">
                   <span class="nav-main-link-name">
                     <i class="fa fa-list-check"></i>
