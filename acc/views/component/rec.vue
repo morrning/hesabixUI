@@ -362,7 +362,9 @@ export default defineComponent({
                           </v-select>
                         </div>
                         <div v-show="pay.type == 'cheque'" class="">
-                          <label class="form-label">شماره چک</label>
+                          <label class="form-label">
+                            <small class="text-danger">*</small>
+                            شماره چک</label>
                           <input class="form-control" v-model="pay.chequeNum">
                         </div>
                         <div v-show="pay.type == 'salary'" class="">
@@ -376,20 +378,29 @@ export default defineComponent({
                       </div>
                       <div v-if="pay.type == 'cheque'" class="col-sm-12 col-md-6">
                         <div class="mb-1">
-                          <label class="form-label">شماره صیاد</label>
+                          <label class="form-label"> 
+                            <small class="text-danger">*</small>
+                            شماره صیاد
+                          </label>
                           <input type="text" v-model="pay.chequeSayadNum" class="form-control">
                         </div>
                       </div>
                       <div v-if="pay.type == 'cheque'" class="col-sm-12 col-md-6">
                         <div class="mb-1">
-                          <label class="form-label">بانک صادر کننده</label>
+                          <label class="form-label">
+                            <small class="text-danger">*</small>
+                            بانک صادر‌ کننده
+                          </label>
                           <input type="text" v-model="pay.chequeBank" class="form-control">
                         </div>
                       </div>
                       <div v-if="pay.type == 'cheque'" class="col-sm-12 col-md-6">
                         <div class="mb-1">
                           <div class="form-control">
-                            <label class="form-label">تاریخ:</label>
+                            <label class="form-label">
+                              <small class="text-danger">*</small>
+                              تاریخ
+                            </label>
                             <date-picker class="" v-model="pay.chequeDate" format="jYYYY/jMM/jDD"
                               display-format="jYYYY/jMM/jDD" />
                           </div>
@@ -397,8 +408,11 @@ export default defineComponent({
                       </div>
                       <div class="col-sm-12 col-md-6">
                         <div class="mb-1">
-                          <div class="block-options">
-                            <label class="form-label">مبلغ</label>
+                          <div class="block-options px-0">
+                            <label class="form-label">
+                              <small class="text-danger">*</small>
+                              مبلغ
+                            </label>
                             <button @click="fillWithTotal(pay)"
                               class="btn btn-sm btn-link block-options-item float-end me-2">کل
                               فاکتور</button>
@@ -445,7 +459,7 @@ export default defineComponent({
             <li><button type="button" @click="addItem('salary')" class="dropdown-item"><i class="fa fa-dot-circle"></i>
                 تنخواه
                 گردان</button></li>
-            <li><button disabled="disabled" type="button" @click="addItem('cheque')" class="dropdown-item"><i
+            <li><button type="button" @click="addItem('cheque')" class="dropdown-item"><i
                   class="fa fa-dot-circle"></i>چک</button></li>
           </ul>
         </div>
