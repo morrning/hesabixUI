@@ -6,8 +6,8 @@
           class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
-        <i class="fa fa-print"></i>
-        چاپگر‌های ابری
+        <i class="fa fa-list"></i>
+        صف چاپ
       </h3>
       <div class="block-options">
         <!-- Button trigger modal -->
@@ -60,10 +60,6 @@
               </button>
               <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
                 style="">
-                <router-link :to="'/acc/printers/printqu/' + id" class="dropdown-item">
-                  <i class="fa fa-list pe-2"></i>
-                  صف چاپ
-                </router-link>
                 <button type="button" @click="deleteItem(id)" class="dropdown-item text-danger">
                   <i class="fa fa-trash pe-2"></i>
                   حذف

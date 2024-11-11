@@ -165,14 +165,6 @@
                   <h3 class="text-primary">اطلاعات مالی</h3>
                   <div class="row">
                     <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-floating">
-                        <select v-model="content.arzmain" class="form-select">
-                          <option v-for="item in moneys" :value="item.name">{{ item.label }}</option>
-                        </select>
-                        <label class="form-label required">نوع ارز اصلی</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
                       <div class="form-floating required">
                         <input v-model="content.maliyatafzode" type="number" id="business_new_maliyatafzode"
                           name="business_new[maliyatafzode]" required="required" class="form-control form-control-sm">
