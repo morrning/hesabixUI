@@ -49,5 +49,9 @@ npm run build
 
 **All output files will be generated in the dist folder, which will be able to run on the web server**
 
+### Contributors
+<a href="https://github.com/OWNER/REPO/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=OWNER/REPO" />
+</a>
 
 
