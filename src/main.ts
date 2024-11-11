@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from "axios";
+import "./registerServiceWorker";
 
 import 'vue3-tel-input/dist/vue3-tel-input.css'
 // @ts-ignore
