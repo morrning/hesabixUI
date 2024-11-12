@@ -116,9 +116,9 @@
               </RouterLink>
             </li>
             <li v-show="ROLE_ADMIN" class="nav-item">
-              <a class="nav-link text-body-color py-4" href="/manager/#/">
+              <RouterLink class="nav-link text-body-color py-4" to="/manager/dashboard">
                 <i class="fab fa-android fa-fw opacity-50"></i> <span class="d-none d-md-inline ms-1">مدیریت</span>
-              </a>
+              </RouterLink>
             </li>
           </ul>
         </div>

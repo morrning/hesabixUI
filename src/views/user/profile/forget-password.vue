@@ -3,7 +3,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
-import { getApiUrl, getSiteName } from "../../../../hesabixConfig"
+import { getApiUrl, getSiteName } from "../..//hesabixConfig"
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "login",

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import {defineComponent} from 'vue'
 import Swal from "sweetalert2";
-import {getApiUrl,getSiteName} from "../../../hesabixConfig"
+import {getApiUrl,getSiteName} from "..//hesabixConfig"
 export default defineComponent({
   name: "active-account",
   data: ()=>{return {

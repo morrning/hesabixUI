@@ -1,7 +1,7 @@
 <script lang="ts">
 import axios from 'axios';
 import Swal from "sweetalert2";
-import { getApiUrl, getSiteName } from "../../../../hesabixConfig"
+import { getApiUrl, getSiteName } from "../..//hesabixConfig"
 
 export default {
   name: "forget-password-submit-code",

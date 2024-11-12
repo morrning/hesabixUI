@@ -96,7 +96,7 @@ export default {
             localStorage.setItem('activeYear', item.id);
           }
         });
-        window.location.href = "/acc/"
+        this.$router.push({name:'acc_home'});
       })
     }
   },
