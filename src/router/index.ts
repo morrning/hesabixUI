@@ -936,10 +936,9 @@ router.beforeEach(async (to, from, next) => {
     //check user is login
     if (to.meta.login) {
         let result = await axios.get('/api/user/check/login');
-        if (result.status === 200 && result.data.result === true) {
+        if (result.status == 200 && result.data.Success == true) {
             //check user has role
             if (to.meta.role) {
-
                 let result = await axios.get('/api/user/has/role/' + to.meta.role);
                 if (result.status == 200 && result.data.result == true) {
                     next();

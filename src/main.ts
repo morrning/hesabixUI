@@ -2,6 +2,59 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from "axios";
+//pinia
+import { createPinia } from 'pinia'
+const pinia = createPinia();
+
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+import colors from 'vuetify/util/colors'
+//i18n imports
+import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
+import { createI18n, useI18n } from 'vue-i18n'
+import i18n from '@/i18n/i18n'
+
+// Styles
+import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/styles'
+import { aliases, mdi } from "vuetify/iconsets/mdi";
+
+
+const vuetify = createVuetify({
+    components,
+    directives,
+    icons: {
+        defaultSet: 'mdi',
+        aliases,
+        sets: {
+            mdi,
+        },
+    },
+    locale: {
+        adapter: createVueI18nAdapter({ i18n, useI18n }),
+    },
+    theme: {
+        defaultTheme: 'light',
+        themes: {
+            light: {
+                dark: false,
+                colors: {
+                    primary: colors.indigo.darken4, // #E53935
+                    secondary: colors.grey.darken4, // #FFCDD2
+                    danger: colors.red.darken3,
+                    error: colors.red.darken3,
+                    dangerLight: colors.red.lighten4,
+                    primaryLight: '#f8f9fc',
+                    primaryLight2: '#edf1fc',
+                    success: '#457237'
+                }
+            },
+        },
+    },
+});
 
 // @ts-ignore
 import Vue3EasyDataTable from 'vue3-easy-data-table';
@@ -30,22 +83,22 @@ axios.defaults.withCredentials = true;
 axios.defaults.headers.common['activeBid'] = localStorage.getItem('activeBid');
 axios.defaults.headers.common['activeYear'] = localStorage.getItem('activeYear');
 axios.defaults.headers.common['activeMoney'] = localStorage.getItem('activeMoney');
-axios.interceptors.request.use(function(config) {
+axios.interceptors.request.use(function (config) {
     // Do something before request is sent
     NProgress.start();
 
     return config;
-}, function(error) {
+}, function (error) {
     // Do something with request error
     console.log('Error');
     return Promise.reject(error);
 });
 
-axios.interceptors.response.use(function(response) {
+axios.interceptors.response.use(function (response) {
     // Do something with response data
     NProgress.done()
     return response;
-}, function(error) {
+}, function (error) {
     if (error.code === 404) {
         // Do something with response error
         Swal.fire({
@@ -59,6 +112,9 @@ axios.interceptors.response.use(function(response) {
 app.use(router)
 app.use(money)
 app.use(LoadingPlugin)
+app.use(pinia)
+app.use(i18n)
+app.use(vuetify);
 app.use(Vue3PersianDatetimePicker, {
     name: 'CustomDatePicker',
     props: {
@@ -100,7 +156,7 @@ app.config.globalProperties.$filters = {
     }
 }
 
-app.config.globalProperties.app_isLogin = async() => {
+app.config.globalProperties.app_isLogin = async () => {
     let result = await axios.get('/api/user/check/login');
     if (result.status === 200) {
         return result.data.result;

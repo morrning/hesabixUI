@@ -3,10 +3,7 @@
     <div class="block-header block-header-default">
       <h3 class="block-title">کسب و کار ها</h3>
       <span class="block-options">
-        <RouterLink to="/profile/new-business" class="btn btn-alt-success">
-          <i class="fa fa-plus-circle"></i>
-          کسب و کار جدید
-        </RouterLink>
+        
       </span>
     </div>
     <div class="block-content pb-2">

@@ -486,7 +486,7 @@ export default {
             <li class="nav-main-heading">حسابداری</li>
             <li v-show="permissions.getpay || permissions.persons" class="nav-main-item">
               <a aria-expanded="false" aria-haspopup="true" class="nav-main-link nav-main-link-submenu"
-                data-toggle="submenu" href="#">
+                data-toggle="submenu" href="#!">
                 <i class="nav-main-link-icon fa fa-person"></i>
                 <span class="nav-main-link-name">اشخاص</span>
               </a>
