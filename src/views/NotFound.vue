@@ -1,60 +1,51 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
+<script setup lang="ts">
 
-export default defineComponent({
-    name: "NotFound"
-})
 </script>
 
 <template>
-    <div id="page-container">    <div id="page-container">
-
-        <!-- Main Container -->
-        <main id="main-container">
-            <!-- Page Content -->
-            <div class="bg-image" style="background-image: url('/assets/media/photos/photo21.jpg');">
-                <div class="row g-0 justify-content-end bg-xwork-op">
-                    <!-- Main Section -->
-                    <div class="hero-static col-md-5 d-flex flex-column bg-body-extra-light">
-                        <!-- Header -->
-                        <div class="flex-grow-0 p-5">
-                            <a class="link-fx fw-bold fs-2" href="/">
-                                <span class="text-dark">حساب</span><span class="text-primary">کس</span>
-                            </a>
-                            <p class="text-uppercase fw-bold fs-sm text-muted mb-0"> به روزترین سامانه حسابداری ابری و رایگان </p>
-                        </div>
-                        <!-- END Header -->
-
-                        <!-- Content -->
-                        <div class="flex-grow-1 d-flex align-items-center p-5 bg-body-light">
-                            <div class="w-100">
-                                <p class="text-danger fs-4 fw-bold text-uppercase mb-2">
-                                    404 خطا </p>
-                                <h1 class="fw-bold mb-2"> صفحه یافت نشد </h1>
-                                <p class="fs-4 fw-medium text-muted mb-5"> متاسفیم اما صفحه مورد نظر شما یافت نشد. </p>
-                                <a class="btn btn-lg btn-alt-danger" href="/">
-                                    <i class="fa fa-arrow-right opacity-50 me-1"></i> صفحه نخست </a>
-                            </div>
-                        </div>
-                        <!-- END Content -->
-
-                        <!-- Footer -->
-                        <ul class="list-inline flex-gow-1 p-5 fs-sm fw-medium mb-0">
-                            <li class="list-inline-item">
-                                <a class="text-muted" href="https://hesabix.ir/"> گزارش خطا </a>
-                            </li>
-                        </ul>
-                        <!-- END Footer -->
-                    </div>
-                    <!-- END Main Section -->
-                </div>
-            </div>
-            <!-- END Page Content -->
-        </main>
-        <!-- END Main Container -->
-    </div></div>
+    <div id="main" class="container">
+        <div class="fof">
+            <h1>{{ $t('static.not_found') }}</h1>
+        </div>
+    </div>
 </template>
 
 <style scoped>
+*{
+    transition: all 0.6s;
+}
 
+html {
+    height: 100%;
+}
+
+body{
+    font-family: 'Lato', sans-serif;
+    color: #888;
+    margin: 0;
+}
+
+#main{
+    display: table;
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+}
+
+.fof{
+	  display: table-cell;
+	  vertical-align: middle;
+}
+
+.fof h1{
+	  font-size: 50px;
+	  display: inline-block;
+	  padding-right: 12px;
+	  animation: type .5s alternate infinite;
+}
+
+@keyframes type{
+	  from{box-shadow: inset -3px 0px 0px #888;}
+	  to{box-shadow: inset -3px 0px 0px transparent;}
+}
 </style>

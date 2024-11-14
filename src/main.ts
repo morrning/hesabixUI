@@ -24,6 +24,14 @@ import { aliases, mdi } from "vuetify/iconsets/mdi";
 
 
 const vuetify = createVuetify({
+    defaults: {
+        VDialog: {
+            VCard: {
+                class: 'bg-light',
+                
+            }
+        },
+    },
     components,
     directives,
     icons: {
@@ -42,11 +50,12 @@ const vuetify = createVuetify({
             light: {
                 dark: false,
                 colors: {
-                    primary: colors.indigo.darken4, // #E53935
+                    primary: '#044792', // #E53935
                     secondary: colors.grey.darken4, // #FFCDD2
                     danger: colors.red.darken3,
                     error: colors.red.darken3,
                     dangerLight: colors.red.lighten4,
+                    successLight: colors.green.lighten4,
                     primaryLight: '#f8f9fc',
                     primaryLight2: '#edf1fc',
                     success: '#457237'

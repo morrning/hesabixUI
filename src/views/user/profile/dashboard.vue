@@ -1,9 +1,9 @@
 <template>
   <v-toolbar :title="$t('title.user.dashboard')"></v-toolbar>
   <v-container>
-    <v-row align="center">
-      <v-col cols="12" sm="12" md="2">
-        <img src="\img\avatar.png" class="img-avatar img-avatar128" />
+    <v-row>
+      <v-col cols="12" sm="12" md="2" class="text-center">
+        <v-avatar image="\img\avatar.png" size="155"></v-avatar>
       </v-col>
       <v-col cols="12" sm="12" md="10">
         <v-text-field v-model="user_email" :label="$t('user.email')" prepend-inner-icon="mdi-email" :disabled="true"
@@ -16,6 +16,14 @@
           @click="this.updateProfile()">ذخیره</v-btn>
       </v-col>
     </v-row>
+    <v-dialog v-model="dialog" max-width="500" persistent>
+      <v-card color="successLight" prepend-icon="mdi-check-circle " :title="$t('dialog.result')" :text="$t('dialog.save_ok')">
+        <template v-slot:actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" :text="$t('dialog.ok')" variant="flat" @click="dialog = false;" />
+        </template>
+      </v-card>
+    </v-dialog>
   </v-container>
 
 </template>
@@ -25,12 +33,14 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { required } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
+import { ref } from "vue";
 
 export default {
   name: "dashboard",
   data() {
     return {
-      loading: false,
+      loading: ref(false),
+      dialog: ref(false),
       user_fullname: '',
       user_email: '',
       user_mobile: ''
@@ -51,16 +61,7 @@ export default {
         })
           .then((response) => {
             this.loading = false;
-            Swal.fire({
-              title: 'پیام',
-              text: 'با موفقیت ثبت شد.',
-              icon: 'success',
-              confirmButtonText: 'قبول',
-            }).then((result) => {
-              if (result.isConfirmed) {
-
-              }
-            })
+            this.dialog = true;
           })
       }
 

@@ -655,8 +655,7 @@ const router = createRouter({
             {
                 path: "/:catchAll(.*)",
                 name: "not-found",
-                component: () =>
-                    import("../views/acc/NotFound.vue"),
+                component: () => import("../views/NotFound.vue"),
                 meta: {
                     'title': 'صفحه یافت نشد',
                 }
@@ -873,12 +872,26 @@ const router = createRouter({
             ],
         },
         {
-            path: '/user/login',
-            name: 'user_login',
-            component: () => import('../views/user/login.vue'),
-            meta: {
-                'title': 'ورود به حساب کاربری',
-            }
+            path: '/user/',
+            component: () => import('../views/user/single.vue'),
+            children: [
+                {
+                    path: 'login',
+                    name: 'user_login',
+                    component: () => import('../views/user/login.vue'),
+                    meta: {
+                        'title': 'ورود کاربر',
+                    }
+                },
+                {
+                    path: '/user/forget-password',
+                    name: 'user_forget_password',
+                    component: () => import('../views/user/profile/forget-password.vue'),
+                    meta: {
+                        'title': 'بازیابی گذرواژه',
+                    }
+                },
+            ],
         },
         {
             path: '/user/active/:email',
@@ -902,14 +915,6 @@ const router = createRouter({
             component: () => import('../views/user/register-success.vue'),
             meta: {
                 'title': 'تکمیل عضویت',
-            }
-        },
-        {
-            path: '/user/forget-password',
-            name: 'user_forget_password',
-            component: () => import('../views/user/profile/forget-password.vue'),
-            meta: {
-                'title': 'بازیابی گذرواژه',
             }
         },
         {

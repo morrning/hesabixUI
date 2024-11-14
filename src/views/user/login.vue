@@ -1,217 +1,103 @@
 <template>
-  <!-- Main Container -->
-  <main id="main-container">
-    <!-- Page Content -->
-    <div class="bg-image" style="background-image: url('/assets/media/photos/photo21.jpg')">
-      <div class="row g-0 justify-content-center bg-primary-dark-op">
-        <!-- pwa install banner -->
-        <div v-if="installBanner" class="row bg-body-extra-light position-absolute rounded p-2 mt-2"
-          style="width: 350px">
-          <div class="col-8">
-            <img src="/img/logo-blue.png" width="40" alt="" />
-            <span class="text-primary fw-bold fs-4">{{ siteName }}</span>
-          </div>
-          <button type="button" class="btn btn-light col-4" @click="callbtn">نصب</button>
-        </div>
-        <div class="hero-static col-sm-8 col-md-6 col-xl-4 d-flex align-items-center p-2 px-sm-0">
-          <!-- Sign In Block -->
-          <div class="block block-transparent block-rounded w-100 mb-0 overflow-hidden">
-            <div class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
-              <!-- Header -->
-              <div class="mb-2 text-center">
-                <a class="link-fx fw-bold fs-1" href="/">
-                  <span class="text-primary">{{ siteName }}</span>
-                </a>
-                <p class="text-uppercase fw-bold fs-sm text-muted">ورود</p>
-              </div>
-              <!-- END Header -->
-              <div v-if="this.loading" class="d-flex justify-content-center">
-                <div class="spinner-border text-danger" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </div>
-              <form v-show="!this.loading" @submit.prevent="submit">
-                <div class="form-floating mb-3">
-                  <input :disabled="this.loadingSubmit" class="form-control" type="text" v-model="email" />
-                  <label>پست الکترونیکی</label>
-                </div>
+  <v-container>
+    <v-row class="d-flex justify-center">
+      <v-col md="5">
+        <v-card :loading="loading ? 'blue' : null" :disabled="loading" :title="$t('app.name')"
+          :subtitle="$t('user.login_label')">
+          <v-card-text class="text-justify">
+            {{ $t('login.des') }}
+          </v-card-text>
+          <v-form :disabled="loading" ref="form" fast-fail @submit.prevent="submit()">
+            <v-card-text>
+              <v-text-field class="mb-2" :label="$t('user.email')" :placeholder="$t('user.email_placeholder')"
+                single-line v-model="user.email" type="email" variant="outlined" prepend-inner-icon="mdi-email"
+                :rules="rules.email"></v-text-field>
 
-                <div class="form-floating mb-3">
-                  <input :disabled="this.loadingSubmit" class="form-control" type="password" v-model="password" />
-                  <label>کلمه عبور</label>
-                </div>
-
-                <div class="d-sm-flex justify-content-sm-between align-items-sm-center text-center text-sm-start">
-                  <div class="fw-semibold fs-sm py-0">
-                    <RouterLink to="/user/forget-password">کلمه عبور را فراموش کرده اید؟</RouterLink>
-                  </div>
-                </div>
-                <div class="text-center mt-3">
-                  <button :disabled="this.loadingSubmit" type="submit" class="btn btn-primary">
-                    <div v-show="this.loadingSubmit" class="spinner-grow spinner-grow-sm me-2" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i>
-                    ورود به {{ siteName }}
-                  </button>
-                </div>
-                <div class="text-center mt-4">
-                  <div class="fw-semibold fs-sm py-0">
-                    <RouterLink to="/user/register">
-                      حساب کاربری ندارید؟ عضو شوید
-                    </RouterLink>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="block-content bg-body">
-              <div class="d-flex justify-content-center text-center push">
-                <a class="btn btn-sm btn-alt-secondary" :href="this.$filters.getApiUrl()">
-                  <i class="fa fa-home"></i>
-                  صفحه نخست
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+              <v-text-field class="mb-2" :label="$t('user.password')" :placeholder="$t('user.password_placeholder')"
+                single-line type="password" variant="outlined" prepend-inner-icon="mdi-lock" :rules="rules.password"
+                v-model="user.password"></v-text-field>
+              <v-btn :disabled="loading" :loading="loading" block type="submit" class="text-none mb-4"
+                color="indigo-darken-3" size="x-large" variant="flat" prepend-icon="mdi-login">
+                {{ $t('user.login') }}
+              </v-btn>
+            </v-card-text>
+          </v-form>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+  <div v-if="dialog" class="text-center">
+    <v-dialog v-model="dialog" max-width="500" persistent>
+      <v-card color="dangerLight" prepend-icon="mdi-close-octagon " :title="$t('dialog.error')" :text="$t('login.input_fail')">
+        <template v-slot:actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" :text="$t('dialog.ok')" variant="flat" @click="dialog = false;" />
+        </template>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from "axios";
-import { getSiteName } from "/hesabixConfig";
 import Swal from "sweetalert2";
+import { ref } from 'vue';
 
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: "login",
-  data: () => {
+  name: 'login',
+  data() {
+    const self = this;
     return {
-      siteName: "",
-      loading: true,
-      loadingSubmit: false,
-      email: "",
-      password: "",
-      tokenID: "123456",
-      installBanner: false,
-      installPromptEvent: {},
-    };
+      loading: false,
+      dialog: false,
+      user: {
+        email: '',
+        password: '',
+        standard: true
+      },
+      rules: {
+        email: [
+          (value: any) => self.validate(value, 'email'),
+        ],
+        password: [
+          (value: any) => self.validate(value, 'password'),
+        ],
+      }
+    }
   },
   mounted() {
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      // console.log("before install prompt event");
-      this.installPromptEvent = e;
-    });
 
-    setTimeout(() => {
-      if (this.installPromptEvent) {
-        this.installBanner = true;
-        console.log(this.installPromptEvent);
-      }
-    }, 1000);
-
-    this.loadData();
   },
   methods: {
-    callbtn() {
-      if (this.installPromptEvent) {
-
-        this.installPromptEvent.prompt();
-
-        this.installPromptEvent.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === "accepted") {
-            console.log("User Accepted");
-          } else {
-            console.log("User dismissed");
-          }
-
-          this.installPromptEvent = null;
-        });
-      } else {
-        Swal.fire({
-          title: "برنامه قبلا روی گوشی شما نصب شده است",
-          text: "در قسمت برنامه های تلفن همراه، میتوانید حسابیکس را پیدا کنید",
-          icon: "warning",
-          confirmButtonText: "متوجه شدم",
-        });
+    validate(input: string, type: string) {
+      if (type == 'email') {
+        if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(input)) return true
+        return this.$t('validator.email_not_valid')
+      }
+      else if (type == 'password') {
+        if (input == undefined) {
+          return false
+        }
+        else if (input.length > 5) return true
+        return this.$t('validator.password_len_lower')
       }
     },
-
-    ValidateEmail(email) {
-      const validRegex =
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-      return !!email.match(validRegex);
-    },
-    loadData() {
-      this.siteName = getSiteName();
-      axios
-        .post("/api/user/check/login")
-        .then((response) => {
+    async submit() {
+      const { valid } = await this.$refs.form.validate()
+      if (valid) {
+        this.loading = true;
+        axios.post('/api/user/login', this.user).then((response: any) => {
           if (response.data.Success == true) {
-            this.$router.push('/profile/dashboard');
-          } else {
-            this.loading = false;
+            localStorage.setItem('X-AUTH-TOKEN', response.data.data.token);
+            window.location.replace('/');
           }
-        })
-        .catch((error) => {
+        }).catch((resp) => {
           this.loading = false;
+          this.dialog = true;
         });
-    },
-    submit() {
-      if (
-        this.email.trim().length === 0 ||
-        this.ValidateEmail(this.email) === false
-      ) {
-        Swal.fire({
-          title: "خطا",
-          text: "پست الکترونیکی نامعتبر است.",
-          icon: "error",
-          confirmButtonText: "قبول",
-        }).then((res) => { });
-      } else if (this.email.trim().length < 6) {
-        Swal.fire({
-          title: "خطا",
-          text: "کلمه عبور نامعتبر است.",
-          icon: "error",
-          confirmButtonText: "قبول",
-        }).then((res) => { });
-      } else {
-        this.loadingSubmit = true;
-        // perform async actions
-        localStorage.removeItem("X-AUTH-TOKEN");
-        axios
-          .post("api/user/login", {
-            email: this.email,
-            password: this.password,
-          })
-          .then((response) => {
-            localStorage.setItem("X-AUTH-TOKEN", response.data.token);
-            axios.defaults.headers.common["X-AUTH-TOKEN"] =
-              localStorage.getItem("X-AUTH-TOKEN");
-            //login to mainSite
-            this.tokenID = response.data.tokenID;
-            this.$router.push('/');
-          })
-          .catch((error) => {
-            Swal.fire({
-              title: "خطا",
-              text: "نام کاربری یا کلمه عبور اشتباه است.",
-              icon: "error",
-              confirmButtonText: "قبول",
-            })
-              .then((res) => { })
-              .then((res) => {
-                this.loadingSubmit = false;
-                this.password = "";
-              });
-          });
       }
-    },
-  },
-};
-</script>
 
-<style scoped></style>
+    }
+  }
+}
+</script>

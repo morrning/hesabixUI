@@ -3,7 +3,6 @@ const en_lang = {
   $vuetify: {
     ...en,
   },
-  hesabix: "Hesabix",
   static:{
     not_found: "Page Not Found!",
     logout_loading: "you logged out ..."
@@ -67,8 +66,8 @@ const en_lang = {
     mobile_not_valid:"Phone number is not valid",
   },
   hesabix:{
-    banner:"Hesabix Best Accounting Sulotion"
-
+    banner:"Hesabix Best Accounting Sulotion",
+    name: "Hesabix"
   },
   title:{
     user:{
