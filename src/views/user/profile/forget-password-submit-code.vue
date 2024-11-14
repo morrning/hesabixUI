@@ -1,155 +1,112 @@
 <script lang="ts">
-import axios from 'axios';
-import Swal from "sweetalert2";
-import { getApiUrl, getSiteName } from "../..//hesabixConfig"
-
-export default {
-  name: "forget-password-submit-code",
-  props: {
-    email: [String]
-  },
-  data: () => {
+import {defineComponent} from 'vue'
+import axios from "axios";
+import {useUserStore} from "@/stores/userStore";
+export default defineComponent({
+  name: "reset-password",
+  data() {
+    const self = this;
     return {
-      siteName: '',
-      email: '',
+      dialog:false,
+      loading:false,
+      counting:true,
       code: '',
-      isCoutDown: false,
-      timer: 300000,
-      user: {
-        mobile: ''
-      },
-      loading: false
     }
   },
-  methods: {
-    goToMainSite() {
-      window.location.href = getApiUrl();
+  methods:{
+    onCountdownEnd(){
+      this.counting = false;
     },
-    loadData() {
-      this.isCoutDown = false;
-      if (localStorage.getItem('forget-password-id')) {
-        this.email = localStorage.getItem('forget-password-id')!;
-      }
+    onResendCodeClick(){
+      axios.post('/api/user/forget-password/resend-code',{'key':this.$route.params.id}).then((response:any)=>{
+        this.counting = true;
+        this.$swal({
+          text: this.$t('user.resendCode'),
+          confirmButtonText: this.$t('dialog.ok'),
+          icon:'success'
+        });
+      });
+
     },
-    jumpback() {
-      this.$router.push('/user/forget-password')
-    },
-    startCountdown: function () {
-      this.isCoutDown = true;
-    },
-    onCountdownEnd: function () {
-      this.isCoutDown = false;
-    },
-    changeCutdown() {
-      this.isCoutDown = true;
-    },
-    sendActive() {
-      if (this.code.toString().length !== 6) {
-        Swal.fire({
-          title: 'خطا',
-          text: 'کد وارد شده اشتباه است.',
-          icon: 'error',
-          confirmButtonText: 'قبول'
-        }).then((res) => {
-          this.code = '';
+    async submit(){
+      const { valid } = await this.$refs.form.validate()
+      if(valid){
+        this.loading = true;
+        axios.post('/api/user/forget-password/do-reset',{
+          key:this.$route.params.id,
+          code:this.code
+        }).then((response:any) => {
+          if(response.data.error != 200){
+            this.$swal({
+              text: response.data.message,
+              confirmButtonText: this.$t('dialog.ok'),
+              icon:'warning'
+            }).then(()=>{
+              this.code = ''
+            });
+          }
+          else{
+            this.$swal({
+              text: this.$t('user.password_sended'),
+              confirmButtonText: this.$t('dialog.ok'),
+              icon:'success'
+            }).then(()=>{
+              this.$router.push('/single/login')
+            });
+          }
+          this.loading = false;
         });
       }
-      else {
-        this.loading = true;
-        axios.post('/api/user/reset/password/send-to-sms/' + this.email, { code: this.code.toString() }).then((response) => {
-          this.loading = false;
-          if (response.data.result == 'ok') {
-            Swal.fire({
-              text: 'کلمه عبور جدید به پست الکترونیکی و موبایل شما ارسال شد.',
-              icon: 'success',
-              confirmButtonText: 'ورود به حساب کاربری'
-            }).then((res) => {
-              this.$router.push('/user/login');
-            });
-          }
-          else if (response.data.result == 'expired') {
-            Swal.fire({
-              title: 'خطا',
-              text: 'کد وارد شده منقضی شده است. لطفا دوباره سعی نمایید.',
-              icon: 'error',
-              confirmButtonText: 'قبول'
-            }).then((res) => {
-              this.$router.push('/user/forget-password')
-            });
-          }
-          else {
-            Swal.fire({
-              title: 'خطا',
-              text: 'کد وارد شده اشتباه است.',
-              icon: 'error',
-              confirmButtonText: 'قبول'
-            }).then((res) => {
-              this.code = '';
-            });
-          }
-        })
-      }
-
     }
-  },
-  mounted() {
-    this.loadData();
-  },
-  created() {
-    this.siteName = getSiteName();
   }
-}
+})
 </script>
 
+
 <template>
-  <!-- Main Container -->
-  <main id="main-container">
-    <!-- Page Content -->
-    <div class="bg-image" style="background-image: url('/assets/media/photos/photo21.jpg');">
-      <div class="row g-0 justify-content-center bg-primary-dark-op">
-        <div class="hero-static col-sm-12 col-md-8 col-xl-6 d-flex align-items-center p-0 px-sm-0">
-          <!-- Sign In Block -->
-          <div class="block block-transparent block-rounded w-100 mb-0 overflow-hidden">
-            <div class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
-              <!-- Header -->
-              <div class="mb-2 text-center">
-                <a class="link-fx fw-bold fs-1" href="/">
-                  <span class="text-primary">{{ siteName }}</span>
-                </a>
-                <p class="text-uppercase fw-bold fs-sm text-muted"> تغییر کلمه عبور </p>
-              </div>
-              <div class="alert alert-info">
-                برای بازیابی کلمه عبور کد ارسالی به شماره موبایل و یا پست الکترونیکی خود را وارد کنید.
-              </div>
-              <!-- END Header -->
-              <form @submit.prevent="sendActive">
-                <div class="form-floating mb-3">
-                  <input class="form-control" type="text" v-model="code">
-                  <label>کد ارسالی به ایمیل و موبایل</label>
-                </div>
-                <div class="float-start">
-                  <button :disabled="loading" type="submit" class="btn btn-primary">
-                    <div v-show="loading" class="spinner-border spinner-border-sm text-white" role="status">
-                      <span class="visually-hidden">صبر کنید ...</span>
-                    </div>
-                    <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> پیامک کلمه عبور جدید
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div class="block-content bg-body">
-              <div class="d-flex justify-content-center text-center push">
-                <button type="button" class="btn btn-sm btn-alt-secondary" @click="goToMainSite()">
-                  <i class="fa fa-home"></i>
-                  صفحه نخست
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+  <v-container>
+    <v-row class="d-flex justify-center">
+      <v-col md="5">
+        <v-card :loading="loading ? 'blue' : null" :title="$t('app.name')" :subtitle="$t('user.forget_password')">
+          <v-card-text>
+            <v-form ref="form" :disabled="loading" fast-fail @submit.prevent="submit()"  >
+              <v-otp-input
+                  focus-all
+                  v-model="code"
+                  style="direction: ltr"
+              ></v-otp-input>
+              <v-row>
+                <v-col class="my-2 mx-4">
+                  <v-btn class="float-end" color="indigo" :disabled="counting" @click="onResendCodeClick()">
+                    <vue-countdown v-if="counting" :time="120000" v-slot="{minutes, seconds }" @end="onCountdownEnd">
+                      {{ $t('user.resendCodeLabel')}}
+                      {{minutes + ':' + seconds}}
+                    </vue-countdown>
+                    <span v-else>{{ $t('user.send_again')}}</span>
+                  </v-btn>
+                </v-col>
+              </v-row>
+
+              <v-btn
+                  :loading="loading"
+                  block
+                  class="text-none mb-4"
+                  color="indigo-darken-3"
+                  size="x-large"
+                  variant="flat"
+                  prepend-icon="mdi-send"
+                  type="submit"
+              >
+                {{ $t('user.send_new_password') }}
+              </v-btn>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>

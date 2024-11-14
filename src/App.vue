@@ -47,14 +47,14 @@ export default {
   <v-responsive>
     <v-app :theme="theme">
       <div v-if="dialog" class="text-center pa-4">
-        <v-dialog v-model="dialog" max-width="400" persistent>
+        <v-dialog v-model="dialog" max-width="600" persistent>
           <v-card prepend-icon="mdi-update" :title="$t('dialog.update')" :subtitle="hesabix.lastUpdateDate">
             <template v-slot:actions>
               <v-spacer></v-spacer>
               <v-btn color="primary" :text="$t('dialog.update')" variant="flat" @click="update()" />
             </template>
             <template v-slot="text">
-              <div class="p-2" v-html="hesabix.lastUpdateDes"></div>
+              <div class="text-primary pa-5" v-html="hesabix.lastUpdateDes"></div>
             </template>
           </v-card>
         </v-dialog>

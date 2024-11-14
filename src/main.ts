@@ -5,6 +5,8 @@ import axios from "axios";
 //pinia
 import { createPinia } from 'pinia'
 const pinia = createPinia();
+//vue countdown
+import VueCountdown from '@chenfengyuan/vue-countdown';
 
 // Vuetify
 import 'vuetify/styles'
@@ -84,6 +86,24 @@ app.component('EasyDataTable', Vue3EasyDataTable);
 app.component('v-select', vSelect);
 app.component('DatePicker', Vue3PersianDatetimePicker);
 app.component('Uploader', Uploader);
+app.component(VueCountdown.name, VueCountdown);
+import Hdatepicker from "@/components/forms/Hdatepicker.vue";
+import calendarLocalConfig from "@/i18n/calendarLocalConfig";
+
+app.component('h-date-picker', Hdatepicker);
+
+app.use(Vue3PersianDatetimePicker, {
+    name: 'CustomDatePicker',
+    props: {
+        locale: localStorage.getItem('UI_LANG'),
+        color: "#3059ab",
+        format: calendarLocalConfig.format(localStorage.getItem('UI_CALENDAR')),
+        displayFormat: calendarLocalConfig.format(localStorage.getItem('UI_CALENDAR')),
+        editable: false,
+        autoSubmit: true,
+        localeConfig: calendarLocalConfig.data().localeConfig
+    }
+})
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
 NProgress.configure({ showSpinner: false });
 app.config.globalProperties.$API_URL = getApiUrl();

@@ -28,10 +28,11 @@
   </v-container>
   <div v-if="dialog" class="text-center">
     <v-dialog v-model="dialog" max-width="500" persistent>
-      <v-card color="dangerLight" prepend-icon="mdi-close-octagon " :title="$t('dialog.error')" :text="$t('login.input_fail')">
+      <v-card color="dangerLight" prepend-icon="mdi-close-octagon " :title="$t('dialog.error')"
+        :text="$t('login.input_fail')">
         <template v-slot:actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" :text="$t('dialog.ok')" variant="flat" @click="dialog = false;" />
+          <v-btn color="primary" :text="$t('dialog.ok')" variant="flat" @click="dialog = false; user.password = ''" />
         </template>
       </v-card>
     </v-dialog>

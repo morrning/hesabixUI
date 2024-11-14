@@ -884,11 +884,19 @@ const router = createRouter({
                     }
                 },
                 {
-                    path: '/user/forget-password',
+                    path: 'forget-password',
                     name: 'user_forget_password',
                     component: () => import('../views/user/profile/forget-password.vue'),
                     meta: {
                         'title': 'بازیابی گذرواژه',
+                    }
+                },
+                {
+                    path: 'forget-password-submit-code',
+                    name: 'user_forget_password_submit_code',
+                    component: () => import('../views/user/profile/forget-password-submit-code.vue'),
+                    meta: {
+                        'title': 'تایید کد بازیابی گذرواژه',
                     }
                 },
             ],
@@ -915,14 +923,6 @@ const router = createRouter({
             component: () => import('../views/user/register-success.vue'),
             meta: {
                 'title': 'تکمیل عضویت',
-            }
-        },
-        {
-            path: '/user/forget-password-submit-code',
-            name: 'user_forget_password_submit_code',
-            component: () => import('../views/user/profile/forget-password-submit-code.vue'),
-            meta: {
-                'title': 'بازیابی گذرواژه',
             }
         },
         {
