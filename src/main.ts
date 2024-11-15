@@ -144,16 +144,6 @@ app.use(LoadingPlugin)
 app.use(pinia)
 app.use(i18n)
 app.use(vuetify);
-app.use(Vue3PersianDatetimePicker, {
-    name: 'CustomDatePicker',
-    props: {
-        format: 'jYYYY/jMM/jDD',
-        displayFormat: 'jYYYY/jMM/jDD', // if you need jalali dates
-        color: '#0384fc',
-        autoSubmit: true,
-        clearable: true,
-    }
-})
 
 //global methods
 app.config.globalProperties.$filters = {
