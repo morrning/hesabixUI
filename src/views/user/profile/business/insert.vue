@@ -1,4 +1,79 @@
 <template>
+  <v-container>
+    <v-row>
+      <v-col class="">
+        <v-form fast-fail ref="form" @submit.prevent>
+          <v-card :title="$t('pages.create_business.info')" flat>
+            <v-row>
+              <v-col sm="12" md="6">
+                <v-text-field class="" :label="$t('pages.create_business.business_name')" v-model="content.name"
+                  type="text" prepend-inner-icon="mdi-domain"
+                  :rules="[() => content.name.length > 0 || $t('validator.required')]"></v-text-field>
+              </v-col>
+              <v-col sm="12" md="6">
+                <v-text-field class="" :label="$t('pages.create_business.business_legal_name')"
+                  v-model="content.legal_name" type="text" prepend-inner-icon="mdi-domain"
+                  :rules="[() => content.legal_name.length > 0 || $t('validator.required')]"></v-text-field>
+              </v-col>
+              <v-col sm="12" md="6">
+                <v-select label="Select" variant="solo-filled" :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"></v-select>
+              </v-col>
+
+              <v-col sm="12" md="12">
+                <v-text-field class="" :label="$t('pages.create_business.address')" v-model="content.address"
+                  type="text" prepend-icon="mdi-map-marker"
+                  :rules="[() => content.country.code.length > 0 || $t('validator.required')]"></v-text-field>
+              </v-col>
+            </v-row>
+          </v-card>
+          <v-card :title="$t('pages.create_business.financial_settings')" flat>
+            <v-row>
+              <v-col sm="12" md="6">
+                <v-select class="" :label="$t('pages.create_business.moneys')"
+                  :hint="$t('pages.create_business.moneys_hint')" v-model="content.moneys"
+                  prepend-icon="mdi-cash-multiple" :items="moneys" item-title="name" item-value="code" persistent-hint
+                  return-object chips multiple
+                  :rules="[() => content.moneys.length > 0 || $t('validator.required')]"></v-select>
+              </v-col>
+              <v-col sm="12" md="6">
+                <v-select class="" :label="$t('pages.create_business.calender')" v-model="content.calendar"
+                  prepend-icon="mdi-calendar" :items="calendars" item-title="name" item-value="code"
+                  return-object></v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <h3 class="ms-5">{{ $t('pages.create_business.fiscal_year') }}</h3>
+              </v-col>
+              <v-col sm="12" md="6">
+                <v-text-field prepend-icon="mdi-calendar" readonly
+                  :rules="[() => content.dateStart.length > 0 || $t('validator.required')]"
+                  :label="$t('pages.create_business.fiscal_year_start')" v-model="content.dateStart"
+                  class="txt_calendar1" />
+                <CustomDatePicker custom-input=".txt_calendar1" append-to="body" v-model="content.dateStart" />
+              </v-col>
+              <v-col sm="12" md="6">
+                <v-text-field prepend-icon="mdi-calendar" readonly
+                  :rules="[() => content.dateEnd.length > 0 || $t('validator.required')]"
+                  :label="$t('pages.create_business.fiscal_year_end')" v-model="content.dateEnd"
+                  class="txt_calendar2" />
+                <CustomDatePicker custom-input=".txt_calendar2" append-to="body" v-model="content.dateEnd"
+                  :min="content.dateStart" />
+              </v-col>
+              <v-col cols="12">
+                <v-text-field prepend-icon="mdi-text-box-outline" :label="$t('pages.create_business.fiscal_year_label')"
+                  :rules="[() => content.fiscalYearLabel.length > 0 || $t('validator.required')]"
+                  v-model="content.fiscalYearLabel" />
+              </v-col>
+            </v-row>
+          </v-card>
+          <v-btn @click="submit()" color="primary" prepend-icon="mdi-content-save"
+            :title="$t('pages.create_business.insert_business')">{{ $t('pages.create_business.insert_business') }}</v-btn>
+        </v-form>
+      </v-col>
+    </v-row>
+  </v-container>
+
   <div class="block block-rounded mb-5">
     <div class="block-header block-header-default">
       <h3 class="block-title">کسب و کار جدید</h3>
@@ -159,9 +234,9 @@
                     <label class="form-label">
                       <span class="text-danger">*</span>
                       شروع سال مالی
-                      </label>
-                    <date-picker class="" v-model="content.year.start" format="jYYYY/jMM/jDD" display-format="jYYYY/jMM/jDD"
-                       />
+                    </label>
+                    <date-picker class="" v-model="content.year.start" format="jYYYY/jMM/jDD"
+                      display-format="jYYYY/jMM/jDD" />
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-6 mb-2">
@@ -170,8 +245,8 @@
                       <span class="text-danger">*</span>
                       اتمام سال مالی
                     </label>
-                    <date-picker class="" v-model="content.year.end" format="jYYYY/jMM/jDD" display-format="jYYYY/jMM/jDD"
-                      :min="content.year.start" />
+                    <date-picker class="" v-model="content.year.end" format="jYYYY/jMM/jDD"
+                      display-format="jYYYY/jMM/jDD" :min="content.year.start" />
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-12">
@@ -225,10 +300,10 @@ export default {
         arzmain: [],
         maliyatafzode: 9,
         moneys: '',
-        year:{
-          start:'',
-          end:'',
-          label:''
+        year: {
+          start: '',
+          end: '',
+          label: ''
         }
       }
     }
@@ -264,7 +339,7 @@ export default {
           'email': this.content.email,
           'arzmain': this.content.arzmain,
           'maliyatafzode': this.content.maliyatafzode,
-          'year':this.content.year
+          'year': this.content.year
         })
           .then((response) => {
             if (response.data.result == 1) {
@@ -308,11 +383,11 @@ export default {
   watch: {
     'content.year.start': {
       handler: function (val, oldVal) {
-       let year = this.content.year.start.split('/');
-       year[0] = parseInt(year[0]) + 1;
-       this.content.year.end = year.join('/');
-       year.reverse();
-       this.content.year.label = "سال مالی منتهی به " + year.join('/');
+        let year = this.content.year.start.split('/');
+        year[0] = parseInt(year[0]) + 1;
+        this.content.year.end = year.join('/');
+        year.reverse();
+        this.content.year.label = "سال مالی منتهی به " + year.join('/');
       },
       deep: true
     },

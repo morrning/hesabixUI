@@ -74,8 +74,7 @@ import 'vue3-easy-data-table/dist/style.css';
 import { LoadingPlugin } from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import '../public/css/main.css';
-import vSelect from 'vue-select';
-import 'vue-select/dist/vue-select.css';
+
 import money from 'v-money3';
 import Vue3PersianDatetimePicker from 'vue3-persian-datetime-picker';
 import NProgress from "nprogress";
@@ -84,7 +83,6 @@ import Uploader from 'vue-media-upload';
 import { getApiUrl } from "/hesabixConfig";
 const app = createApp(App)
 app.component('EasyDataTable', Vue3EasyDataTable);
-app.component('v-select', vSelect);
 app.component('DatePicker', Vue3PersianDatetimePicker);
 app.component('Uploader', Uploader);
 app.component(VueCountdown.name, VueCountdown);

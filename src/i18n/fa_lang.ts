@@ -129,7 +129,8 @@ const fa_lang = {
       fiscal_year_label: "عنوان سال مالی",
       fiscal_year_label_default: "سال مالی منتهی به {date}",
       insert_business: "ثبت کسب و کار",
-      created: "کسب و کار با موفقیت ایجاد شد"
+      created: "کسب و کار با موفقیت ایجاد شد",
+      business_legal_name:"نام قانونی کسب‌و‌کار"
     },
     dashboard: {
       money: "واحد پولی",
