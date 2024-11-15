@@ -27,17 +27,16 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar color="primary">
+    <v-app-bar :elevation="0" color="primary">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-app-bar-title>{{ $t('app.name') }}</v-app-bar-title>
       <v-spacer></v-spacer>
-      <v-btn icon="mdi-logout-variant"@click="logout" class="me-2" title="خروج" />
-      <v-btn :icon="true" to="/user/notifications" class="me-2">
-        <v-badge color="error" dot>
-          <v-icon>mdi-bell</v-icon>
-        </v-badge>
-      </v-btn>
+      <v-tooltip :text="$t('dialog.exit')" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" color="primary" icon="mdi-logout-variant" variant="flat" @click="logout" class="me-2" />
+        </template>
+      </v-tooltip>
     </v-app-bar>
 
     <v-main>
@@ -51,14 +50,15 @@ import axios from "axios";
 import { getSiteName, getApiUrl } from "/hesabixConfig"
 import { applicationStore } from "@/stores/applicationStore";
 import { useUserStore } from "@/stores/userStore";
-import { ref,defineComponent } from "vue";
+import { ref, defineComponent } from "vue";
 import { mapActions, mapState, mapStores } from "pinia";
 import Change_lang from "/src/components/application/buttons/change_lang.vue";
 
-export default defineComponent ({
+export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
   name: "profile-main",
   data: (vm) => {
+    const self = this;
     return {
       siteName: '',
       siteUrl: '',
@@ -70,8 +70,8 @@ export default defineComponent ({
       drawer: ref(true),
       items: [
         { text: 'داشبورد', url: '/profile/dashboard', icon: 'mdi-format-list-text', visible: true },
-        { text: 'کسب‌و‌کار جدید', url: '/profile/new-business', icon: 'mdi-shape-square-plus', visible: true },
-        { text: 'کسب‌و‌کارها', url: '/profile/business', icon: 'mdi-shape-square-plus', visible: true },
+        { text: 'کسب‌و‌کار جدید', url: '/profile/new-business', icon: 'mdi-store-plus', visible: true },
+        { text: 'کسب‌و‌کارها', url: '/profile/business', icon: 'mdi-format-list-text', visible: true },
         { text: 'پشتیبانی', url: '/profile/support-list', icon: 'mdi-ticket-confirmation', visible: true },
         { text: 'اعلانات', url: '/user/notifications', icon: 'mdi-email-newsletter', visible: false },
         { text: 'تغییر کلمه عبور', url: '/profile/change-password', icon: 'mdi-lock-reset', visible: true },
@@ -106,8 +106,8 @@ export default defineComponent ({
     },
   },
   mounted() {
-    axios.post('/api/admin/has/role/' + 'ROLE_ADMIN').then((response) => {
-      this.ROLE_ADMIN = response.data.result;
+    axios.post('/api/user/has/role/' + 'ROLE_ADMIN').then((response) => {
+      this.ROLE_ADMIN = response.data.Success;
     });
   },
   async beforeMount() {

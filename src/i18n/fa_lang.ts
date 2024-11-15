@@ -34,7 +34,10 @@ const fa_lang = {
     update: "به روز رسانی",
     error: "خطا",
     save_ok: "تغییرات با موفقیت ثبت شد.",
-    result:"نتیجه"
+    result:"نتیجه",
+    title: "پاسخ",
+    view:"مشاهده",
+    exit:"خروج از حساب کاربری",
   },
   app: {
     name: "حسابیکس",
@@ -71,6 +74,7 @@ const fa_lang = {
     businesses: "کسب‌و‌کارها",
     new_business: "کسب‌و‌کار جدید",
     tickets: "پشتیبانی",
+    ticket_new:"درخواست پشتیبانی جدید",
     manager: "مدیریت",
     change_password: "تغییر کلمه عبور",
     notifications: "اعلانات",

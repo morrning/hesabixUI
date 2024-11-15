@@ -18,7 +18,10 @@ export default defineComponent({
       response: {
         code: '',
         message: '',
-        Success: false
+        Success: false,
+        data: {
+          id: ''
+        }
       }
     }
   },
@@ -37,7 +40,7 @@ export default defineComponent({
         this.loading = true;
         axios.post('/api/user/forget/password/send-code', { mobile: this.mobile }).then((response) => {
           if (response.data.Success == true) {
-            this.$router.push('/user/forget-password-submit-code');
+            this.$router.push('/user/forget-password-submit-code/' + response.data.data.id);
           }
           else {
             this.response = response.data;

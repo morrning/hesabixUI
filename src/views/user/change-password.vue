@@ -1,99 +1,106 @@
-<template>
-  <div class="block block-rounded">
-    <div class="block-header block-header-default">
-      <h3 class="block-title">
-        تغییر کلمه عبور
-      </h3>
-    </div>
-    <div class="block-content mt-0">
-      <div class="row pb-sm-3 pb-md-5">
-        <div class="col-sm-10 col-md-8">
-          <form @submit.prevent="changePassword">
-            <div class="form-floating mb-3">
-              <input class="form-control" type="password" v-model="pass">
-              <label>کلمه عبور</label>
-              <small class="form-text text-danger" v-if="v$.pass.$error">حداقل طول کلمه عبور ۱۰ کاراکتر است.</small>
-            </div>
-            <div class="form-floating mb-3">
-              <input class="form-control" type="password" v-model="repass">
-              <label>تکرار کلمه عبور</label>
-              <small class="form-text text-danger" v-if="v$.repass.$error">حداقل طول تکرار کلمه عبور ۱۰ کاراکتر است.</small>
-            </div>
-            <button class="btn btn-alt-primary" type="submit">
-              <i class="fa fa-save"></i>
-              تغییر کلمه عبور
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script>
-import Swal from "sweetalert2";
+<script lang="ts">
+import {defineComponent,ref} from 'vue'
 import axios from "axios";
-import {required,minLength} from "@vuelidate/validators";
-import {useVuelidate} from "@vuelidate/core";
+import Swal from 'sweetalert2';
 
-export default {
-  name: "change-password",
-  data: ()=>{return{
-    pass: '',
-    repass: '',
-  }},
-  methods:{
-    async changePassword(){
-      const isFormCorrect = await this.v$.$validate()
-      if (isFormCorrect) {
-        if(this.pass !== this.repass){
-          Swal.fire({
-            title: 'خطا',
-            text: 'کلمات عبور وارد شده یکسان نیست',
-            icon: 'error',
-            confirmButtonText: 'قبول',
-          })
-        }
-        else{
-          axios.post( '/api/user/change/password', {
-            pass: this.pass,
-            repass: this.repass
-          }).then(function (response) {
-            if(response.data.result === true){
-              Swal.fire({
-                title: 'پیام',
-                text: 'کلمه عبور با موفقیت تغییر یافت',
-                icon: 'success',
-                confirmButtonText: 'قبول',
-              }).then((result) => {
-                window.location.href = '/profile/dashboard'
-              })
-            }
-          })
-        }
+export default defineComponent({
+  name: "change_password",
+  data(){
+    const self = this;
+    return{
+      loading: ref(false),
+      formData:{
+        password1:'',
+        password2:''
       }
-
+  }},
+ 
+  methods:{
+    async submit() {
+      const { valid } = await this.$refs.form.validate()
+      if(valid && (this.formData.password1.toString() == this.formData.password2.toString())){
+        this.loading = true;
+        axios.post('/api/user/change/password',{
+          pass: this.formData.password1,
+          repass: this.formData.password2
+        }).then((response:any) => {
+          this.loading = false;
+          if(response.data.Success ==true){
+            Swal.fire({
+              text: this.$t('pages.reset_password.password_changed'),
+              confirmButtonText: this.$t('dialog.ok'),
+              icon:'success'
+            }).then(()=>{
+              this.$router.push('/profile/dashboard');
+            });
+          }
+          else{
+            Swal.fire({
+              text: response.data.message,
+              confirmButtonText: this.$t('dialog.ok'),
+              icon:'error'
+            });
+          }
+        });
+      }
+      else if(this.formData.password1.toString() != this.formData.password2.toString()){
+        Swal.fire({
+          text: this.$t('pages.reset_password.passwords_not_match'),
+          confirmButtonText: this.$t('dialog.ok'),
+          icon:'error'
+        });
+      }
+      else{
+        Swal.fire({
+          text: this.$t('pages.reset_password.form_not_valid'),
+          confirmButtonText: this.$t('dialog.ok'),
+          icon:'error'
+        });
+      }
     }
-  },
-  validations () {
-    return {
-      pass: {
-        required ,
-        minLengthValue: minLength(10),
-      },
-      repass: {
-        required ,
-        minLengthValue: minLength(10),
-      },
-    }
-  },
-  setup () {
-    return {
-      v$: useVuelidate()
-    }
-  },
-}
+  }
+})
 </script>
+
+<template>
+  <v-toolbar density="compact" :title="$t('user.change_password')"></v-toolbar>
+  <v-container class="ma-0 pa-0">
+    <v-row>
+      <v-col>
+        <v-card :loading="loading ? 'red' : null" :disabled="loading">
+          <v-card-text>
+            <v-form ref="form" @submit.prevent >
+              <v-text-field
+                  class="mb-2"
+                  :label="$t('user.password')"
+                  :placeholder="$t('user.password_placeholder')"
+                  single-line
+                  type="password"
+                  variant="outlined"
+                  prepend-icon="mdi-lock"
+                  v-model="formData.password1"
+                  :rules="[() => formData.password1.length > 7 || $t('validator.password_len_lower')]"
+              ></v-text-field>
+              <v-text-field
+                  :label="$t('user.password')"
+                  :placeholder="$t('user.password_placeholder')"
+                  single-line
+                  type="password"
+                  variant="outlined"
+                  prepend-icon="mdi-lock"
+                  v-model="formData.password2"
+                  :rules="[() => formData.password2.length > 7 || $t('validator.password_len_lower')]"
+              ></v-text-field>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn :loading="loading" @click="submit()" type="submit" prepend-icon="mdi-content-save-check" variant="flat" color="primary">{{$t('dialog.save')}}</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
 
 <style scoped>
 

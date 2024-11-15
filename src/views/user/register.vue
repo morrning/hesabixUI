@@ -1,195 +1,182 @@
-<template>
-  <!-- Main Container -->
-  <main id="main-container">
-    <!-- Page Content -->
-    <div class="bg-image" style="background-image: url('/assets/media/photos/photo21.jpg');">
-      <div class="row g-0 justify-content-center bg-primary-dark-op">
-        <div class="hero-static col-sm-8 col-md-6 col-xl-4 d-flex align-items-center p-2 px-sm-0">
-          <!-- Sign Up Block -->
-          <div class="block block-transparent block-rounded w-100 mb-0 overflow-hidden">
-            <div class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
-              <!-- Header -->
-              <div class="mb-2 text-center">
-                <router-link class="link-fx fw-bold fs-1" to="/">
-                  <span class="text-primary">{{ siteName }}</span>
-                </router-link>
-                <p class="text-uppercase fw-bold fs-sm text-muted">ایجاد حساب جدید</p>
-              </div>
-              <!-- END Header -->
-
-              <!-- Sign Up Form -->
-              <form @submit.prevent="onSubmit">
-                <div class="mb-4">
-                  <div class="input-group input-group-lg">
-                    <span class="input-group-text">
-                          <i class="fa fa-user-circle"></i>
-                        </span>
-                    <input class="form-control" v-model="name" placeholder="نام و نام خانوادگی" type="text"/>
-
-                  </div>
-                </div>
-                <div class="mb-4">
-                  <div class="input-group input-group-lg">
-                    <span class="input-group-text">
-                          <i class="fa fa-envelope-open"></i>
-                        </span>
-                    <input class="form-control" v-model="email" placeholder="پست الکترونیک" type="email"/>
-                  </div>
-                </div>
-                <div class="mb-4">
-                  <div class="input-group input-group-lg">
-                    <span class="input-group-text">
-                          <i class="fa fa-mobile-android"></i>
-                        </span>
-                    <input class="form-control" v-model="mobile" placeholder="شماره موبایل" type="tel" style="direction: rtl;"/>
-                  </div>
-                </div>
-                <div class="mb-4">
-                  <div class="input-group input-group-lg">
-                    <span class="input-group-text">
-                          <i class="fa fa-asterisk"></i>
-                        </span>
-                    <input class="form-control" v-model="password" placeholder="کلمه عبور" type="password"/>
-                  </div>
-                </div>
-                <div class="d-sm-flex justify-content-sm-between align-items-sm-center mb-4 bg-body rounded py-2 px-3">
-                  <div class="form-check">
-                    <input class="form-check-input" v-model="term" type="checkbox"/>
-                    <label class="form-check-label" for="signup-terms">موافقم</label>
-                  </div>
-                  <div class="fw-semibold fs-sm py-1">
-                    <a class="fw-semibold fs-sm" target="_blank" :href="this.$filters.getApiUrl() + '/front/terms'">شرایط و ضوابط</a>
-                  </div>
-                </div>
-                <div class="text-center mb-4">
-                  <button :disabled="this.loading" class="btn btn-hero btn-primary w-100" type="submit">
-                    <div v-show="this.loading" class="spinner-grow spinner-grow-sm me-2" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <i class="fa fa-fw fa-plus opacity-50 me-1"></i> ثبت نام
-                  </button>
-                </div>
-                <div class="text-center mb-0">
-                  <RouterLink to="/user/login">
-                    قبلا عضو شده اید؟ وارد شوید
-                  </RouterLink>
-                </div>
-              </form>
-              <!-- END Sign Up Form -->
-            </div>
-          </div>
-        </div>
-        <!-- END Sign Up Block -->
-      </div>
-    </div>
-    <!-- END Page Content -->
-  </main>
-  <!-- END Main Container -->
-</template>
-
-<script>
-import { useVuelidate } from '@vuelidate/core'
-import {email, required} from "@vuelidate/validators";
+<script lang="ts">
+import {defineComponent} from 'vue'
 import axios from "axios";
-import Swal from "sweetalert2";
-import router from "@/router";
-import {ref} from "vue";
-import { getSiteName } from '/hesabixConfig';
-
-export default {
+export default defineComponent({
   name: "register",
-  setup () {
+  data() {
+    const self = this;
     return {
-      v$: useVuelidate()
-    }
-  },
-  data () {
-    return {
-      siteName:'',
-      loading: ref(true),
-      email: '',
-      password: '',
-      name: '',
-      mobile: '',
-      term: false
-    }
-  },
-  validations () {
-    return {
-      email: { required,email },
-      password: {required},
-      mobile: {required},
-      name: {required}
+      loading:false,
+      dialog:false,
+      user:{
+        name:'',
+        email:'',
+        mobile:'',
+        password:''
+      },
+      rules:{
+        name: [
+          (value:any) => self.validate(value,'fill'),
+        ],
+        email: [
+          (value:any) => self.validate(value,'email'),
+        ],
+        mobile: [
+          (value:any) => self.validate(value,'mobile'),
+        ],
+        password: [
+          (value:any) => self.validate(value,'password'),
+        ],
+      },
+      response: {
+        code: '',
+        message: '',
+        Success: false,
+        data: {
+          id: ''
+        }
+      }
     }
   },
   mounted() {
-    this.loading = false;
-    if(this.$filters.isLogin() === true){
-      this.$router.push({ name: 'home' });
+    this.loadData();
+  },
+  methods:{
+    validate(input:string,type:string){
+      if(type == 'fill'){
+        if (input?.length > 0) return true
+        return this.$t('validator.required')
+      }
+      else if(type == 'email'){
+        if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(input)) return true
+        return this.$t('validator.email_not_valid')
+      }
+      else if(type == 'password'){
+        if(input == undefined ) {
+          return false
+        }
+        else if (input.length > 7) return true
+        return this.$t('validator.password_len_lower')
+      }
+      else if(type == 'mobile'){
+        var regex = new RegExp("^(\\+98|0)?9\\d{9}$");
+        if(regex.test(input))  return true
+        return this.$t('validator.mobile_not_valid')
+      }
+    },
+    loadData(){
+      
+    },
+    async submit(){
+      const { valid } = await this.$refs.form.validate()
+      if(valid){
+        this.loading = true;
+        axios.post('/api/user/register',this.user)
+            .then((response:any) => {
+              if(response.data.Success == false){
+                this.response = response.data;
+                this.dialog = true;
+              }
+              else{
+                this.$router.push('/user/active-account/' + this.user.mobile)
+              }
+              this.loading = false;
+            });
+      }
     }
-  },
-  methods: {
-    async onSubmit () {
-      const result = await this.v$.$validate()
-      if (!result) {
-        // notify user form is invalid
-        Swal.fire({
-          text: 'لطفا تمام موارد را به صورت صحیح وارد کنید.',
-          icon: 'error',
-          confirmButtonText: 'قبول'
-        });
-      }
-      else{
-        if(this.term == false){
-          Swal.fire({
-            text: 'موافقت با قوانین ارائه خدمات جهت ثبت نام ضروری است.',
-            icon: 'error',
-            confirmButtonText: 'قبول'
-          });
-        }
-        else{
-          this.loading = true;
-          // perform async actions
-          axios.post( '/api/user/register', {
-            name: this.name,
-            email: this.email,
-            mobile: this.mobile,
-            password: this.password
-          }).then((response) => {
-                this.loading=false;
-                if(response.data.error === 0){
-                  //go to success page
-                  router.push('/user/active/' + response.data.id)
-                }
-                if(response.data.error === 1){
-                  Swal.fire({
-                    text: 'این پست الکترونیکی قبلا ثبت شده است.',
-                    icon: 'error',
-                    confirmButtonText: 'قبول'
-                  });
-                }
-                else if(response.data.error === 2){
-                  Swal.fire({
-                    text: 'این شماره تلفن قبلا ثبت شده است.',
-                    icon: 'error',
-                    confirmButtonText: 'قبول'
-                  });
-                }
-          });
-        }
-        }
-      }
-  },
-  async created() {
-    this.siteName = getSiteName();
-    await axios.post('/api/user/check/login').then((response)=>{
-      if(response.data.result == true){
-        this.$router.push('/profile/business');
-      }
-    })
   }
-}
+})
 </script>
+
+<template>
+  <v-container>
+    <v-row class="d-flex justify-center">
+      <v-col md="5">
+        <v-card :loading="loading ? 'blue' : null" :title="$t('app.name')" :subtitle="$t('user.register_label')">
+          <v-card-text>
+            <v-form ref="form" :disabled="loading" fast-fail @submit.prevent="submit()"  >
+              <v-text-field
+                  class="mb-2"
+                  :label="$t('user.name')"
+                  :placeholder="$t('user.name_des')"
+                  single-line
+                  v-model="user.name"
+                  type="text"
+                  variant="outlined"
+                  prepend-inner-icon="mdi-account"
+                  :rules="rules.name"
+              ></v-text-field>
+
+              <v-text-field
+                  class="mb-2"
+                  :label="$t('user.email')"
+                  :placeholder="$t('user.email_placeholder')"
+                  single-line
+                  v-model="user.email"
+                  type="email"
+                  variant="outlined"
+                  prepend-inner-icon="mdi-email"
+                  :rules="rules.email"
+              ></v-text-field>
+
+              <v-text-field
+                  class="mb-2"
+                  :label="$t('user.mobile')"
+                  :placeholder="$t('user.mobile_placeholder')"
+                  single-line
+                  v-model="user.mobile"
+                  type="phone"
+                  variant="outlined"
+                  prepend-inner-icon="mdi-phone"
+                  :rules="rules.mobile"
+              ></v-text-field>
+
+              <v-text-field
+                  class="mb-2"
+                  :label="$t('user.password')"
+                  :placeholder="$t('user.password_register_des')"
+                  single-line
+                  type="password"
+                  variant="outlined"
+                  prepend-inner-icon="mdi-lock"
+                  :rules="rules.password"
+                  v-model="user.password"
+              ></v-text-field>
+              <v-card-text class="text-justify text-info">
+                <v-icon icon="mdi-information" />
+                {{ $t('user.register_terms_des') }}
+              </v-card-text>
+              <v-btn
+                  :loading="loading"
+                  block
+                  class="text-none mb-4"
+                  color="indigo-darken-3"
+                  size="x-large"
+                  variant="flat"
+                  prepend-icon="mdi-account-plus"
+                  type="submit"
+              >
+                {{ $t('user.register') }}
+              </v-btn>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+  <div v-if="dialog" class="text-center">
+    <v-dialog v-model="dialog" max-width="500" persistent>
+      <v-card color="dangerLight" prepend-icon="mdi-close-octagon " :title="$t('dialog.error')"
+        :text="response.message">
+        <template v-slot:actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" :text="$t('dialog.ok')" variant="flat"
+            @click="dialog = false; loading = false;" />
+        </template>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
 
 <style scoped>
 

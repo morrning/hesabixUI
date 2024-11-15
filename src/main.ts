@@ -60,7 +60,8 @@ const vuetify = createVuetify({
                     successLight: colors.green.lighten4,
                     primaryLight: '#f8f9fc',
                     primaryLight2: '#edf1fc',
-                    success: '#457237'
+                    success: '#457237',
+                    toolbar:colors.indigo.lighten5
                 }
             },
         },

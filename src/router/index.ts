@@ -892,38 +892,29 @@ const router = createRouter({
                     }
                 },
                 {
-                    path: 'forget-password-submit-code',
+                    path: 'forget-password-submit-code/:id',
                     name: 'user_forget_password_submit_code',
                     component: () => import('../views/user/profile/forget-password-submit-code.vue'),
                     meta: {
                         'title': 'تایید کد بازیابی گذرواژه',
                     }
                 },
+                {
+                    path: 'register',
+                    name: 'user_register',
+                    component: () => import('../views/user/register.vue'),
+                    meta: {
+                        'title': 'عضویت',
+                    }
+                },{
+                    path: 'active-account/:id',
+                    name: 'user_active_account',
+                    component: () => import('../views/user/active-account.vue'),
+                    meta: {
+                        'title': 'فعال سازی حساب کاربری',
+                    }
+                },
             ],
-        },
-        {
-            path: '/user/active/:email',
-            name: 'user_active_account',
-            component: () => import('../views/user/active-account.vue'),
-            meta: {
-                'title': 'فعال سازی حساب کاربری',
-            }
-        },
-        {
-            path: '/user/register',
-            name: 'user_register',
-            component: () => import('../views/user/register.vue'),
-            meta: {
-                'title': 'عضویت',
-            }
-        },
-        {
-            path: '/user/register-success',
-            name: 'user_register_success',
-            component: () => import('../views/user/register-success.vue'),
-            meta: {
-                'title': 'تکمیل عضویت',
-            }
         },
         {
             path: "/:catchAll(.*)",

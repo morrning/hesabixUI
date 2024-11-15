@@ -1,12 +1,21 @@
 <script lang="ts">
 import Change_lang from "@/components/application/buttons/change_lang.vue";
+import axios from "axios";
 
 export default {
   name: 'single',
   components: { Change_lang },
   data() {
     return {
-
+      system:{
+        footer:''
+      },
+      icons: [
+        'mdi-telegram',
+        'mdi-twitter',
+        'mdi-linkedin',
+        'mdi-instagram',
+      ],
     }
   },
   created() {
@@ -14,6 +23,11 @@ export default {
       this.$router.push('/user/dashboard')
     }
   },
+  mounted(){
+    axios.post('/front/system/get/data').then((response) => {
+      this.system = response.data;
+    });
+  }
 }
 </script>
 
@@ -30,12 +44,13 @@ export default {
         <v-tab prepend-icon="mdi-lock" :text="$t('user.forget_password')" to="/user/forget-password"></v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
-      <change_lang />
+    
     </v-app-bar>
 
     <v-main class="bg-grey-lighten-3">
       <RouterView />
     </v-main>
+    
   </v-app>
 </template>
 
