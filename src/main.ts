@@ -5,8 +5,8 @@ import axios from "axios";
 //pinia
 import { createPinia } from 'pinia'
 const pinia = createPinia();
-//vue countdown
-import VueCountdown from '@chenfengyuan/vue-countdown';
+
+import { VDateInput } from 'vuetify/labs/VDateInput'
 
 // Vuetify
 import 'vuetify/styles'
@@ -23,7 +23,6 @@ import i18n from '@/i18n/i18n'
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 import { aliases, mdi } from "vuetify/iconsets/mdi";
-
 
 const vuetify = createVuetify({
     defaults: {
@@ -73,19 +72,15 @@ import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 import { LoadingPlugin } from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
-import '../public/css/main.css';
+import '@/css/main.css';
 
 import money from 'v-money3';
 import Vue3PersianDatetimePicker from 'vue3-persian-datetime-picker';
-import NProgress from "nprogress";
 import Swal from "sweetalert2";
-import Uploader from 'vue-media-upload';
-import { getApiUrl } from "/hesabixConfig";
+import { getApiUrl } from "@/hesabixConfig";
 const app = createApp(App)
 app.component('EasyDataTable', Vue3EasyDataTable);
 app.component('DatePicker', Vue3PersianDatetimePicker);
-app.component('Uploader', Uploader);
-app.component(VueCountdown.name, VueCountdown);
 import Hdatepicker from "@/components/forms/Hdatepicker.vue";
 import calendarLocalConfig from "@/i18n/calendarLocalConfig";
 
@@ -104,7 +99,6 @@ app.use(Vue3PersianDatetimePicker, {
     }
 })
 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem('X-AUTH-TOKEN');
-NProgress.configure({ showSpinner: false });
 app.config.globalProperties.$API_URL = getApiUrl();
 axios.defaults.baseURL = app.config.globalProperties.$API_URL;
 axios.defaults.withCredentials = true;
@@ -113,8 +107,6 @@ axios.defaults.headers.common['activeYear'] = localStorage.getItem('activeYear')
 axios.defaults.headers.common['activeMoney'] = localStorage.getItem('activeMoney');
 axios.interceptors.request.use(function (config) {
     // Do something before request is sent
-    NProgress.start();
-
     return config;
 }, function (error) {
     // Do something with request error
@@ -124,7 +116,6 @@ axios.interceptors.request.use(function (config) {
 
 axios.interceptors.response.use(function (response) {
     // Do something with response data
-    NProgress.done()
     return response;
 }, function (error) {
     if (error.code === 404) {
@@ -146,12 +137,12 @@ app.use(vuetify);
 
 //global methods
 app.config.globalProperties.$filters = {
-    formatNumber(value) {
+    formatNumber(value:any) {
         let result = parseFloat(value).toFixed(0).toString();
         result = result.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         return result;
     },
-    onlyNumber($event) {
+    onlyNumber($event:any) {
         //console.log($event.keyCode); //keyCodes value
         let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
         if ((keyCode < 48 || keyCode > 57)) { // 46 is dot

@@ -1,10 +1,9 @@
 <template>
-  <v-toolbar color="toolbar" :title="$t('title.user.dashboard')">
+  <v-toolbar color="toolbar" :title="$t('pages.support.titlebar')">
     <v-spacer></v-spacer>
-
     <v-tooltip :text="$t('user.ticket_new')" location="bottom">
       <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" icon="mdi-note-plus-outline" color="primary" to="/profile/support-new"></v-btn>
+        <v-btn v-bind="props" icon="mdi-chat-plus" color="primary" to="/profile/support-new"></v-btn>
       </template>
     </v-tooltip>
 
@@ -33,7 +32,6 @@
               </template>
             </EasyDataTable>
           </v-col>
-
         </v-row>
       </v-card-text>
     </v-card>

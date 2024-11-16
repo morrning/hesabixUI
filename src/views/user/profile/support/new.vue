@@ -1,75 +1,71 @@
 <template>
-  <div class="block block-rounded">
-    <div class="block-header block-header-default">
-      <h3 class="block-title">
-        درخواست جدید
-      </h3>
-      <div class="block-options">
-        <router-link to="/profile/support-list" class="btn btn-info">
-          <i class="fa fa-undo-alt"></i>
-          بازگشت
-        </router-link>
-      </div>
-    </div>
-    <div class="block-content mt-0 mb-4 pb-4">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 col-md-12">
-            <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
-            <div class="alert alert-info">
-              ما به صورت پیشفرض به اطلاعات هیچ یک از کسب‌و‌کارها دسترسی نداریم و انجام فرایند رفع مشکلات که لازمه آن دسترسی به اطلاعات شماست که با دعوت کاربر پشتیبانی با ایمیل support@hesabix.ir امکان‌پذیر است.لذا از شما تقاضا می شود بعد از ارسال درخواست پشتیبانی دسترسی‌های لازم را برای کاربر پشتیبانی فعال نمایید.این کار به کاهش زمان پاسخگویی کمک خواهد کرد.
-            </div>
-            <div class="form-floating mb-4">
-              <input v-model="this.item.title" class="form-control" type="text">
-              <label class="form-label"><span class="text-danger">  *  </span> عنوان درخواست </label>
-            </div>
-            <div class="form-floating mb-4">
-              <select v-model="this.item.bid" class="form-select" >
-                <option v-for="item in this.bidItems" :value="item">{{ item.name }}</option>
-              </select>
-              <label class="form-label required">کسب و کار</label>
-
-            </div>
-            <div class="form-floating mb-4">
-              <textarea v-model="this.item.body" class="form-control" type="text" style="height: 200px" />
-              <label class="form-label"><span class="text-danger">  *  </span>متن درخواست</label>
-            </div>
-            <button @click="save()" :disabled="isLoading" type="button" class="btn btn-alt-primary mb-4">ثبت درخواست</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-toolbar color="toolbar" :title="$t('pages.support.new')">
+  </v-toolbar>
+  <v-container class="pa-0 ma-0">
+    <v-row>
+      <v-col class="">
+        <v-form fast-fail ref="form" @submit.prevent>
+          <v-card class="pa-3" :loading="loading ? 'red' : null" :disabled="loading" flat>
+            <v-row>
+              <v-col cols="12" sm="12" md="12">
+                <v-alert icon="mdi-information-slab-box-outline" :text="$t('pages.support.alert_top')"
+                  type="info"></v-alert>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" sm="12" md="6">
+                <v-text-field class="" :label="$t('pages.support.title')" v-model="item.title" type="text"
+                  prepend-inner-icon="mdi-format-title"
+                  :rules="[() => item.title.length > 0 || $t('validator.required')]"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="12" md="6">
+                <v-select class="" :label="$t('pages.support.bid')" prepend-inner-icon="mdi-domain"
+                  :items="bidItems" item-title="name" return-object v-model="item.bid"></v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" sm="12" md="12">
+                <v-textarea class="" :label="$t('pages.support.body')" v-model="item.body" type="text"
+                  prepend-inner-icon="mdi-text"
+                  :rules="[() => item.body.length > 0 || $t('validator.required')]"></v-textarea>
+              </v-col>
+            </v-row>
+            <v-btn @click="submit()" type="submit" color="primary" class="mt-3" prepend-icon="mdi-content-save" :loading="loading">
+              {{ $t('dialog.save') }}
+            </v-btn>
+          </v-card>
+        </v-form>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
-import Loading from "vue-loading-overlay";
-import 'vue-loading-overlay/dist/css/index.css';
 
 export default {
   name: "new",
-  components:{
-    Loading
+  data() {
+    return {
+      item: {
+        title: '',
+        body: '',
+        bid: '',
+      },
+      bidItems: [],
+      loading: true,
+    }
   },
-  data(){return{
-    item:{
-      title:'',
-      body:'',
-      bid:'',
-    },
-    bidItems:{},
-    isLoading: false,
-  }},
   beforeMount() {
     this.loadData();
   },
-  methods:{
-    loadData(){
-      axios.post('/api/business/list').then((response)=>{
+  methods: {
+    loadData() {
+      axios.post('/api/business/list').then((response) => {
         this.bidItems = response.data;
-        if(response.data.length == 0){
+        this.loading = false;
+        if (response.data.length == 0) {
           Swal.fire({
             text: 'برای درخواست پشتیبانی می بایست حداقل یک کسب و کار داشته باشید.',
             showCancelButton: true,
@@ -80,32 +76,29 @@ export default {
             if (result.isConfirmed) {
               this.$router.push('/profile/new-business');
             }
-            else{
+            else {
               this.$router.push('/profile/dashboard');
             }
           })
         }
-        else{
+        else {
           this.item.bid = response.data[0];
         }
+
       })
     },
-    save(){
-      if(this.item.title.trim() == '' || this.item.body.trim() == ''){
-        Swal.fire({
-          text: 'تکمیل موارد ستاره دار الزامی است.',
-          confirmButtonText: 'قبول',
-        })
-      }
-      else{
-        this.isLoading = true;
-        axios.post('/api/support/mod',this.item).then((response)=>{
-          this.isLoading = false;
+    async submit() {
+      const { valid } = await this.$refs.form.validate()
+      if(valid){
+        this.loading = true;
+        axios.post('/api/support/mod', this.item).then((response) => {
           Swal.fire({
-            text: 'درخواست با موفقیت ثبت شد.',
-            confirmButtonText: 'قبول',
-          }).then((result)=>{
-           this.$router.push('/profile/support-list')
+            text: this.$t('pages.support.saved'),
+          confirmButtonText: this.$t('dialog.ok'),
+          icon:'success'
+          }).then((result) => {
+            this.loading = false;
+            this.$router.push('/profile/support-list')
           })
         })
       }
@@ -114,6 +107,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

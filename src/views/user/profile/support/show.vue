@@ -1,116 +1,106 @@
 <template>
-  <div class="block block-rounded">
-    <div class="block-header block-header-default">
-      <h3 class="block-title">
-       مشاهده درخواست‌ پشتیبانی
-      </h3>
-      <div class="block-options">
-        <router-link to="/profile/support-list" class="btn btn-info">
-          <i class="fa fa-undo"></i>
-          بازگشت
-        </router-link>
-      </div>
-    </div>
-    <div class="block-content mt-0">
-      <div class="row pb-sm-3 pb-md-5">
-        <div class="col-sm-12 col-md-12">
-          <div class="block block-rounded">
-            <!-- Chat #1 Header -->
-            <div class="block-content block-content-full bg-primary">
-              <div class="fs-lg fw-semibold text-white text-start"> موضوع: <b>{{this.item.title}}</b> </div>
-              <div class="text-start mt-2 text-white">وضعیت درخواست:
-                <div class="badge bg-white text-danger">{{item.state}}</div>
-              </div>
-            </div>
-            <!-- END Chat #1 Header -->
-
-            <!-- Chat #1 Messages -->
-            <div class="js-chat-messages block-content block-content-full text-break overflow-y-auto" data-chat-id="1" style="height: 300px;"><div class="me-4">
-              <div class="fs-sm text-muted animated fadeIn my-2">
-                {{item.dateSubmit}}
-              </div>
-              <div class="me-4" >
-                <div class="fs-sm d-inline-block fw-medium animated fadeIn bg-body-light border-3 px-3 py-2 mb-2 shadow-sm mw-100 border-start border-dark rounded-end">
-                  {{item.body}}
-                </div>
-              </div>
-            </div>
-              <div class="me-4" v-bind:class = "(replay.state == 1)?'':'justify-content-end text-end'" v-for="replay in replays">
-                <div class="fs-sm text-muted animated fadeIn my-2">
-                  {{replay.dateSubmit}}
-                  توسط
-                  {{replay.title}}
-                </div>
-                <div class="fs-sm d-inline-block fw-medium animated fadeIn bg-body-light border-3 px-3 py-2 mb-2 shadow-sm mw-100 border-dark" v-bind:class = "(replay.state == 1)?'border-start rounded-end':'border-end rounded-start'">
-                  {{replay.body}}
-                </div>
-              </div>
-            </div>
-            <!-- Chat #1 Input -->
-            <div class="js-chat-form block-content p-2 bg-body-dark">
-              <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
-              <div class="input-group mb-3">
-                <input v-model="this.replay" type="text" class="form-control" placeholder="پاسخ خود را ارسال کنید." >
-                <button :disabled="isLoading" @click="save()" class="btn btn-outline-secondary" type="button" id="button-addon1">ارسال</button>
-              </div>
-            </div>
-            <!-- END Chat #1 Input -->
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-toolbar color="toolbar" :title="$t('pages.support.view_ticket')">
+    <v-spacer></v-spacer>
+    <v-tooltip :text="$t('pages.support.new_ticket')" location="bottom">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-chat-plus" color="primary" to="/profile/support-new"></v-btn>
+      </template>
+    </v-tooltip>
+  </v-toolbar>
+  <v-container class="pa-0 ma-0">
+    <v-row>
+      <v-col class="">
+        <v-form fast-fail ref="form" @submit.prevent>
+          <v-card class="pa-3" :loading="loading ? 'red' : null" :disabled="loading" flat>
+            <v-row>
+              <v-col cols="12" md="12">
+                <v-card color="primary" class="mx-auto" prepend-icon="mdi-account"
+                  :subtitle="item.dateSubmit + ' ' + item.state" :title="item.title">
+                  <v-card-text>
+                    {{ item.body }}
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-timeline side="end" class="align-end">
+              <v-timeline-item v-for="item in replays" :key="item.id" dot-color="primary" size="small">
+                <v-alert color="" :icon="mdi - person" :value="true">
+                  {{ item.body }}
+                  <br>
+                  <v-chip color="primary" prepend-icon="mdi-calendar" variant="tonal" >
+                    {{ item.dateSubmit }}
+                  </v-chip>
+                </v-alert>
+              </v-timeline-item>
+            </v-timeline>
+            <v-row>
+              <v-col class="">
+                <v-card class="pa-3" :loading="loading ? 'red' : null" :disabled="loading" flat>
+                  <v-row>
+                    <v-col cols="12" sm="12" md="12">
+                      <v-textarea class="" :label="$t('pages.support.replay')" v-model="replay" type="text"
+                        prepend-inner-icon="mdi-text"
+                        :rules="[() => replay.length > 0 || $t('validator.required')]"></v-textarea>
+                    </v-col>
+                  </v-row>
+                  <v-btn @click="submit()" type="submit" color="primary" class="mt-3" prepend-icon="mdi-content-save"
+                    :loading="loading">
+                    {{ $t('dialog.save') }}
+                  </v-btn>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-form>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
-import Loading from "vue-loading-overlay";
-import 'vue-loading-overlay/dist/css/index.css';
 export default {
   name: "show",
-  components:{
-    Loading
+  data() {
+    return {
+      item: {
+        state: '',
+        body: '',
+        dateSubmit: ''
+      },
+      replays: [],
+      replay: '',
+      loading: false,
+    }
   },
-  data(){return {
-    item: '',
-    replays:[],
-    replay:'',
-    isLoading: false,
-  }},
-  methods:{
-    loadData(){
-      axios.post('/api/support/view/' + this.$route.params.id).then((response)=>{
+  methods: {
+    loadData() {
+      axios.post('/api/support/view/' + this.$route.params.id).then((response) => {
         this.item = response.data.item;
         this.replays = response.data.replays;
       })
     },
-    save(){
-      if(this.replay.trim() == ''){
-        Swal.fire({
-          text: 'متن پاسخ وارد نشده است.',
-          confirmButtonText: 'قبول',
-        })
-      }
-      else{
-        this.isLoading = true;
-        axios.post('/api/support/mod/' + this.item.id,{
-          'body':this.replay
-        }).then((response)=>{
-          this.isLoading = false;
-          if(response.data.error==0){
+    async submit() {
+      const { valid } = await this.$refs.form.validate()
+      if (valid) {
+        this.loading = true;
+        axios.post('/api/support/mod/' + this.item.id, {
+          'body': this.replay
+        }).then((response) => {
+          this.loading = false;
+          if (response.data.error == 0) {
             Swal.fire({
               text: 'پاسخ ثبت شد . منتظر پاسخ کارشناسان باشید.',
               icon: 'success',
               confirmButtonText: 'قبول',
-            }).then((res)=>{
+            }).then((res) => {
               this.replays.push({
-                id:0,
-                body:this.replay,
+                id: 0,
+                body: this.replay,
                 state: 1,
-                title:'شما',
-                dateSubmit:'هم اکنون'
+                title: 'شما',
+                dateSubmit: 'هم اکنون'
               });
               this.replay = '';
               this.item.state = 'در حال پیگیری'
@@ -126,6 +116,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

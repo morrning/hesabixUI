@@ -15,7 +15,7 @@
 
 <script>
 import axios from "axios";
-import { getSiteName } from "/hesabixConfig";
+import { getSiteName } from "@/hesabixConfig";
 
 export default {
   name: "dashboard",

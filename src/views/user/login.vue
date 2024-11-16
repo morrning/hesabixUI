@@ -97,7 +97,6 @@ export default {
           this.dialog = true;
         });
       }
-
     }
   }
 }

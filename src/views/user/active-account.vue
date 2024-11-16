@@ -7,8 +7,8 @@ export default defineComponent({
   data() {
     const self = this;
     return {
-      dialog: ref(false),
-      dialogSuccess: ref(false),
+      dialog: false,
+      dialogSuccess: false,
       loading: false,
       disableSend: true,
       code: '',

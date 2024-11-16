@@ -16,9 +16,9 @@ export default {
     }
   },
   methods: {
-    update(){
+    update() {
       this.dialog = false;
-      localStorage.setItem('hesabixVersion',this.hesabix.version);
+      localStorage.setItem('hesabixVersion', this.hesabix.version);
       window.location.reload();
     },
     gethesabix() {
@@ -63,7 +63,11 @@ export default {
     </v-app>
   </v-responsive>
 
-
 </template>
 
-<style scoped></style>
+<style>
+.customize-table {
+  --easy-table-header-font-color: #e1e1e1;
+  --easy-table-header-background-color: #055bbb;
+}
+</style>

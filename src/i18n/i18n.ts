@@ -8,7 +8,10 @@ const messages = {
   en: en_lang
 }
 let activeLanguageCode = localStorage.getItem('UI_LANG');
-if(activeLanguageCode == null){ activeLanguageCode='fa'}
+if(activeLanguageCode == null || activeLanguageCode == undefined){ 
+  localStorage.setItem('UI_LANG','fa')
+  activeLanguageCode='fa';
+}
 const i18n = createI18n({
   legacy: false, // Vuetify does not support the legacy mode of vue-i18n
   locale: activeLanguageCode,

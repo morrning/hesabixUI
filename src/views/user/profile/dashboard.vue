@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar color="toolbar" density="compact" :title="$t('title.user.dashboard')"></v-toolbar>
+  <v-toolbar color="toolbar" :title="$t('title.user.dashboard')"></v-toolbar>
   <v-container class="pa-0 ma-0">
     <v-card :loading="loading ? 'red' : null" :disabled="loading">
       <v-card-text>
@@ -9,13 +9,13 @@
           </v-col>
           <v-col cols="12" sm="12" md="10">
             <v-text-field v-model="user_email" :label="$t('user.email')" prepend-inner-icon="mdi-email" :disabled="true"
-              color="primary" variant="solo" ></v-text-field>
+              color="primary" variant="solo"></v-text-field>
             <v-text-field v-model="user_mobile" :label="$t('user.mobile')" prepend-inner-icon="mdi-cellphone"
-              :disabled="true" color="primary" variant="solo" ></v-text-field>
+              :disabled="true" color="primary" variant="solo"></v-text-field>
             <v-text-field v-model="user_fullname" :label="$t('user.name')" prepend-inner-icon="mdi-account"
-              :disabled="loading"  color="primary" variant="solo"></v-text-field>
+              :disabled="loading" color="primary" variant="solo"></v-text-field>
             <v-btn color="primary" :loading="loading" prepend-icon="mdi-content-save"
-              @click="this.updateProfile()">ذخیره</v-btn>
+              @click="this.updateProfile()">{{ $t('dialog.save') }}</v-btn>
           </v-col>
         </v-row>
       </v-card-text>
@@ -45,7 +45,7 @@ export default {
   name: "dashboard",
   data() {
     return {
-      loading: ref(false),
+      loading: ref(true),
       dialog: ref(false),
       user_fullname: '',
       user_email: '',
@@ -79,6 +79,7 @@ export default {
         this.user_email = res.data.email;
         this.user_fullname = res.data.fullname;
         this.user_mobile = res.data.mobile;
+        this.loading = false;
       });
   },
   validations() {

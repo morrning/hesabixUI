@@ -63,7 +63,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <v-toolbar density="compact" :title="$t('user.change_password')"></v-toolbar>
+  <v-toolbar color="toolbar" :title="$t('user.change_password')"></v-toolbar>
   <v-container class="ma-0 pa-0">
     <v-row>
       <v-col>
