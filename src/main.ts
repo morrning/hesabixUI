@@ -32,6 +32,9 @@ const vuetify = createVuetify({
                 
             }
         },
+        VToolbar:{
+            density:'compact'
+        }
     },
     components,
     directives,

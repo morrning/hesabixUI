@@ -11,26 +11,6 @@ const router = createRouter({
             redirect: '/profile/dashboard'
         },
         {
-            path: '/acc/',
-            component: () => import('../views/acc/App.vue'),
-            children: [{
-                path: 'dashboard',
-                name: 'acc_home',
-                component: () =>
-                    import('../views/acc/dashboard.vue')
-            },
-        ]
-        },
-        {
-            path: '/manager/',
-            component: () => import('../views/manager/App.vue'),
-            children: [{
-                path: 'dashboard',
-                name: 'manager_home',
-                component: ()=> import ('../views/manager/dashboard.vue')
-            }]
-        },
-        {
             path: '/profile/',
             component: () => import('../views/user/profile/profile-main.vue'),
             children: [
@@ -98,6 +78,46 @@ const router = createRouter({
                         'login': true
                     }
                 },
+                {
+                    path: 'manager/support-list',
+                    component: () => import('../views/user/manager/support/list.vue'),
+                    meta: {
+                        'title': 'درخواست‌های پشتیبانی',
+                        'login': true
+                    }
+                },
+                {
+                    path: 'manager/support-view/:id',
+                    component: () => import('../views/user/manager/support/show.vue'),
+                    meta: {
+                        'title': 'مشاهده درخواست',
+                        'login': true
+                    }
+                },
+                {
+                    path: 'manager/business/list',
+                    component: () => import('../views/user/manager/business/list.vue'),
+                    meta: {
+                        'title': 'کسب‌و‌کارها',
+                        'login': true
+                    }
+                },
+                {
+                    path: 'manager/users/list',
+                    component: () => import('../views/user/manager/users/list.vue'),
+                    meta: {
+                        'title': 'کاربران',
+                        'login': true
+                    }
+                },
+                {
+                    path: 'manager/logs/list',
+                    component: () => import('../views/user/manager/log/logs.vue'),
+                    meta: {
+                        'title': 'تاریخچه سیستم',
+                        'login': true
+                    }
+                },
             ],
         },
         {
@@ -135,7 +155,8 @@ const router = createRouter({
                     meta: {
                         'title': 'عضویت',
                     }
-                },{
+                },
+                {
                     path: 'active-account/:id',
                     name: 'user_active_account',
                     component: () => import('../views/user/active-account.vue'),

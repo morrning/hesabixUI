@@ -19,15 +19,20 @@
                   <v-card-text>
                     {{ item.body }}
                   </v-card-text>
+                  <v-card-actions>
+                    {{ $t('pages.support.ticket_id') }}
+                    {{ item.id }}
+                  </v-card-actions>
                 </v-card>
               </v-col>
             </v-row>
             <v-timeline side="end" class="align-end">
-              <v-timeline-item v-for="item in replays" :key="item.id" dot-color="primary" size="small">
-                <v-alert color="" :icon="mdi - person" :value="true">
-                  {{ item.body }}
+              <v-timeline-item v-for="item in replays" :key="item.id" :dot-color="item.owner? 'primary' : 'warning'" size="small">
+                <v-alert color="" icon="mdi-account" :value="true">
+                  <span class="text-primary">{{ item.submitter.name }} :</span>
+                   {{ item.body }}
                   <br>
-                  <v-chip color="primary" prepend-icon="mdi-calendar" variant="tonal" >
+                  <v-chip color="primary" prepend-icon="mdi-clock-outline" variant="tonal" >
                     {{ item.dateSubmit }}
                   </v-chip>
                 </v-alert>
@@ -76,7 +81,9 @@ export default {
   },
   methods: {
     loadData() {
+      this.loading = true;
       axios.post('/api/support/view/' + this.$route.params.id).then((response) => {
+        this.loading = false;
         this.item = response.data.item;
         this.replays = response.data.replays;
       })
@@ -95,15 +102,8 @@ export default {
               icon: 'success',
               confirmButtonText: 'قبول',
             }).then((res) => {
-              this.replays.push({
-                id: 0,
-                body: this.replay,
-                state: 1,
-                title: 'شما',
-                dateSubmit: 'هم اکنون'
-              });
+              this.loadData();
               this.replay = '';
-              this.item.state = 'در حال پیگیری'
             })
           }
         })

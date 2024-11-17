@@ -13,7 +13,7 @@
       <v-card-text class="pa-0">
         <v-row>
           <v-col>
-            <EasyDataTable table-class-name="customize-table" show-index alternating :search-value="searchValue"
+            <EasyDataTable table-class-name="customize-table" alternating :search-value="searchValue"
               :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
               body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
               rowsOfPageSeparatorMessage="از" :loading="loading">
@@ -21,7 +21,7 @@
                 <v-tooltip :text="$t('dialog.view')" location="bottom">
                   <template v-slot:activator="{ props }">
                     <v-btn v-bind="props" color="primary" icon="mdi-eye" size="small" density="comfortable"
-                      variant="flat" :to="'/profile/support-view/' + id" />
+                      variant="flat" :to="'/profile/support-view/' + id" @click="loading=true;"/>
                   </template>
                 </v-tooltip>
               </template>
@@ -47,9 +47,10 @@ export default {
   data() {
     return {
       searchValue: '',
-      loading: ref(true),
+      loading: true,
       items: [],
       headers: [
+        { text: "شناسه", value: "id", sortable: true },
         { text: "تاریخ", value: "dateSubmit", sortable: true },
         { text: "عنوان", value: "title", sortable: true },
         { text: "وضعیت", value: "state", sortable: true },

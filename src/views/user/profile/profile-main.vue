@@ -19,10 +19,27 @@
         <template v-slot:prepend>
           <v-icon :icon="item.icon"></v-icon>
         </template>
-
         <v-list-item-title v-text="item.text"></v-list-item-title>
       </v-list-item>
     </v-list>
+    <v-list class="px-0 pt-0">
+      <v-list-subheader v-if="ROLE_ADMIN == true">{{ $t('pages.dashboard.admin_area') }}</v-list-subheader>
+      <v-list-item v-if="ROLE_ADMIN" v-for="(item, i) in adminItems" v-show="item.visible" :to="item.url" :key="i"
+        :value="item" color="primary">
+        <template v-slot:prepend>
+          <v-icon :icon="item.icon"></v-icon>
+        </template>
+        <v-list-item-title v-text="item.text"></v-list-item-title>
+      </v-list-item>
+      <v-list-group v-if="ROLE_ADMIN == true">
+        <template v-slot:activator="{ props }">
+          <v-list-item v-bind="props" prepend-icon="mdi-cog" :title="$t('dialog.settings')"></v-list-item>
+        </template>
+        <v-list-item v-for="(item, i) in adminSettings" :prepend-icon="item.icon" :to="item.url" :title="item.text"></v-list-item>
+      </v-list-group>
+
+    </v-list>
+
   </v-navigation-drawer>
   <v-app-bar scroll-behavior="inverted elevate" scroll-threshold="0" color="primary">
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -67,13 +84,22 @@ export default defineComponent({
       business_count: 0,
       drawer: ref(true),
       items: [
-        { text: 'داشبورد', url: '/profile/dashboard', icon: 'mdi-format-list-text', visible: true },
+        { text: 'داشبورد', url: '/profile/dashboard', icon: 'mdi-view-dashboard', visible: true },
         { text: 'کسب‌و‌کار جدید', url: '/profile/new-business', icon: 'mdi-store-plus', visible: true },
         { text: 'کسب‌و‌کارها', url: '/profile/business', icon: 'mdi-format-list-text', visible: true },
         { text: 'پشتیبانی', url: '/profile/support-list', icon: 'mdi-forum', visible: true },
-        { text: 'اعلانات', url: '/user/notifications', icon: 'mdi-email-newsletter', visible: false },
         { text: 'تغییر کلمه عبور', url: '/profile/change-password', icon: 'mdi-lock-reset', visible: true },
-        { text: 'مدیریت', url: '/manager/dashboard', icon: 'mdi-shield-crown', visible: false },
+      ],
+      adminItems: [
+        { text: 'تیکت‌ها', url: '/profile/manager/support-list', icon: 'mdi-forum', visible: true },
+        { text: 'کسب‌و‌کارها', url: '/profile/manager/business/list', icon: 'mdi-home-city', visible: true },
+        { text: 'کاربران', url: '/profile/manager/users/list', icon: 'mdi-account-multiple', visible: true },
+        { text: 'تاریخچه سیستم', url: '/profile/manager/logs/list', icon: 'mdi-history', visible: true },
+      ],
+      adminSettings: [
+        { text: 'پیامک', url: '/profile/manager/support-list', icon: 'mdi-message-alert', visible: true },
+        { text: 'سیستم', url: '/profile/manager/business/list', icon: 'mdi-desktop-classic', visible: true },
+        { text: 'بانک اطلاعاتی', url: '/profile/manager/users/list', icon: 'mdi-database-cog', visible: true },
       ],
     }
   },
@@ -104,8 +130,10 @@ export default defineComponent({
     },
   },
   mounted() {
+    this.loading = true;
     axios.post('/api/user/has/role/' + 'ROLE_ADMIN').then((response) => {
       this.ROLE_ADMIN = response.data.Success;
+      this.loading = false;
     });
   },
   async beforeMount() {
