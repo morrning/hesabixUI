@@ -11,8 +11,8 @@
     <v-card :loading="loading ? 'red' : null" :disabled="loading">
       <v-card-text>
         <v-row>
-          <v-col v-if="loading" cols="12" sm="12" md="6" class="pa-0 ma-0">
-            <v-skeleton-loader :elevation="1" type="list-item-avatar"></v-skeleton-loader>
+          <v-col v-if="loading" cols="12" sm="12" md="12" class="pa-0 ma-0">
+            <v-skeleton-loader class="my-5 mx-5" :elevation="1" type="list-item-avatar"></v-skeleton-loader>
           </v-col>
           <v-col v-for="item in contents" cols="12" sm="12" md="6" class="px-1">
             <v-card class="mx-auto mb-3" border flat>
