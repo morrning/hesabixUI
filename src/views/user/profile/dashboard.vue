@@ -8,14 +8,25 @@
             <v-avatar image="\img\avatar.png" size="155"></v-avatar>
           </v-col>
           <v-col cols="12" sm="12" md="10">
-            <v-text-field v-model="user_email" :label="$t('user.email')" prepend-inner-icon="mdi-email" :disabled="true"
-              color="primary" variant="solo"></v-text-field>
-            <v-text-field v-model="user_mobile" :label="$t('user.mobile')" prepend-inner-icon="mdi-cellphone"
-              :disabled="true" color="primary" variant="solo"></v-text-field>
-            <v-text-field v-model="user_fullname" :label="$t('user.name')" prepend-inner-icon="mdi-account"
-              :disabled="loading" color="primary" variant="solo"></v-text-field>
-            <v-btn color="primary" :loading="loading" prepend-icon="mdi-content-save"
-              @click="this.updateProfile()">{{ $t('dialog.save') }}</v-btn>
+            <v-row>
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field v-model="user_email" :label="$t('user.email')" prepend-inner-icon="mdi-email"
+                  :disabled="true" color="primary" variant="solo"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field v-model="user_mobile" :label="$t('user.mobile')" prepend-inner-icon="mdi-cellphone"
+                  :disabled="true" color="primary" variant="solo"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field v-model="user_fullname" :label="$t('user.name')" prepend-inner-icon="mdi-account"
+                  :disabled="loading" color="primary" variant="solo"
+                  :rules="[() => user_fullname.length > 0 || $t('validator.required')]"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="12" md="12">
+                <v-btn color="primary" :loading="loading" prepend-icon="mdi-content-save"
+                  @click="this.updateProfile()">{{ $t('dialog.save') }}</v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-card-text>

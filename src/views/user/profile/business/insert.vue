@@ -61,11 +61,14 @@
                   :rules="[() => content.year.label.length > 0 || $t('validator.required')]"
                   v-model="content.year.label" />
               </v-col>
+              <v-col>
+                <v-btn type="submit" @click="submit()" color="primary" prepend-icon="mdi-content-save"
+                  :loading="loading" :title="$t('pages.create_business.insert_business')">
+                  {{ $t('pages.create_business.insert_business') }}
+                </v-btn>
+              </v-col>
             </v-row>
-            <v-btn type="submit" @click="submit()" color="primary" prepend-icon="mdi-content-save" :loading="loading"
-              :title="$t('pages.create_business.insert_business')">
-              {{ $t('pages.create_business.insert_business') }}
-            </v-btn>
+
           </v-card>
         </v-form>
       </v-col>

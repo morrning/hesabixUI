@@ -118,6 +118,46 @@ const router = createRouter({
                         'login': true
                     }
                 },
+                {
+                    path: 'manager/changes/list',
+                    component: () => import('../views/user/manager/reportchange/list.vue'),
+                    meta: {
+                        'title': 'لیست تغییرات',
+                        'login': true
+                    }
+                },
+                {
+                    path: 'manager/changes/mod/:id',
+                    component: () => import('../views/user/manager/reportchange/mod.vue'),
+                    meta: {
+                        'title': 'ارائه تغییرات سیستم',
+                        'login': true
+                    }
+                },
+                {
+                    path: 'manager/database/info',
+                    component: () => import('../views/user/manager/settings/database_info.vue'),
+                    meta: {
+                        'title': 'خروجی از بانک اطلاعاتی',
+                        'login': true
+                    }
+                },
+                {
+                    path: 'manager/system/mod',
+                    component: () => import('../views/user/manager/settings/system.vue'),
+                    meta: {
+                        'title': 'تنظیمات پایه',
+                        'login': true
+                    }
+                },
+                {
+                    path: 'manager/system/sms/settings',
+                    component: () => import('../views/user/manager/settings/sms/smsSettings.vue'),
+                    meta: {
+                        'title': 'تنظیمات پیامک',
+                        'login': true
+                    }
+                },
             ],
         },
         {
@@ -173,7 +213,7 @@ const router = createRouter({
             meta: {
                 'title': 'صفحه یافت نشد',
             }
-        },
+        }
     ]
 })
 

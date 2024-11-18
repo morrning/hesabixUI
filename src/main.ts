@@ -8,6 +8,10 @@ const pinia = createPinia();
 
 import { VDateInput } from 'vuetify/labs/VDateInput'
 
+import CKEditor from '@ckeditor/ckeditor5-vue';
+// Import translations for the Persian language.
+import '@ckeditor/ckeditor5-build-classic/build/translations/fa';
+
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
@@ -26,10 +30,18 @@ import { aliases, mdi } from "vuetify/iconsets/mdi";
 
 const vuetify = createVuetify({
     defaults: {
+        VTextField:{
+            hideDetails:"auto"
+        },
+        VTextarea:{
+            hideDetails:"auto"
+        },
+        VSelect:{
+            hideDetails:"auto"
+        },
         VDialog: {
             VCard: {
                 class: 'bg-light',
-                
             }
         },
         VToolbar:{
@@ -88,7 +100,7 @@ import Hdatepicker from "@/components/forms/Hdatepicker.vue";
 import calendarLocalConfig from "@/i18n/calendarLocalConfig";
 
 app.component('h-date-picker', Hdatepicker);
-
+app.use(CKEditor)
 app.use(Vue3PersianDatetimePicker, {
     name: 'CustomDatePicker',
     props: {

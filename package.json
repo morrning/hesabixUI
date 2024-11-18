@@ -10,6 +10,10 @@
         "type-check": "vue-tsc --noEmit"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^36.0.1",
+        "@ckeditor/ckeditor5-image": "^36.0.1",
+        "@ckeditor/ckeditor5-vue": "^4.0.1",
+        "@ckeditor/vite-plugin-ckeditor5": "^0.1.1",
         "@mdi/font": "^7.4.47",
         "@syncfusion/ej2-vue-dropdowns": "^21.2.5",
         "@vuelidate/core": "^2.0.0",

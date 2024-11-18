@@ -21,8 +21,6 @@
         </template>
         <v-list-item-title v-text="item.text"></v-list-item-title>
       </v-list-item>
-    </v-list>
-    <v-list class="px-0 pt-0">
       <v-list-subheader v-if="ROLE_ADMIN == true">{{ $t('pages.dashboard.admin_area') }}</v-list-subheader>
       <v-list-item v-if="ROLE_ADMIN" v-for="(item, i) in adminItems" v-show="item.visible" :to="item.url" :key="i"
         :value="item" color="primary">
@@ -35,15 +33,18 @@
         <template v-slot:activator="{ props }">
           <v-list-item v-bind="props" prepend-icon="mdi-cog" :title="$t('dialog.settings')"></v-list-item>
         </template>
-        <v-list-item v-for="(item, i) in adminSettings" :prepend-icon="item.icon" :to="item.url" :title="item.text"></v-list-item>
+        <v-list-item v-for="(item, i) in adminSettings" :prepend-icon="item.icon" :to="item.url"
+          :title="item.text"></v-list-item>
       </v-list-group>
-
+      <v-list-item color="primary">
+        <v-list-item-title>
+          <small class="text-primary">{{ $t('app.name') }} : {{ hesabix.version }}</small>
+        </v-list-item-title>
+      </v-list-item>
     </v-list>
-
   </v-navigation-drawer>
   <v-app-bar scroll-behavior="inverted elevate" scroll-threshold="0" color="primary">
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
     <v-app-bar-title>
       {{ $t('app.name') }}
     </v-app-bar-title>
@@ -54,9 +55,10 @@
       </template>
     </v-tooltip>
   </v-app-bar>
-
-  <v-main>
-    <RouterView />
+  <v-main class="bg-surface-light">
+    <div class="position-relative py-1 px-1">
+      <RouterView />
+    </div>
   </v-main>
 </template>
 
@@ -75,6 +77,10 @@ export default defineComponent({
   data: (vm) => {
     const self = this;
     return {
+      loading: false,
+      hesabix: {
+        version: '',
+      },
       siteName: '',
       siteUrl: '',
       ROLE_ADMIN: false,
@@ -82,7 +88,7 @@ export default defineComponent({
         mobile: '1'
       },
       business_count: 0,
-      drawer: ref(true),
+      drawer: true,
       items: [
         { text: 'داشبورد', url: '/profile/dashboard', icon: 'mdi-view-dashboard', visible: true },
         { text: 'کسب‌و‌کار جدید', url: '/profile/new-business', icon: 'mdi-store-plus', visible: true },
@@ -94,12 +100,13 @@ export default defineComponent({
         { text: 'تیکت‌ها', url: '/profile/manager/support-list', icon: 'mdi-forum', visible: true },
         { text: 'کسب‌و‌کارها', url: '/profile/manager/business/list', icon: 'mdi-home-city', visible: true },
         { text: 'کاربران', url: '/profile/manager/users/list', icon: 'mdi-account-multiple', visible: true },
+        { text: 'تغییرات', url: '/profile/manager/changes/list', icon: 'mdi-cellphone-arrow-down', visible: true },
         { text: 'تاریخچه سیستم', url: '/profile/manager/logs/list', icon: 'mdi-history', visible: true },
       ],
       adminSettings: [
-        { text: 'پیامک', url: '/profile/manager/support-list', icon: 'mdi-message-alert', visible: true },
-        { text: 'سیستم', url: '/profile/manager/business/list', icon: 'mdi-desktop-classic', visible: true },
-        { text: 'بانک اطلاعاتی', url: '/profile/manager/users/list', icon: 'mdi-database-cog', visible: true },
+        { text: 'پیامک', url: '/profile/manager/system/sms/settings', icon: 'mdi-message-alert', visible: true },
+        { text: 'سیستم', url: '/profile/manager/system/mod', icon: 'mdi-desktop-classic', visible: true },
+        { text: 'بانک اطلاعاتی', url: '/profile/manager/database/info', icon: 'mdi-database-cog', visible: true },
       ],
     }
   },
@@ -130,10 +137,17 @@ export default defineComponent({
     },
   },
   mounted() {
+    //set drawer for display on mobile devices
+    this.drawer = !this.$vuetify.display.mobile;
+
     this.loading = true;
     axios.post('/api/user/has/role/' + 'ROLE_ADMIN').then((response) => {
       this.ROLE_ADMIN = response.data.Success;
       this.loading = false;
+    });
+
+    axios.get('/api/general/stat').then((response) => {
+      this.hesabix = response.data;
     });
   },
   async beforeMount() {
