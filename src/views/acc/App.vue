@@ -4,40 +4,42 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 import { getApiUrl, getSiteName } from "@/hesabixConfig"
+import { ref } from 'vue';
+import Profile_btn from '@/components/application/buttons/profile_btn.vue';
+import Notifications_btn from '@/components/application/buttons/notifications_btn.vue';
+import Year_cob from '@/components/application/combobox/year_cob.vue';
+import Currency_cob from '@/components/application/combobox/currency_cob.vue';
 export default {
 
   data() {
     return {
-      
+      drawer: ref(null),
+      plugins: [],
+      business: {
+        id:'',
+        name: ''
+      },
+      timeNow: '',
+      apiUrl: '',
     }
   },
-  async beforeMount() {
-    await axios.get('/api/user/check/login').then((response) => {
-      if (response.data.result == 1) {
-        axios.post('/api/business/get/user/permissions',
-          {
-            'bid': localStorage.getItem('activeBid'),
-            'email': response.data.email
-          }
-        ).then((response) => {
-          this.permissions = response.data;
-          if (response.data.active != 1) {
-            // jump user to active page
-            Swal.fire({
-              title: 'خطا',
-              text: 'حساب کاربری شما فعال نیست.لطفا ابتدا حساب کاربری خود را تایید نمایید.',
-              icon: 'error',
-              confirmButtonText: 'انجام احراز هویت'
-            }).then((result) => {
-              window.location.href = window.location.origin + '/user/active/' + this.permissions.id;
-            });
-          }
-        });
-        //get active plugins
-        axios.post('/api/plugin/get/actives',).then((response) => {
-          this.plugins = response.data;
-        });
-      }
+  watch: {
+
+  },
+  mounted() {
+    //get active plugins
+    axios.post('/api/plugin/get/actives',).then((response) => {
+      this.plugins = response.data;
+    });
+    axios.post('/api/business/list/count')
+      .then((response) => {
+        this.business_count = response.data.count;
+      });
+    axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
+      this.business = response.data;
+    });
+    axios.post('/api/general/get/time').then((response) => {
+      this.timeNow = response.data.timeNow;
     });
     this.apiUrl = getApiUrl();
   },
@@ -105,65 +107,85 @@ export default {
     isPluginActive(plugName) {
       return this.plugins[plugName] !== undefined;
     },
-    saveTicket() {
-      if (this.ticket.title.trim() == '' || this.ticket.body.trim() == '') {
-        Swal.fire({
-          text: 'تکمیل موارد ستاره دار الزامی است.',
-          confirmButtonText: 'قبول',
-        })
-      }
-      else {
-        this.isLoading = true;
-        axios.post('/api/support/mod', this.ticket).then((response) => {
-          this.isLoading = false;
-          Swal.fire({
-            text: 'درخواست با موفقیت ثبت شد.',
-            confirmButtonText: 'قبول',
-          }).then((result) => {
-            this.ticket.title = '';
-            this.ticket.body = '';
-            Dashmix.layout('side_overlay_close');
-          })
-        })
-      }
-    }
-  },
-  async mounted() {
-    axios.post('/api/user/check/login')
-      .then((response) => {
-        this.isLogedIn = response.data.result;
-        axios.post('/api/user/current/info')
-          .then((res) => {
-            this.userEmail = res.data.email;
-            this.userFullName = res.data.fullname;
-            this.$isLogedIn = true;
-          });
-      });
-
-    axios.post('/api/business/list/count')
-      .then((response) => {
-        this.business_count = response.data.count;
-      });
-    axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
-      this.business = response.data;
-    });
-    axios.post('/api/general/get/time').then((response) => {
-      this.timeNow = response.data.timeNow;
-    });
-    axios.post('/api/system/get/data').then((response) => {
-      this.system = response.data;
-    });
   },
   components: {
-   
+    Profile_btn: Profile_btn,
+    Notifications_btn: Notifications_btn,
+    Year_cob: Year_cob,
+    Currency_cob: Currency_cob
   }
 }
 </script>
 
 <template>
-  
+  <v-system-bar color="primaryLight2">
+    <v-avatar image="/img/logo-blue.png" size="20" class="me-2 d-none d-sm-flex" />
+    <span class="d-none d-sm-flex">{{ $t('hesabix.banner') }}</span>
+    <v-avatar :image="apiUrl + '/front/avatar/file/get/' + business.id" size="20" class="me-2 d-flex d-sm-none" />
+    <span class="d-flex d-sm-none">{{ business.name }}</span>
+    <v-spacer />
+  </v-system-bar>
+  <v-navigation-drawer v-model="drawer" color="primaryLight">
+    <v-card height="64" color="primary" rounded="0" prepend-icon="mdi-account">
+      <template v-slot:title>
+        {{ $t('app.name') }}
+      </template>
+      <template v-slot:prepend>
+        <v-avatar class="d-none d-sm-flex" :image="apiUrl + '/front/avatar/file/get/' + business.id" />
+        <v-avatar class="d-flex d-sm-none" image="/img/favw.png" />
+
+      </template>
+    </v-card>
+    <v-list class="px-0 pt-0">
+      <v-list-item to="/acc/dashboard" color="primary">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-view-dashboard"></v-icon>
+        </template>
+        <v-list-item-title v-text="$t('drawer.dashboard')" />
+      </v-list-item>
+      <v-list-item to="/acc/persons/list" color="primary">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-account-multiple"></v-icon>
+        </template>
+        <v-list-item-title v-text="$t('drawer.persons')" />
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
+  <v-app-bar scroll-behavior="inverted elevate" scroll-threshold="0" color="primary">
+    <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+    <v-app-bar-title>
+      <span class="d-none d-sm-flex">{{ business.name }}</span>
+    </v-app-bar-title>
+    <v-spacer></v-spacer>
+    <v-bottom-sheet inset>
+      <template v-slot:activator="{ props }">
+        <v-btn stacked v-bind="props">
+          <v-icon>mdi-cog</v-icon>
+        </v-btn>
+      </template>
+      <v-card :subtitle="$t('dialog.fiscal_settings_info')" prepend-icon="mdi-cog"
+        :title="$t('dialog.fiscal_settings')">
+        <v-card-text>
+          <v-row class="text-center">
+            <v-col cols="12" sm="12" md="6">
+              <Year_cob />
+            </v-col>
+            <v-col cols="12" sm="12" md="6">
+              <Currency_cob />
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-bottom-sheet>
+    <Notifications_btn />
+    <Profile_btn />
+  </v-app-bar>
+  <v-main class="bg-surface-light">
+    <div class="position-relative py-1 px-1">
+      <RouterView />
+    </div>
+  </v-main>
+
 </template>
 
-<style global>
-
-</style>
+<style global></style>

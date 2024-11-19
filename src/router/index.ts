@@ -159,6 +159,20 @@ const router = createRouter({
                     }
                 },
             ],
+        },{
+            path: '/acc/',
+            component: () => import('../views/acc/App.vue'),
+            children: [
+                {
+                    path: 'dashboard',
+                    component: () => import('../views/acc/dashboard.vue'),
+                    name:'acc_home',
+                    meta: {
+                        'title': 'داشبورد کسب‌و‌کار',
+                        'login': true
+                    }
+                },
+            ],
         },
         {
             path: '/user/',
