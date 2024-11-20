@@ -4,8 +4,8 @@
     <span>{{ $t('hesabix.banner') }}</span>
     <v-spacer />
   </v-system-bar>
-  <v-navigation-drawer v-model="drawer" color="primaryLight">
-    <v-card height="64" color="primary" rounded="0" prepend-icon="mdi-account">
+  <v-navigation-drawer v-model="drawer">
+    <v-card height="64"  rounded="0" prepend-icon="mdi-account">
       <template v-slot:title>
         {{ $t('app.name') }}
       </template>
@@ -14,8 +14,7 @@
       </template>
     </v-card>
     <v-list class="px-0 pt-0">
-      <v-list-item v-for="(item, i) in items" v-show="item.visible" :to="item.url" :key="i" :value="item"
-        color="primary">
+      <v-list-item v-for="(item, i) in items" v-show="item.visible" :to="item.url" :key="i" :value="item">
         <template v-slot:prepend>
           <v-icon :icon="item.icon"></v-icon>
         </template>
@@ -43,7 +42,7 @@
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
-  <v-app-bar scroll-behavior="inverted elevate" scroll-threshold="0" color="primary">
+  <v-app-bar scroll-behavior="inverted elevate" scroll-threshold="0">
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
     <v-app-bar-title>
       {{ $t('app.name') }}

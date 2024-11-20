@@ -30,22 +30,31 @@ import { aliases, mdi } from "vuetify/iconsets/mdi";
 
 const vuetify = createVuetify({
     defaults: {
-        VTextField:{
-            hideDetails:"auto"
+        VNavigationDrawer: {
+            color: 'primaryLight',
+            VCard: {
+                color: 'indigo-darken-2'
+            }
         },
-        VTextarea:{
-            hideDetails:"auto"
+        VTextField: {
+            hideDetails: "auto"
         },
-        VSelect:{
-            hideDetails:"auto"
+        VTextarea: {
+            hideDetails: "auto"
+        },
+        VSelect: {
+            hideDetails: "auto"
         },
         VDialog: {
             VCard: {
                 class: 'bg-light',
             }
         },
-        VToolbar:{
-            density:'compact'
+        VToolbar: {
+            density: 'compact'
+        },
+        VAppBar: {
+            color: 'indigo-darken-2'
         }
     },
     components,
@@ -75,7 +84,7 @@ const vuetify = createVuetify({
                     primaryLight: '#f8f9fc',
                     primaryLight2: '#edf1fc',
                     success: '#457237',
-                    toolbar:colors.indigo.lighten5
+                    toolbar: colors.indigo.lighten5
                 }
             },
         },
@@ -152,12 +161,15 @@ app.use(vuetify);
 
 //global methods
 app.config.globalProperties.$filters = {
-    formatNumber(value:any) {
+    formatNumber(value: any, moneyLabel: any = false) {
         let result = parseFloat(value).toFixed(0).toString();
-        result = result.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        result = result.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        if (moneyLabel == true) {
+            result = result + ' ' + localStorage.getItem('activeMoneyShortName');
+        }
         return result;
     },
-    onlyNumber($event:any) {
+    onlyNumber($event: any) {
         //console.log($event.keyCode); //keyCodes value
         let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
         if ((keyCode < 48 || keyCode > 57)) { // 46 is dot
