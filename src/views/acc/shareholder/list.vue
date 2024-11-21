@@ -18,11 +18,11 @@
             <i class="fa fa-person me-2"></i>
             سهامدار
           </label>
-          <v-select dir="rtl" class="" :options="persons" label="nikename" v-model="shareholder.person">
+          <v-cob dir="rtl" class="" :options="persons" label="nikename" v-model="shareholder.person">
             <template #no-options="{ search, searching, loading }">
               وردی یافت نشد!
             </template>
-          </v-select>
+          </v-cob>
         </div>
         <div class="col-sm-12 col-md-4 my-2">
           <label class="form-label">

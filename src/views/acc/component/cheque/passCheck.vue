@@ -108,7 +108,7 @@ export default defineComponent({
             <div class="col-sm-12 col-md-12 mb-2">
               <div class="form-control">
                 <label class="form-label">بانک</label>
-                <v-select
+                <v-cob
                         dir="rtl"
                         :options="banks"
                         label="name"
@@ -117,7 +117,7 @@ export default defineComponent({
                     <template #no-options="{ search, searching, loading }">
                         وردی یافت نشد!
                     </template>
-                </v-select>
+                </v-cob>
               </div>
             </div>
             <div class="col-sm-12 col-md-12 mb-2">

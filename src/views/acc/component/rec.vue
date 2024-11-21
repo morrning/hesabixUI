@@ -347,19 +347,19 @@ export default defineComponent({
                       <div class="col-sm-12 col-md-6">
                         <div v-show="pay.type == 'bank'" class="">
                           <label class="form-label">بانک</label>
-                          <v-select dir="rtl" :options="listBanks" label="name" v-model="pay.bank">
+                          <v-cob dir="rtl" :options="listBanks" label="name" v-model="pay.bank">
                             <template #no-options="{ search, searching, loading }">
                               وردی یافت نشد!
                             </template>
-                          </v-select>
+                          </v-cob>
                         </div>
                         <div v-show="pay.type == 'cashdesk'" class="">
                           <label class="form-label">صندوق</label>
-                          <v-select dir="rtl" :options="listCashdesks" label="name" v-model="pay.cashdesk">
+                          <v-cob dir="rtl" :options="listCashdesks" label="name" v-model="pay.cashdesk">
                             <template #no-options="{ search, searching, loading }">
                               وردی یافت نشد!
                             </template>
-                          </v-select>
+                          </v-cob>
                         </div>
                         <div v-show="pay.type == 'cheque'" class="">
                           <label class="form-label">
@@ -369,11 +369,11 @@ export default defineComponent({
                         </div>
                         <div v-show="pay.type == 'salary'" class="">
                           <label class="form-label">تنخواه گردان</label>
-                          <v-select dir="rtl" :options="listSalarys" label="name" v-model="pay.salary">
+                          <v-cob dir="rtl" :options="listSalarys" label="name" v-model="pay.salary">
                             <template #no-options="{ search, searching, loading }">
                               وردی یافت نشد!
                             </template>
-                          </v-select>
+                          </v-cob>
                         </div>
                       </div>
                       <div v-if="pay.type == 'cheque'" class="col-sm-12 col-md-6">

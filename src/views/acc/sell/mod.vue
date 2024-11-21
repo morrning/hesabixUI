@@ -57,7 +57,7 @@
                 </div>
               </div>
               <div class="block-content pt-1 px-1">
-                <v-select class="mb-1 mx-0" :filterable="false" dir="rtl" @search="searchPerson" :options="persons"
+                <v-cob class="mb-1 mx-0" :filterable="false" dir="rtl" @search="searchPerson" :options="persons"
                   label="nikename" v-model="data.person">
                   <template #no-options="{ search, searching, loading }">
                     وردی یافت نشد!
@@ -88,7 +88,7 @@
                       </div>
                     </div>
                   </template>
-                </v-select>
+                </v-cob>
                 <span v-if="selectedPersonWithDet.bs != undefined" class="text-info ms-2">
                   تراز:
                   {{ this.$filters.formatNumber(Math.abs(parseInt(this.selectedPersonWithDet.bs) -
@@ -151,7 +151,7 @@
                     </div>
                   </div>
                   <div class="block-content pt-1 px-1">
-                    <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name"
+                    <v-cob dir="rtl" @search="searchCommodity" :options="commodity" label="name"
                       v-model="itemData.commodity" class="">
                       <template #no-options="{ search, searching, loading }">
                         وردی یافت نشد!
@@ -176,7 +176,7 @@
                           </div>
                         </div>
                       </template>
-                    </v-select>
+                    </v-cob>
 
                   </div>
                 </div>
@@ -266,7 +266,7 @@
                     </div>
                   </div>
                   <div class="block-content pt-1 px-1">
-                    <v-select dir="rtl" @search="searchCommodity" :options="commodity" label="name"
+                    <v-cob dir="rtl" @search="searchCommodity" :options="commodity" label="name"
                       v-model="editItemData.commodity" class="">
                       <template #no-options="{ search, searching, loading }">
                         وردی یافت نشد!
@@ -291,7 +291,7 @@
                           </div>
                         </div>
                       </template>
-                    </v-select>
+                    </v-cob>
 
                   </div>
                 </div>

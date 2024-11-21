@@ -91,7 +91,7 @@
                 </div>
                 <div class="card-body">
                   <small class="mb-2">شخص</small>
-                  <v-select dir="rtl" @search="searchPerson" :options="listPersons" label="nikename"
+                  <v-cob dir="rtl" @search="searchPerson" :options="listPersons" label="nikename"
                     v-model="selectedPerson" @option:selected="updateRoute(selectedPerson.code)">
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
@@ -122,7 +122,7 @@
                         </div>
                       </div>
                     </template>
-                  </v-select>
+                  </v-cob>
                   <hr />
                   <div class="fw-bold mb-2">کد حسابداری: <small class="text-primary">{{ selectedPerson.code }}</small>
                   </div>

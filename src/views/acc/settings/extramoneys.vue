@@ -28,7 +28,7 @@
               </div>
             </div>
             <div class="modal-body">
-              <v-select class="mb-1 mx-0" :filterable="true" dir="rtl" :options="moneyAll" label="label"
+              <v-cob class="mb-1 mx-0" :filterable="true" dir="rtl" :options="moneyAll" label="label"
                 v-model="selectedMoney">
                 <template #no-options="{ search, searching, loading }">
                   موردی یافت نشد!
@@ -42,7 +42,7 @@
                     </div>
                   </div>
                 </template>
-              </v-select>
+              </v-cob>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بازگشت</button>

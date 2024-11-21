@@ -10,6 +10,7 @@ import Notifications_btn from '@/components/application/buttons/notifications_bt
 import Year_cob from '@/components/application/combobox/year_cob.vue';
 import Currency_cob from '@/components/application/combobox/currency_cob.vue';
 import "/public/dashmix/dashmix.min.css"
+
 export default {
 
   data() {
@@ -124,7 +125,7 @@ export default {
     <span class="d-flex d-sm-none">{{ business.name }}</span>
     <v-spacer />
   </v-system-bar>
-  <v-navigation-drawer v-model="drawer" :width="250">
+  <v-navigation-drawer v-model="drawer" :width="280">
     <v-card height="64" rounded="0" prepend-icon="mdi-account">
       <template v-slot:title>
         {{ $t('app.name') }}
@@ -187,7 +188,7 @@ export default {
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/persons/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/commodity/mod/" />
               </template>
             </v-tooltip>
           </template>
@@ -311,57 +312,5 @@ export default {
 </template>
 
 <style global>
-.v-list-item {
-  &.v-list-item--border {
-    border-color: rgb(var(--v-border-color));
-    border-width: 0 0 1px 0;
 
-    &:last-child {
-      border-width: 0;
-    }
-  }
-
-  &.v-list-item--variant-tonal {
-    background: rgb(var(--v-theme-gray100));
-
-    .v-list-item__underlay {
-      background: transparent;
-    }
-  }
-
-  &:last-child {
-    .v-list-item__content {
-      .v-divider--inset {
-        display: none;
-      }
-    }
-  }
-}
-
-.v-list {
-  &[aria-busy='true'] {
-    cursor: context-menu;
-  }
-}
-
-.v-list-group__items {
-  .v-list-item {
-    padding-inline-start: 40px !important;
-  }
-}
-
-.v-list-item__content {
-  .v-divider--inset:not(.v-divider--vertical) {
-    max-width: 100%;
-    margin-inline-start: 0;
-  }
-}
-
-.v-list--border {
-  .v-list-item {
-    +.v-list-item {
-      border-top: 1px solid rgb(var(--v-theme-borderLight));
-    }
-  }
-}
 </style>

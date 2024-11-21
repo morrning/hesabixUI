@@ -10,7 +10,7 @@
     <div class="row my-2">
       <div class="col-sm-12 col-md-8">
         <label class="fw-bold mb-2">شخص</label>
-        <v-select
+        <v-cob
             dir="rtl"
             :options="persons"
             label="labelName"
@@ -29,7 +29,7 @@
            وردی یافت نشد!
           </template>
           <div slot="vs__no-options">No Options Her33333e!</div>
-        </v-select>
+        </v-cob>
       </div>
       <div class="col-sm-12 col-md-4">
         <label class="fw-bold mb-2">مبلغ</label>

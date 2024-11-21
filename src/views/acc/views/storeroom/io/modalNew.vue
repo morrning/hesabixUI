@@ -161,11 +161,11 @@ export default defineComponent({
             <div class="col-sm-12 col-md-6 mt-2">
               <div class="form-control mb-2">
                 <label class="form-label">انبار</label>
-                <v-select dir="rtl" :options="storerooms" label="name" v-model="item.storeroom">
+                <v-cob dir="rtl" :options="storerooms" label="name" v-model="item.storeroom">
                   <template #no-options="{ search, searching, loading }">
                     وردی یافت نشد!
                   </template>
-                </v-select>
+                </v-cob>
               </div>
             </div>
             <div class="col-sm-12 col-md-6 mt-2">
@@ -212,30 +212,30 @@ export default defineComponent({
             <div class="col-sm-12 col-md-12 mt-2">
               <div class="rounded-2 border border-secondary bg-danger-light p-2">
                 <span>فاکتور {{ item.title }}</span>
-                <v-select v-if="this.item.type == 'buy'" dir="rtl" :options="buys" label="des" v-model="item.docBuy"
+                <v-cob v-if="this.item.type == 'buy'" dir="rtl" :options="buys" label="des" v-model="item.docBuy"
                   class="bg-white">
                   <template #no-options="{ search, searching, loading }">
                     وردی یافت نشد!
                   </template>
-                </v-select>
-                <v-select v-if="this.item.type == 'sell'" dir="rtl" :options="sells" label="des" v-model="item.docSell"
+                </v-cob>
+                <v-cob v-if="this.item.type == 'sell'" dir="rtl" :options="sells" label="des" v-model="item.docSell"
                   class="bg-white">
                   <template #no-options="{ search, searching, loading }">
                     وردی یافت نشد!
                   </template>
-                </v-select>
-                <v-select v-if="this.item.type == 'rfsell'" dir="rtl" :options="rfsells" label="des"
+                </v-cob>
+                <v-cob v-if="this.item.type == 'rfsell'" dir="rtl" :options="rfsells" label="des"
                   v-model="item.docRfsell" class="bg-white">
                   <template #no-options="{ search, searching, loading }">
                     وردی یافت نشد!
                   </template>
-                </v-select>
-                <v-select v-if="this.item.type == 'rfbuy'" dir="rtl" :options="rfbuys" label="des"
+                </v-cob>
+                <v-cob v-if="this.item.type == 'rfbuy'" dir="rtl" :options="rfbuys" label="des"
                   v-model="item.docRfbuy" class="bg-white">
                   <template #no-options="{ search, searching, loading }">
                     وردی یافت نشد!
                   </template>
-                </v-select>
+                </v-cob>
                 <div class="form-check mt-2 ms-3">
                   <input :disabled="!item.removeBeforeTicketsEnable" v-model="this.item.removeBeforeTickets" class="form-check-input" type="checkbox">
                   <label class="form-check-label" >

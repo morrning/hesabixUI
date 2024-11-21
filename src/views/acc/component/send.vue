@@ -356,7 +356,7 @@ export default defineComponent({
               <div class="col-sm-12 col-md-6">
                 <div v-show="pay.type == 'bank'" class="">
                   <label class="form-label">بانک</label>
-                  <v-select
+                  <v-cob
                       dir="rtl"
                       :options="listBanks"
                       label="name"
@@ -365,12 +365,12 @@ export default defineComponent({
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
                     </template>
-                  </v-select>
+                  </v-cob>
                 </div>
 
                 <div v-show="pay.type == 'chequeforpay'" class="">
                   <label class="form-label">چک‌های قابل واگذاری</label>
-                  <v-select
+                  <v-cob
                       dir="rtl"
                       :options="listChequesForPay"
                       label="label"
@@ -379,12 +379,12 @@ export default defineComponent({
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
                     </template>
-                  </v-select>
+                  </v-cob>
                 </div>
 
                 <div v-show="pay.type == 'cashdesk'" class="">
                   <label class="form-label">صندوق</label>
-                  <v-select
+                  <v-cob
                       dir="rtl"
                       :options="listCashdesks"
                       label="name"
@@ -393,11 +393,11 @@ export default defineComponent({
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
                     </template>
-                  </v-select>
+                  </v-cob>
                 </div>
                 <div v-show="pay.type == 'salary'" class="">
                   <label class="form-label">تنخواه گردان</label>
-                  <v-select
+                  <v-cob
                       dir="rtl"
                       :options="listSalarys"
                       label="name"
@@ -406,7 +406,7 @@ export default defineComponent({
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
                     </template>
-                  </v-select>
+                  </v-cob>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">

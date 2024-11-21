@@ -255,7 +255,7 @@ export default defineComponent({
                           <div v-if="this.transfer.content == 'bank'" class="">
                             <label class="form-label">بانک</label>
                             <div class="form-floating mb-2">
-                              <v-select
+                              <v-cob
                                   dir="rtl"
                                   :options="banks"
                                   label="name"
@@ -264,13 +264,13 @@ export default defineComponent({
                                 <template #no-options="{ search, searching, loading }">
                                   وردی یافت نشد!
                                 </template>
-                              </v-select>
+                              </v-cob>
                             </div>
                           </div>
                           <div v-if="this.transfer.content == 'cashdesk'" class="">
                             <label class="form-label">صندوق</label>
                             <div class="form-floating mb-2">
-                              <v-select
+                              <v-cob
                                   dir="rtl"
                                   :options="cashdesks"
                                   label="name"
@@ -279,13 +279,13 @@ export default defineComponent({
                                 <template #no-options="{ search, searching, loading }">
                                   وردی یافت نشد!
                                 </template>
-                              </v-select>
+                              </v-cob>
                             </div>
                           </div>
                           <div v-if="this.transfer.content == 'salary'" class="">
                             <label class="form-label">تنخواه گردان</label>
                             <div class="form-floating mb-2">
-                              <v-select
+                              <v-cob
                                   dir="rtl"
                                   :options="salarys"
                                   label="name"
@@ -294,7 +294,7 @@ export default defineComponent({
                                 <template #no-options="{ search, searching, loading }">
                                   وردی یافت نشد!
                                 </template>
-                              </v-select>
+                              </v-cob>
                             </div>
                           </div>
                           <div class="form-floating mb-2">

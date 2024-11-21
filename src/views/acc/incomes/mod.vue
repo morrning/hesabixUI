@@ -104,13 +104,13 @@
                     <div class="row">
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">بانک</small>
-                        <v-select dir="rtl" :options="listBanks" label="name" v-model="item.id"
+                        <v-cob dir="rtl" :options="listBanks" label="name" v-model="item.id"
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
                           @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
                             وردی یافت نشد!
                           </template>
-                        </v-select>
+                        </v-cob>
                       </div>
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">مبلغ</small>
@@ -153,13 +153,13 @@
                     <div class="row">
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">تنخواه گردان</small>
-                        <v-select @change="alert()" dir="rtl" :options="listSalarys" label="name" v-model="item.id"
+                        <v-cob @change="alert()" dir="rtl" :options="listSalarys" label="name" v-model="item.id"
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
                           @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
                             وردی یافت نشد!
                           </template>
-                        </v-select>
+                        </v-cob>
                       </div>
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">مبلغ</small>
@@ -202,13 +202,13 @@
                     <div class="row">
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">صندوق</small>
-                        <v-select @change="alert()" dir="rtl" :options="listCashdesks" label="name" v-model="item.id"
+                        <v-cob @change="alert()" dir="rtl" :options="listCashdesks" label="name" v-model="item.id"
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
                           @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
                             وردی یافت نشد!
                           </template>
-                        </v-select>
+                        </v-cob>
                       </div>
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">مبلغ</small>
@@ -253,7 +253,7 @@
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">شخص</small>
                   
-                        <v-select :filterable="false" @search="searchPerson" class="" dir="rtl" :options="listPersons"
+                        <v-cob :filterable="false" @search="searchPerson" class="" dir="rtl" :options="listPersons"
                           label="nikename" v-model="item.id">
                           <template v-slot:option="option">
                             <div class="row mb-1">
@@ -281,7 +281,7 @@
                               </div>
                             </div>
                           </template>
-                        </v-select>
+                        </v-cob>
                       </div>
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">مبلغ</small>

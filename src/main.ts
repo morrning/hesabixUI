@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from "axios";
+
 //pinia
 import { createPinia } from 'pinia'
 const pinia = createPinia();
@@ -105,6 +106,10 @@ import { getApiUrl } from "@/hesabixConfig";
 const app = createApp(App)
 app.component('EasyDataTable', Vue3EasyDataTable);
 app.component('DatePicker', Vue3PersianDatetimePicker);
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
+
+app.component('v-cob', vSelect)
 import Hdatepicker from "@/components/forms/Hdatepicker.vue";
 import calendarLocalConfig from "@/i18n/calendarLocalConfig";
 

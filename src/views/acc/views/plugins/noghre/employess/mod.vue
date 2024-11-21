@@ -17,7 +17,7 @@
             </div>
             <div class="form-control mb-2">
               <label class="form-label">شخص</label>
-              <v-select
+              <v-cob
                   dir="rtl"
                   :options="this.persons"
                   label="nikename"
@@ -26,7 +26,7 @@
                 <template #no-options="{ search, searching, loading }">
                   وردی یافت نشد!
                 </template>
-              </v-select>
+              </v-cob>
             </div>
             <b>نوع همکاری</b>
             <div class="mt-1 mb-3 border rounded-2 p-3">

@@ -20,12 +20,12 @@
               </div>
               <div class="card-body">
                 <small class="mb-2">تنخواه گردان</small>
-                <v-select dir="rtl" :options="objectItems" label="name" v-model="selectedObjectItem"
+                <v-cob dir="rtl" :options="objectItems" label="name" v-model="selectedObjectItem"
                   @option:selected="updateRoute(selectedObjectItem.code)">
                   <template #no-options="{ search, searching, loading }">
                     وردی یافت نشد!
                   </template>
-                </v-select>
+                </v-cob>
                 <hr />
                 <div class="fw-bold mb-2">کد حسابداری: <small class="text-primary">{{ selectedObjectItem.code }}</small>
                 </div>

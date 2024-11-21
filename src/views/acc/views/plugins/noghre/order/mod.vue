@@ -176,7 +176,7 @@ export default defineComponent({
           <div class="col-sm-12 col-md-4">
             <label class="form-label required">مشتری</label>
             <div class="mb-2">
-              <v-select
+              <v-cob
                   dir="rtl"
                   :options="this.persons"
                   label="nikename"
@@ -185,7 +185,7 @@ export default defineComponent({
                 <template #no-options="{ search, searching, loading }">
                   وردی یافت نشد!
                 </template>
-              </v-select>
+              </v-cob>
             </div>
           </div>
           <div class="col-sm-12 col-md-4 mb-2">
@@ -278,7 +278,7 @@ export default defineComponent({
               <div class="col-sm-12 col-md-6">
                 <label class=" required">تراشکار</label>
                 <div class="mb-2">
-                  <v-select
+                  <v-cob
                       dir="rtl"
                       :options="this.tarashs"
                       label="nikename"
@@ -287,7 +287,7 @@ export default defineComponent({
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
                     </template>
-                  </v-select>
+                  </v-cob>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
@@ -303,7 +303,7 @@ export default defineComponent({
               <div class="col-sm-12 col-md-6">
                 <label class=" required">حکاک</label>
                 <div class="mb-2">
-                  <v-select
+                  <v-cob
                       dir="rtl"
                       :options="this.hakaks"
                       label="nikename"
@@ -312,7 +312,7 @@ export default defineComponent({
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
                     </template>
-                  </v-select>
+                  </v-cob>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
@@ -328,7 +328,7 @@ export default defineComponent({
               <div class="col-sm-12 col-md-6">
                 <label class=" required">قلم زن</label>
                 <div class="mb-2">
-                  <v-select
+                  <v-cob
                       dir="rtl"
                       :options="this.ghalams"
                       label="nikename"
@@ -337,7 +337,7 @@ export default defineComponent({
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
                     </template>
-                  </v-select>
+                  </v-cob>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
@@ -353,7 +353,7 @@ export default defineComponent({
               <div class="col-sm-12 col-md-6">
                 <label class=" required">مرصع کار</label>
                 <div class="mb-2">
-                  <v-select
+                  <v-cob
                       dir="rtl"
                       :options="this.morsas"
                       label="nikename"
@@ -362,7 +362,7 @@ export default defineComponent({
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
                     </template>
-                  </v-select>
+                  </v-cob>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">

@@ -39,7 +39,7 @@
               <div class="col-sm-12 col-md-6">
                 <div class="mb-2">
                   <label class="form-label">کالا و خدمات</label>
-                  <v-select dir="rtl" @search="searchCommodity" :options="commoditys" label="name"
+                  <v-cob dir="rtl" @search="searchCommodity" :options="commoditys" label="name"
                     v-model="selectedCommodity">
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
@@ -64,17 +64,17 @@
                         </div>
                       </div>
                     </template>
-                  </v-select>
+                  </v-cob>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
                 <div class="mb-2">
                   <label class="form-label">نوع</label>
-                  <v-select dir="rtl" :options="types" label="label" v-model="selectedType">
+                  <v-cob dir="rtl" :options="types" label="label" v-model="selectedType">
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
                     </template>
-                  </v-select>
+                  </v-cob>
                 </div>
               </div>
             </div>

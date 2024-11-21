@@ -52,7 +52,7 @@
                 <div v-if="this.sideOne.content == 'bank'" class="">
                   <label class="form-label">بانک</label>
                   <div class="form-floating mb-2">
-                    <v-select dir="rtl" :options="banks" label="name" v-model="this.sideOne.bank">
+                    <v-cob dir="rtl" :options="banks" label="name" v-model="this.sideOne.bank">
                       <template #no-options="{ search, searching, loading }">
                         وردی یافت نشد!
                       </template>
@@ -70,14 +70,14 @@
                           </div>
                         </div>
                       </template>
-                    </v-select>
+                    </v-cob>
 
                   </div>
                 </div>
                 <div v-if="this.sideOne.content == 'cashdesk'" class="">
                   <label class="form-label">صندوق</label>
                   <div class="form-floating mb-2">
-                    <v-select dir="rtl" :options="cashdesks" label="name" v-model="this.sideOne.cashdesk">
+                    <v-cob dir="rtl" :options="cashdesks" label="name" v-model="this.sideOne.cashdesk">
                       <template #no-options="{ search, searching, loading }">
                         وردی یافت نشد!
                       </template>
@@ -95,13 +95,13 @@
                           </div>
                         </div>
                       </template>
-                    </v-select>
+                    </v-cob>
                   </div>
                 </div>
                 <div v-if="this.sideOne.content == 'salary'" class="">
                   <label class="form-label">تنخواه گردان</label>
                   <div class="form-floating mb-2">
-                    <v-select dir="rtl" :options="salarys" label="name" v-model="this.sideOne.salary">
+                    <v-cob dir="rtl" :options="salarys" label="name" v-model="this.sideOne.salary">
                       <template #no-options="{ search, searching, loading }">
                         وردی یافت نشد!
                       </template>
@@ -119,7 +119,7 @@
                           </div>
                         </div>
                       </template>
-                    </v-select>
+                    </v-cob>
                   </div>
                 </div>
                 <div class="form-floating mb-2">
@@ -157,7 +157,7 @@
                 <div v-if="this.sideTwo.content == 'bank'" class="">
                   <label class="form-label">بانک</label>
                   <div class="form-floating mb-2">
-                    <v-select dir="rtl" :options="banks" label="name" v-model="this.sideTwo.bank">
+                    <v-cob dir="rtl" :options="banks" label="name" v-model="this.sideTwo.bank">
                       <template #no-options="{ search, searching, loading }">
                         وردی یافت نشد!
                       </template>
@@ -175,13 +175,13 @@
                           </div>
                         </div>
                       </template>
-                    </v-select>
+                    </v-cob>
                   </div>
                 </div>
                 <div v-if="this.sideTwo.content == 'cashdesk'" class="">
                   <label class="form-label">صندوق</label>
                   <div class="form-floating mb-2">
-                    <v-select dir="rtl" :options="cashdesks" label="name" v-model="this.sideTwo.cashdesk">
+                    <v-cob dir="rtl" :options="cashdesks" label="name" v-model="this.sideTwo.cashdesk">
                       <template #no-options="{ search, searching, loading }">
                         وردی یافت نشد!
                       </template>
@@ -199,13 +199,13 @@
                           </div>
                         </div>
                       </template>
-                    </v-select>
+                    </v-cob>
                   </div>
                 </div>
                 <div v-if="this.sideTwo.content == 'salary'" class="">
                   <label class="form-label">تنخواه گردان</label>
                   <div class="form-floating mb-2">
-                    <v-select dir="rtl" :options="salarys" label="name" v-model="this.sideTwo.salary">
+                    <v-cob dir="rtl" :options="salarys" label="name" v-model="this.sideTwo.salary">
                       <template #no-options="{ search, searching, loading }">
                         وردی یافت نشد!
                       </template>
@@ -223,7 +223,7 @@
                           </div>
                         </div>
                       </template>
-                    </v-select>
+                    </v-cob>
                   </div>
                 </div>
                 <div class="form-floating mb-2">

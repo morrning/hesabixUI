@@ -251,12 +251,12 @@
                         <div class="col-sm-12 col-md-6">
                           <label class="mb-2">حساب بانکی متصل به کیف پول</label>
                           <div class="col">
-                            <v-select dir="rtl" :options="listBanks" label="name" v-model="content.walletMatchBank"
+                            <v-cob dir="rtl" :options="listBanks" label="name" v-model="content.walletMatchBank"
                               @option:deselecting="" @search:focus="" @option:selecting="">
                               <template #no-options="{ search, searching, loading }">
                                 وردی یافت نشد!
                               </template>
-                            </v-select>
+                            </v-cob>
                           </div>
                         </div>
                         <label class="text-muted">برای تسویه اتوماتیک به حساب انتخاب شده حتما باید تمام موارد از جمله

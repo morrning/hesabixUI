@@ -108,7 +108,7 @@ export default defineComponent({
               انبار :
               <span class="text-muted">برای مشاهده موجودی ابتدا انبار را انتخاب نمایید.</span>
             </label>
-            <v-select
+            <v-cob
                 dir="rtl"
                 :options="storerooms"
                 label="name"
@@ -118,7 +118,7 @@ export default defineComponent({
               <template #no-options="{ search, searching, loading }">
                 وردی یافت نشد!
               </template>
-            </v-select>
+            </v-cob>
           </div>
         </div>
         <div class="col-sm-12 col-md-12 m-0 p-0">

@@ -372,13 +372,13 @@ export default defineComponent({
               </div>
             </div>
             <div class="card-body p-0">
-              <v-select dir="rtl" @search="searchCommodity" :filterable="false" :options="commodity" label="name"
+              <v-cob dir="rtl" @search="searchCommodity" :filterable="false" :options="commodity" label="name"
                 v-model="selectedCommodity" class="rounded-0 m-1">
                 <template #no-options="{ search, searching, loading }">
                   وردی یافت نشد!
                 </template>
 
-              </v-select>
+              </v-cob>
               <ul class="list-group rounded-0">
                 <button @click="addFastItem(cm)" v-for="cm in this.commoditySpeedAccess"
                   class="list-group-item d-flex justify-content-between align-items-center">
@@ -401,12 +401,12 @@ export default defineComponent({
               </div>
             </div>
             <div class="card-body p-1">
-              <v-select :filterable="false" dir="rtl" @search="searchPerson" :options="persons" label="nikename"
+              <v-cob :filterable="false" dir="rtl" @search="searchPerson" :options="persons" label="nikename"
                 v-model="person">
                 <template #no-options="{ search, searching, loading }">
                   وردی یافت نشد!
                 </template>
-              </v-select>
+              </v-cob>
             </div>
           </div>
           <div class="card mt-2">
@@ -415,11 +415,11 @@ export default defineComponent({
               صندوق
             </div>
             <div class="card-body p-1">
-              <v-select dir="rtl" :options="cashdesks" label="name" v-model="cashdesk">
+              <v-cob dir="rtl" :options="cashdesks" label="name" v-model="cashdesk">
                 <template #no-options="{ search, searching, loading }">
                   وردی یافت نشد!
                 </template>
-              </v-select>
+              </v-cob>
             </div>
           </div>
         </div>
