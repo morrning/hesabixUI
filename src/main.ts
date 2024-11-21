@@ -35,7 +35,24 @@ const vuetify = createVuetify({
             color: 'primaryLight',
             VCard: {
                 color: 'indigo-darken-2'
-            }
+            },
+            VList: {
+                density:'compact',
+                VListGroup: {
+                    density:'compact',
+                    VListItem: {
+                        class: 'text-indigo-darken-4',
+                        VListItemAction: {
+                            class:'text-caption text-danger'
+                        },
+                        VBtn: {
+                            class:'text-danger',
+                            variant:'flat'
+                        },
+                    },
+                }
+            },
+
         },
         VTextField: {
             hideDetails: "auto"
@@ -85,7 +102,8 @@ const vuetify = createVuetify({
                     primaryLight: '#f8f9fc',
                     primaryLight2: '#edf1fc',
                     success: '#457237',
-                    toolbar: colors.indigo.lighten5
+                    toolbar: colors.indigo.lighten5,
+                    primaryDark: colors.indigo.darken4
                 }
             },
         },

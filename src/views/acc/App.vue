@@ -145,25 +145,22 @@ export default {
       <v-list-subheader>{{ $t('drawer.basic_tools') }}</v-list-subheader>
       <v-list-group v-show="permissions.getpay || permissions.persons">
         <template v-slot:activator="{ props }">
-          <v-list-item v-bind="props" prepend-icon="mdi-account-multiple" :title="$t('drawer.persons')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-account-multiple" :title="$t('drawer.persons')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.persons" to="/acc/persons/list" :title="$t('drawer.persons')">
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/persons/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/persons/mod/" />
               </template>
             </v-tooltip>
           </template>
-          <v-list-item-action>
-            <small>{{ $t('drawer.persons_list') }}</small>
-          </v-list-item-action>
         </v-list-item>
         <v-list-item v-if="permissions.getpay" to="/acc/persons/receive/list" :title="$t('drawer.gets')">
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/persons/receive/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/persons/receive/mod/" />
               </template>
             </v-tooltip>
           </template>
@@ -172,7 +169,7 @@ export default {
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/persons/send/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/persons/send/mod/" />
               </template>
             </v-tooltip>
           </template>
@@ -182,26 +179,23 @@ export default {
       </v-list-group>
       <v-list-group v-show="permissions.commodity">
         <template v-slot:activator="{ props }">
-          <v-list-item v-bind="props" prepend-icon="mdi-package-variant" :title="$t('drawer.commodity')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-package-variant" :title="$t('drawer.commodity')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.commodity" to="/acc/commodity/list" :title="$t('drawer.commodity')">
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/commodity/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/commodity/mod/" />
               </template>
             </v-tooltip>
           </template>
-          <v-list-item-action>
-            <small>{{ $t('drawer.commodity_list') }}</small>
-          </v-list-item-action>
         </v-list-item>
         <v-list-item v-if="permissions.commodity && this.isPluginActive('accpro')" to="/acc/commodity/pricelist/list"
           :title="$t('drawer.price_lists')">
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/commodity/pricelist/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/commodity/pricelist/mod/" />
               </template>
             </v-tooltip>
           </template>
@@ -212,7 +206,7 @@ export default {
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/commodity/drop/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/commodity/drop/mod/" />
               </template>
             </v-tooltip>
           </template>
@@ -221,13 +215,13 @@ export default {
       <v-list-group
         v-show="permissions.bank || permissions.wallet || permissions.cashdesk || permissions.salary || permissions.cheque || permissions.bankTransfer">
         <template v-slot:activator="{ props }">
-          <v-list-item v-bind="props" prepend-icon="mdi-bank" :title="$t('drawer.bank_label')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-bank" :title="$t('drawer.bank_label')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.bank" to="/acc/banks/list" :title="$t('drawer.banks_accounts')">
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/banks/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/banks/mod/" />
               </template>
             </v-tooltip>
           </template>
@@ -236,7 +230,7 @@ export default {
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/cashdesk/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/cashdesk/mod/" />
               </template>
             </v-tooltip>
           </template>
@@ -245,7 +239,7 @@ export default {
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/salary/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/salary/mod/" />
               </template>
             </v-tooltip>
           </template>
@@ -256,7 +250,7 @@ export default {
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus" variant="plain" to="/acc/transfer/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/transfer/mod/" />
               </template>
             </v-tooltip>
           </template>
@@ -266,7 +260,7 @@ export default {
       </v-list-group>
       <v-list-subheader>{{ $t('drawer.acc_store_tools') }}</v-list-subheader>
 
-      <v-list-item v-if="permissions.owner == 0" @click="exitBusiness()">
+      <v-list-item class="text-dark" v-if="permissions.owner == 0" @click="exitBusiness()">
         <template v-slot:prepend>
           <v-icon color="danger" icon="mdi-logout"></v-icon>
         </template>
