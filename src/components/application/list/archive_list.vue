@@ -27,7 +27,7 @@ export default {
 
 <template>
   <v-list>
-    <v-list-item to="/acc/archive/order/new">
+    <v-list-item to="/acc/archive/order/new" class="my-0 py-0">
       <v-list-item-title>
         <v-progress-linear class="my-2"color="primary" :model-value="((parseInt(this.info.used) * 100) / parseInt(this.info.size))" :height="10"></v-progress-linear>
         <span class="text-danger">{{ this.$filters.formatNumber(this.info.size) }}</span>

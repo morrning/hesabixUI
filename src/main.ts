@@ -73,6 +73,11 @@ const vuetify = createVuetify({
         },
         VAppBar: {
             color: 'indigo-darken-2'
+        },
+        VMenu:{
+            VList:{
+                density:"compact"
+            }
         }
     },
     components,

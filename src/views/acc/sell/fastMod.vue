@@ -299,11 +299,9 @@ export default defineComponent({
     },
   },
   mounted() {
-    Dashmix.layout('sidebar_close');
     this.loadData();
   },
   unmounted() {
-    Dashmix.layout('sidebar_open');
   },
   watch: {
     itemsSelected: {

@@ -1,108 +1,121 @@
 <template>
-  <div class="block block-content-full ">
-    <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
-      <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning m-0">
-          <i class="fa fw-bold fa-arrow-right"></i>
-        </button>
-        اشخاص
-      </h3>
-      <div class="block-options">
-        <router-link to="/acc/persons/mod/" class="btn btn-sm btn-primary ms-2">
-          <span class="fa fa-plus fw-bolder"></span>
-        </router-link>
-        <importExcel :windowsState="this.importWindowsState"></importExcel>
-        <div class="dropdown">
-          <a class="btn btn-sm btn-danger ms-2 dropdown-toggle text-end" href="#" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-file-pdf"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a @click.prevent="print(false)" class="dropdown-item" href="#">انتخاب شده‌ها</a></li>
-            <li><a @click.prevent="print(true)" class="dropdown-item" href="#">همه موارد</a></li>
-          </ul>
-        </div>
-        <div class="dropdown">
-          <a class="btn btn-sm btn-success ms-2 dropdown-toggle text-end" href="#" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-file-excel"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a @click.prevent="excellOutput(false)" class="dropdown-item" href="#">انتخاب شده‌ها</a></li>
-            <li><a @click.prevent="excellOutput(true)" class="dropdown-item" href="#">همه موارد</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="block-content pt-1 pb-3">
-      <div class="row">
-        <div class="col-sm-12 col-md-12 m-0 p-0">
-          <div class="mb-1">
-            <div class="input-group input-group-sm">
-              <span class="input-group-text"><i class="fa fa-search"></i></span>
-              <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-12 border rounded mb-2 px-2 py-1">
-            <div v-for="(item, index) in types" class="form-check form-check-inline">
-              <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
-                type="checkbox">
-              <label class="form-check-label">{{ item.label }}</label>
-            </div>
-          </div>
-          <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName" v-model:items-selected="itemsSelected" multi-sort show-index
-            alternating :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
-            header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
-            emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
-            <template #item-operation="{ code }">
-              <div class="dropdown-center">
-                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link"
-                  data-bs-toggle="dropdown" id="dropdown-align-center-alt-primary" type="button">
-                  <i class="fa-solid fa-ellipsis"></i>
-                </button>
-                <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
-                  style="">
-                  <router-link class="dropdown-item" :to="'/acc/persons/card/view/' + code">
-                    <i class="fa fa-eye text-success pe-2"></i>
-                    مشاهده
-                  </router-link>
-                  <router-link class="dropdown-item" :to="'/acc/persons/mod/' + code">
-                    <i class="fa fa-edit pe-2"></i>
-                    ویرایش
-                  </router-link>
-                  <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger">
-                    <i class="fa fa-trash pe-2"></i>
-                    حذف
-                  </button>
-                </div>
-              </div>
+  <v-toolbar color="toolbar" :title="$t('drawer.persons')">
+    <template v-slot:prepend>
+      <v-tooltip :text="$t('dialog.back')" location="bottom">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" @click="this.$router.back()" variant="text" icon="mdi-arrow-right"/>
+      </template>
+    </v-tooltip>
+    </template>
+    <v-spacer></v-spacer>
+    <v-tooltip :text="$t('dialog.add_new')" location="bottom">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-account-plus" color="primary" to="/acc/persons/mod/"></v-btn>
+      </template>
+    </v-tooltip>
+    <importExcel :windowsState="this.importWindowsState"></importExcel>
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-file-pdf-box" color="red"></v-btn>
+      </template>
+      <v-list>
+        <v-list-subheader color="primary">{{ $t('dialog.export_pdf') }}</v-list-subheader>
+        <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="print(false)">
+          <template v-slot:prepend>
+            <v-icon color="green-darken-4" icon="mdi-check"></v-icon>
+          </template>
+        </v-list-item>
+        <v-list-item class="text-dark" :title="$t('dialog.selected_all')" @click="print(true)">
+          <template v-slot:prepend>
+            <v-icon color="indigo-darken-4" icon="mdi-expand-all"></v-icon>
+          </template>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-file-excel-box" color="green"></v-btn>
+      </template>
+      <v-list>
+        <v-list-subheader color="primary">{{ $t('dialog.export_excel') }}</v-list-subheader>
+        <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="excellOutput(false)">
+          <template v-slot:prepend>
+            <v-icon color="green-darken-4" icon="mdi-check"></v-icon>
+          </template>
+        </v-list-item>
+        <v-list-item class="text-dark" :title="$t('dialog.selected_all')" @click="excellOutput(true)">
+          <template v-slot:prepend>
+            <v-icon color="indigo-darken-4" icon="mdi-expand-all"></v-icon>
+          </template>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+  </v-toolbar>
+  <v-row>
+    <v-col>
+      <v-text-field color="info"class="mb-1" hide-details="auto"  variant="outlined" density="compact"
+        :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
+        <template v-slot:prepend-inner>
+          <v-tooltip location="bottom" :text="$t('dialog.search')">
+            <template v-slot:activator="{ props }">
+              <v-icon v-bind="props" color="danger" icon="mdi-magnify"></v-icon>
             </template>
-            <template #item-nikename="{ nikename, code }">
-              <router-link :to="'/acc/persons/card/view/' + code">
-                {{ nikename }}
-              </router-link>
+          </v-tooltip>
+        </template>
+      </v-text-field>
+      <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
+        v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
+        :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
+        body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+        rowsOfPageSeparatorMessage="از" :loading="loading">
+        <template #item-operation="{ code }">
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
             </template>
-            <template #item-speedAccess="{ speedAccess }">
-              <i v-if="speedAccess" class="fa fa-check text-success"></i>
-            </template>
-            <template #item-status="{ balance }">
-              <span v-if="balance < 0" class="text-danger">بدهکار</span>
-              <span v-if="balance > 0" class="text-success">بستانکار</span>
-            </template>
-            <template #item-bs="{ bs }">
-              <span>{{ this.$filters.formatNumber(bs) }}</span>
-            </template>
-            <template #item-bd="{ bd }">
-              <span>{{ this.$filters.formatNumber(bd) }}</span>
-            </template>
-            <template #item-balance="{ balance }">
-              <span>{{ this.$filters.formatNumber(balance) }}</span>
-            </template>
-          </EasyDataTable>
-        </div>
-      </div>
-    </div>
-  </div>
+            <v-list>
+              <v-list-item class="text-dark" :title="$t('dialog.view')" :to="'/acc/persons/card/view/' + code">
+                <template v-slot:prepend>
+                  <v-icon color="green-darken-4" icon="mdi-eye"></v-icon>
+                </template>
+              </v-list-item>
+              <v-list-item class="text-dark" :title="$t('dialog.edit')" :to="'/acc/persons/mod/' + code">
+                <template v-slot:prepend>
+                  <v-icon icon="mdi-file-edit"></v-icon>
+                </template>
+              </v-list-item>
+              <v-list-item class="text-dark" :title="$t('dialog.delete')" @click="deleteItem(code)">
+                <template v-slot:prepend>
+                  <v-icon color="deep-orange-accent-4" icon="mdi-trash-can"></v-icon>
+                </template>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </template>
+        <template #item-nikename="{ nikename, code }">
+          <router-link :to="'/acc/persons/card/view/' + code">
+            {{ nikename }}
+          </router-link>
+        </template>
+        <template #item-speedAccess="{ speedAccess }">
+          <i v-if="speedAccess" class="fa fa-check text-success"></i>
+        </template>
+        <template #item-status="{ balance }">
+          <span v-if="balance < 0" class="text-danger">بدهکار</span>
+          <span v-if="balance > 0" class="text-success">بستانکار</span>
+        </template>
+        <template #item-bs="{ bs }">
+          <span>{{ this.$filters.formatNumber(bs) }}</span>
+        </template>
+        <template #item-bd="{ bd }">
+          <span>{{ this.$filters.formatNumber(bd) }}</span>
+        </template>
+        <template #item-balance="{ balance }">
+          <span>{{ this.$filters.formatNumber(balance) }}</span>
+        </template>
+      </EasyDataTable>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -228,7 +241,7 @@ export default {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          axios.post('/api/person/delete/' + code ).then((response) => {
+          axios.post('/api/person/delete/' + code).then((response) => {
             if (response.data.result == 1) {
               let index = 0;
               for (let z = 0; z < this.items.length; z++) {

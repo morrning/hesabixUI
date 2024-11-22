@@ -6,11 +6,11 @@ import Sms_list from '../list/sms_list.vue';
 export default defineComponent({
   name: "profile_btn",
   data: () => ({
-    
+
   }),
-  components:{
-    Archive_list : Archive_list,
-    Sms_list : Sms_list
+  components: {
+    Archive_list: Archive_list,
+    Sms_list: Sms_list
   },
   methods: {
 
@@ -26,11 +26,11 @@ export default defineComponent({
       </v-btn>
     </template>
     <v-card>
-      <Sms_list />
-      <v-divider></v-divider>
-      <Archive_list />
-      <v-divider></v-divider>
       <v-list>
+        <Sms_list />
+        <v-divider class="my-0 py-0"></v-divider>
+        <Archive_list />
+        <v-divider class="my-0 py-0"></v-divider>
         <v-list-item to="/profile/dashboard">
           <v-list-item-title>{{ $t('dialog.account') }}</v-list-item-title>
           <template v-slot:prepend>
@@ -38,7 +38,7 @@ export default defineComponent({
           </template>
         </v-list-item>
         <v-list-item @click="logout()">
-          <v-list-item-title >{{ $t('dialog.logout') }}</v-list-item-title>
+          <v-list-item-title>{{ $t('dialog.logout') }}</v-list-item-title>
           <template v-slot:prepend>
             <v-icon color="danger" icon="mdi-logout"></v-icon>
           </template>

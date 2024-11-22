@@ -24,7 +24,7 @@ export default {
 
 <template>
   <v-list>
-    <v-list-item to="/acc/sms/panel">
+    <v-list-item to="/acc/sms/panel" class="my-0 py-0">
       <v-list-item-title>
         <span class="text-danger">{{ this.$filters.formatNumber(smsCharge) }}</span>
         ریال

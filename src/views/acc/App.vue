@@ -377,8 +377,8 @@ export default {
         </template>
         <v-list-item v-if="permissions.accounting" to="/acc/accounting/list" :title="$t('drawer.accounting_docs')" />
         <v-list-item v-if="permissions.accounting" to="/acc/accounting/table" :title="$t('drawer.accounting_table')" />
-        <v-list-item v-if="permissions.plugAccproCloseYear && this.isPluginActive('accpro')" to="/acc/accounting/close_year"
-          :title="$t('drawer.close_year')">
+        <v-list-item v-if="permissions.plugAccproCloseYear && this.isPluginActive('accpro')"
+          to="/acc/accounting/close_year" :title="$t('drawer.close_year')">
         </v-list-item>
       </v-list-group>
       <v-list-item to="/acc/reports/list">
@@ -395,32 +395,86 @@ export default {
         </template>
         <v-list-item v-if="permissions.settings" to="/acc/business/settings" :title="$t('drawer.bid_settings')" />
         <v-list-item v-if="permissions.settings" to="/acc/business/printoptions" :title="$t('drawer.print_settings')" />
-        <v-list-item  v-if="permissions.settings && this.isPluginActive('accpro')" to="/acc/business/avatar"
+        <v-list-item v-if="permissions.settings && this.isPluginActive('accpro')" to="/acc/business/avatar"
           :title="$t('drawer.avatar_settings')">
         </v-list-item>
-        <v-list-item  v-if="permissions.permission" to="/acc/business/users"
-          :title="$t('drawer.user_perms')">
+        <v-list-item v-if="permissions.permission" to="/acc/business/users" :title="$t('drawer.user_perms')">
         </v-list-item>
-        <v-list-item  v-if="permissions.owner" to="/acc/business/apis"
-          :title="$t('drawer.tokens')">
+        <v-list-item v-if="permissions.owner" to="/acc/business/apis" :title="$t('drawer.tokens')">
         </v-list-item>
-        <v-list-item  v-if="permissions.settings && this.isPluginActive('accpro')" to="/acc/business/extramoneys"
+        <v-list-item v-if="permissions.settings && this.isPluginActive('accpro')" to="/acc/business/extramoneys"
           :title="$t('drawer.extra_moneys')">
         </v-list-item>
-        <v-list-item  v-if="permissions.log" to="/acc/business/logs"
-          :title="$t('drawer.history')">
+        <v-list-item v-if="permissions.log" to="/acc/business/logs" :title="$t('drawer.history')">
         </v-list-item>
-        <v-list-item class="text-danger"  v-if="permissions.owner" @click="deleteBusiness()"
+        <v-list-item class="text-danger" v-if="permissions.owner" @click="deleteBusiness()"
           :title="$t('drawer.bid_delete')">
         </v-list-item>
       </v-list-group>
       <v-list-subheader>{{ $t('drawer.services') }}</v-list-subheader>
-
-      <v-list-item class="text-dark" v-if="permissions.owner == 0" @click="exitBusiness()">
-        <template v-slot:prepend>
-          <v-icon color="danger" icon="mdi-logout"></v-icon>
+      <v-list-group v-show="permissions.plugRepservice && isPluginActive('repservice')">
+        <template v-slot:activator="{ props }">
+          <v-list-item class="text-dark" v-bind="props" :title="$t('drawer.repservice')">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-progress-wrench" color="primary"></v-icon>
+            </template>
+          </v-list-item>
         </template>
-        <v-list-item-title class="text-danger" v-text="$t('drawer.exit_bus')" />
+        <v-list-item v-if="permissions.plugRepservice" to="/acc/plugin/repservice/order/list" :title="$t('drawer.repservice_reqs')">
+          <template v-slot:append="{ props }">
+            <v-tooltip :text="$t('dialog.add_new')" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/plugin/repservice/order/mod/" />
+              </template>
+            </v-tooltip>
+          </template>
+        </v-list-item>
+      </v-list-group>
+      <v-list-item class="text-dark" v-if="permissions.owner" to="/acc/sms/panel">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-message-cog" color="primary"></v-icon>
+        </template>
+        <v-list-item-title v-text="$t('drawer.sms_panel')" />
+      </v-list-item>
+      <v-list-item class="text-dark" v-if="permissions.owner" to="/acc/printers/list">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-printer-pos-network" color="primary"></v-icon>
+        </template>
+        <v-list-item-title v-text="$t('drawer.cloud_printers')" />
+      </v-list-item>
+      <v-list-group
+        v-show="permissions.owner || permissions.archiveUpload || permissions.archiveMod || permissions.archiveDelete">
+        <template v-slot:activator="{ props }">
+          <v-list-item class="text-dark" v-bind="props" :title="$t('drawer.archive_panel')">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-file-cloud" color="primary"></v-icon>
+            </template>
+          </v-list-item>
+        </template>
+        <v-list-item v-if="permissions.archiveUpload || permissions.archiveMod || permissions.archiveDelete"
+          to="/acc/archive/list" :title="$t('drawer.archive_files')" />
+        <v-list-item v-if="permissions.owner" to="/acc/archive/order/new" :title="$t('drawer.archive_order')" />
+        <v-list-item v-if="permissions.owner" to="/acc/archive/order/list" :title="$t('drawer.archive_log')" />
+
+      </v-list-group>
+      <v-list-group v-show="permissions.owner">
+        <template v-slot:activator="{ props }">
+          <v-list-item class="text-white bg-green-darken-4 rounded-2 ma-2" v-bind="props" :title="$t('drawer.market')">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-shopping" color="green-accent-1"></v-icon>
+            </template>
+          </v-list-item>
+        </template>
+        <v-list-item v-if="permissions.owner" to="/acc/plugin-center/list" :title="$t('drawer.plugins_list')" />
+        <v-list-item v-if="permissions.owner" to="/acc/plugin-center/my" :title="$t('drawer.my_plugins')" />
+        <v-list-item v-if="permissions.owner" to="/acc/plugin-center/invoice" :title="$t('drawer.plugins_invoices')" />
+      </v-list-group>
+      <v-list-item class="text-dark bg-red-darken-3 ma-2 rounded-2" v-if="permissions.owner == 1"
+        @click="exitBusiness()">
+        <template v-slot:prepend>
+          <v-icon color="white" icon="mdi-logout"></v-icon>
+        </template>
+        <v-list-item-title class="text-white" v-text="$t('drawer.exit_bus')" />
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
