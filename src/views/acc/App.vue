@@ -145,7 +145,8 @@ export default {
       <v-list-subheader>{{ $t('drawer.basic_tools') }}</v-list-subheader>
       <v-list-group v-show="permissions.getpay || permissions.persons">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-account-multiple" :title="$t('drawer.persons')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-account-multiple"
+            :title="$t('drawer.persons')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.persons" to="/acc/persons/list" :title="$t('drawer.persons')">
           <template v-slot:append="{ props }">
@@ -179,7 +180,8 @@ export default {
       </v-list-group>
       <v-list-group v-show="permissions.commodity">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-package-variant" :title="$t('drawer.commodity')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-package-variant"
+            :title="$t('drawer.commodity')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.commodity" to="/acc/commodity/list" :title="$t('drawer.commodity')">
           <template v-slot:append="{ props }">
@@ -195,7 +197,8 @@ export default {
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/commodity/pricelist/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain"
+                  to="/acc/commodity/pricelist/mod/" />
               </template>
             </v-tooltip>
           </template>
@@ -215,7 +218,8 @@ export default {
       <v-list-group
         v-show="permissions.bank || permissions.wallet || permissions.cashdesk || permissions.salary || permissions.cheque || permissions.bankTransfer">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-bank" :title="$t('drawer.bank_label')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-bank"
+            :title="$t('drawer.bank_label')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.bank" to="/acc/banks/list" :title="$t('drawer.banks_accounts')">
           <template v-slot:append="{ props }">
@@ -259,6 +263,158 @@ export default {
         </v-list-item>
       </v-list-group>
       <v-list-subheader>{{ $t('drawer.acc_store_tools') }}</v-list-subheader>
+      <v-list-group v-show="permissions.store">
+        <template v-slot:activator="{ props }">
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-store"
+            :title="$t('drawer.storeroom_title')"></v-list-item>
+        </template>
+        <v-list-item v-if="permissions.store" to="/acc/storeroom/list" :title="$t('drawer.storerooms')">
+          <template v-slot:append="{ props }">
+            <v-tooltip :text="$t('dialog.add_new')" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/storeroom/mod/" />
+              </template>
+            </v-tooltip>
+          </template>
+        </v-list-item>
+        <v-list-item v-if="permissions.store" to="/acc/storeroom/tickets/list" :title="$t('drawer.storeroom_ticket')">
+          <template v-slot:append="{ props }">
+            <v-tooltip :text="$t('dialog.add_new')" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain"
+                  to="/acc/storeroom/new/ticket/type" />
+              </template>
+            </v-tooltip>
+          </template>
+        </v-list-item>
+        <v-list-item v-if="permissions.store" to="/acc/storeroom/commodity/check/exist"
+          :title="$t('drawer.commodity_exist_count')" />
+      </v-list-group>
+      <v-list-group v-show="permissions.buy || permissions.cost || permissions.plugAccproRfbuy">
+        <template v-slot:activator="{ props }">
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-cash-fast"
+            :title="$t('drawer.buy_cost')"></v-list-item>
+        </template>
+        <v-list-item v-if="permissions.buy" to="/acc/buy/list" :title="$t('drawer.buy_invoices')">
+          <template v-slot:append="{ props }">
+            <v-tooltip :text="$t('dialog.add_new')" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/buy/mod/" />
+              </template>
+            </v-tooltip>
+          </template>
+        </v-list-item>
+        <v-list-item v-if="permissions.plugAccproRfbuy && this.isPluginActive('accpro')" to="/acc/rfbuy/list"
+          :title="$t('drawer.rfbuy_invoices')">
+          <template v-slot:append="{ props }">
+            <v-tooltip :text="$t('dialog.add_new')" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/rfbuy/mod/" />
+              </template>
+            </v-tooltip>
+          </template>
+        </v-list-item>
+        <v-list-item v-if="permissions.cost" to="/acc/costs/list" :title="$t('drawer.costs')">
+          <template v-slot:append="{ props }">
+            <v-tooltip :text="$t('dialog.add_new')" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/costs/mod/" />
+              </template>
+            </v-tooltip>
+          </template>
+        </v-list-item>
+      </v-list-group>
+      <v-list-group v-show="permissions.sell || permissions.income || permissions.plugAccproRfsell">
+        <template v-slot:activator="{ props }">
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-cart-arrow-down"
+            :title="$t('drawer.sell_income')"></v-list-item>
+        </template>
+        <v-list-item v-if="permissions.sell" to="/acc/sell/fast-mod" :title="$t('drawer.fast_sell')">
+        </v-list-item>
+        <v-list-item v-if="permissions.sell" to="/acc/sell/list" :title="$t('drawer.sell_invoices')">
+          <template v-slot:append="{ props }">
+            <v-tooltip :text="$t('dialog.add_new')" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/sell/mod/" />
+              </template>
+            </v-tooltip>
+          </template>
+        </v-list-item>
+        <v-list-item v-if="this.isPluginActive('accpro') && permissions.sell" to="/acc/presell/list"
+          :title="$t('drawer.presells')">
+          <template v-slot:append="{ props }">
+            <v-tooltip :text="$t('dialog.add_new')" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/presell/mod/" />
+              </template>
+            </v-tooltip>
+          </template>
+        </v-list-item>
+        <v-list-item v-if="permissions.plugAccproRfsell && this.isPluginActive('accpro')" to="/acc/rfsell/list"
+          :title="$t('drawer.rfsell_invoices')">
+          <template v-slot:append="{ props }">
+            <v-tooltip :text="$t('dialog.add_new')" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/rfsell/mod/" />
+              </template>
+            </v-tooltip>
+          </template>
+        </v-list-item>
+        <v-list-item v-if="permissions.income" to="/acc/incomes/list" :title="$t('drawer.incomes')">
+          <template v-slot:append="{ props }">
+            <v-tooltip :text="$t('dialog.add_new')" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/incomes/mod/" />
+              </template>
+            </v-tooltip>
+          </template>
+        </v-list-item>
+      </v-list-group>
+      <v-list-group v-show="permissions.accounting || permissions.plugAccproCloseYear">
+        <template v-slot:activator="{ props }">
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-file-document-multiple"
+            :title="$t('drawer.accounting')"></v-list-item>
+        </template>
+        <v-list-item v-if="permissions.accounting" to="/acc/accounting/list" :title="$t('drawer.accounting_docs')" />
+        <v-list-item v-if="permissions.accounting" to="/acc/accounting/table" :title="$t('drawer.accounting_table')" />
+        <v-list-item v-if="permissions.plugAccproCloseYear && this.isPluginActive('accpro')" to="/acc/accounting/close_year"
+          :title="$t('drawer.close_year')">
+        </v-list-item>
+      </v-list-group>
+      <v-list-item to="/acc/reports/list">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-poll"></v-icon>
+        </template>
+        <v-list-item-title v-text="$t('drawer.reports')" />
+      </v-list-item>
+      <v-list-subheader>{{ $t('drawer.settings') }}</v-list-subheader>
+      <v-list-group v-show="permissions.settings || permissions.log || permissions.permission">
+        <template v-slot:activator="{ props }">
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-cogs"
+            :title="$t('drawer.settings')"></v-list-item>
+        </template>
+        <v-list-item v-if="permissions.settings" to="/acc/business/settings" :title="$t('drawer.bid_settings')" />
+        <v-list-item v-if="permissions.settings" to="/acc/business/printoptions" :title="$t('drawer.print_settings')" />
+        <v-list-item  v-if="permissions.settings && this.isPluginActive('accpro')" to="/acc/business/avatar"
+          :title="$t('drawer.avatar_settings')">
+        </v-list-item>
+        <v-list-item  v-if="permissions.permission" to="/acc/business/users"
+          :title="$t('drawer.user_perms')">
+        </v-list-item>
+        <v-list-item  v-if="permissions.owner" to="/acc/business/apis"
+          :title="$t('drawer.tokens')">
+        </v-list-item>
+        <v-list-item  v-if="permissions.settings && this.isPluginActive('accpro')" to="/acc/business/extramoneys"
+          :title="$t('drawer.extra_moneys')">
+        </v-list-item>
+        <v-list-item  v-if="permissions.log" to="/acc/business/logs"
+          :title="$t('drawer.history')">
+        </v-list-item>
+        <v-list-item class="text-danger"  v-if="permissions.owner" @click="deleteBusiness()"
+          :title="$t('drawer.bid_delete')">
+        </v-list-item>
+      </v-list-group>
+      <v-list-subheader>{{ $t('drawer.services') }}</v-list-subheader>
 
       <v-list-item class="text-dark" v-if="permissions.owner == 0" @click="exitBusiness()">
         <template v-slot:prepend>
@@ -305,6 +461,4 @@ export default {
 
 </template>
 
-<style global>
-
-</style>
+<style global></style>
