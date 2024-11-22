@@ -6,7 +6,7 @@ import rec from "../component/rec.vue";
 import recList from "../component/recList.vue";
 import ArchiveUpload from "../component/archive/archiveUpload.vue";
 import type { Header, Item } from "vue3-easy-data-table";
-import { getApiUrl } from "@@@@/hesabixConfig";
+import { getApiUrl } from "@/hesabixConfig";
 import notes from '../component/notes.vue';
 export default defineComponent({
   name: "viewInvoice",

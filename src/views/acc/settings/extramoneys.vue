@@ -91,7 +91,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import { ref } from "vue";
-import { getApiUrl, getSiteName } from "..//hesabixConfig"
+import { getApiUrl, getSiteName } from "@/hesabixConfig"
 import Loading from "vue-loading-overlay";
 
 export default {
