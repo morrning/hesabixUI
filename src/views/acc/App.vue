@@ -381,7 +381,7 @@ export default {
           to="/acc/accounting/close_year" :title="$t('drawer.close_year')">
         </v-list-item>
       </v-list-group>
-      <v-list-item to="/acc/reports/list">
+      <v-list-item v-show="permissions.reports" to="/acc/reports/list">
         <template v-slot:prepend>
           <v-icon icon="mdi-poll"></v-icon>
         </template>

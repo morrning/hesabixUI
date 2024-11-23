@@ -46,7 +46,7 @@
           </v-col>
           <v-col cols="12" sm="6" md="3" v-show="permissions.commodity">
             <v-card variant="outlined" color="primary" prepend-icon="mdi-package-variant"
-              :title="$t('drawer.commoditiy')" to="/acc/commodity/list">
+              :title="$t('drawer.commodity')" to="/acc/commodity/list">
               <v-card-text>
                 {{ $t('static.count') }} :
                 {{ this.$filters.formatNumber(stat.commodity) }}

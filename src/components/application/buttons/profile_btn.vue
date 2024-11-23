@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue'
 import Archive_list from '../list/archive_list.vue';
 import Sms_list from '../list/sms_list.vue';
+import axios from "axios";
 
 export default defineComponent({
   name: "profile_btn",
@@ -13,7 +14,14 @@ export default defineComponent({
     Sms_list: Sms_list
   },
   methods: {
-
+    logout() {
+      axios.post('/api/user/logout')
+        .then((response) => {
+          localStorage.removeItem('X-AUTH-TOKEN');
+          delete axios.defaults.headers.common['X-AUTH-TOKEN'];
+          this.$router.push('/user/login')
+        });
+    },
   }
 })
 </script>

@@ -127,11 +127,10 @@ export default defineComponent({
 
     logout() {
       axios.post('/api/user/logout')
-        .then((response) => {
+      .then((response) => {
           localStorage.removeItem('X-AUTH-TOKEN');
-          document.location.reload();
           delete axios.defaults.headers.common['X-AUTH-TOKEN'];
-          window.location.href = this.$filters.getApiUrl() + '/logout/by/token/user/login';
+          this.$router.push('/user/login')
         });
     },
   },
