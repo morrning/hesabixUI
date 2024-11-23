@@ -142,7 +142,7 @@ export default {
         </template>
         <v-list-item-title v-text="$t('drawer.dashboard')" />
       </v-list-item>
-      <v-list-subheader>{{ $t('drawer.basic_tools') }}</v-list-subheader>
+      <v-list-subheader color="primary">{{ $t('drawer.basic_tools') }}</v-list-subheader>
       <v-list-group v-show="permissions.getpay || permissions.persons">
         <template v-slot:activator="{ props }">
           <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-account-multiple"
@@ -262,7 +262,7 @@ export default {
         <v-list-item v-if="permissions.wallet" to="/acc/wallet/view" :title="$t('static.wallet')">
         </v-list-item>
       </v-list-group>
-      <v-list-subheader>{{ $t('drawer.acc_store_tools') }}</v-list-subheader>
+      <v-list-subheader color="primary">{{ $t('drawer.acc_store_tools') }}</v-list-subheader>
       <v-list-group v-show="permissions.store">
         <template v-slot:activator="{ props }">
           <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-store"
@@ -387,7 +387,7 @@ export default {
         </template>
         <v-list-item-title v-text="$t('drawer.reports')" />
       </v-list-item>
-      <v-list-subheader>{{ $t('drawer.settings') }}</v-list-subheader>
+      <v-list-subheader color="primary">{{ $t('drawer.settings') }}</v-list-subheader>
       <v-list-group v-show="permissions.settings || permissions.log || permissions.permission">
         <template v-slot:activator="{ props }">
           <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-cogs"
@@ -411,7 +411,7 @@ export default {
           :title="$t('drawer.bid_delete')">
         </v-list-item>
       </v-list-group>
-      <v-list-subheader>{{ $t('drawer.services') }}</v-list-subheader>
+      <v-list-subheader color="primary">{{ $t('drawer.services') }}</v-list-subheader>
       <v-list-group v-show="permissions.plugRepservice && isPluginActive('repservice')">
         <template v-slot:activator="{ props }">
           <v-list-item class="text-dark" v-bind="props" :title="$t('drawer.repservice')">
