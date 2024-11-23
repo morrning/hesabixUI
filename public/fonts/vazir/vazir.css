@@ -109,6 +109,8 @@ nav,
 section,
 summary,
 small,
-.btn {
+.form-control,
+.btn,
+input {
     font-family: 'Vazirmatn FD', sans-serif;
 }

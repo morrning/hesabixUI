@@ -63,7 +63,8 @@ export default defineComponent({
   <v-tooltip :text="$t('dialog.import_excel')" location="bottom">
     <template v-slot:activator="{ props }">
       <v-btn v-bind="props" icon="mdi-table-arrow-left" color="primary" data-bs-toggle="modal"
-        data-bs-target="#importexcel"></v-btn>
+        data-bs-target="#importexcel">
+      </v-btn>
     </template>
   </v-tooltip>
 

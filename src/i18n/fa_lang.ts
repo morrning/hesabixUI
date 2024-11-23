@@ -124,6 +124,8 @@ const fa_lang = {
     cancel: "بازگشت",
     save: "ذخیره",
     new: "جدید",
+    filter: "فیلتر",
+    filters: "فیلتر‌ها",
     add_new: "افزودن مورد جدید",
     fiscal_year: "سال مالی",
     currency: "واحد پولی",

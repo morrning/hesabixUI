@@ -507,8 +507,8 @@ export default {
     <Notifications_btn />
     <Profile_btn />
   </v-app-bar>
-  <v-main class="bg-surface-light">
-    <div class="position-relative py-1 px-1">
+  <v-main class="">
+    <div class="position-relative">
       <RouterView />
     </div>
   </v-main>

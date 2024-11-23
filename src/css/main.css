@@ -60,3 +60,8 @@ small,
 input {
     font-family: 'Vazirmatn FD', sans-serif;
 }
+
+div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled,
+div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled {
+    color: white;
+}

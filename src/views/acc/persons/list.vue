@@ -2,10 +2,10 @@
   <v-toolbar color="toolbar" :title="$t('drawer.persons')">
     <template v-slot:prepend>
       <v-tooltip :text="$t('dialog.back')" location="bottom">
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" @click="this.$router.back()" variant="text" icon="mdi-arrow-right"/>
-      </template>
-    </v-tooltip>
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" @click="this.$router.back()" variant="text" icon="mdi-arrow-right" />
+        </template>
+      </v-tooltip>
     </template>
     <v-spacer></v-spacer>
     <v-tooltip :text="$t('dialog.add_new')" location="bottom">
@@ -16,7 +16,10 @@
     <importExcel :windowsState="this.importWindowsState"></importExcel>
     <v-menu>
       <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" icon="mdi-file-pdf-box" color="red"></v-btn>
+        <v-btn v-bind="props" icon="" color="red">
+          <v-tooltip activator="parent" :text="$t('dialog.export_pdf')" location="bottom" />
+          <v-icon icon="mdi-file-pdf-box"></v-icon>
+        </v-btn>
       </template>
       <v-list>
         <v-list-subheader color="primary">{{ $t('dialog.export_pdf') }}</v-list-subheader>
@@ -34,7 +37,10 @@
     </v-menu>
     <v-menu>
       <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" icon="mdi-file-excel-box" color="green"></v-btn>
+        <v-btn v-bind="props" icon="" color="green">
+          <v-tooltip activator="parent" :text="$t('dialog.export_excel')" location="bottom" />
+          <v-icon icon="mdi-file-excel-box"></v-icon>
+        </v-btn>
       </template>
       <v-list>
         <v-list-subheader color="primary">{{ $t('dialog.export_excel') }}</v-list-subheader>
@@ -51,9 +57,9 @@
       </v-list>
     </v-menu>
   </v-toolbar>
-  <v-row>
+  <v-row class="pa-1">
     <v-col>
-      <v-text-field color="info"class="mb-1" hide-details="auto"  variant="outlined" density="compact"
+      <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
         :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
         <template v-slot:prepend-inner>
           <v-tooltip location="bottom" :text="$t('dialog.search')">
@@ -61,6 +67,30 @@
               <v-icon v-bind="props" color="danger" icon="mdi-magnify"></v-icon>
             </template>
           </v-tooltip>
+        </template>
+        <template v-slot:append-inner>
+          <v-menu :close-on-content-click="false">
+            <template v-slot:activator="{ props }">
+              <v-icon size="sm" v-bind="props" icon="" color="primary">
+                <v-tooltip activator="parent" variant="plain" :text="$t('dialog.filters')" location="bottom" />
+                <v-icon icon="mdi-filter"></v-icon>
+              </v-icon>
+            </template>
+            <v-list>
+              <v-list-subheader color="primary">
+                <v-icon icon="mdi-filter"></v-icon>
+                {{ $t('dialog.filters') }}</v-list-subheader>
+              <v-list-item v-for="(item, index) in types" class="text-dark">
+                <template v-slot:title>
+                  <div class="form-check form-check-inline mx-1">
+                    <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
+                      type="checkbox">
+                    <label class="form-check-label">{{ item.label }}</label>
+                  </div>
+                </template>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </template>
       </v-text-field>
       <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
@@ -147,9 +177,10 @@ export default {
       },
       tableClassName: 'extable',
       searchValue: '',
-      loading: ref(true),
+      loading: true,
       orgItems: [],
       types: [],
+      typesSelected: [],
       items: [],
       itemsSelected: [],
       headers: [
@@ -220,6 +251,7 @@ export default {
       this.loading = false;
     },
     loadData() {
+      this.loading= true;
       axios.get('/api/person/list')
         .then((response) => {
           this.items = response.data;
