@@ -48,7 +48,7 @@ export default defineComponent({
         return this.$t('validator.required')
       }
       else if(type == 'email'){
-        if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(input)) return true
+        if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(input)) return true
         return this.$t('validator.email_not_valid')
       }
       else if(type == 'password'){

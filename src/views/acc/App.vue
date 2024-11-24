@@ -340,7 +340,7 @@ export default {
             </v-tooltip>
           </template>
         </v-list-item>
-        <v-list-item v-if="this.isPluginActive('accpro') && permissions.sell" to="/acc/presell/list"
+        <v-list-item v-if="this.isPluginActive('accpro') && permissions.sell && 1==2" to="/acc/presell/list"
           :title="$t('drawer.presells')">
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
@@ -381,7 +381,7 @@ export default {
           to="/acc/accounting/close_year" :title="$t('drawer.close_year')">
         </v-list-item>
       </v-list-group>
-      <v-list-item v-show="permissions.reports" to="/acc/reports/list">
+      <v-list-item v-show="permissions.report" to="/acc/reports/list">
         <template v-slot:prepend>
           <v-icon icon="mdi-poll"></v-icon>
         </template>
@@ -469,7 +469,7 @@ export default {
         <v-list-item v-if="permissions.owner" to="/acc/plugin-center/my" :title="$t('drawer.my_plugins')" />
         <v-list-item v-if="permissions.owner" to="/acc/plugin-center/invoice" :title="$t('drawer.plugins_invoices')" />
       </v-list-group>
-      <v-list-item class="text-dark bg-red-darken-3 ma-2 rounded-2" v-if="permissions.owner == 1"
+      <v-list-item class="text-dark bg-red-darken-3 ma-2 rounded-2" v-if="permissions.owner == false"
         @click="exitBusiness()">
         <template v-slot:prepend>
           <v-icon color="white" icon="mdi-logout"></v-icon>

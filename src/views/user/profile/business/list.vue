@@ -28,7 +28,7 @@
                 </template>
 
                 <template v-slot:append>
-                  <v-btn @click="runBid(item.id)" class="text-none" color="primary" :text="$t('pages.dashboard.login')" prepend-icon="mdi-login" slim></v-btn>
+                  <v-btn @click="runBid(item.id)" class="text-none" color="primary" :text="$t('pages.dashboard.login')" append-icon="mdi-arrow-left" slim></v-btn>
                 </template>
               </v-list-item>
               <v-card-text class="text-medium-emphasis pa-1 px-3">
@@ -98,7 +98,7 @@ export default {
             localStorage.setItem('activeYear', item.id);
           }
         });
-        this.$router.push({ name: 'acc_home' });
+        window.location.href = '/acc/dashboard';
       })
     }
   },

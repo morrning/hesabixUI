@@ -125,7 +125,7 @@ export default {
         });
       axios.get('/api/money/get/all')
         .then((response) => {
-          this.moneyAll = response.data;
+          this.moneyAll = response.data.data;
         })
     },
     save() {
