@@ -164,6 +164,7 @@ const fa_lang = {
     selected_all: "همه‌ی موارد",
     export_pdf: "خروجی پی دی اف",
     export_excel: "خروجی اکسل",
+    filter_results: "فیلتر نتایج",
     account: "حساب کاربری",
     database_export: "خروجی از بانک اطلاعاتی",
     error_operation: "در انجام عملیات خطایی به وجود آمد.در صورت تکرار خطا با پشتیبان نرم افزار تماس بگیرید.",
