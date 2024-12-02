@@ -93,7 +93,7 @@
           </v-menu>
         </template>
       </v-text-field>
-      <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
+      <EasyDataTable table-class-name="customize-table ma-1 pa-1" :table-class-name="tableClassName"
         v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
         :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
         body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"

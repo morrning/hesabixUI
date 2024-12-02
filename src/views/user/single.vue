@@ -33,12 +33,12 @@ export default {
 
 <template>
   <v-app id="">
-    <v-app-bar class="px-2" color="primary" flat>
+    <v-app-bar class="px-2" color="indigo-darken-2" flat>
       <v-avatar size="32" image="/img/favw.png"></v-avatar>
 
       <v-spacer></v-spacer>
 
-      <v-tabs centered color="white">
+      <v-tabs centered color="">
         <v-tab prepend-icon="mdi-login" :text="$t('user.login')" to="/user/login"></v-tab>
         <v-tab prepend-icon="mdi-account-plus" :text="$t('user.register')" to="/user/register"></v-tab>
         <v-tab prepend-icon="mdi-lock" :text="$t('user.forget_password')" to="/user/forget-password"></v-tab>
