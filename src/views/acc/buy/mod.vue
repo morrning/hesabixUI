@@ -120,116 +120,6 @@
           </div>
         </div>
       </div>
-      <!-- offcanvas add item -->
-
-
-
-      <!-- offcanvas edit item -->
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEdit" aria-labelledby="offcanvasBottomLabel">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasBottomLabel">ویرایش</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <div class="container">
-            <div class="row">
-              <div class="col-12 mb-0">
-                <div class="block block-rounded border">
-                  <div class="block-header block-header-default py-1">
-                    <h3 class="block-title text-primary">
-                      <i class="fa fa-box pe-2"></i>
-                      کالا و خدمات
-                    </h3>
-                    <div class="block-options">
-                      <!-- Button trigger modal -->
-                      <quickAddCommodity></quickAddCommodity>
-                    </div>
-                  </div>
-                  <div class="block-content pt-1 px-1">
-                    <v-cob dir="rtl" @search="searchCommodity" :options="commodity" label="name"
-                      v-model="editItemData.commodity" class="">
-                      <template #no-options="{ search, searching, loading }">
-                        وردی یافت نشد!
-                      </template>
-                      <template v-slot:option="option">
-                        <div class="row mb-1">
-                          <div class="col-12">
-                            <i class="fa fa-box me-1"></i>
-                            {{ option.name }}
-                          </div>
-                          <div class="col-12">
-                            <small v-if="option.khadamat == false">
-                              <i class="fa fa-store me-1"></i>
-                              <small class="text-danger">
-                                موجودی:
-                              </small>
-                              <label style="direction: ltr;">
-                                {{ option.count }}
-                              </label>
-                              {{ option.unit }}
-                            </small>
-                          </div>
-                        </div>
-                      </template>
-                    </v-cob>
-
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 mb-2">
-                <div class="block block-rounded border">
-                  <div class="block-header block-header-default py-1">
-                    <h3 class="block-title text-primary">
-                      <i class="fa-regular fa-note-sticky"></i>
-                      شرح
-                    </h3>
-                    <div class="block-options">
-
-                    </div>
-                  </div>
-                  <div class="block-content p-0">
-                    <input v-model="this.editItemData.des" class="form-control" type="text">
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 mb-2">
-                <div class="form-floating mb-3">
-                  <money3 v-bind="unitConfig" class="form-control" v-model.number="this.editItemData.count" />
-                  <label v-if="editItemData.commodity" for="floatingInput">{{ editItemData.commodity.unitData.name
-                    }}</label>
-                </div>
-              </div>
-              <div class="col-12 mb-2">
-                <div class="input-group mb-3">
-                  <div class="form-floating mb-3">
-                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="this.editItemData.price" />
-                    <label for="floatingInput">قیمت واحد</label>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 mb-2">
-                <div class="form-floating mb-3">
-                  <money3 v-bind="currencyConfig" class="form-control" v-model.number="this.editItemData.discount" />
-                  <label for="floatingInput">تخفیف</label>
-                </div>
-              </div>
-              <div class="col-12 mb-2">
-                <div class="form-floating mb-3">
-                  <money3 readonly="readonly" v-bind="currencyConfig" class="form-control"
-                    v-model.number="this.editItemData.sumWithoutTax" />
-                  <label for="floatingInput">قیمت کل</label>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-success" @click="doEditeItem">
-              <i class="fa fa-save"></i>
-              ویرایش
-            </button>
-          </div>
-        </div>
-      </div>
       <div class="container">
         <div class="row">
           <div class="col-12">
@@ -534,14 +424,13 @@
                 href="javascript:void(0)">
                 <div class="block-content block-content-full block-content-sm bg-body-light">
                   <div class="row">
-
                     <div class="col-sm-12 col-md-3">
                       <span class="text-dark">
                         <i class="fa fa-list-dots"></i>
                         اقلام فاکتور:
                       </span>
                       <span class="text-primary">
-                        ({{ items.length }} قلم)
+                        {{ items.length }} قلم
                       </span>
                     </div>
                     <div class="col-sm-12 col-md-3">
