@@ -9,12 +9,12 @@
       </v-tooltip>
     </template>
     <v-spacer></v-spacer>
-    <v-btn @click="submit()" icon="" color="green">
+    <v-btn :loading="loading" @click="submit()" icon="" color="green">
       <v-tooltip activator="parent" :text="$t('dialog.save')" location="bottom" />
       <v-icon icon="mdi-content-save"></v-icon>
     </v-btn>
     <template v-slot:extension>
-         <v-tabs color="primary" grow v-model="tabs">
+         <v-tabs color="primary" class="bg-light" grow v-model="tabs">
         <v-tab value="0">
           {{ $t('dialog.basic_info') }}
         </v-tab>
@@ -334,7 +334,7 @@ export default {
   data: () => {
     return {
       tabs: '',
-
+      loading : false,
       moneys: [],
       content: {
         name: '',
@@ -403,6 +403,7 @@ export default {
       }
       else {
         //submit data
+        this.loading = true;
         let data = axios.post('/api/business/insert', {
           'bid': localStorage.getItem('activeBid'),
           'name': this.content.name,
@@ -433,6 +434,7 @@ export default {
           'profitCalcType': this.content.profitCalcType
         })
           .then((response) => {
+            this.loading = false;
             if (response.data.result == 1) {
               Swal.fire({
                 text: 'با موفقیت ثبت شد.',
@@ -453,6 +455,7 @@ export default {
     }
   },
   async beforeMount() {
+    this.loading = true
     //get all money types
     axios.get("/api/money/get/all").then((response) => {
       this.moneys = response.data;
@@ -463,6 +466,7 @@ export default {
     let data = axios.post('/api/business/get/info/' + localStorage.getItem('activeBid'))
       .then((response) => {
         this.content = response.data;
+        this.loading = false;
       });
     //get list of banks
     axios.get('/api/bank/list').then((response) => {

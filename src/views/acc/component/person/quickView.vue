@@ -7,16 +7,23 @@ import 'vue-loading-overlay/dist/css/index.css';
 export default defineComponent({
   name: "quickView",
   props: {
-    code: String,
+    code: {
+      type: String
+    },
+    btn: {
+      default: true,
+      type: Boolean
+    }
   },
-  components:{
+  components: {
     Loading
   },
   data: () => {
     return {
-      isLoading:true,
+      isLoading: true,
+      dialog: false,
       selectedPerson: {
-        accounts:[]
+        accounts: []
       }
     }
   },
@@ -30,33 +37,31 @@ export default defineComponent({
     }
   },
   mounted() {
-    
+    this.loadData();
   }
 })
 </script>
 
 <template>
-  <!-- Button trigger modal -->
-  <button @click="loadData()" :disabled="this.$props.code == undefined" title="مشاهده مشخصات شخص" type="button"
-    class="btn-block-option" data-bs-toggle="modal" data-bs-target="#quickPersonView">
-    <i class="fa fa-eye"></i>
-  </button>
-  <!-- Modal -->
-  <div class="modal modal-lg fade" id="quickPersonView" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="quickPersonViewLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header bg-primary-light text-white">
-          <h1 class="modal-title fs-5" id="quickPersonViewLabel">
-          <i class="fa fa-person"></i>
-          اطلاعات شخص
-          </h1>
-          <div class="block-options">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-        </div>
-        <div class="modal-body">
-          <Loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false"/>
+  <v-btn v-if="$props.btn == true" :disabled="this.$props.code == undefined" @click="loadData(); dialog = true"
+    icon="mdi-eye" class="text-primary" variant="plain" density="compact" size="small" :title="$t('dialog.user_info')">
+  </v-btn>
+
+  <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
+    <v-card class="bg-white">
+      <v-toolbar>
+        <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+
+        <v-toolbar-title>{{ $t('dialog.user_info') }}</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-toolbar-items>
+        </v-toolbar-items>
+      </v-toolbar>
+      <v-row class="pa-3">
+        <v-col>
+          <Loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false" />
           <div class="row">
             <div class="col-sm-12 col-md-6 mb-2">
               <div class="fw-bold mb-2">کد حسابداری: <small class="text-primary">{{ selectedPerson.code }}</small>
@@ -71,7 +76,7 @@ export default defineComponent({
               <div class="fw-bold mb-2">موبایل دوم: <small class="text-primary">{{ selectedPerson.mobile2 }}</small>
               </div>
               <div class="fw-bold mb-2">آدرس: <small class="text-primary">{{ selectedPerson.keshvar + ' ' +
-    selectedPerson.ostan + ' ' + selectedPerson.shahr + ' ' + selectedPerson.address }}</small></div>
+                selectedPerson.ostan + ' ' + selectedPerson.shahr + ' ' + selectedPerson.address }}</small></div>
               <div class="fw-bold mb-2">توضیحات: <small class="text-primary">{{ selectedPerson.des }}</small></div>
 
             </div>
@@ -85,13 +90,13 @@ export default defineComponent({
 
                 </div>
                 <div class="fw-bold mb-2">بستانکار: <small class="text-primary">{{
-    this.$filters.formatNumber(selectedPerson.bs)
-  }}</small></div>
+                  this.$filters.formatNumber(selectedPerson.bs)
+                }}</small></div>
                 <div class="fw-bold mb-2">بدهکار: <small class="text-primary">{{
-      this.$filters.formatNumber(selectedPerson.bd)
-    }}</small></div>
+                  this.$filters.formatNumber(selectedPerson.bd)
+                }}</small></div>
                 <div class="fw-bold mb-2">تراز حسابداری: <small class="text-primary">{{
-                    this.$filters.formatNumber(selectedPerson.balance) }}</small></div>
+                  this.$filters.formatNumber(selectedPerson.balance) }}</small></div>
               </div>
 
             </div>
@@ -118,11 +123,10 @@ export default defineComponent({
               </div>
             </div>
           </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
+        </v-col>
+      </v-row>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped></style>

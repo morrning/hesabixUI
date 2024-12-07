@@ -24,8 +24,6 @@
     </div>
     <div class="block-content py-3 vl-parent px-0">
       <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false" />
-      <quickAddCommodity></quickAddCommodity>
-
       <div class="container">
         <div class="row">
           <div class="col-sm-12 col-md-4 mb-1">
@@ -91,10 +89,7 @@
                 </h3>
                 <div class="block-options">
                   <!-- Button trigger modal -->
-                  <button title="افزودن کالا/خدمات جدید" type="button" class="btn-block-option" data-bs-toggle="modal"
-                    data-bs-target="#quickComodityAdd">
-                    <i class="fa fa-plus"></i>
-                  </button>
+                  <quickAddCommodity></quickAddCommodity>
                 </div>
               </div>
               <div class="block-content pt-1 px-1">

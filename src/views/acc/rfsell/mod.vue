@@ -120,7 +120,7 @@
           </div>
         </div>
       </div>
-      <quickAddCommodity></quickAddCommodity>
+      
       <!-- offcanvas add item -->
       <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
         <div class="offcanvas-header">
@@ -139,10 +139,7 @@
                     </h3>
                     <div class="block-options">
                       <!-- Button trigger modal -->
-                      <button title="افزودن کالا/خدمات جدید" type="button" class="btn-block-option"
-                        data-bs-toggle="modal" data-bs-target="#quickComodityAdd">
-                        <i class="fa fa-plus"></i>
-                      </button>
+                      <quickAddCommodity></quickAddCommodity>
                     </div>
                   </div>
                   <div class="block-content pt-1 px-1">
@@ -248,10 +245,7 @@
                     </h3>
                     <div class="block-options">
                       <!-- Button trigger modal -->
-                      <button title="افزودن کالا/خدمات جدید" type="button" class="btn-block-option"
-                        data-bs-toggle="modal" data-bs-target="#quickComodityAdd">
-                        <i class="fa fa-plus"></i>
-                      </button>
+                      <quickAddCommodity></quickAddCommodity>
                     </div>
                   </div>
                   <div class="block-content pt-1 px-1">

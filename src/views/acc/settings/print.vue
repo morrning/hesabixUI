@@ -1,299 +1,331 @@
 <template>
-  <div class="block block-content-full">
-    <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
-      <h3 class="block-title text-primary-dark">
-        <i class="fa fa-print"></i>
-        چاپ اسناد
-      </h3>
-      <div class="block-options">
-        <button @click="submit()" type="submit" class="btn btn-sm btn-success mx-2">
-          <i class="fa fa-save me-2"></i>
-          ذخیره تنظیمات
-        </button>
-      </div>
-    </div>
-    <div class="block-content pb-3">
-      <Loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false" />
-      <div class="row">
-        <div class="col-12">
-          <form @submit.prevent="submit">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
-                  role="tab" aria-controls="home" aria-selected="true"> فروش</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="buy-tab" data-bs-toggle="tab" data-bs-target="#buy" type="button"
-                  role="tab" aria-controls="home" aria-selected="true"> خرید</button>
-              </li>
-              <li v-if="isPluginActive('accpro')" class="nav-item" role="presentation">
-                <button class="nav-link" id="rfbuy-tab" data-bs-toggle="tab" data-bs-target="#rfbuy" type="button"
-                  role="tab" aria-controls="home" aria-selected="true">برگشت از خرید</button>
-              </li>
-              <li v-if="isPluginActive('accpro')" class="nav-item" role="presentation">
-                <button class="nav-link" id="rfsell-tab" data-bs-toggle="tab" data-bs-target="#rfsell" type="button"
-                  role="tab" aria-controls="home" aria-selected="true"> برگشت از فروش</button>
-              </li>
-              <li v-if="isPluginActive('repservice')" class="nav-item" role="presentation">
-                <button class="nav-link" id="repservice-tab" data-bs-toggle="tab" data-bs-target="#repservice" type="button"
-                  role="tab" aria-controls="home" aria-selected="true">تعمیرکاران</button>
-              </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <div class="p-md-4">
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.sell.bidInfo" type="checkbox">
-                        <label class="form-check-label">اطلاعات کسب‌وکار</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.sell.pays" type="checkbox">
-                        <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.sell.note" type="checkbox">
-                        <label class="form-check-label">یاداشت پایین فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.sell.taxInfo" type="checkbox">
-                        <label class="form-check-label">مالیات به تفکیک اقلام</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.sell.discountInfo" type="checkbox">
-                        <label class="form-check-label">تخفیف به تفکیک اقلام</label>
-                      </div>
-                    </div>
+  <v-toolbar color="toolbar" :title="$t('drawer.print_settings')">
+    <template v-slot:prepend>
+      <v-tooltip :text="$t('dialog.back')" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" @click="this.$router.back()" class="d-none d-sm-flex" variant="text"
+            icon="mdi-arrow-right" />
+        </template>
+      </v-tooltip>
+    </template>
+    <v-spacer></v-spacer>
+    <v-btn :loading="loading" @click="submit()" icon="" color="green">
+      <v-tooltip activator="parent" :text="$t('dialog.save')" location="bottom" />
+      <v-icon icon="mdi-content-save"></v-icon>
+    </v-btn>
+    <template v-slot:extension>
+      <v-tabs color="primary" class="bg-light" grow v-model="tabs">
+        <v-tab value="0">
+          {{ $t('drawer.sell') }}
+        </v-tab>
+        <v-tab value="1">
+          {{ $t('drawer.buy') }}
+        </v-tab>
+        <v-tab v-if="isPluginActive('accpro')" value="2">
+          {{ $t('drawer.rfbuy_invoices') }}
+        </v-tab>
+        <v-tab v-if="isPluginActive('accpro')" value="3">
+          {{ $t('drawer.rfsell_invoices') }}
+        </v-tab>
+        <v-tab value="4">
+          {{ $t('drawer.fast_sell') }}
+        </v-tab>
+        <v-tab v-if="isPluginActive('repservice')" value="5">
+          {{ $t('drawer.repservice') }}
+        </v-tab>
+      </v-tabs>
+    </template>
+  </v-toolbar>
+  <v-row class="pa-1">
+    <v-col>
+      <v-tabs-window v-model="tabs">
+        <v-tabs-window-item value="0">
+          <v-card>
+            <v-card-text>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.sell.bidInfo" type="checkbox">
+                    <label class="form-check-label">اطلاعات کسب‌وکار</label>
                   </div>
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-floating">
-                        <textarea v-model="settings.sell.noteString" class="form-control"
-                          placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
-                        <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-floating">
-                        <select v-model="settings.sell.paper" class="form-select">
-                          <option value="A4-L">A4 افقی</option>
-                          <option value="A4">A4 عمودی</option>
-                          <option value="A5-L">A5 افقی</option>
-                          <option value="A5">A5 عمودی</option>
-                        </select>
-                        <label>سایز کاغذ و حالت چاپ</label>
-                      </div>
-                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.sell.pays" type="checkbox">
+                    <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.sell.note" type="checkbox">
+                    <label class="form-check-label">یاداشت پایین فاکتور</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.sell.taxInfo" type="checkbox">
+                    <label class="form-check-label">مالیات به تفکیک اقلام</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.sell.discountInfo" type="checkbox">
+                    <label class="form-check-label">تخفیف به تفکیک اقلام</label>
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="buy" role="tabpanel" aria-labelledby="buy-tab">
-                <div class="p-md-4">
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.buy.bidInfo" type="checkbox">
-                        <label class="form-check-label">اطلاعات کسب‌وکار</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.buy.pays" type="checkbox">
-                        <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.buy.note" type="checkbox">
-                        <label class="form-check-label">یاداشت پایین فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.buy.taxInfo" type="checkbox">
-                        <label class="form-check-label">مالیات به تفکیک اقلام</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.buy.discountInfo" type="checkbox">
-                        <label class="form-check-label">تخفیف به تفکیک اقلام</label>
-                      </div>
-                    </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-floating">
+                    <textarea v-model="settings.sell.noteString" class="form-control"
+                      placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
+                    <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
                   </div>
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-floating">
-                        <textarea v-model="settings.buy.noteString" class="form-control"
-                          placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
-                        <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-floating">
-                        <select v-model="settings.buy.paper" class="form-select">
-                          <option value="A4-L">A4 افقی</option>
-                          <option value="A4">A4 عمودی</option>
-                          <option value="A5-L">A5 افقی</option>
-                          <option value="A5">A5 عمودی</option>
-                        </select>
-                        <label>سایز کاغذ و حالت چاپ</label>
-                      </div>
-                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-floating">
+                    <select v-model="settings.sell.paper" class="form-select">
+                      <option value="A4-L">A4 افقی</option>
+                      <option value="A4">A4 عمودی</option>
+                      <option value="A5-L">A5 افقی</option>
+                      <option value="A5">A5 عمودی</option>
+                    </select>
+                    <label>سایز کاغذ و حالت چاپ</label>
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="rfbuy" role="tabpanel" aria-labelledby="rfbuy-tab">
-                <div class="p-md-4">
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.rfbuy.bidInfo" type="checkbox">
-                        <label class="form-check-label">اطلاعات کسب‌وکار</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.rfbuy.pays" type="checkbox">
-                        <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.rfbuy.note" type="checkbox">
-                        <label class="form-check-label">یاداشت پایین فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.rfbuy.taxInfo" type="checkbox">
-                        <label class="form-check-label">مالیات به تفکیک اقلام</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.rfbuy.discountInfo" type="checkbox">
-                        <label class="form-check-label">تخفیف به تفکیک اقلام</label>
-                      </div>
-                    </div>
+            </v-card-text>
+          </v-card>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="1">
+          <v-card>
+            <v-card-text>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.buy.bidInfo" type="checkbox">
+                    <label class="form-check-label">اطلاعات کسب‌وکار</label>
                   </div>
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-floating">
-                        <textarea v-model="settings.rfbuy.noteString" class="form-control"
-                          placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
-                        <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-floating">
-                        <select v-model="settings.rfbuy.paper" class="form-select">
-                          <option value="A4-L">A4 افقی</option>
-                          <option value="A4">A4 عمودی</option>
-                          <option value="A5-L">A5 افقی</option>
-                          <option value="A5">A5 عمودی</option>
-                        </select>
-                        <label>سایز کاغذ و حالت چاپ</label>
-                      </div>
-                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.buy.pays" type="checkbox">
+                    <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.buy.note" type="checkbox">
+                    <label class="form-check-label">یاداشت پایین فاکتور</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.buy.taxInfo" type="checkbox">
+                    <label class="form-check-label">مالیات به تفکیک اقلام</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.buy.discountInfo" type="checkbox">
+                    <label class="form-check-label">تخفیف به تفکیک اقلام</label>
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="rfsell" role="tabpanel" aria-labelledby="rfsell-tab">
-                <div class="p-md-4">
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.rfsell.bidInfo" type="checkbox">
-                        <label class="form-check-label">اطلاعات کسب‌وکار</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.rfsell.pays" type="checkbox">
-                        <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.rfsell.note" type="checkbox">
-                        <label class="form-check-label">یاداشت پایین فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.rfsell.taxInfo" type="checkbox">
-                        <label class="form-check-label">مالیات به تفکیک اقلام</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" v-model="settings.rfsell.discountInfo" type="checkbox">
-                        <label class="form-check-label">تخفیف به تفکیک اقلام</label>
-                      </div>
-                    </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-floating">
+                    <textarea v-model="settings.buy.noteString" class="form-control"
+                      placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
+                    <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
                   </div>
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-floating">
-                        <textarea v-model="settings.rfsell.noteString" class="form-control"
-                          placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
-                        <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-floating">
-                        <select v-model="settings.rfsell.paper" class="form-select">
-                          <option value="A4-L">A4 افقی</option>
-                          <option value="A4">A4 عمودی</option>
-                          <option value="A5-L">A5 افقی</option>
-                          <option value="A5">A5 عمودی</option>
-                        </select>
-                        <label>سایز کاغذ و حالت چاپ</label>
-                      </div>
-                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-floating">
+                    <select v-model="settings.buy.paper" class="form-select">
+                      <option value="A4-L">A4 افقی</option>
+                      <option value="A4">A4 عمودی</option>
+                      <option value="A5-L">A5 افقی</option>
+                      <option value="A5">A5 عمودی</option>
+                    </select>
+                    <label>سایز کاغذ و حالت چاپ</label>
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="repservice" role="tabpanel" aria-labelledby="repservice-tab">
-                <div class="p-md-4">
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-floating">
-                        <textarea v-model="settings.repservice.noteString" class="form-control"
-                          placeholder="این نوشته در پایین قبض چاپ خواهد شد" style="height: 100px"></textarea>
-                        <label for="floatingTextarea2">قوانین تعمیرگاه</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mb-2">
-                      <div class="form-floating">
-                        <select v-model="settings.repservice.paper" class="form-select">
-                          <option value="A4-L">A4 افقی</option>
-                          <option value="A4">A4 عمودی</option>
-                          <option value="A5-L">A5 افقی</option>
-                          <option value="A5">A5 عمودی</option>
-                        </select>
-                        <label>سایز کاغذ و حالت چاپ</label>
-                      </div>
-                    </div>
+            </v-card-text>
+          </v-card>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="2">
+          <v-card>
+            <v-card-text>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.rfbuy.bidInfo" type="checkbox">
+                    <label class="form-check-label">اطلاعات کسب‌وکار</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.rfbuy.pays" type="checkbox">
+                    <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.rfbuy.note" type="checkbox">
+                    <label class="form-check-label">یاداشت پایین فاکتور</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.rfbuy.taxInfo" type="checkbox">
+                    <label class="form-check-label">مالیات به تفکیک اقلام</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.rfbuy.discountInfo" type="checkbox">
+                    <label class="form-check-label">تخفیف به تفکیک اقلام</label>
                   </div>
                 </div>
               </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-floating">
+                    <textarea v-model="settings.rfbuy.noteString" class="form-control"
+                      placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
+                    <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-floating">
+                    <select v-model="settings.rfbuy.paper" class="form-select">
+                      <option value="A4-L">A4 افقی</option>
+                      <option value="A4">A4 عمودی</option>
+                      <option value="A5-L">A5 افقی</option>
+                      <option value="A5">A5 عمودی</option>
+                    </select>
+                    <label>سایز کاغذ و حالت چاپ</label>
+                  </div>
+                </div>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="3">
+          <v-card>
+            <v-card-text>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.rfsell.bidInfo" type="checkbox">
+                    <label class="form-check-label">اطلاعات کسب‌وکار</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.rfsell.pays" type="checkbox">
+                    <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.rfsell.note" type="checkbox">
+                    <label class="form-check-label">یاداشت پایین فاکتور</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.rfsell.taxInfo" type="checkbox">
+                    <label class="form-check-label">مالیات به تفکیک اقلام</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.rfsell.discountInfo" type="checkbox">
+                    <label class="form-check-label">تخفیف به تفکیک اقلام</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-floating">
+                    <textarea v-model="settings.rfsell.noteString" class="form-control"
+                      placeholder="این نوشته در پایین فاکتور‌ها چاپ خواهد شد" style="height: 100px"></textarea>
+                    <label for="floatingTextarea2">یاداشت پایین فاکتور</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-floating">
+                    <select v-model="settings.rfsell.paper" class="form-select">
+                      <option value="A4-L">A4 افقی</option>
+                      <option value="A4">A4 عمودی</option>
+                      <option value="A5-L">A5 افقی</option>
+                      <option value="A5">A5 عمودی</option>
+                    </select>
+                    <label>سایز کاغذ و حالت چاپ</label>
+                  </div>
+                </div>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="4">
+          <v-card>
+            <v-card-text>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.fastsell.invoice" type="checkbox">
+                    <label class="form-check-label">{{ $t('dialog.invoice') }}</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.fastsell.cashdeskTicket" type="checkbox">
+                    <label class="form-check-label">{{ $t('dialog.cashdeskTicket') }}</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" v-model="settings.fastsell.pdf" type="checkbox">
+                    <label class="form-check-label">{{ $t('dialog.export_pdf') }}</label>
+                  </div>
+                </div>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="5">
+          <v-card>
+            <v-card-text>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-floating">
+                    <textarea v-model="settings.repservice.noteString" class="form-control"
+                      placeholder="این نوشته در پایین قبض چاپ خواهد شد" style="height: 100px"></textarea>
+                    <label for="floatingTextarea2">قوانین تعمیرگاه</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="form-floating">
+                    <select v-model="settings.repservice.paper" class="form-select">
+                      <option value="A4-L">A4 افقی</option>
+                      <option value="A4">A4 عمودی</option>
+                      <option value="A5-L">A5 افقی</option>
+                      <option value="A5">A5 عمودی</option>
+                    </select>
+                    <label>سایز کاغذ و حالت چاپ</label>
+                  </div>
+                </div>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-tabs-window-item>
+      </v-tabs-window>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -309,7 +341,8 @@ export default {
   },
   data: () => {
     return {
-      isLoading: ref(false),
+      loading: ref(false),
+      tabs: 0,
       plugins: [],
       settings: {
         sell: {
@@ -351,6 +384,11 @@ export default {
         repservice: {
           noteString: '',
           paper: 'A4-L',
+        },
+        fastsell: {
+          invoice: true,
+          cashdeskTicket: true,
+          pdf: true
         }
       }
     }
@@ -360,7 +398,7 @@ export default {
       return this.plugins[plugName] !== undefined;
     },
     submit() {
-      this.isLoading = true;
+      this.loading = true;
       axios.post('/api/printers/options/save', this.settings).then((response) => {
         if (response.data.code == 0) {
           Swal.fire({
@@ -369,16 +407,16 @@ export default {
             confirmButtonText: 'قبول',
           })
         }
-        this.isLoading = false;
+        this.loading = false;
       })
     }
   },
   async beforeMount() {
-    this.isLoading = true;
+    this.loading = true;
     axios.get("/api/printers/options/info").then((response) => {
-      this.isLoading = false;
+      this.loading = false;
       this.settings = response.data;
-      if(this.settings.repservice.paper == null || this.settings.repservice.paper == ''){
+      if (this.settings.repservice.paper == null || this.settings.repservice.paper == '') {
         this.settings.repservice.paper = 'A5-L';
       }
     });

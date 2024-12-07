@@ -9,12 +9,12 @@
       </v-tooltip>
     </template>
     <v-spacer></v-spacer>
-    <v-btn @click="save()" icon="" color="green">
+    <v-btn :loading="loading" @click="save()" icon="" color="green">
       <v-tooltip activator="parent" :text="$t('dialog.save')" location="bottom" />
       <v-icon icon="mdi-content-save"></v-icon>
     </v-btn>
     <template v-slot:extension>
-      <v-tabs color="primary" grow v-model="tabs">
+      <v-tabs color="primary" class="bg-light" grow v-model="tabs">
         <v-tab value="0">
           {{ $t('pages.person.basic_info') }}
         </v-tab>
@@ -274,7 +274,7 @@ export default {
   data: () => {
     return {
       tabs: '',
-      isLoading: false,
+      loading: true,
       account: {
         name: '',
         cardNum: '',
@@ -327,17 +327,17 @@ export default {
     loadData(id = '') {
       if (id != '') {
         //load user info
-        this.isLoading = true;
+        this.loading = true;
         axios.post('/api/person/info/' + id).then((response) => {
           this.person = response.data;
-          this.isLoading = false;
+          this.loading = false;
         });
       }
       else {
         //user is new
         axios.post('/api/person/types/get').then((response) => {
           this.person.types = response.data;
-          this.isLoading = false;
+          this.loading = false;
         });
         this.person.code = 0;
       }
@@ -374,9 +374,9 @@ export default {
         }
       });
       if (canSubmit) {
-        this.isLoading = true;
+        this.loading = true;
         axios.post('/api/person/mod/' + this.person.code, this.person).then((response) => {
-          this.isLoading = false;
+          this.loading = false;
           if (response.data.result == 2) {
             Swal.fire({
               text: 'قبلا ثبت شده است.',

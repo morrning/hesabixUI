@@ -65,3 +65,7 @@ div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2
 div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled {
     color: white;
 }
+
+.swal2-container {
+    z-index: 20000 !important;
+}

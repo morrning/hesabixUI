@@ -47,7 +47,7 @@ const vuetify = createVuetify({
                             class:'text-caption text-danger'
                         },
                         VBtn: {
-                            class:'text-danger',
+                            class:'text-primary',
                             variant:'flat'
                         },
                     },
@@ -109,7 +109,8 @@ const vuetify = createVuetify({
                     primaryLight2: '#edf1fc',
                     success: '#457237',
                     toolbar: colors.indigo.lighten5,
-                    primaryDark: colors.indigo.darken4
+                    primaryDark: colors.indigo.darken4,
+                    btnAdd: '#5696bd'
                 }
             },
         },
