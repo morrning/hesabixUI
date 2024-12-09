@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import quickAddCommodity from "../component/commodity/quickAddCommodity.vue";
 import quickView from "../component/person/quickView.vue";
 import quickAdd from "../component/person/quickAdd.vue";
+import { useDebounceFn } from "@vueuse/core"
 
 export default defineComponent({
   name: "fastMod",
@@ -14,8 +15,29 @@ export default defineComponent({
     quickView,
     quickAdd,
   },
-  data: () => {
+  data() {
+    const self = this;
     return {
+      barcodeSearch: '',
+      onInput: useDebounceFn(() => {
+        if (self.barcodeSearch != '') {
+          self.loading = true;
+          axios.post('/api/commodity/list/search/barcode', { barcode: self.barcodeSearch }).then((response) => {
+            self.loading = false;
+            if (response.data.Success == true) {
+              self.addFastItem(response.data.data);
+            }
+            else {
+              Swal.fire({
+                text: self.$t('dialog.commodity_not_found'),
+                icon: 'error',
+                confirmButtonText: 'قبول'
+              })
+            }
+            self.barcodeSearch = '';
+          })
+        }
+      }, 500),
       tabs: 0,
       canSubmitRecpDoc: true,
       canPdf: true,
@@ -67,7 +89,7 @@ export default defineComponent({
     }
   },
   methods: {
-    searchPerson(query, loading) {
+    searchPerson(query: any, loading: any) {
       loading(true);
       axios.post('/api/person/list/search', { search: query }).then((response) => {
         this.persons = response.data;
@@ -295,12 +317,12 @@ export default defineComponent({
             });
           })
         }
-        else{
+        else {
           Swal.fire({
-              text: 'قیمت یکی از اقلام صفر است',
-              icon: 'error',
-              confirmButtonText: 'قبول'
-            })
+            text: 'قیمت یکی از اقلام صفر است',
+            icon: 'error',
+            confirmButtonText: 'قبول'
+          })
         }
       }
     },
@@ -325,8 +347,6 @@ export default defineComponent({
   },
   mounted() {
     this.loadData();
-  },
-  unmounted() {
   },
   watch: {
     itemsSelected: {
@@ -414,8 +434,14 @@ export default defineComponent({
                   </div>
                 </div>
                 <div class="card-body p-0">
+                  <v-text-field :loading="loading" v-model="barcodeSearch" @input="onInput" clearable :label="$t('dialog.barcode')"
+                     color="primary" class="pa-2" density="comfortable" variant="outlined" >
+                    <template v-slot:append-inner="{props}">
+                      <v-icon color="danger" icon="mdi-barcode-scan"></v-icon>
+                    </template>
+                    </v-text-field>
                   <v-cob dir="rtl" @search="searchCommodity" :filterable="false" :options="commodity" label="name"
-                    v-model="selectedCommodity" class="rounded-0 m-1 cobcom">
+                    v-model="selectedCommodity" class="rounded-0 m-1 cobcom" :placeholder="$t('dialog.search')">
                     <template #no-options="{ search, searching, loading }">
                       وردی یافت نشد!
                     </template>

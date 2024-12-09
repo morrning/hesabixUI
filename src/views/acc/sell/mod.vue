@@ -128,7 +128,7 @@
       <div class="container">
         <div class="row">
           <div class="col-12">
-            <v-bottom-sheet inset class="float-start" v-model="addsheet">
+            <v-bottom-sheet fullscreen inset class="float-start" v-model="addsheet">
               <template v-slot:activator="{ props }">
                 <v-btn v-bind="props" color="primary" class="">
                   <v-icon>mdi-plus</v-icon>
@@ -249,7 +249,7 @@
                 </v-row>
               </v-card>
             </v-bottom-sheet>
-            <v-bottom-sheet inset class="float-start" v-model="editsheet">
+            <v-bottom-sheet fullscreen inset class="float-start" v-model="editsheet">
               <v-card class="bg-white" :loading="loading">
                 <v-toolbar color="toolbar" :title="$t('drawer.commodity')">
                   <template v-slot:prepend>
@@ -265,7 +265,7 @@
                     <v-icon icon="mdi-content-save"></v-icon>
                   </v-btn>
                 </v-toolbar>
-                <div class="row pa-2 my-auto">
+                <div class="row pa-2">
                   <div class="col-sm-12 col-md-6 mb-0">
                     <div class="block block-rounded border">
                       <div class="block-header block-header-default py-1">

@@ -30,10 +30,13 @@ export default defineComponent({
   methods: {
     loadData() {
       this.isLoading = true;
-      axios.post('/api/person/info/' + this.$props.code).then((response) => {
-        this.isLoading = false;
-        this.selectedPerson = response.data;
-      });
+      if (this.$props.code != undefined) {
+        axios.post('/api/person/info/' + this.$props.code).then((response) => {
+          this.isLoading = false;
+          this.selectedPerson = response.data;
+        });
+      }
+
     }
   },
   mounted() {
@@ -91,10 +94,10 @@ export default defineComponent({
                 </div>
                 <div class="fw-bold mb-2">بستانکار: <small class="text-primary">{{
                   this.$filters.formatNumber(selectedPerson.bs)
-                }}</small></div>
+                    }}</small></div>
                 <div class="fw-bold mb-2">بدهکار: <small class="text-primary">{{
                   this.$filters.formatNumber(selectedPerson.bd)
-                }}</small></div>
+                    }}</small></div>
                 <div class="fw-bold mb-2">تراز حسابداری: <small class="text-primary">{{
                   this.$filters.formatNumber(selectedPerson.balance) }}</small></div>
               </div>

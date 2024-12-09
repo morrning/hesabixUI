@@ -41,7 +41,7 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <v-bottom-sheet inset>
+    <v-bottom-sheet fullscreen inset>
       <template v-slot:activator="{ props }">
         <v-btn v-bind="props" icon="">
           <v-icon icon="mdi-list-box-outline"></v-icon>
