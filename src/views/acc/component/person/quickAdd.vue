@@ -160,7 +160,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <v-btn v-if="$props.btn == true" :disabled="this.$props.code == undefined" @click="loadData(); dialog = true"
+    <v-btn v-if="$props.btn == true" @click="loadData(); dialog = true"
         icon="mdi-plus" class="text-primary" variant="plain" density="compact" :title="$t('dialog.new')">
     </v-btn>
 
