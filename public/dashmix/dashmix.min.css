@@ -6212,7 +6212,6 @@ fieldset:disabled .btn {
     display: block;
     padding: var(--bs-tooltip-arrow-height);
     margin: var(--bs-tooltip-margin);
-    font-family: 'Vazirmatn FD', Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;
@@ -6333,7 +6332,6 @@ fieldset:disabled .btn {
     z-index: var(--bs-popover-zindex);
     display: block;
     max-width: var(--bs-popover-max-width);
-    font-family: 'Vazirmatn FD', Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;
@@ -13583,9 +13581,7 @@ small {
     border-color: #dfe4f1
 }
 
-.form-control {
-    font-family: 'Vazirmatn FD', Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
-}
+.form-control {}
 
 .form-control.form-control-alt {
     border-color: #edf0f7;
@@ -13619,9 +13615,7 @@ small {
     background-color: #f7d4c7
 }
 
-.form-select {
-    font-family: 'Vazirmatn FD', Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
-}
+.form-select {}
 
 .form-select.form-control-alt {
     border-color: #edf0f7;
@@ -33706,7 +33700,6 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 
 .jqstooltip {
     box-sizing: content-box;
-    font-family: 'Vazirmatn FD', Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     border: none!important;
     background-color: rgba(0, 0, 0, .75)!important;
     border-radius: .25rem
@@ -33714,7 +33707,6 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 
 .jvectormap-tip {
     padding: .375rem .5rem;
-    font-family: 'Vazirmatn FD', Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     background: #044792;
     border: none;
     border-radius: 0
@@ -33767,7 +33759,6 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 
 .select2-container .select2-dropdown .select2-search__field {
     padding: .25rem .75rem;
-    font-family: 'Vazirmatn FD', Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     border-radius: .375rem;
     box-shadow: none
 }
@@ -33881,7 +33872,6 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 .select2-container--default .select2-search--inline .select2-search__field {
     padding-right: 0;
     padding-left: 0;
-    font-family: 'Vazirmatn FD', Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     box-shadow: none
 }
 

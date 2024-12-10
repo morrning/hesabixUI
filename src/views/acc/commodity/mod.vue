@@ -1,196 +1,197 @@
 <template>
-  <!-- Modal -->
-  <div class="modal modal-lg fade" data-bs-backdrop="static" data-bs-keyboard="false" id="pricesModal" tabindex="-1" aria-labelledby="pricesModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 text-primary-dark" id="pricesModalLabel">
-            سایر قیمت‌های فروش
-          </h1>
-          <div class="block-options">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-sm-12 col-md-12" v-for="price in data.prices">
+  <v-toolbar color="toolbar" :title="$t('dialog.commodity_info')">
+    <template v-slot:prepend>
+      <v-tooltip :text="$t('dialog.back')" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" @click="this.$router.back()" class="d-none d-sm-flex" variant="text"
+            icon="mdi-arrow-right" />
+        </template>
+      </v-tooltip>
+    </template>
+    <v-spacer></v-spacer>
+    <v-btn :loading="loading" @click="save()" icon="" color="green">
+      <v-tooltip activator="parent" :text="$t('dialog.save')" location="bottom" />
+      <v-icon icon="mdi-content-save"></v-icon>
+    </v-btn>
+    <template v-slot:extension>
+      <v-tabs color="primary" class="bg-light" grow v-model="tabs">
+        <v-tab value="0">
+          {{ $t('dialog.general') }}
+        </v-tab>
+        <v-tab value="1">
+          {{ $t('dialog.prices') }}
+        </v-tab>
+        <v-tab value="2">
+          {{ $t('dialog.existly') }}
+        </v-tab>
+        <v-tab value="3">
+          {{ $t('dialog.tax') }}
+        </v-tab>
+      </v-tabs>
+    </template>
+  </v-toolbar>
+  <v-row class="pa-1">
+    <v-col>
+      <v-tabs-window v-model="tabs">
+        <v-tabs-window-item value="0">
+          <v-card>
+            <v-card-text>
+              <div class="row py-3">
+                <div class="col-sm-6 col-md-6 mb-1">
+                  <div>
+                    <label class="me-4 text-primary">نوع کالا یا خدمات</label>
+                    <div class="form-check form-check-inline">
+                      <input v-model="this.data.khadamat" class="form-check-input" type="radio" value="true">
+                      <label class="form-check-label" for="inlineCheckbox1">خدمات</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input v-model="this.data.khadamat" class="form-check-input" type="radio" value="false">
+                      <label class="form-check-label" for="inlineCheckbox2">کالا و اقلام فیزیکی</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6 mb-1">
+                  <div class="space-y-2">
+                    <div class="form-check form-switch">
+                      <input v-model="this.data.speedAccess" class="form-check-input" type="checkbox">
+                      <label class="form-check-label">دسترسی سریع</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="row">
-                <div class="col-sm-6 col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" readonly="readonly"
-                      v-model="price.list.label">
-                    <label for="floatingInput">لیست</label>
+                <div class="col-sm-12 col-md-6">
+                  <div class="form-floating mb-4">
+                    <input v-model="data.name" class="form-control" type="text">
+                    <label class="form-label"><span class="text-danger">(لازم)</span> نام کالا/خدمات</label>
                   </div>
                 </div>
-                <div class="col-sm-6 col-md-6">
-                  <div class="form-floating mb-3">
-                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="price.priceSell" />
-                    <label for="floatingInput">قیمت فروش</label>
+                <div class="col-sm-12 col-md-6">
+                  <div class="form-floating mb-4">
+                    <select v-model="data.unit" class="form-select">
+                      <option v-for="option in units" :key="option.name" :value="option.name">
+                        {{ option.name }}
+                      </option>
+                    </select>
+                    <label class="form-label">واحد شمارش</label>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="col-sm-12 col-md-12" v-if="data.prices.length == 0 && this.isLoading == false">
-              <h5 class="text-danger">تاکنون هیچ لیست قیمتی ایجاد نشده است.برای ثبت قیمت‌های فرعی ابتدا یک لیست ایجاد
-                کنید.</h5>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-            <i class="fa fa-save me-2"></i>
-            ثبت
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+                <div class="col-sm-12 col-md-12 mb-4">
+                  <small class="mb-2">دسته بندی</small>
+                  <select class="form-select" aria-label="دسته‌بندی" v-model="this.data.cat">
+                    <option v-for="(item, index) in listCats" :value="item.id">{{ item.name }}</option>
+                  </select>
+                </div>
+                <div class="row mx-0 px-0">
+                  <div class="col-sm-12 col-md-12">
+                    <div class="form-floating mb-4">
+                      <input placeholder="بارکد‌ها را با ; از هم جدا کنید" v-model="data.barcodes" class="form-control"
+                        type="text">
+                      <label class="form-label">
+                        بارکد‌ها
+                        <small class="text-danger">
+                          (بارکد‌ها را با ; از هم جدا کنید)
+                        </small>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                  <div class="form-floating mb-4">
+                    <input v-model="data.des" class="form-control" type="text">
+                    <label class="form-label">توضیحات</label>
+                  </div>
+                </div>
 
-  <div class="block block-content-full ">
-    <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
-      <h3 class="block-title text-primary-dark">
-        <button type="button" @click="this.$router.back()" class="btn text-warning mx-2 px-2">
-          <i class="fa fw-bold fa-arrow-right"></i>
-        </button>
-        مشخصات کالا و خدمات
-      </h3>
-      <div class="block-options">
-        <button @click="save()" type="button" class="btn btn-sm btn-alt-primary">
-          <i class="fa fa-save me-1"></i>
-          ثبت
-        </button>
-      </div>
-    </div>
-    <div class="block-content py-3 vl-parent">
-      <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false" />
-      <div class="container">
-        <div class="row py-3">
-          <div class="col-sm-12 col-md-12 mb-1">
-            <div>
-              <label class="me-4 text-primary">نوع کالا یا خدمات</label>
-              <div class="form-check form-check-inline">
-                <input v-model="this.data.khadamat" class="form-check-input" type="radio" value="true">
-                <label class="form-check-label" for="inlineCheckbox1">خدمات</label>
               </div>
-              <div class="form-check form-check-inline">
-                <input v-model="this.data.khadamat" class="form-check-input" type="radio" value="false">
-                <label class="form-check-label" for="inlineCheckbox2">کالا و اقلام فیزیکی</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-6 mb-1">
-            <div class="space-y-2">
-              <div class="form-check form-switch">
-                <input v-model="this.data.speedAccess" class="form-check-input" type="checkbox">
-                <label class="form-check-label">دسترسی سریع</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-6 mb-1">
-            <div class="space-y-2">
-              <div class="form-check form-switch">
-                <input v-model="this.data.withoutTax" class="form-check-input" type="checkbox">
-                <label class="form-check-label">معاف از مالیات</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <input v-model="data.name" class="form-control" type="text">
-              <label class="form-label"><span class="text-danger">(لازم)</span> نام کالا/خدمات</label>
-            </div>
-            <div class="form-floating mb-4">
-              <select v-model="data.unit" class="form-select">
-                <option v-for="option in units" :key="option.name" :value="option.name">
-                  {{ option.name }}
-                </option>
-              </select>
-              <label class="form-label">واحد شمارش</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <div class="form-floating mb-4">
-              <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceBuy" />
-              <label class="form-label">قیمت خرید</label>
-            </div>
-            <div class="input-group mb-3">
-              <button  v-if="isPluginActive('accpro')" class="input-group-text bg-alt-primary" type="button" title="لیست قیمت‌ها" data-bs-toggle="modal"
-                data-bs-target="#pricesModal">
-                <i class="fa fa-list"></i>
-              </button>
-              <div class="form-floating">
-                <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceSell" />
-                <label class="form-label">قیمت فروش</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-12 mb-4">
-            <small class="mb-2">دسته بندی</small>
-            <select class="form-select" aria-label="دسته‌بندی" v-model="this.data.cat">
-              <option v-for="(item, index) in listCats" :value="item.id">{{ item.name }}</option>
-            </select>
-          </div>
-          <div class="row mx-0 px-0">
-            <div class="col-sm-12 col-md-12">
-              <div class="form-floating mb-4">
-                <input placeholder="بارکد‌ها را با ; از هم جدا کنید" v-model="data.barcodes" class="form-control"
-                  type="text">
-                <label class="form-label">
-                  بارکد‌ها
-                  <small class="text-danger">
-                    (بارکد‌ها را با ; از هم جدا کنید)
-                  </small>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-12">
-            <div class="form-floating mb-4">
-              <input v-model="data.des" class="form-control" type="text">
-              <label class="form-label">توضیحات</label>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-12">
-            <b class="text-primary-dark me-3">موجودی کالا</b>
-            <label class="text-muted">تنظیمات بخش موجودی کالا تنها برای نوع کالا اعمال می‌شود و برای نوع خدمات نادیده
-              گرفته می‌شود.</label>
-            <div class="space-y-2">
-              <div class="form-check form-switch">
-                <input v-model="data.commodityCountCheck" class="form-check-input" type="checkbox">
-                <label class="form-check-label">کنترل موجودی</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-12 col-md-4 mt-2">
-                <div class="form-floating mb-4">
-                  <input v-model="data.minOrderCount"
-                    @blur="(event) => { if (this.data.minOrderCount === '' || this.data.minOrderCount === 0) { this.data.minOrderCount = 1 } }"
-                    @keypress="this.$filters.onlyNumber($event)" class="form-control" type="number" min="1">
-                  <label class="form-label">حداقل سفارش</label>
+            </v-card-text>
+          </v-card>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="1">
+          <v-card>
+            <v-card-text>
+              <div class="row">
+                <div class="col-sm-12 col-md-6">
+                  <div class="form-floating mb-4">
+                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceBuy" />
+                    <label class="form-label">قیمت خرید</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <div class="form-floating mb-4">
+                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceSell" />
+                    <label class="form-label">قیمت فروش</label>
+                  </div>
+                </div>
+                <div v-if="isPluginActive('accpro')" class="col-sm-12 col-md-6" v-for="price in data.prices">
+                  <div class="form-floating mb-4">
+                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceBuy" />
+                    <label class="form-label">{{ price.list.label }}</label>
+                  </div>
                 </div>
               </div>
-              <div class="col-sm-12 col-md-4 mt-2">
-                <div class="form-floating mb-4">
-                  <input v-model="data.orderPoint" @keypress="this.$filters.onlyNumber($event)" class="form-control"
-                    type="number" min="1">
-                  <label class="form-label">نقطه سفارش</label>
+            </v-card-text>
+          </v-card>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="2">
+          <v-card>
+            <v-card-text>
+              <div class="col-sm-12 col-md-12">
+                <b class="text-primary-dark me-3">موجودی کالا</b>
+                <label class="text-muted">تنظیمات بخش موجودی کالا تنها برای نوع کالا اعمال می‌شود و برای نوع خدمات
+                  نادیده
+                  گرفته می‌شود.</label>
+                <div class="space-y-2">
+                  <div class="form-check form-switch">
+                    <input v-model="data.commodityCountCheck" class="form-check-input" type="checkbox">
+                    <label class="form-check-label">کنترل موجودی</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-4 mt-2">
+                    <div class="form-floating mb-4">
+                      <input v-model="data.minOrderCount"
+                        @blur="(event) => { if (this.data.minOrderCount === '' || this.data.minOrderCount === 0) { this.data.minOrderCount = 1 } }"
+                        @keypress="this.$filters.onlyNumber($event)" class="form-control" type="number" min="1">
+                      <label class="form-label">حداقل سفارش</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-4 mt-2">
+                    <div class="form-floating mb-4">
+                      <input v-model="data.orderPoint" @keypress="this.$filters.onlyNumber($event)" class="form-control"
+                        type="number" min="1">
+                      <label class="form-label">نقطه سفارش</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-4 mt-2">
+                    <div class="form-floating mb-4">
+                      <input v-model="data.dayLoading" @keypress="this.$filters.onlyNumber($event)" class="form-control"
+                        type="number">
+                      <label class="form-label">زمان انتظار(روز)</label>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="col-sm-12 col-md-4 mt-2">
-                <div class="form-floating mb-4">
-                  <input v-model="data.dayLoading" @keypress="this.$filters.onlyNumber($event)" class="form-control"
-                    type="number">
-                  <label class="form-label">زمان انتظار(روز)</label>
+            </v-card-text>
+          </v-card>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="3">
+          <v-card>
+            <v-card-text>
+              <div class="col-sm-6 col-md-6 mb-1">
+                <div class="space-y-2">
+                  <div class="form-check form-switch">
+                    <input v-model="this.data.withoutTax" class="form-check-input" type="checkbox">
+                    <label class="form-check-label">معاف از مالیات</label>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+            </v-card-text>
+          </v-card>
+        </v-tabs-window-item>
+      </v-tabs-window>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -212,8 +213,9 @@ export default {
   },
   data: () => {
     return {
-      isLoading: false,
-      plugins:[],
+      tabs: 0,
+      loading: false,
+      plugins: [],
       units: '',
       priceList: [],
       data: {
@@ -264,7 +266,7 @@ export default {
       return this.plugins[plugName] !== undefined;
     },
     loadData(id = '') {
-      this.isLoading = true;
+      this.loading = true;
       //get active plugins
       axios.post('/api/plugin/get/actives',).then((response) => {
         this.plugins = response.data;
@@ -302,7 +304,7 @@ export default {
       });
       if (id != '') {
         //load info
-        this.isLoading = true;
+        this.loading = true;
         axios.post('/api/commodity/info/' + id).then((response) => {
           this.data = response.data;
           if (this.data.prices.length == 0) {
@@ -311,7 +313,7 @@ export default {
           }
         });
       }
-      this.isLoading = false;
+      this.loading = false;
     },
     save() {
       if (this.data.name.length === 0)
@@ -321,9 +323,9 @@ export default {
           confirmButtonText: 'قبول'
         });
       else {
-        this.isLoading = true;
+        this.loading = true;
         axios.post('/api/commodity/mod/' + this.data.code, this.data).then((response) => {
-          this.isLoading = false;
+          this.loading = false;
           if (response.data.result == 2) {
             Swal.fire({
               text: 'قبلا ثبت شده است.',
@@ -347,6 +349,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
