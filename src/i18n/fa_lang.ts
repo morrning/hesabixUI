@@ -13,6 +13,7 @@ const fa_lang = {
     mb: "مگابایت",
   },
   drawer: {
+    open_balance: "تراز افتتاحیه",
     sell_invoices_long: "فاکتور‌های فروش",
     person_info: "مشخصات شخص",
     dashboard: "پیشخوان",
