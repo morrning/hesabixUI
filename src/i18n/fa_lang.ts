@@ -3,6 +3,9 @@ const fa_lang = {
   $vuetify: {
     ...fa,
   },
+  info: {
+    sell_pairdocs: "با افزودن فاکتور‌های خرید مرتبط با این فاکتور نحوه محاسبه سود و ... بر مبنای فاکتور‌های انتخابی محاسبه خواهد شد."
+  },
   currency: {
     irr: {
       short: "ریال",
@@ -123,6 +126,12 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    search_invoice: "جست‌و‌جوی فاکتور خرید",
+    operation: "عملیات",
+    row: "ردیف",
+    invoice_num: "شماره فاکتور",
+    type: "نوع",
+    invoice_person: "طرف حساب",
     sell_invoice: "فاکتور فروش",
     invoice_info: "اطلاعات فاکتور",
     comsofinvoice: "اقلام",
