@@ -31,7 +31,7 @@
               <v-cob class="mb-1 mx-0" :filterable="true" dir="rtl" :options="moneyAll" label="label"
                 v-model="selectedMoney">
                 <template #no-options="{ search, searching, loading }">
-                  منتیجه‌ای یافت نشد!
+                  نتیجه‌ای یافت نشد!
                 </template>
                 <template v-slot:option="option">
                   <div class="row">

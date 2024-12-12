@@ -61,7 +61,7 @@
                         <small class="mb-2">مرکز درآمد</small>
                         <treeselect :disable-branch-nodes="true" v-model="item.id" :multiple="false"
                           :options="listIncomes" placeholder="انتخاب  مرکز درآمد" noOptionsText="آیتمی انتخاب نشده است."
-                          noChildrenText="فاقد زیرمجموعه" noResultsText="منتیجه‌ای یافت نشد" />
+                          noChildrenText="فاقد زیرمجموعه" noResultsText="نتیجه‌ای یافت نشد" />
                       </div>
                       <div class="col-sm-12 col-md-12">
                         <small class="mb-2">مبلغ</small>

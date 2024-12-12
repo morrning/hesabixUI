@@ -116,7 +116,7 @@ export default defineComponent({
             </li>
           </ul>
           <div v-if="items.length == 0">
-            منتیجه‌ای یافت نشد
+            نتیجه‌ای یافت نشد
           </div>
         </div>
       </div>
