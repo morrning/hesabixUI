@@ -54,7 +54,7 @@
                   <div class="form-floating mb-2">
                     <v-cob dir="rtl" :options="banks" label="name" v-model="this.sideOne.bank">
                       <template #no-options="{ search, searching, loading }">
-                        وردی یافت نشد!
+                        نتیجه‌ای یافت نشد!
                       </template>
                       <template #option="option">
                         <div class="row">
@@ -79,7 +79,7 @@
                   <div class="form-floating mb-2">
                     <v-cob dir="rtl" :options="cashdesks" label="name" v-model="this.sideOne.cashdesk">
                       <template #no-options="{ search, searching, loading }">
-                        وردی یافت نشد!
+                        نتیجه‌ای یافت نشد!
                       </template>
                       <template #option="option">
                         <div class="row">
@@ -103,7 +103,7 @@
                   <div class="form-floating mb-2">
                     <v-cob dir="rtl" :options="salarys" label="name" v-model="this.sideOne.salary">
                       <template #no-options="{ search, searching, loading }">
-                        وردی یافت نشد!
+                        نتیجه‌ای یافت نشد!
                       </template>
                       <template #option="option">
                         <div class="row">
@@ -159,7 +159,7 @@
                   <div class="form-floating mb-2">
                     <v-cob dir="rtl" :options="banks" label="name" v-model="this.sideTwo.bank">
                       <template #no-options="{ search, searching, loading }">
-                        وردی یافت نشد!
+                        نتیجه‌ای یافت نشد!
                       </template>
                       <template #option="option">
                         <div class="row">
@@ -183,7 +183,7 @@
                   <div class="form-floating mb-2">
                     <v-cob dir="rtl" :options="cashdesks" label="name" v-model="this.sideTwo.cashdesk">
                       <template #no-options="{ search, searching, loading }">
-                        وردی یافت نشد!
+                        نتیجه‌ای یافت نشد!
                       </template>
                       <template #option="option">
                         <div class="row">
@@ -207,7 +207,7 @@
                   <div class="form-floating mb-2">
                     <v-cob dir="rtl" :options="salarys" label="name" v-model="this.sideTwo.salary">
                       <template #no-options="{ search, searching, loading }">
-                        وردی یافت نشد!
+                        نتیجه‌ای یافت نشد!
                       </template>
                       <template #option="option">
                         <div class="row">

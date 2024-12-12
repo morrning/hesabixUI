@@ -23,7 +23,7 @@
                 <v-cob dir="rtl" :options="objectItems" label="name" v-model="selectedObjectItem"
                   @option:selected="updateRoute(selectedObjectItem.code)">
                   <template #no-options="{ search, searching, loading }">
-                    وردی یافت نشد!
+                    نتیجه‌ای یافت نشد!
                   </template>
                 </v-cob>
                 <hr />

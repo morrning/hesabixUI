@@ -60,7 +60,7 @@
                 <v-cob class="mb-1 mx-0" :filterable="false" dir="rtl" @search="searchPerson" :options="persons"
                   label="nikename" v-model="data.person">
                   <template #no-options="{ search, searching, loading }">
-                    وردی یافت نشد!
+                    نتیجه‌ای یافت نشد!
                   </template>
                   <template v-slot:option="option">
                     <div class="row mb-1">

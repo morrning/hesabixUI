@@ -115,7 +115,7 @@ export default defineComponent({
                         v-model="bankSelected"
                   >
                     <template #no-options="{ search, searching, loading }">
-                        وردی یافت نشد!
+                        نتیجه‌ای یافت نشد!
                     </template>
                 </v-cob>
               </div>

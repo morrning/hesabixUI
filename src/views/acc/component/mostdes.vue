@@ -147,7 +147,7 @@ export default defineComponent({
             </li>
           </ul>
           <div v-if="items.length == 0 && loading == false">
-            موردی یافت نشد
+            منتیجه‌ای یافت نشد
           </div>
         </div>
         <div class="modal-footer">

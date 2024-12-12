@@ -163,7 +163,7 @@ export default defineComponent({
                 <label class="form-label">انبار</label>
                 <v-cob dir="rtl" :options="storerooms" label="name" v-model="item.storeroom">
                   <template #no-options="{ search, searching, loading }">
-                    وردی یافت نشد!
+                    نتیجه‌ای یافت نشد!
                   </template>
                 </v-cob>
               </div>
@@ -215,25 +215,25 @@ export default defineComponent({
                 <v-cob v-if="this.item.type == 'buy'" dir="rtl" :options="buys" label="des" v-model="item.docBuy"
                   class="bg-white">
                   <template #no-options="{ search, searching, loading }">
-                    وردی یافت نشد!
+                    نتیجه‌ای یافت نشد!
                   </template>
                 </v-cob>
                 <v-cob v-if="this.item.type == 'sell'" dir="rtl" :options="sells" label="des" v-model="item.docSell"
                   class="bg-white">
                   <template #no-options="{ search, searching, loading }">
-                    وردی یافت نشد!
+                    نتیجه‌ای یافت نشد!
                   </template>
                 </v-cob>
                 <v-cob v-if="this.item.type == 'rfsell'" dir="rtl" :options="rfsells" label="des"
                   v-model="item.docRfsell" class="bg-white">
                   <template #no-options="{ search, searching, loading }">
-                    وردی یافت نشد!
+                    نتیجه‌ای یافت نشد!
                   </template>
                 </v-cob>
                 <v-cob v-if="this.item.type == 'rfbuy'" dir="rtl" :options="rfbuys" label="des"
                   v-model="item.docRfbuy" class="bg-white">
                   <template #no-options="{ search, searching, loading }">
-                    وردی یافت نشد!
+                    نتیجه‌ای یافت نشد!
                   </template>
                 </v-cob>
                 <div class="form-check mt-2 ms-3">

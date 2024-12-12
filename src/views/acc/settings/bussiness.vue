@@ -249,7 +249,7 @@
                         <v-cob dir="rtl" :options="listBanks" label="name" v-model="content.walletMatchBank"
                           @option:deselecting="" @search:focus="" @option:selecting="">
                           <template #no-options="{ search, searching, loading }">
-                            وردی یافت نشد!
+                            نتیجه‌ای یافت نشد!
                           </template>
                         </v-cob>
                       </div>

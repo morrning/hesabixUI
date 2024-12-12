@@ -94,7 +94,7 @@
                   <v-cob dir="rtl" @search="searchPerson" :options="listPersons" label="nikename"
                     v-model="selectedPerson" @option:selected="updateRoute(selectedPerson.code)">
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                     <template v-slot:option="option">
                       <div class="row mb-1">

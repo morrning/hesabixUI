@@ -26,7 +26,7 @@
             </div>
           </template>
           <template #no-options="{ search, searching, loading }">
-           وردی یافت نشد!
+           نتیجه‌ای یافت نشد!
           </template>
           <div slot="vs__no-options">No Options Her33333e!</div>
         </v-cob>

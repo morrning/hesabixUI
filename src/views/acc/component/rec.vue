@@ -349,7 +349,7 @@ export default defineComponent({
                           <label class="form-label">بانک</label>
                           <v-cob dir="rtl" :options="listBanks" label="name" v-model="pay.bank">
                             <template #no-options="{ search, searching, loading }">
-                              وردی یافت نشد!
+                              نتیجه‌ای یافت نشد!
                             </template>
                           </v-cob>
                         </div>
@@ -357,7 +357,7 @@ export default defineComponent({
                           <label class="form-label">صندوق</label>
                           <v-cob dir="rtl" :options="listCashdesks" label="name" v-model="pay.cashdesk">
                             <template #no-options="{ search, searching, loading }">
-                              وردی یافت نشد!
+                              نتیجه‌ای یافت نشد!
                             </template>
                           </v-cob>
                         </div>
@@ -371,7 +371,7 @@ export default defineComponent({
                           <label class="form-label">تنخواه گردان</label>
                           <v-cob dir="rtl" :options="listSalarys" label="name" v-model="pay.salary">
                             <template #no-options="{ search, searching, loading }">
-                              وردی یافت نشد!
+                              نتیجه‌ای یافت نشد!
                             </template>
                           </v-cob>
                         </div>

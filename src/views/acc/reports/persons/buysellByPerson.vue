@@ -42,7 +42,7 @@
                   <v-cob :filterable="false" dir="rtl" @search="searchPerson" :options="persons" label="nikename"
                     v-model="selectedPerson">
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                     <template v-slot:option="option">
                       <div class="row mb-1">
@@ -78,7 +78,7 @@
                   <label class="form-label">نوع</label>
                   <v-cob dir="rtl" :options="types" label="label" v-model="selectedType">
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                   </v-cob>
                 </div>

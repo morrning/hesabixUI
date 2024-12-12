@@ -20,7 +20,7 @@
           </label>
           <v-cob dir="rtl" class="" :options="persons" label="nikename" v-model="shareholder.person">
             <template #no-options="{ search, searching, loading }">
-              وردی یافت نشد!
+              نتیجه‌ای یافت نشد!
             </template>
           </v-cob>
         </div>

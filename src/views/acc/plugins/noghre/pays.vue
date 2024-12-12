@@ -262,7 +262,7 @@ export default defineComponent({
                                   v-model="this.transfer.bank"
                               >
                                 <template #no-options="{ search, searching, loading }">
-                                  وردی یافت نشد!
+                                  نتیجه‌ای یافت نشد!
                                 </template>
                               </v-cob>
                             </div>
@@ -277,7 +277,7 @@ export default defineComponent({
                                   v-model="this.transfer.cashdesk"
                               >
                                 <template #no-options="{ search, searching, loading }">
-                                  وردی یافت نشد!
+                                  نتیجه‌ای یافت نشد!
                                 </template>
                               </v-cob>
                             </div>
@@ -292,7 +292,7 @@ export default defineComponent({
                                   v-model="this.transfer.salary"
                               >
                                 <template #no-options="{ search, searching, loading }">
-                                  وردی یافت نشد!
+                                  نتیجه‌ای یافت نشد!
                                 </template>
                               </v-cob>
                             </div>

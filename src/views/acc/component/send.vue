@@ -363,7 +363,7 @@ export default defineComponent({
                       v-model="pay.bank"
                   >
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                   </v-cob>
                 </div>
@@ -377,7 +377,7 @@ export default defineComponent({
                       v-model="pay.chequeforpay"
                   >
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                   </v-cob>
                 </div>
@@ -391,7 +391,7 @@ export default defineComponent({
                       v-model="pay.cashdesk"
                   >
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                   </v-cob>
                 </div>
@@ -404,7 +404,7 @@ export default defineComponent({
                       v-model="pay.salary"
                   >
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                   </v-cob>
                 </div>

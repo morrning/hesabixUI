@@ -122,6 +122,11 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    sell_invoice: "فاکتور فروش",
+    invoice_info: "اطلاعات فاکتور",
+    comsofinvoice: "اقلام",
+    etc: "سایر",
+    pair_docs: "اسناد مرتبط",
     ok: "قبول",
     change_to: "تغییر به",
     delete_labels: "حذف برچسب‌‌ها",

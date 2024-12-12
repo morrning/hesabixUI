@@ -76,7 +76,7 @@
                         <v-cob dir="rtl" @search="searchPerson" :options="listPersons" label="nikename"
                           v-model="item.id" @option:deselecting="funcCanSubmit()" @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
-                            وردی یافت نشد!
+                            نتیجه‌ای یافت نشد!
                           </template>
                           <template v-slot:option="option">
                             <div class="row mb-1">
@@ -151,7 +151,7 @@
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
                           @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
-                            وردی یافت نشد!
+                            نتیجه‌ای یافت نشد!
                           </template>
                         </v-cob>
                       </div>
@@ -200,7 +200,7 @@
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
                           @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
-                            وردی یافت نشد!
+                            نتیجه‌ای یافت نشد!
                           </template>
                         </v-cob>
                       </div>
@@ -249,7 +249,7 @@
                           @option:deselecting="funcCanSubmit()" @search:focus="funcCanSubmit()"
                           @option:selecting="funcCanSubmit()">
                           <template #no-options="{ search, searching, loading }">
-                            وردی یافت نشد!
+                            نتیجه‌ای یافت نشد!
                           </template>
                         </v-cob>
                       </div>

@@ -183,7 +183,7 @@ export default defineComponent({
                   v-model="this.order.customer"
               >
                 <template #no-options="{ search, searching, loading }">
-                  وردی یافت نشد!
+                  نتیجه‌ای یافت نشد!
                 </template>
               </v-cob>
             </div>
@@ -285,7 +285,7 @@ export default defineComponent({
                       v-model="this.order.tarash"
                   >
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                   </v-cob>
                 </div>
@@ -310,7 +310,7 @@ export default defineComponent({
                       v-model="this.order.hakak"
                   >
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                   </v-cob>
                 </div>
@@ -335,7 +335,7 @@ export default defineComponent({
                       v-model="this.order.ghalam"
                   >
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                   </v-cob>
                 </div>
@@ -360,7 +360,7 @@ export default defineComponent({
                       v-model="this.order.morsa"
                   >
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                   </v-cob>
                 </div>

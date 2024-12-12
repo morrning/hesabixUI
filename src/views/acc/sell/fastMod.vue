@@ -443,7 +443,7 @@ export default defineComponent({
                   <v-cob dir="rtl" @search="searchCommodity" :filterable="false" :options="commodity" label="name"
                     v-model="selectedCommodity" class="rounded-0 m-1 cobcom" :placeholder="$t('dialog.search')">
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
 
                     <template v-slot:option="option">
@@ -479,7 +479,7 @@ export default defineComponent({
                   <v-cob :filterable="false" dir="rtl" @search="searchPerson" :options="persons" label="nikename"
                     v-model="person">
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                   </v-cob>
                 </div>
@@ -492,7 +492,7 @@ export default defineComponent({
                 <div class="card-body p-1">
                   <v-cob dir="rtl" :options="cashdesks" label="name" v-model="cashdesk">
                     <template #no-options="{ search, searching, loading }">
-                      وردی یافت نشد!
+                      نتیجه‌ای یافت نشد!
                     </template>
                   </v-cob>
                 </div>
