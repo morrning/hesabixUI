@@ -1,32 +1,6 @@
 <template>
   <v-container>
     <v-row class="d-flex justify-center">
-      <!-- pwa install banner -->
-      <v-card
-        v-if="installBanner"
-        class="d-flex justify-center rounded p-2 mt-2"
-        style="width: 350px; z-index: 9"
-      >
-        <v-row class="">
-          <v-col md="8" class="d-flex pr-5">
-            <img src="/img/logo-blue.png" width="38" class="mt-2 mb-2" alt="" />
-            <h4 class="text-primary pr-2 pt-4">{{ $t("app.name") }}</h4>
-          </v-col>
-          <v-col md="4" class="pl-5">
-            <v-btn
-              block
-              class="text-none mt-2 mb-2"
-              color="indigo-darken-3"
-              variant="flat"
-              @click="callInstallbtn"
-            >
-              نصب
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-card>
-    </v-row>
-    <v-row class="d-flex justify-center">
       <v-col md="5">
         <v-card
           :loading="loading ? 'blue' : null"
@@ -83,6 +57,16 @@
               </v-btn>
             </v-card-text>
           </v-form>
+          <div class="d-flex justify-center pb-5">
+            <v-btn
+              :loading="loading"
+              class="text-none"
+              color="primary"
+              variant="tonal"
+              flat
+              :to="{ name: 'install_pwa' }"
+              >نصب وب اپلیکیشن</v-btn>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -165,51 +149,6 @@ export default {
           });
       }
     },
-  },
-
-  setup() {
-    const installPromptEvent = ref<Event | null>(null);
-    const installBanner = ref(false);
-
-    // Call button method for install banner
-    const callInstallbtn = () => {
-      if (installPromptEvent.value) {
-        // Cast as BeforeInstallPromptEvent if needed
-        const event = installPromptEvent.value as BeforeInstallPromptEvent;
-        event.prompt();
-
-        event.userChoice.then((choiceResult: { outcome: string }) => {
-          if (choiceResult.outcome === "accepted") {
-            console.log("User Accepted");
-          } else {
-            console.log("User dismissed");
-          }
-
-          installPromptEvent.value = null;
-        });
-      }
-    };
-
-    // Set up event listener
-    onMounted(() => {
-      window.addEventListener("beforeinstallprompt", (e: Event) => {
-        e.preventDefault();
-        installPromptEvent.value = e;
-        console.log(installPromptEvent.value);
-      });
-
-      setTimeout(() => {
-        if (installPromptEvent.value) {
-          installBanner.value = true;
-        }
-      }, 1000);
-    });
-
-    return {
-      installPromptEvent,
-      installBanner,
-      callInstallbtn,
-    };
   },
 };
 </script>

@@ -854,6 +854,14 @@ const router = createRouter({
             ],
         },
         {
+            path: '/install-pwa',
+            name: 'install_pwa',
+            component: () => import('../views/user/InstallPWA.vue'),
+            meta: {
+                'title': 'نصب وب اپلیکیشن حسابیکس',
+            }
+        },
+        {
             path: "/:catchAll(.*)",
             name: "not-found",
             component: () => import("../views/NotFound.vue"),
