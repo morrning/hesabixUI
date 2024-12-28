@@ -126,6 +126,7 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    close: "بستن",
     deg: "دارائی‌ها",
     deg_info: "مجموع دارائی های اول دوره",
     search_invoice: "جست‌و‌جوی فاکتور خرید",

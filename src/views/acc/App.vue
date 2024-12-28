@@ -376,6 +376,7 @@ export default {
             :title="$t('drawer.accounting')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.accounting" to="/acc/accounting/list" :title="$t('drawer.accounting_docs')" />
+        <v-list-item v-if="permissions.accounting" to="/acc/accounting/open_balance" :title="$t('drawer.open_balance')" />
         <v-list-item v-if="permissions.accounting" to="/acc/accounting/table" :title="$t('drawer.accounting_table')" />
         <v-list-item v-if="permissions.plugAccproCloseYear && this.isPluginActive('accpro')"
           to="/acc/accounting/close_year" :title="$t('drawer.close_year')">

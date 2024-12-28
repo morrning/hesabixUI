@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import axios from "axios";
 import "./registerServiceWorker";
+import { vMaska } from "maska/vue"
 
 //pinia
 import { createPinia } from 'pinia'
@@ -19,6 +20,7 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import * as labsComponents from 'vuetify/labs/components'
 import colors from 'vuetify/util/colors'
 //i18n imports
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
@@ -38,17 +40,17 @@ const vuetify = createVuetify({
                 color: 'indigo-darken-2'
             },
             VList: {
-                density:'compact',
+                density: 'compact',
                 VListGroup: {
-                    density:'compact',
+                    density: 'compact',
                     VListItem: {
                         class: 'text-indigo-darken-4',
                         VListItemAction: {
-                            class:'text-caption text-danger'
+                            class: 'text-caption text-danger'
                         },
                         VBtn: {
-                            class:'text-primary',
-                            variant:'flat'
+                            class: 'text-primary',
+                            variant: 'flat'
                         },
                     },
                 }
@@ -75,13 +77,16 @@ const vuetify = createVuetify({
         VAppBar: {
             color: 'indigo-darken-2'
         },
-        VMenu:{
-            VList:{
-                density:"compact"
+        VMenu: {
+            VList: {
+                density: "compact"
             }
         }
     },
-    components,
+    components: {
+        ...components,
+        ...labsComponents
+    },
     directives,
     icons: {
         defaultSet: 'mdi',
@@ -188,7 +193,7 @@ app.use(LoadingPlugin)
 app.use(pinia)
 app.use(i18n)
 app.use(vuetify);
-
+app.directive("maska", vMaska)
 //global methods
 app.config.globalProperties.$filters = {
     formatNumber(value: any, moneyLabel: any = false) {

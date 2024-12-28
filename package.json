@@ -23,6 +23,7 @@
         "downloadjs": "^1.4.7",
         "file-saver": "^2.0.5",
         "libphonenumber-js": "^1.10.44",
+        "maska": "^3.0.4",
         "maz-ui": "^3.11.4",
         "pinia": "^2.2.6",
         "sweetalert2": "^11.6.13",
