@@ -18,6 +18,11 @@ export default defineComponent({
           title: 'ایده پیام',
           value: 'idepayam',
           props: { subtitle: 'idehpayam.com' },
+        },
+        {
+          title: 'ّIPPanel فراز اس ام اس',
+          value: 'ippanel',
+          props: { subtitle: 'ippanel.com' },
         }
       ],
       form: {

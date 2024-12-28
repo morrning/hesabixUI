@@ -503,8 +503,13 @@
             <v-card-text>
               <v-alert color="info" icon="mdi-information-box" :text="$t('info.sell_pairdocs')"
                 variant="tonal"></v-alert>
-              <v-autocomplete search="searchBuyDoc" :loading="loading" prepend-inner-icon="mdi-file-search" class="mt-2"
-                hide-details="auto" :label="$t('dialog.search_invoice')" :items="data.pair_docs"></v-autocomplete>
+              <v-autocomplete :loading="loading" prepend-inner-icon="mdi-file-search" class="mt-2" hide-details="auto"
+                :label="$t('dialog.search_invoice')" :items="buyDocs" item-value="code">
+                <template v-slot:item="{ props, item }">
+                  <v-list-item v-bind="props" :prepend-avatar="item.raw.avatar" :subtitle="item.raw.group"
+                    :title="item.raw.name"></v-list-item>
+                </template>
+              </v-autocomplete>
               <v-table density="compact">
                 <thead class="bg-gray">
                   <tr>
@@ -569,6 +574,7 @@
       return {
         tabs: 0,
         searchBuyDoc: '',
+        buyDocs: [],
         addsheet: false,
         editsheet: false,
         priceList: [],
@@ -1065,6 +1071,14 @@
             });
           });
         }
+        //load buy docs for pair docs
+        axios.post('/api/buy/docs/search', {
+          type: 'buy'
+        })
+          .then((response) => {
+            this.buyDocs = response.data;
+            this.loading = false;
+          })
       },
       save() {
         this.canSubmit = false;

@@ -125,7 +125,7 @@
                 </div>
                 <div v-if="isPluginActive('accpro')" class="col-sm-12 col-md-6" v-for="price in data.prices">
                   <div class="form-floating mb-4">
-                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="data.priceBuy" />
+                    <money3 v-bind="currencyConfig" min=0 class="form-control" v-model="price.priceSell" />
                     <label class="form-label">{{ price.list.label }}</label>
                   </div>
                 </div>
