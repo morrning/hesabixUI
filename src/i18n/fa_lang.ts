@@ -126,6 +126,10 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    sum: "مجموع",
+    total: "جمع کل",
+    shareloders_equity: "حقوق سهامداران",
+    shareloders_equity_info: "دارايی ها و سرمایه سهامداران",
     close: "بستن",
     deg: "دارائی‌ها",
     deg_info: "مجموع دارائی های اول دوره",
