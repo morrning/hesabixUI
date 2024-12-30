@@ -536,11 +536,12 @@
                 <tbody>
                   <tr v-for="(item, index) in pair_docs" :key="item.name" class="text-center">
                     <td>{{ index }}</td>
-                    <td>{{ item.code }}</td>
+                    <td><RouterLink :to="'/acc/sell/mod/' + item.code">{{ item.code }}</RouterLink></td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.person.nikename }}</td>
                     <td>
-                      <v-chip variant="tonal" class="me-1" size="small" color="primary" v-for="commodity in item.commodities">
+                      <v-chip variant="tonal" class="me-1" size="small" color="primary"
+                        v-for="commodity in item.commodities">
                         {{ commodity.name }}
                       </v-chip>
                     </td>
@@ -1065,41 +1066,44 @@
           .then((response) => {
             this.sms = response.data.sendAfterSell;
           });
-        //load data for edit document
-        if (this.$route.params.id != '') {
-          axios.get('/api/sell/get/info/' + this.$route.params.id).then((response) => {
-            this.data.date = response.data.date;
-            this.data.des = response.data.des;
-            this.data.person = response.data.person;
-            this.data.transferCost = response.data.transferCost
-            this.data.discountAll = response.data.discountAll
-            response.data.rows.forEach((item, key) => {
-              if (item.commodity != null) {
-                this.items.push({
-                  commodity: item.commodity,
-                  count: item.commodity_count,
-                  price: parseInt((parseInt(item.bs) - parseInt(item.tax) + parseInt(item.discount)) / parseInt(item.commodity_count)),
-                  bs: item.bs,
-                  bd: item.bd,
-                  type: 'commodity',
-                  id: item.commodity.id,
-                  des: item.des,
-                  discount: item.discount,
-                  tax: item.tax,
-                  sumWithoutTax: item.bs - item.tax,
-                  sumTotal: item.bs,
-                  table: 53
-                });
-              }
-            });
-          });
-        }
+
         //load buy docs for pair docs
         axios.post('/api/buy/docs/search', {
           type: 'buy'
         })
           .then((response) => {
             this.buyDocs = response.data;
+            //load data for edit document
+            if (this.$route.params.id != '') {
+              axios.get('/api/sell/get/info/' + this.$route.params.id).then((response) => {
+                this.data.date = response.data.date;
+                this.data.des = response.data.des;
+                this.data.person = response.data.person;
+                this.data.transferCost = response.data.transferCost
+                this.data.discountAll = response.data.discountAll
+                this.data.pair_docs = response.data.pair_docs
+
+                response.data.rows.forEach((item, key) => {
+                  if (item.commodity != null) {
+                    this.items.push({
+                      commodity: item.commodity,
+                      count: item.commodity_count,
+                      price: parseInt((parseInt(item.bs) - parseInt(item.tax) + parseInt(item.discount)) / parseInt(item.commodity_count)),
+                      bs: item.bs,
+                      bd: item.bd,
+                      type: 'commodity',
+                      id: item.commodity.id,
+                      des: item.des,
+                      discount: item.discount,
+                      tax: item.tax,
+                      sumWithoutTax: item.bs - item.tax,
+                      sumTotal: item.bs,
+                      table: 53
+                    });
+                  }
+                });
+              });
+            }
             this.loading = false;
           })
       },
@@ -1130,7 +1134,8 @@
             discountAll: this.data.discountAll,
             transferCost: this.data.transferCost,
             update: this.$route.params.id,
-            sms: this.sms
+            sms: this.sms,
+            pair_docs: this.data.pair_docs
           }).then((response) => {
             this.loading = false;
             if (response.data.code == 0) {
