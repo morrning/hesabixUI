@@ -12,6 +12,9 @@
   </v-toolbar>
   <v-container>
     <v-row class="pa-1">
+      <v-col v-if="sums.degSum != sums.shareSum" cols="12" sm="12" md="12">
+        <v-alert :title="$t('dialog.error')" :text="$t('dialog.openbalance_notvalid')" type="warning"></v-alert>
+      </v-col>
       <v-col cols="12" sm="12" md="6">
         <v-card :title="$t('dialog.deg')" :subtitle="$t('dialog.deg_info')" color="success">
           <v-card-text class="px-0 pb-0">

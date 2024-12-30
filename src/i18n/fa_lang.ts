@@ -126,6 +126,11 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    commodities: "کالاها و خدمات",
+    date: "تاریخ",
+    suplayer: "تامین کننده",
+    amount: "جمع فاکتور",
+    openbalance_notvalid: "تراز افتتاحیه دارای ناترازی است و می‌بایست جمع کل هر دو ستون برابر باشد!",
     sum: "مجموع",
     total: "جمع کل",
     shareloders_equity: "حقوق سهامداران",

@@ -504,13 +504,13 @@
               <v-alert color="info" icon="mdi-information-box" :text="$t('info.sell_pairdocs')"
                 variant="tonal"></v-alert>
               <v-autocomplete :loading="loading" prepend-inner-icon="mdi-file-search" class="mt-2" hide-details="auto"
-                :label="$t('dialog.search_invoice')" :items="buyDocs" item-value="code">
+                chips closable-chips multiple :label="$t('dialog.search_invoice')" v-model="data.pair_docs"
+                :items="buyDocs" item-title="code" item-value="code">
                 <template v-slot:item="{ props, item }">
-                  <v-list-item v-bind="props" :prepend-avatar="item.raw.avatar" :subtitle="item.raw.group"
-                    :title="item.raw.name"></v-list-item>
+                  <v-list-item v-bind="props" @click="console.log(data.pair_docs)" :title="item.title"></v-list-item>
                 </template>
               </v-autocomplete>
-              <v-table density="compact">
+              <v-table density="compact" class="border">
                 <thead class="bg-gray">
                   <tr>
                     <th class="text-center">
@@ -520,21 +520,31 @@
                       {{ $t('dialog.invoice_num') }}
                     </th>
                     <th class="text-center">
-                      {{ $t('dialog.invoice_person') }}
+                      {{ $t('dialog.date') }}
                     </th>
                     <th class="text-center">
-                      {{ $t('dialog.type') }}
+                      {{ $t('dialog.suplayer') }}
                     </th>
                     <th class="text-center">
-                      {{ $t('dialog.operation') }}
+                      {{ $t('dialog.commodities') }}
+                    </th>
+                    <th class="text-center">
+                      {{ $t('dialog.amount') }}
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="item in data.pairDocs" :key="item.name">
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.calories }}</td>
-                    <td>{{ item.calories }}</td>
+                  <tr v-for="(item, index) in pair_docs" :key="item.name" class="text-center">
+                    <td>{{ index }}</td>
+                    <td>{{ item.code }}</td>
+                    <td>{{ item.date }}</td>
+                    <td>{{ item.person.nikename }}</td>
+                    <td>
+                      <v-chip variant="tonal" class="me-1" size="small" color="primary" v-for="commodity in item.commodities">
+                        {{ commodity.name }}
+                      </v-chip>
+                    </td>
+                    <td>{{ $filters.formatNumber(item.amount) }}</td>
                   </tr>
                 </tbody>
               </v-table>
@@ -575,6 +585,7 @@
         tabs: 0,
         searchBuyDoc: '',
         buyDocs: [],
+        pair_docs: [],
         addsheet: false,
         editsheet: false,
         priceList: [],
@@ -797,6 +808,19 @@
         },
         deep: false
       },
+      'data.pair_docs': {
+        handler: function (val, oldVal) {
+          this.pair_docs = [];
+          this.data.pair_docs.forEach((pair) => {
+            this.buyDocs.forEach((buy) => {
+              if (pair == buy.code) {
+                this.pair_docs.push(buy);
+              }
+            })
+          })
+        },
+        deep: false
+      },
       'data.discountAll': {
         handler: function (val, oldVal) {
           this.calcInvoice();
@@ -986,7 +1010,6 @@
       },
       loadData() {
         this.loading = true;
-
         axios.get('/api/commodity/pricelist/list')
           .then((response) => {
             this.priceList = response.data;
