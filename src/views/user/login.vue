@@ -64,7 +64,7 @@
               color="primary"
               variant="tonal"
               flat
-              :to="{ name: 'install_pwa' }"
+              @click="goto_pwa_page()"
               >نصب وب اپلیکیشن</v-btn>
           </div>
         </v-card>
@@ -149,6 +149,10 @@ export default {
           });
       }
     },
+    goto_pwa_page(){
+      this.loading = true;
+      window.location.href = "/install-pwa";
+    }
   },
 };
 </script>
