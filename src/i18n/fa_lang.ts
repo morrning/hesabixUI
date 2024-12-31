@@ -300,6 +300,7 @@ const fa_lang = {
   },
   title: {
     user: {
+      online:"کاربران آنلاین",
       dashboard: "پروفایل کاربر",
       businesses: "کسب‌و‌کارها",
       business_create: "ایجاد کسب و کار جدید",

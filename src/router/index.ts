@@ -158,6 +158,14 @@ const router = createRouter({
                         'login': true
                     }
                 },
+                {
+                    path: 'manager/users/onlinelist',
+                    component: () => import('../views/user/manager/online-users.vue'),
+                    meta: {
+                        'title': 'کاربران آنلاین',
+                        'login': true
+                    }
+                },
             ],
         }, {
             path: '/acc/',
