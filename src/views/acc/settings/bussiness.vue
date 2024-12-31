@@ -291,6 +291,7 @@
                   <div class="space-y-2">
                     <div class="form-floating">
                       <select class="form-select" v-model="content.profitCalcType">
+                        <option value="simple">بر اساس اختلاف قیمت خرید و فروش</option>
                         <option value="lis">بر اساس آخرین قیمت ورود به انبار</option>
                         <option value="avgis">بر اساس میانگین قیمت ورود به انبار</option>
                       </select>
