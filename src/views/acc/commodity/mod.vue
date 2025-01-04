@@ -82,19 +82,33 @@
                     <option v-for="(item, index) in listCats" :value="item.id">{{ item.name }}</option>
                   </select>
                 </div>
-                <div class="row mx-0 px-0">
-                  <div class="col-sm-12 col-md-12">
-                    <div class="form-floating mb-4">
-                      <input placeholder="بارکد‌ها را با ; از هم جدا کنید" v-model="data.barcodes" class="form-control"
-                        type="text">
-                      <label class="form-label">
-                        بارکد‌ها
-                        <small class="text-danger">
-                          (بارکد‌ها را با ; از هم جدا کنید)
-                        </small>
-                      </label>
-                    </div>
-                  </div>
+                <div class="col-sm-12 col-md-12 mb-4">
+                  <v-dialog>
+                    <template v-slot:activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" prepend-icon="mdi-wizard-hat" color="surface-variant"
+                        :text="$t('dialog.barcodes_generate')" class="mb-2"></v-btn>
+                    </template>
+
+                    <template v-slot:default="{ isActive }">
+                      <v-card :text="$t('dialog.barcodes_generate')">
+                        <v-card-text>
+                          <v-number-input :min="1" :max="400" v-model="barcode.count" :label="$t('dialog.count')"
+                            prepend-inner-icon="mdi-barcode"></v-number-input>
+                        </v-card-text>
+
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn :text="$t('dialog.generate')" color="success" variant="flat"
+                            @click="isActive.value = false; generateBarcode();"></v-btn>
+
+                          <v-btn :text="$t('dialog.close')" color="secondary" variant="flat"
+                            @click="isActive.value = false"></v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                  <v-textarea class="text-left" v-model="data.barcodes" :label="$t('dialog.barcodes')"
+                    :placeholder="$t('dialog.barcodes_info')" prepend-inner-icon="mdi-barcode"></v-textarea>
                 </div>
                 <div class="col-sm-12 col-md-12">
                   <div class="form-floating mb-4">
@@ -217,6 +231,9 @@ export default {
       loading: false,
       plugins: [],
       units: '',
+      barcode: {
+        count: 1,
+      },
       priceList: [],
       data: {
         name: '',
@@ -262,6 +279,12 @@ export default {
     this.loadData(to.params.id);
   },
   methods: {
+    generateBarcode(){
+      for (let index = 0; index < this.barcode.count; index++) {
+        let x = Math.random() * 1000000000000000000;
+        this.data.barcodes = this.data.barcodes + ';' + x
+      }
+    },
     isPluginActive(plugName) {
       return this.plugins[plugName] !== undefined;
     },

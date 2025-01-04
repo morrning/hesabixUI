@@ -340,7 +340,7 @@ export default {
             </v-tooltip>
           </template>
         </v-list-item>
-        <v-list-item v-if="this.isPluginActive('accpro') && permissions.sell && 1==2" to="/acc/presell/list"
+        <v-list-item v-if="this.isPluginActive('accpro') && permissions.sell" to="/acc/presell/list"
           :title="$t('drawer.presells')">
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">

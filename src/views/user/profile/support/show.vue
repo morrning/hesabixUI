@@ -43,7 +43,7 @@
                 <v-card class="pa-3" :loading="loading ? 'red' : null" :disabled="loading" flat>
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
-                      <v-textarea class="" :label="$t('pages.support.replay')" v-model="replay" type="text"
+                      <v-textarea auto-grow class="" :label="$t('pages.support.replay')" v-model="replay" type="text"
                         prepend-inner-icon="mdi-text"
                         :rules="[() => replay.length > 0 || $t('validator.required')]"></v-textarea>
                     </v-col>

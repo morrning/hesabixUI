@@ -126,6 +126,11 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    count:"تعداد",
+    barcodes: "بارکد‌ها",
+    barcodes_info: "بارکد‌ها را با ; از هم جدا کنید",
+    barcodes_generate: "تولید بارکد",
+    generate: "تولید بارکد و افزودن",
     commodities: "کالاها و خدمات",
     date: "تاریخ",
     suplayer: "تامین کننده",
@@ -300,7 +305,7 @@ const fa_lang = {
   },
   title: {
     user: {
-      online:"کاربران آنلاین",
+      online: "کاربران آنلاین",
       dashboard: "پروفایل کاربر",
       businesses: "کسب‌و‌کارها",
       business_create: "ایجاد کسب و کار جدید",
