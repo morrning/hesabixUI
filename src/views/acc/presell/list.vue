@@ -1,253 +1,233 @@
 <template>
+  <v-toolbar color="toolbar" :title="$t('drawer.presells')">
+    <template v-slot:prepend>
+      <v-tooltip :text="$t('dialog.back')" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" @click="this.$router.back()" class="d-none d-sm-flex" variant="text"
+            icon="mdi-arrow-right" />
+        </template>
+      </v-tooltip>
+    </template>
+    <v-spacer></v-spacer>
+    <v-tooltip :text="$t('dialog.add_new')" location="bottom">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-plus" color="primary" to="/acc/presell/mod/"></v-btn>
+      </template>
+    </v-tooltip>
+    <v-tooltip :text="$t('dialog.delete')" location="bottom">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-delete" color="danger" @click="deleteItems()"></v-btn>
+      </template>
+    </v-tooltip>
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="" color="green">
+          <v-tooltip activator="parent" :text="$t('dialog.change_labels')" location="bottom" />
+          <v-icon icon="mdi-dots-horizontal-circle"></v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-subheader color="primary">{{ $t('dialog.change_labels') }}</v-list-subheader>
+        <v-list-item v-for="item in types" class="text-dark" :title="$t('dialog.change_to') + ' ' + item.label"
+          @click="changeLabel(item)">
+          <template v-slot:prepend>
+            <v-icon color="green-darken-4" icon="mdi-label"></v-icon>
+          </template>
+        </v-list-item>
+        <v-list-item class="text-dark" :title="$t('dialog.delete_labels')" @click="changeLabel('clear')">
+          <template v-slot:prepend>
+            <v-icon color="red" icon="mdi-undo"></v-icon>
+          </template>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+  </v-toolbar>
+  <v-row class="pa-1">
+    <v-col>
+      <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
+        :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
+        <template v-slot:prepend-inner>
+          <v-tooltip location="bottom" :text="$t('dialog.search')">
+            <template v-slot:activator="{ props }">
+              <v-icon v-bind="props" color="danger" icon="mdi-magnify"></v-icon>
+            </template>
+          </v-tooltip>
+        </template>
+        <template v-slot:append-inner>
+          <v-menu :close-on-content-click="false">
+            <template v-slot:activator="{ props }">
+              <v-icon size="sm" v-bind="props" icon="" color="primary">
+                <v-tooltip activator="parent" variant="plain" :text="$t('dialog.filters')" location="bottom" />
+                <v-icon icon="mdi-filter"></v-icon>
+              </v-icon>
+            </template>
+            <v-list>
+              <v-list-subheader color="primary">
+                <v-icon icon="mdi-filter"></v-icon>
+                {{ $t('dialog.filters') }}</v-list-subheader>
+              <v-list-item v-for="(item, index) in types" class="text-dark">
+                <template v-slot:title>
+                  <div class="form-check form-check-inline mx-1">
+                    <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
+                      type="checkbox">
+                    <label class="form-check-label">{{ item.label }}</label>
+                  </div>
+                </template>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </template>
+      </v-text-field>
+      <EasyDataTable table-class-name="customize-table ma-1 pa-1" :table-class-name="tableClassName"
+        v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
+        :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
+        body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+        rowsOfPageSeparatorMessage="از" :loading="loading">
+        <template #item-operation="{ code, type }">
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
+            </template>
+            <v-list>
+              <v-list-item class="text-dark" :title="$t('dialog.accounting_doc')" :to="'/acc/accounting/view/' + code">
+                <template v-slot:prepend>
+                  <v-icon color="green-darken-4" icon="mdi-file"></v-icon>
+                </template>
+              </v-list-item>
+              <v-list-item class="text-dark" :title="$t('dialog.view')" :to="'/acc/sell/view/' + code">
+                <template v-slot:prepend>
+                  <v-icon color="green-darken-4" icon="mdi-eye"></v-icon>
+                </template>
+              </v-list-item>
+              <v-list-item class="text-dark" :title="$t('dialog.export_pdf')"
+                @click="printOptions.selectedPrintCode = code; modal = true;">
+                <template v-slot:prepend>
+                  <v-icon icon="mdi-file-pdf-box"></v-icon>
+                </template>
+              </v-list-item>
+              <v-list-item class="text-dark" :title="$t('dialog.edit')" @click="canEditItem(code)">
+                <template v-slot:prepend>
+                  <v-icon icon="mdi-file-edit"></v-icon>
+                </template>
+              </v-list-item>
+              <v-list-item class="text-dark" :title="$t('dialog.delete')" @click="deleteItem(code)">
+                <template v-slot:prepend>
+                  <v-icon color="deep-orange-accent-4" icon="mdi-trash-can"></v-icon>
+                </template>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </template>
+        <template #item-label="{ label }">
+          <span v-if="label">
+            <span v-if="label.code == 'payed'" class="text-success">{{ label.label }}</span>
+            <span v-if="label.code == 'returned'" class="text-danger">{{ label.label }}</span>
+            <span v-if="label.code == 'accepted'" class="text-info">{{ label.label }}</span>
+          </span>
+        </template>
+        <template #item-des="{ des }">
+          {{ des.replace("فاکتور فروش:", "") }}
+        </template>
+        <template #item-relatedDocsCount="{ relatedDocsCount, relatedDocsPays }">
+          <span v-if="relatedDocsCount != '0'" class="text-success"><i class="fa fa-money"></i>
+            {{ this.$filters.formatNumber(relatedDocsPays) }}
+          </span>
+        </template>
+        <template #item-amount="{ amount }">
+          <span class="text-dark">
+            {{ this.$filters.formatNumber(amount) }}
+          </span>
+        </template>
+        <template #item-profit="{ profit }">
+          <span v-if="profit >= 0" class="text-dark">
+            {{ this.$filters.formatNumber(profit) }}
+          </span>
+          <span v-else class="text-danger">
+            {{ this.$filters.formatNumber(Math.abs(profit)) }}
+            (زیان)
+          </span>
+        </template>
+        <template #item-transferCost="{ transferCost }">
+          <span class="text-dark">
+            {{ this.$filters.formatNumber(transferCost) }}
+          </span>
+        </template>
+        <template #item-discountAll="{ discountAll }">
+          <span class="text-dark">
+            {{ this.$filters.formatNumber(discountAll) }}
+          </span>
+        </template>
+        <template #item-person="{ person }">
+          <router-link :to="'/acc/persons/card/view/' + person.code">
+            {{ person.nikename }}
+          </router-link>
+        </template>
+        <template #item-code="{ code }">
+          <router-link :to="'/acc/sell/view/' + code">
+            {{ code }}
+          </router-link>
+        </template>
+      </EasyDataTable>
+    </v-col>
+  </v-row>
   <!-- Print Modal -->
-  <div class="modal fade" id="printModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="printModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header bg-primary-light text-white">
-          <h1 class="modal-title fs-5" id="printModalLabel">چاپ فاکتور</h1>
-          <div class="block-options">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-        </div>
-        <div class="modal-body">
-          <p class="mb-2">برای تغییر تنظیمات پیشفرض به بخش تنظیمات چاپ مراجعه نمایید</p>
-          <div class="form-floating mb-2">
-            <select v-model="printOptions.paper" class="form-select">
-              <option value="A4-L">A4 افقی</option>
-              <option value="A4">A4 عمودی</option>
-              <option value="A5-L">A5 افقی</option>
-              <option value="A5">A5 عمودی</option>
-            </select>
-            <label>سایز کاغذ و حالت چاپ</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" v-model="printOptions.bidInfo" type="checkbox">
-            <label class="form-check-label">اطلاعات کسب‌وکار</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" v-model="printOptions.pays" type="checkbox">
-            <label class="form-check-label">نمایش پرداخت‌های فاکتور</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" v-model="printOptions.note" type="checkbox">
-            <label class="form-check-label">یاداشت پایین فاکتور</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" v-model="printOptions.taxInfo" type="checkbox">
-            <label class="form-check-label">مالیات به تفکیک اقلام</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" v-model="printOptions.discountInfo" type="checkbox">
-            <label class="form-check-label">تخفیف به تفکیک اقلام</label>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary mx-2" @click="printInvoice()" type="button">
-            <i class="si si-printer me-1"></i>
-            <span class="">چاپ</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-dialog v-model="modal" width="auto">
+    <v-card :subtitle="$t('dialog.print_info_des')" prepend-icon="mdi-file-pdf-box" :title="$t('dialog.export_pdf')">
+      <template v-slot:text>
+        <v-select class=mb-2 v-model="printOptions.paper" :items="paperSizes" :label="$t('dialog.paper_size')">
+        </v-select>
+        <v-switch inset v-model="printOptions.bidInfo" color="primary" :label="$t('dialog.bid_info_label')"
+          hide-details></v-switch>
+        <v-switch inset v-model="printOptions.pays" color="primary" :label="$t('dialog.invoice_pays')"
+          hide-details></v-switch>
+        <v-switch inset v-model="printOptions.note" color="primary" :label="$t('dialog.invoice_footer_note')"
+          hide-details></v-switch>
+        <v-switch inset v-model="printOptions.taxInfo" color="primary" :label="$t('dialog.tax_dexpo')"
+          hide-details></v-switch>
+        <v-switch inset v-model="printOptions.discountInfo" color="primary" :label="$t('dialog.discount_dexpo')"
+          hide-details></v-switch>
+
+      </template>
+      <template v-slot:actions>
+        <v-btn variant="tonal" class="" prepend-icon="mdi-printer" color="primary" :text="$t('dialog.print')"
+          @click="modal = false; printInvoice()"></v-btn>
+        <v-btn variant="tonal" class="" prepend-icon="mdi-undo" color="secondary" :text="$t('dialog.cancel')"
+          @click="modal = false"></v-btn>
+      </template>
+    </v-card>
+  </v-dialog>
   <!-- End Print Modal -->
-  <div class="block block-content-full ">
-    <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
-      <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button"
-          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
-          <i class="fa fw-bold fa-arrow-right"></i>
-        </button>
-        <i class="fa fa-book"></i>
-        پیش‌فاکتور‌ها
-      </h3>
-      <div class="block-options">
-        <div class="dropdown-center block-options-item">
-          <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
-            id="dropdown-align-center-alt-primary" type="button">
-            <i class="fa-solid fa-ellipsis"></i>
-          </button>
-          <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end" style="">
-            <button v-for="item in types" class="dropdown-item" @click="changeLabel(item)">
-              <i class="fa fa-undo text-dark pe-2"></i>
-              تغییر به
-              {{ item.label }}
-            </button>
-            <button class="dropdown-item text-danger" @click="changeLabel('clear')">
-              <i class="fa fa-undo pe-2"></i>
-              حذف برچسب‌ها
-            </button>
-            <hr class="dropdown-divider">
-            <button class="dropdown-item text-danger" @click="deleteItems()">
-              <i class="fa fa-trash pe-2"></i>
-              حذف گروهی
-            </button>
-          </div>
-        </div>
-        <router-link to="/acc/presell/mod/" type="button" class="block-options-item">
-          <span class="fa fa-plus fw-bolder"></span>
-        </router-link>
-      </div>
-    </div>
-    <div class="block-content pt-1 pb-3">
-      <div class="row">
-        <div class="col-sm-12 col-md-12 m-0 p-0">
-          <div class="mb-1">
-            <div class="input-group input-group-sm">
-              <span class="input-group-text"><i class="fa fa-search"></i></span>
-              <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
-              <button class="btn btn-outline-success dropdown-toggle d-block d-sm-none" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-filter"></i>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <div v-for="(item, index) in types" class="form-check">
-                  <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
-                    type="checkbox">
-                  <label class="form-check-label">{{ item.label }}</label>
-                </div>
-              </ul>
-
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-12 border rounded mb-2 px-2 py-1 d-none d-sm-block">
-            <div v-for="(item, index) in types" class="form-check form-check-inline">
-              <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
-                type="checkbox">
-              <label class="form-check-label">{{ item.label }}</label>
-            </div>
-          </div>
-          <EasyDataTable table-class-name="customize-table" v-model:items-selected="itemsSelected" show-index
-            alternating :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
-            body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-            rowsOfPageSeparatorMessage="از" :loading="loading">
-            <template #item-operation="{ code, type }">
-              <div class="dropdown-center">
-                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
-                  id="dropdown-align-center-alt-primary" type="button">
-                  <i class="fa-solid fa-ellipsis"></i>
-                </button>
-                <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
-                  style="">
-                  <router-link class="dropdown-item" :to="'/acc/accounting/view/' + code">
-                    <i class="fa fa-file text-success pe-2"></i>
-                    سند حسابداری
-                  </router-link>
-                  <router-link class="dropdown-item" :to="'/acc/presell/view/' + code">
-                    <i class="fa fa-eye text-info pe-2"></i>
-                    مشاهده فاکتور
-                  </router-link>
-                  <button class="dropdown-item" @click="printOptions.selectedPrintCode = code" data-bs-toggle="modal"
-                    data-bs-target="#printModal">
-                    <i class="fa fa-file-pdf pe-2"></i>
-                    خروجی PDF
-                  </button>
-                  <button type="button" @click="canEditItem(code)" class="dropdown-item">
-                    <i class="fa fa-edit pe-2"></i>
-                    ویرایش
-                  </button>
-                  <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger">
-                    <i class="fa fa-trash pe-2"></i>
-                    حذف
-                  </button>
-                </div>
-              </div>
-            </template>
-            <template #item-label="{ label }">
-              <span v-if="label">
-                <span v-if="label.code == 'payed'" class="text-success">{{ label.label }}</span>
-                <span v-if="label.code == 'returned'" class="text-danger">{{ label.label }}</span>
-                <span v-if="label.code == 'accepted'" class="text-info">{{ label.label }}</span>
-              </span>
-            </template>
-            <template #item-des="{ des }">
-              {{ des.replace("فاکتور فروش:", "") }}
-            </template>
-            <template #item-relatedDocsCount="{ relatedDocsCount, relatedDocsPays }">
-              <span v-if="relatedDocsCount != '0'" class="text-success"><i class="fa fa-money"></i>
-                {{ this.$filters.formatNumber(relatedDocsPays) }}
-              </span>
-            </template>
-            <template #item-amount="{ amount }">
-              <span class="text-dark">
-                {{ this.$filters.formatNumber(amount) }}
-              </span>
-            </template>
-            <template #item-profit="{ profit }">
-              <span v-if="profit >= 0" class="text-dark">
-                {{ this.$filters.formatNumber(profit) }}
-              </span>
-              <span v-else class="text-danger">
-                {{ this.$filters.formatNumber(Math.abs(profit)) }}
-                 (زیان)
-              </span>
-            </template>
-            <template #item-transferCost="{ transferCost }">
-              <span class="text-dark">
-                {{ this.$filters.formatNumber(transferCost) }}
-              </span>
-            </template>
-            <template #item-discountAll="{ discountAll }">
-              <span class="text-dark">
-                {{ this.$filters.formatNumber(discountAll) }}
-              </span>
-            </template>
-            <template #item-person="{ person }">
-              <router-link :to="'/acc/persons/card/view/' + person.code">
-                {{ person.nikename }}
-              </router-link>
-            </template>
-            <template #item-code="{ code }">
-              <router-link :to="'/acc/presell/view/' + code">
-                {{ code }}
-              </router-link>
-            </template>
-          </EasyDataTable>
-          <div class="container-fluid p-0 mx-0 my-3">
-            <a class="block block-rounded block-link-shadow border-start border-success border-3"
-              href="javascript:void(0)">
-              <div class="block-content block-content-full block-content-sm bg-body-light">
-                <div class="row">
-                  <div class="col-sm-6 com-md-6">
-                    <span class="text-dark">
-                      <i class="fa fa-list-dots"></i>
-                      مبلغ کل:
-                    </span>
-                    <span class="text-primary">
-                      {{ this.$filters.formatNumber(this.sumTotal) }}
-                      {{ this.$filters.getActiveMoney().shortName }}
-                    </span>
-                  </div>
-
-                  <div class="col-sm-6 com-md-6">
-                    <span class="text-dark">
-                      <i class="fa fa-list-check"></i>
-                      جمع مبلغ موارد انتخابی:
-                    </span>
-                    <span class="text-primary">
-                      {{ this.$filters.formatNumber(this.sumSelected) }}
-                      {{ this.$filters.getActiveMoney().shortName }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
-import { ref } from "vue";
-export default {
+import { ref ,defineComponent } from "vue";
+
+export default defineComponent ({
   name: "list",
-  data: () => {
+  data() {
+    let self = this;
     return {
+      paperSizes : [
+        {
+          title:self.$t('dialog.a4p'),
+          value:'A4'
+        },
+        {
+          title:self.$t('dialog.a4l'),
+          value:'A4-L'
+        },
+        {
+          title:self.$t('dialog.a5p'),
+          value:'A5'
+        },
+        {
+          title:self.$t('dialog.a5l'),
+          value:'A5-L'
+        },
+      ],
+      modal: false,
       printOptions: {
         pays: true,
         note: true,
@@ -255,7 +235,7 @@ export default {
         taxInfo: true,
         discountInfo: true,
         selectedPrintCode: 0,
-        paper:  'A4-L'
+        paper: 'A4-L'
       },
       sumSelected: 0,
       sumTotal: 0,
@@ -291,7 +271,7 @@ export default {
       }
       else {
         this.loading = true;
-        axios.post('/api/presell/label/change', {
+        axios.post('/api/sell/label/change', {
           'items': this.itemsSelected,
           'label': label
         }
@@ -356,17 +336,17 @@ export default {
     },
     loadData() {
       axios.get("/api/printers/options/info").then((response) => {
-        this.printOptions = response.data.presell;
+        this.printOptions = response.data.sell;
       });
 
       axios.post('/api/invoice/types', {
-        type: 'presell'
+        type: 'sell'
       }).then((response) => {
         this.types = response.data;
       });
 
-      axios.post('/api/presell/docs/search', {
-        type: 'presell'
+      axios.post('/api/sell/docs/search', {
+        type: 'sell'
       })
         .then((response) => {
           this.items = response.data;
@@ -379,7 +359,7 @@ export default {
     },
     canEditItem(code) {
       this.loading = true;
-      axios.post('/api/presell/edit/can/' + code)
+      axios.post('/api/sell/edit/can/' + code)
         .then((response) => {
           this.loading = false;
           if (response.data.result == false) {
@@ -390,7 +370,7 @@ export default {
             });
           }
           else {
-            this.$router.push('/acc/presell/mod/' + code);
+            this.$router.push('/acc/sell/mod/' + code);
           }
         });
     },
@@ -438,14 +418,14 @@ export default {
         })
       }
     },
-    printInvoice(pdf = true,cloudePrinters=true) {
+    printInvoice(pdf = true, cloudePrinters = true) {
       this.loading = true;
-      axios.post('/api/presell/print/invoice', { 
+      axios.post('/api/sell/print/invoice', {
         'code': this.printOptions.selectedPrintCode,
         'pdf': pdf,
-        'printers':cloudePrinters,
+        'printers': cloudePrinters,
         'printOptions': this.printOptions
-       }).then((response) => {
+      }).then((response) => {
         this.loading = false;
         window.open(this.$API_URL + '/front/print/' + response.data.id, '_blank', 'noreferrer');
       });
@@ -501,7 +481,7 @@ export default {
           if (typeof item.amount.valueOf() === "string") {
             this.sumSelected += parseInt(item.amount.replaceAll(",", ""))
           }
-          else{
+          else {
             this.sumSelected += item.amount;
           }
         });
@@ -543,7 +523,7 @@ export default {
       deep: false
     }
   }
-}
+})
 </script>
 
 <style scoped></style>

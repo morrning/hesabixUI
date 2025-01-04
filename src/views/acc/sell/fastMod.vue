@@ -217,14 +217,14 @@ export default defineComponent({
           confirmButtonText: 'بازگشت',
         });
       }
-      else if (this.person === null) {
+      else if (this.person == null || this.person == undefined ) {
         Swal.fire({
           text: 'مشتری انتخاب نشده است.',
           icon: 'error',
           confirmButtonText: 'بازگشت',
         });
       }
-      else if (this.cashdesk === null) {
+      else if (this.cashdesk == null || this.cashdesk == undefined) {
         Swal.fire({
           text: 'صندوق انتخاب نشده است.',
           icon: 'error',
