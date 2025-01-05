@@ -126,7 +126,8 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
-    count:"تعداد",
+    presell_invoice: "پیش فاکتور",
+    count: "تعداد",
     barcodes: "بارکد‌ها",
     barcodes_info: "بارکد‌ها را با ; از هم جدا کنید",
     barcodes_generate: "تولید بارکد",

@@ -37,6 +37,8 @@ After run this command you can access with [http://localhost:5173](http://localh
 
 ### Configure API Url in hesabixConfig.js
 
+open src/hesabixConfig.js and replace default return values of functions like application name and api address of [hesabix Core](https://github.com/morrning/hesabixCore).
+
 ```js
 return 'https://next.hesabix.ir';
 ```
@@ -44,14 +46,13 @@ return 'https://next.hesabix.ir';
 ### Type-Check, Compile and Minify for Production
 
 ```sh
-npm run build
+npm run build-only
 ```
 
 **All output files will be generated in the dist folder, which will be able to run on the web server**
 
 ### Contributors
+
 <a href="https://github.com/morrning/hesabixUI/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=morrning/hesabixUI" />
 </a>
-
-
