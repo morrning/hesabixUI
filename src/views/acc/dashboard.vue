@@ -1,6 +1,20 @@
 <template>
   <v-toolbar color="toolbar" :title="$t('drawer.dashboard')">
+    <v-tooltip :text="$t('dialog.edit_dashboard')" location="bottom">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-layers-edit" color="primary" @click="dialog = true"></v-btn>
+        <v-dialog v-model="dialog" width="auto">
+          <v-card prepend-icon="mdi-update" :title="$t('dialog.edit_dashboard')">
+            <v-card-text>
 
+            </v-card-text>
+            <template v-slot:actions>
+              <v-btn class="ms-auto" :text="$t('dialog.save')" @click="save()"></v-btn>
+            </template>
+          </v-card>
+        </v-dialog>
+      </template>
+    </v-tooltip>
   </v-toolbar>
   <v-container class="pa-0 ma-0">
     <v-card :loading="loading ? 'red' : null" :disabled="loading">
@@ -100,11 +114,11 @@
                 </p>
                 <p>
                   {{ $t('drawer.recs_today') }} :
-                  {{ this.$filters.formatNumber(stat.recs_today,true) }}
+                  {{ this.$filters.formatNumber(stat.recs_today, true) }}
                 </p>
                 <p>
                   {{ $t('drawer.sends_today') }} :
-                  {{ this.$filters.formatNumber(stat.sends_today,true) }}
+                  {{ this.$filters.formatNumber(stat.sends_today, true) }}
                 </p>
               </v-card-text>
             </v-card>
@@ -123,6 +137,7 @@ export default {
   data: () => {
     return {
       loading: false,
+      dialog: false,
       stat: {},
       statements: [],
       permissions: {},
@@ -131,9 +146,16 @@ export default {
     }
   },
   methods: {
+    save() {
+      this.loading = true;
+      this.dialog = false;
+    },
     loadData() {
       this.loading = false;
       axios.post('/api/business/get/user/permissions').then((response) => {
+        this.permissions = response.data;
+      });
+      axios.post('/api/dashboard/settings/load').then((response) => {
         this.permissions = response.data;
       });
       //get active plugins

@@ -126,6 +126,7 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    edit_dashboard: "ویرایش آیتم‌های پیشخوان",
     presell_invoice: "پیش فاکتور",
     count: "تعداد",
     barcodes: "بارکد‌ها",
