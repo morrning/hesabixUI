@@ -89,12 +89,7 @@
               <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
             </template>
             <v-list>
-              <v-list-item class="text-dark" :title="$t('dialog.accounting_doc')" :to="'/acc/accounting/view/' + code">
-                <template v-slot:prepend>
-                  <v-icon color="green-darken-4" icon="mdi-file"></v-icon>
-                </template>
-              </v-list-item>
-              <v-list-item class="text-dark" :title="$t('dialog.view')" :to="'/acc/sell/view/' + code">
+              <v-list-item class="text-dark" :title="$t('dialog.view')" :to="'/acc/presell/view/' + code">
                 <template v-slot:prepend>
                   <v-icon color="green-darken-4" icon="mdi-eye"></v-icon>
                 </template>
@@ -163,7 +158,7 @@
           </router-link>
         </template>
         <template #item-code="{ code }">
-          <router-link :to="'/acc/sell/view/' + code">
+          <router-link :to="'/acc/presell/view/' + code">
             {{ code }}
           </router-link>
         </template>
@@ -271,7 +266,7 @@ export default defineComponent ({
       }
       else {
         this.loading = true;
-        axios.post('/api/sell/label/change', {
+        axios.post('/api/presell/label/change', {
           'items': this.itemsSelected,
           'label': label
         }
@@ -345,9 +340,7 @@ export default defineComponent ({
         this.types = response.data;
       });
 
-      axios.post('/api/sell/docs/search', {
-        type: 'sell'
-      })
+      axios.post('/api/presell/docs/search')
         .then((response) => {
           this.items = response.data;
           this.orgItems = response.data;
@@ -356,23 +349,6 @@ export default defineComponent ({
           })
           this.loading = false;
         })
-    },
-    canEditItem(code) {
-      this.loading = true;
-      axios.post('/api/sell/edit/can/' + code)
-        .then((response) => {
-          this.loading = false;
-          if (response.data.result == false) {
-            Swal.fire({
-              text: 'این فاکتور به دلیل وجود اسناد پرداخت یا حواله های انبار مرتبط با آن قابل ویرایش نیست',
-              confirmButtonText: 'قبول',
-              icon: 'error'
-            });
-          }
-          else {
-            this.$router.push('/acc/sell/mod/' + code);
-          }
-        });
     },
     deleteItems() {
       if (this.itemsSelected.length == 0) {
@@ -420,7 +396,7 @@ export default defineComponent ({
     },
     printInvoice(pdf = true, cloudePrinters = true) {
       this.loading = true;
-      axios.post('/api/sell/print/invoice', {
+      axios.post('/api/presell/print/invoice', {
         'code': this.printOptions.selectedPrintCode,
         'pdf': pdf,
         'printers': cloudePrinters,
