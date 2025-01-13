@@ -3,23 +3,13 @@
     <v-tooltip :text="$t('dialog.edit_dashboard')" location="bottom">
       <template v-slot:activator="{ props }">
         <v-btn v-bind="props" icon="mdi-layers-edit" color="primary" @click="dialog = true"></v-btn>
-        <v-dialog v-model="dialog" width="auto">
-          <v-card prepend-icon="mdi-update" :title="$t('dialog.edit_dashboard')">
-            <v-card-text>
-
-            </v-card-text>
-            <template v-slot:actions>
-              <v-btn class="ms-auto" :text="$t('dialog.save')" @click="save()"></v-btn>
-            </template>
-          </v-card>
-        </v-dialog>
       </template>
     </v-tooltip>
   </v-toolbar>
   <v-container class="pa-0 ma-0">
     <v-card :loading="loading ? 'red' : null" :disabled="loading">
       <v-card-text>
-        <v-row v-show="this.statements.length != 0">
+        <v-row v-show="this.statements.length != 0 && dashboard.notif">
           <v-col>
             <v-alert type="info" color="primary" variant="tonal" border>
               <p v-for="statment in this.statements">
@@ -30,7 +20,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.wallet">
+          <v-col cols="12" sm="6" md="3" v-show="permissions.wallet && dashboard.wallet">
             <v-card variant="flat" color="success" prepend-icon="mdi-wallet" :title="$t('static.wallet')"
               to="/acc/wallet/view">
               <v-card-text>
@@ -40,7 +30,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.bank">
+          <v-col cols="12" sm="6" md="3" v-show="permissions.bank && dashboard.banks">
             <v-card variant="outlined" color="primary" prepend-icon="mdi-bank" :title="$t('drawer.banks')"
               to="/acc/banks/list">
               <v-card-text>
@@ -49,7 +39,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.accounting">
+          <v-col cols="12" sm="6" md="3" v-show="permissions.accounting && dashboard.acc_docs">
             <v-card variant="outlined" color="primary" prepend-icon="mdi-book-open-page-variant"
               :title="$t('drawer.docs')" to="/acc/accounting/list">
               <v-card-text>
@@ -58,7 +48,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.commodity">
+          <v-col cols="12" sm="6" md="3" v-show="permissions.commodity && dashboard.commodities">
             <v-card variant="outlined" color="primary" prepend-icon="mdi-package-variant"
               :title="$t('drawer.commodity')" to="/acc/commodity/list">
               <v-card-text>
@@ -67,14 +57,14 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.accounting">
+          <v-col cols="12" sm="6" md="3" v-show="permissions.accounting && dashboard.accounting_total">
             <v-card variant="outlined" color="primary" prepend-icon="mdi-table-refresh" :title="$t('drawer.roller')">
               <v-card-text>
                 {{ this.$filters.formatNumber(stat.income, true) }}
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.sell">
+          <v-col cols="12" sm="6" md="3" v-show="permissions.sell && dashboard.sells">
             <v-card variant="outlined" color="primary" prepend-icon="mdi-basket-unfill" :title="$t('drawer.sell')"
               to="/acc/sell/list">
               <v-card-text>
@@ -89,7 +79,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.buy">
+          <v-col cols="12" sm="6" md="3" v-show="permissions.buy && dashboard.buys">
             <v-card variant="outlined" color="primary" prepend-icon="mdi-basket-fill" :title="$t('drawer.buy')"
               to="/acc/buy/list">
               <v-card-text>
@@ -104,7 +94,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.persons">
+          <v-col cols="12" sm="6" md="3" v-show="permissions.persons && dashboard.persons">
             <v-card variant="outlined" color="primary" prepend-icon="mdi-account-multiple" :title="$t('drawer.persons')"
               to="/acc/persons/list">
               <v-card-text>
@@ -127,6 +117,42 @@
       </v-card-text>
     </v-card>
   </v-container>
+  <v-dialog v-model="dialog">
+    <v-card prepend-icon="mdi-layers-edit" :title="$t('dialog.edit_dashboard')">
+      <v-card-text>
+        <v-row>
+          <v-col cols="12" sm="6" md="4">
+            <v-switch color="primary" hide-details="auto" :label="$t('static.wallet')" inset
+              v-model="dashboard.wallet"></v-switch>
+            <v-switch color="primary" hide-details="auto" :label="$t('drawer.banks')" inset
+              v-model="dashboard.banks"></v-switch>
+            <v-switch color="primary" hide-details="auto" :label="$t('drawer.acc_docs')" inset
+              v-model="dashboard.acc_docs"></v-switch>
+          </v-col>
+          <v-col cols="12" sm="6" md="4">
+            <v-switch color="primary" hide-details="auto" :label="$t('drawer.persons')" inset
+              v-model="dashboard.persons"></v-switch>
+            <v-switch color="primary" hide-details="auto" :label="$t('drawer.buys')" inset
+              v-model="dashboard.buys"></v-switch>
+            <v-switch color="primary" hide-details="auto" :label="$t('drawer.sells')" inset
+              v-model="dashboard.sells"></v-switch>
+          </v-col>
+          <v-col cols="12" sm="6" md="4">
+            <v-switch color="primary" hide-details="auto" :label="$t('dialog.commodities')" inset
+              v-model="dashboard.commodities"></v-switch>
+            <v-switch color="primary" hide-details="auto" :label="$t('drawer.accounting_total')" inset
+              v-model="dashboard.accounting_total"></v-switch>
+            <v-switch color="primary" hide-details="auto" :label="$t('drawer.notif')" inset
+              v-model="dashboard.notif" :error-messages="$t('dialog.notif_msg')"></v-switch>
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <template v-slot:actions>
+        <v-btn class="ms-auto" prepend-icon="mdi-content-save" variant="outlined" color="primary"
+          :text="$t('dialog.save')" @click="save()"></v-btn>
+      </template>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -142,13 +168,27 @@ export default {
       statements: [],
       permissions: {},
       plugins: {},
-      wallet: {}
+      wallet: {},
+      dashboard: {
+        banks: false,
+        wallet: false,
+        buys: false,
+        sells: false,
+        commodities: false,
+        acc_docs: false,
+        accounting_total: false,
+        persons: false,
+        notif : false,
+      }
     }
   },
   methods: {
     save() {
       this.loading = true;
       this.dialog = false;
+      axios.post('/api/dashboard/settings/save', this.dashboard).then((response) => {
+        this.loading = false;
+      });
     },
     loadData() {
       this.loading = false;
@@ -156,7 +196,7 @@ export default {
         this.permissions = response.data;
       });
       axios.post('/api/dashboard/settings/load').then((response) => {
-        this.permissions = response.data;
+        this.dashboard = response.data.data;
       });
       //get active plugins
       axios.post('/api/plugin/get/actives',).then((response) => {
