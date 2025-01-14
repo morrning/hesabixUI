@@ -6,29 +6,46 @@
         <v-card :loading="loading ? 'red' : null" :disabled="loading">
             <v-card-text>
                 <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                        <v-date-input prepend-icon="" prepend-inner-icon="$calendar" v-model="repData.dateStart"
-                            hide-details="auto" :label="$t('dialog.date_start')"></v-date-input>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                        <v-date-input prepend-icon="" prepend-inner-icon="$calendar" v-model="repData.dateEnd"
-                            hide-details="auto" :label="$t('dialog.date_end')"></v-date-input>
+                    <v-col>
+                        <v-breadcrumbs :items="tree" class="m-0 p-0">
+                            <template v-slot:prepend>
+                                <v-icon icon="mdi-family-tree" color="primary" class="me-3"></v-icon>
+                            </template>
+                            <template v-slot:title="{ item }">
+                                <v-btn density="compact" @click="repData.node = item.id" color="info">{{ item.name
+                                    }}</v-btn>
+                            </template>
+                        </v-breadcrumbs>
                     </v-col>
                 </v-row>
             </v-card-text>
+            <v-card-text class="mt-0 pt-0 px-0">
+                <EasyDataTable table-class-name="customize-table ma-1 pa-1" :table-class-name="tableClassName"
+                    multi-sort show-index alternating :headers="headers" :items="items" theme-color="#1d90ff"
+                    header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
+                    emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
+                    <template #item-operation="{ code }">
+                        <v-btn color="primary" size="xs" variant="plain" icon="mdi-magnify"></v-btn>
+                    </template>
+                    <template #item-account="{ hasChild, code, account, id }">
+                        <v-btn color="primary" :readonly="hasChild == false" block variant="text" :text="account"
+                            @click="repData.node = id"></v-btn>
+                    </template>
+                    <template #item-bal_bd="{ bal_bd }">
+                        {{ this.$filters.formatNumber(bal_bd) }}
+                    </template>
+                    <template #item-bal_bs="{ bal_bs }">
+                        {{ this.$filters.formatNumber(bal_bs) }}
+                    </template>
+                    <template #item-his_bd="{ his_bd }">
+                        {{ this.$filters.formatNumber(his_bd) }}
+                    </template>
+                    <template #item-his_bs="{ his_bs }">
+                        {{ this.$filters.formatNumber(his_bs) }}
+                    </template>
+                </EasyDataTable>
+            </v-card-text>
         </v-card>
-        <EasyDataTable table-class-name="customize-table ma-1 pa-1" :table-class-name="tableClassName"
-            v-model:items-selected="itemsSelected" multi-sort show-index alternating
-            :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
-            body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-            rowsOfPageSeparatorMessage="از" :loading="loading">
-            <template #item-operation="{ code }">
-                <v-btn color="primary" size="xs" variant="plain" icon="mdi-magnify"></v-btn>
-            </template>
-            <template #item-account="{ hasChild, code, account ,id}">
-                <v-btn color="primary" :readonly="hasChild == false" block variant="text" :text="account" @click="repData.node = id"></v-btn>
-            </template>
-        </EasyDataTable>
     </v-container>
 </template>
 
@@ -41,6 +58,7 @@ export default {
         return {
             loading: false,
             plugins: [],
+            tree: [],
             repData: {
                 dateStart: null,
                 dateEnd: null,
@@ -65,10 +83,7 @@ export default {
             axios.post('/api/plugin/get/actives',).then((response) => {
                 this.plugins = response.data;
             });
-            axios.post('/api/report/acc/explore_accounts', this.repData).then((response) => {
-                this.items = response.data;
-                console.log(this.items);
-            });
+            this.loadNode();
         },
         isPluginActive(plugName) {
             return this.plugins[plugName] !== undefined;
@@ -76,7 +91,8 @@ export default {
         loadNode() {
             this.loading = true;
             axios.post('/api/report/acc/explore_accounts', this.repData).then((response) => {
-                this.items = response.data;
+                this.items = response.data.itemData;
+                this.tree = response.data.tree;
                 this.loading = false;
             });
         },
