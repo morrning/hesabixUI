@@ -584,7 +584,6 @@
     data: () => {
       return {
         tabs: 0,
-        searchBuyDoc: '',
         buyDocs: [],
         pair_docs: [],
         addsheet: false,
@@ -706,9 +705,7 @@
       }
     },
     watch: {
-      searchBuyDoc: function (newval) {
-        alert(newval)
-      },
+      
       'editItemData.price': function () {
         this.editCalc();
       },

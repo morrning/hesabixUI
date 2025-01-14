@@ -131,7 +131,10 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
-    notif_msg:"غیر فعال کردن اطلاعیه‌ها پیشنهاد نمی‌شود.",
+    date_start: "تاریخ شروع",
+    date_end: "تاریخ پایان",
+    explore_accounts: "مرور حساب‌ها",
+    notif_msg: "غیر فعال کردن اطلاعیه‌ها پیشنهاد نمی‌شود.",
     edit_dashboard: "ویرایش آیتم‌های پیشخوان",
     presell_invoice: "پیش فاکتور",
     count: "تعداد",

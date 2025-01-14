@@ -115,7 +115,9 @@
                   <li>
                     <router-link to="/acc/reports/acc/balance_sheet">ترازنامه</router-link>
                   </li>
-
+                  <li>
+                    <router-link to="/acc/reports/acc/explore_accounts">{{  $t('dialog.explore_accounts') }}</router-link>
+                  </li>
                 </ul>
               </div>
             </div>

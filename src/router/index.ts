@@ -208,6 +208,12 @@ const router = createRouter({
                     name: 'acc_balanceSheet_list',
                     component: () =>
                         import('../views/acc/reports/balanceSheet.vue'),
+                }, 
+                {
+                    path: 'reports/acc/explore_accounts',
+                    name: 'acc_report_explore_accounts',
+                    component: () =>
+                        import('../views/acc/reports/explore_accounts.vue'),
                 },
                 {
                     path: 'reports/commodity/buysell',
