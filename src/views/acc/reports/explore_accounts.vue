@@ -24,8 +24,8 @@
                     multi-sort show-index alternating :headers="headers" :items="items" theme-color="#1d90ff"
                     header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
                     emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
-                    <template #item-operation="{ code }">
-                        <v-btn color="primary" size="xs" variant="plain" icon="mdi-magnify"></v-btn>
+                    <template #item-operation="{ code,type }">
+                        <DetailsBtn :node="code" :type="type"></DetailsBtn>
                     </template>
                     <template #item-account="{ hasChild, code, account, id }">
                         <v-btn color="primary" :readonly="hasChild == false" block variant="text" :text="account"
@@ -51,6 +51,7 @@
 
 <script>
 import axios from 'axios';
+import DetailsBtn from '../component/reports/detailsBtn.vue';
 
 export default {
     name: "explore_accounts",
@@ -104,6 +105,9 @@ export default {
             },
             deep: true
         },
+    },
+    components:{
+        DetailsBtn : DetailsBtn
     },
     mounted() {
         this.loadData();

@@ -68,7 +68,6 @@ const vuetify = createVuetify({
         },
         VDialog: {
             VCard: {
-                class: 'bg-light',
             }
         },
         VToolbar: {
