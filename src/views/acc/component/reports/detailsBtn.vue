@@ -1,20 +1,25 @@
 <template>
   <div class="text-center pa-4">
-    <v-btn @click="dialog = true" color="primary" size="xs" variant="plain" icon="mdi-magnify"></v-btn>
-    <v-dialog v-model="dialog" width="auto">
+    <v-btn @click="dialog = true; loadData($props.node,$props.nodeType)" color="primary" size="xs" variant="plain" icon="mdi-magnify"></v-btn>
+    <v-dialog v-model="dialog" class="vh-100">
       <v-card :loading="loading">
-        {{ $props.node }}
         <v-toolbar :title="$t('dialog.details')"></v-toolbar>
         <v-card-text class="p-0 m-0">
           <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
-            v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
+            multi-sort show-index alternating :search-value="searchValue"
             :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
             body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
             rowsOfPageSeparatorMessage="از" :loading="loading">
-            <template #item-bs="{}">
-
+            <template #item-bs="{bs}">
+              {{ $filters.formatNumber(bs) }}
             </template>
-
+            <template #item-bd="{bd}">
+              {{ $filters.formatNumber(bd) }}
+            </template>
+            <template #item-doc_code="{doc_code}">
+              <v-btn color="primary" block variant="plain" :text="$filters.formatNumber(doc_code)"
+                           :to="'/acc/accounting/view/' + doc_code"></v-btn>
+            </template>
           </EasyDataTable>
         </v-card-text>
 
@@ -33,37 +38,34 @@ export default {
   name: "DetailsBtn",
   props: {
     node: String,
-    type: String,
+    nodeType: String,
   },
   data: () => {
     return {
       loading: true,
       dialog: false,
       items: [],
-      itemsSelected: [],
       headers: [
-        { text: "تاریخ", value: "operation" },
-        { text: "شماره", value: "code" },
+        { text: "تاریخ", value: "date" },
+        { text: "شماره", value: "doc_code" },
         { text: "شرح", value: "des" },
         { text: "بدهکار", value: "bd" },
         { text: "بستانکار", value: "bs" },
-        { text: "تراز", value: "balance" },
-        { text: "وضعیت", value: "status" },
-        { text: "تعداد", value: "count" },
+        { text: "تعداد", value: "commodity_count" },
       ]
     }
   },
   methods: {
-    loadData() {
+    loadData(node,type) {
       this.loading = true;
-      axios.post('/api/report/acc/get_details', { node: $this.props.node, type: $this.props.type, }).then((response) => {
-        this.items = response.data.data;
+      axios.post('/api/report/acc/get_details', { node: node, type: type }).then((response) => {
+        this.items = response.data;
         this.loading = false;
       });
     }
   },
   mounted() {
-
+   
   }
 }
 </script>
