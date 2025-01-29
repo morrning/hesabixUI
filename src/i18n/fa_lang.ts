@@ -16,6 +16,7 @@ const fa_lang = {
     mb: "مگابایت",
   },
   drawer: {
+    print_queue: "صف چاپ",
     open_balance: "تراز افتتاحیه",
     sell_invoices_long: "فاکتور‌های فروش",
     person_info: "مشخصات شخص",
@@ -131,6 +132,7 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    clean_queue: "پاک کردن کل صف چاپ",
     date_start: "تاریخ شروع",
     date_end: "تاریخ پایان",
     explore_accounts: "مرور حساب‌ها",

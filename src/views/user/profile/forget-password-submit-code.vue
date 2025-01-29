@@ -1,9 +1,13 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import axios from "axios";
-import { useUserStore } from "@/stores/userStore";
+import VueCountdown from '@chenfengyuan/vue-countdown';
+
 export default defineComponent({
   name: "reset-password",
+  components: {
+    'vue-countdown': VueCountdown
+  },
   data() {
     const self = this;
     return {
@@ -84,9 +88,9 @@ export default defineComponent({
               <v-row>
                 <v-col class="my-2 mx-4">
                   <v-btn class="float-end" color="indigo" :disabled="counting" @click="onResendCodeClick()">
-                    <vue-countdown v-if="counting" :time="120000" v-slot="{ minutes, seconds }" @end="onCountdownEnd">
+                    <vue-countdown v-if="counting" :time="120000" v-slot="{minutes, seconds }" @end="onCountdownEnd">
                       {{ $t('user.resendCodeLabel') }}
-                      {{ minutes + ':' + seconds }}
+                      {{minutes + ':' + seconds }}
                     </vue-countdown>
                     <span v-else>{{ $t('user.send_again') }}</span>
                   </v-btn>
@@ -122,7 +126,7 @@ export default defineComponent({
         <template v-slot:actions>
           <v-spacer></v-spacer>
           <v-btn color="primary" :text="$t('dialog.ok')" variant="flat"
-            @click="dialogSuccess = false; loading = false; $router.push({name:'user_login'})"  />
+            @click="dialogSuccess = false; loading = false; $router.push({ name: 'user_login' })" />
         </template>
       </v-card>
     </v-dialog>

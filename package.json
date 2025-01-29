@@ -10,6 +10,7 @@
         "type-check": "vue-tsc --noEmit"
     },
     "dependencies": {
+        "@chenfengyuan/vue-countdown": "^2.1.2",
         "@ckeditor/ckeditor5-build-classic": "^36.0.1",
         "@ckeditor/ckeditor5-image": "^36.0.1",
         "@ckeditor/ckeditor5-vue": "^4.0.1",
@@ -29,7 +30,7 @@
         "sweetalert2": "^11.6.13",
         "v-money3": "^3.24.0",
         "v-skeleton-loader": "^0.1.9",
-        "vue": "^3.3.4",
+        "vue": "^3.5.13",
         "vue-avatar-cropper": "^6.1.1",
         "vue-currency-input": "^3.0.4",
         "vue-i18n": "^10.0.4",

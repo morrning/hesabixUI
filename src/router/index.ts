@@ -192,6 +192,11 @@ const router = createRouter({
                     component: () =>
                         import('../views/acc/printers/list.vue')
                 }, {
+                    path: 'printers/printqueue/:id?',
+                    name: 'printers_queue',
+                    component: () =>
+                        import('../views/acc/printers/queue.vue')
+                }, {
                     path: 'reports/list',
                     name: 'reports_list',
                     component: () =>

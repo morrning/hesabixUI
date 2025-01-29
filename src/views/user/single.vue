@@ -22,11 +22,6 @@ export default {
     if (localStorage.getItem('isLogedIn') == true) {
       this.$router.push('/user/dashboard')
     }
-  },
-  mounted(){
-    axios.post('/front/system/get/data').then((response) => {
-      this.system = response.data;
-    });
   }
 }
 </script>
