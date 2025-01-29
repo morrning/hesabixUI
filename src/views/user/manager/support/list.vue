@@ -10,6 +10,7 @@ export default defineComponent({
       loading: ref(true),
       items: [],
       headers: [
+        { text: "شناسه", value: "id", sortable: true },
         { text: "کاربر", value: "submitter.fullName", sortable: true },
         { text: "عنوان", value: "title", sortable: true },
         { text: "تاریخ", value: "dateSubmit", sortable: true },

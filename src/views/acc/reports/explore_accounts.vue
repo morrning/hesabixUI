@@ -25,7 +25,8 @@
                     header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
                     emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
                     <template #item-operation="{ code,id,type }">
-                        <DetailsBtn :node="id" :nodeType="type"></DetailsBtn>
+                        {{ type }}
+                        <DetailsBtn v-if="type != 'calc'" :node="id" :nodeType="type"></DetailsBtn>
                     </template>
                     <template #item-account="{ hasChild, code, account, id }">
                         <v-btn color="primary" :readonly="hasChild == false" block variant="text" :text="account"

@@ -20,7 +20,7 @@ export default defineComponent({
         this.loading = false;
         if (resp.data.result == 0) {
           Swal.fire({
-            text: 'فایل پشتیبان از بانک اطلاعاتی با نام ' + resp.data.filename + 'در پوشه hesabixBackup با موفقیت ایجاد شد.',
+            text: 'فایل پشتیبان از بانک اطلاعاتی با نام ' + resp.data.filename + 'در پوشه Backup با موفقیت ایجاد شد.',
             icon: 'success',
             confirmButtonText: 'قبول',
           });

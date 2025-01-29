@@ -3,7 +3,7 @@
     <v-btn @click="dialog = true; loadData($props.node,$props.nodeType)" color="primary" size="xs" variant="plain" icon="mdi-magnify"></v-btn>
     <v-dialog v-model="dialog" class="vh-100">
       <v-card :loading="loading">
-        <v-toolbar :title="$t('dialog.details')"></v-toolbar>
+        <v-toolbar class="position-sticky" :title="$t('dialog.details')"></v-toolbar>
         <v-card-text class="p-0 m-0">
           <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
             multi-sort show-index alternating :search-value="searchValue"
