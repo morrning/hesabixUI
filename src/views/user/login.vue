@@ -2,70 +2,30 @@
   <v-container>
     <v-row class="d-flex justify-center">
       <v-col md="5">
-        <v-card
-          :loading="loading ? 'blue' : null"
-          :disabled="loading"
-          :title="$t('app.name')"
-          :subtitle="$t('user.login_label')"
-        >
+        <v-card :loading="loading ? 'blue' : null" :disabled="loading" :title="$t('app.name')"
+          :subtitle="$t('user.login_label')">
           <v-card-text class="text-justify">
             {{ $t("login.des") }}
           </v-card-text>
 
-          <v-form
-            :disabled="loading"
-            ref="form"
-            fast-fail
-            @submit.prevent="submit()"
-          >
+          <v-form :disabled="loading" ref="form" fast-fail @submit.prevent="submit()">
             <v-card-text>
-              <v-text-field
-                class="mb-2"
-                :label="$t('user.email')"
-                :placeholder="$t('user.email_placeholder')"
-                single-line
-                v-model="user.email"
-                type="email"
-                variant="outlined"
-                prepend-inner-icon="mdi-email"
-                :rules="rules.email"
-              ></v-text-field>
+              <v-text-field class="mb-2" :label="$t('user.email')" :placeholder="$t('user.email_placeholder')"
+                single-line v-model="user.email" type="email" variant="outlined" prepend-inner-icon="mdi-email"
+                :rules="rules.email"></v-text-field>
 
-              <v-text-field
-                class="mb-2"
-                :label="$t('user.password')"
-                :placeholder="$t('user.password_placeholder')"
-                single-line
-                type="password"
-                variant="outlined"
-                prepend-inner-icon="mdi-lock"
-                :rules="rules.password"
-                v-model="user.password"
-              ></v-text-field>
-              <v-btn
-                :disabled="loading"
-                :loading="loading"
-                block
-                type="submit"
-                class="text-none mb-4"
-                color="indigo-darken-3"
-                size="x-large"
-                variant="flat"
-                prepend-icon="mdi-login"
-              >
+              <v-text-field class="mb-2" :label="$t('user.password')" :placeholder="$t('user.password_placeholder')"
+                single-line type="password" variant="outlined" prepend-inner-icon="mdi-lock" :rules="rules.password"
+                v-model="user.password"></v-text-field>
+              <v-btn :disabled="loading" :loading="loading" block type="submit" class="text-none mb-4"
+                color="indigo-darken-3" size="x-large" variant="flat" prepend-icon="mdi-login">
                 {{ $t("user.login") }}
               </v-btn>
             </v-card-text>
           </v-form>
           <div class="d-flex justify-center pb-5">
-            <v-btn
-              :loading="loading"
-              class="text-none"
-              color="primary"
-              variant="tonal"
-              flat
-              @click="goto_pwa_page()"
-              >نصب وب اپلیکیشن</v-btn>
+            <v-btn :loading="loading" class="text-none" color="primary" variant="tonal" flat
+              @click="goto_pwa_page()">نصب وب اپلیکیشن</v-btn>
           </div>
         </v-card>
       </v-col>
@@ -73,23 +33,13 @@
   </v-container>
   <div v-if="dialog" class="text-center">
     <v-dialog v-model="dialog" max-width="500" persistent>
-      <v-card
-        color="dangerLight"
-        prepend-icon="mdi-close-octagon "
-        :title="$t('dialog.error')"
-        :text="$t('login.input_fail')"
-      >
+      <v-card color="dangerLight" prepend-icon="mdi-close-octagon " :title="$t('dialog.error')" :text="errorMsg">
         <template v-slot:actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            :text="$t('dialog.ok')"
-            variant="flat"
-            @click="
-              dialog = false;
-              user.password = '';
-            "
-          />
+          <v-btn color="primary" :text="$t('dialog.ok')" variant="flat" @click="
+            dialog = false;
+          user.password = '';
+          " />
         </template>
       </v-card>
     </v-dialog>
@@ -108,6 +58,7 @@ export default {
     return {
       loading: false,
       dialog: false,
+      errorMsg: self.$t('login.input_fail'),
       user: {
         email: "",
         password: "",
@@ -142,6 +93,13 @@ export default {
               localStorage.setItem("X-AUTH-TOKEN", response.data.data.token);
               window.location.replace("/");
             }
+            else {
+              if (response.data.data.active == false) {
+                this.errorMsg = response.data.message
+                this.loading = false;
+                this.dialog = true;
+              }
+            }
           })
           .catch((resp) => {
             this.loading = false;
@@ -149,7 +107,7 @@ export default {
           });
       }
     },
-    goto_pwa_page(){
+    goto_pwa_page() {
       this.loading = true;
       window.location.href = "/install-pwa";
     }
