@@ -92,7 +92,7 @@ export default {
         },
         loadNode() {
             this.loading = true;
-            axios.post('/api/report/acc/explore_accounts', this.repData).then((response) => {
+            axios.post('/api/report/acc/explore_accounts_det', this.repData).then((response) => {
                 this.items = response.data.itemData;
                 this.tree = response.data.tree;
                 this.loading = false;
