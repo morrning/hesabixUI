@@ -340,7 +340,7 @@ export default {
             </v-tooltip>
           </template>
         </v-list-item>
-        <v-list-item v-if="this.isPluginActive('accpro') && permissions.sell" to="/acc/presell/list"
+        <v-list-item v-if="this.isPluginActive('accpro') && permissions.sell && (1 == 2)" to="/acc/presell/list"
           :title="$t('drawer.presells')">
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
@@ -376,7 +376,8 @@ export default {
             :title="$t('drawer.accounting')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.accounting" to="/acc/accounting/list" :title="$t('drawer.accounting_docs')" />
-        <v-list-item v-if="permissions.accounting" to="/acc/accounting/open_balance" :title="$t('drawer.open_balance')" />
+        <v-list-item v-if="permissions.accounting" to="/acc/accounting/open_balance"
+          :title="$t('drawer.open_balance')" />
         <v-list-item v-if="permissions.accounting" to="/acc/accounting/table" :title="$t('drawer.accounting_table')" />
         <v-list-item v-if="permissions.plugAccproCloseYear && this.isPluginActive('accpro')"
           to="/acc/accounting/close_year" :title="$t('drawer.close_year')">
@@ -421,11 +422,13 @@ export default {
             </template>
           </v-list-item>
         </template>
-        <v-list-item v-if="permissions.plugRepservice" to="/acc/plugin/repservice/order/list" :title="$t('drawer.repservice_reqs')">
+        <v-list-item v-if="permissions.plugRepservice" to="/acc/plugin/repservice/order/list"
+          :title="$t('drawer.repservice_reqs')">
           <template v-slot:append="{ props }">
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain" to="/acc/plugin/repservice/order/mod/" />
+                <v-btn v-bind="props" size="sm" icon="mdi-plus-box" variant="plain"
+                  to="/acc/plugin/repservice/order/mod/" />
               </template>
             </v-tooltip>
           </template>
