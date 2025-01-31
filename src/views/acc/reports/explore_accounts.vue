@@ -12,7 +12,9 @@
                                 <v-icon icon="mdi-family-tree" color="primary" class="me-3"></v-icon>
                             </template>
                             <template v-slot:title="{ item }">
-                                <v-btn density="compact" @click="repData.node = item.id" color="info">{{ item.name
+                                <v-btn density="compact" @click="loadNode(item.id, 'calc', item.hasChild)"
+                                    color="info">{{
+                                        item.name
                                     }}</v-btn>
                             </template>
                         </v-breadcrumbs>
@@ -24,13 +26,13 @@
                     multi-sort show-index alternating :headers="headers" :items="items" theme-color="#1d90ff"
                     header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
                     emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
-                    <template #item-operation="{ code,id,type }">
-                        {{ type }}
-                        <DetailsBtn v-if="type != 'calc'" :node="id" :nodeType="type"></DetailsBtn>
+                    <template #item-operation="{ id, type, isObject, upperID }">
+                        <DetailsBtn :node="id" :nodeType="type" :isObject="isObject" :upperID="upperID"></DetailsBtn>
                     </template>
-                    <template #item-account="{ hasChild, code, account, id }">
-                        <v-btn color="primary" :readonly="hasChild == false" block variant="text" :text="account"
-                            @click="repData.node = id"></v-btn>
+                    <template #item-account="{ hasChild, type, isObject, code, account, id }">
+                        <v-btn color="primary"
+                            :readonly="(hasChild == false && isObject == true) || (hasChild == false && type == 'calc')"
+                            block variant="text" :text="account" @click="loadNode(id, type, hasChild)"></v-btn>
                     </template>
                     <template #item-bal_bd="{ bal_bd }">
                         {{ this.$filters.formatNumber(bal_bd) }}
@@ -61,12 +63,6 @@ export default {
             loading: false,
             plugins: [],
             tree: [],
-            repData: {
-                dateStart: null,
-                dateEnd: null,
-                node: 'root',
-                subnode: 'root',
-            },
             itemsSelected: [],
             items: [],
             headers: [
@@ -85,30 +81,26 @@ export default {
             axios.post('/api/plugin/get/actives',).then((response) => {
                 this.plugins = response.data;
             });
-            this.loadNode();
+            this.loadNode('root', 'calc', true);
         },
         isPluginActive(plugName) {
             return this.plugins[plugName] !== undefined;
         },
-        loadNode() {
+        loadNode(id, type, hasChild) {
             this.loading = true;
-            axios.post('/api/report/acc/explore_accounts_det', this.repData).then((response) => {
+            axios.post('/api/report/acc/explore_accounts_det', {
+                node: id,
+                type: type,
+                hasChild: hasChild
+            }).then((response) => {
                 this.items = response.data.itemData;
                 this.tree = response.data.tree;
                 this.loading = false;
             });
         },
     },
-    watch: {
-        repData: {
-            handler: function (val, oldVal) {
-                this.loadNode();
-            },
-            deep: true
-        },
-    },
-    components:{
-        DetailsBtn : DetailsBtn
+    components: {
+        DetailsBtn: DetailsBtn
     },
     mounted() {
         this.loadData();
