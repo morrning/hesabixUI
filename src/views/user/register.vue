@@ -125,7 +125,7 @@ export default defineComponent({
                   :placeholder="$t('user.mobile_placeholder')"
                   single-line
                   v-model="user.mobile"
-                  type="phone"
+                  type="tel"
                   variant="outlined"
                   prepend-inner-icon="mdi-phone"
                   :rules="rules.mobile"

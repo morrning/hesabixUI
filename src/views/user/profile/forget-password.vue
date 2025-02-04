@@ -61,7 +61,7 @@ export default defineComponent({
           <v-card-text>
             <v-form ref="form" :disabled="loading" fast-fail @submit.prevent="submit()">
               <v-text-field v-model="mobile" class="mb-2" :label="$t('user.mobile')"
-                :placeholder="$t('user.mobile_placeholder')" single-line type="phone" variant="outlined"
+                :placeholder="$t('user.mobile_placeholder')" single-line type="tel" variant="outlined"
                 prepend-inner-icon="mdi-phone" :rules="rules.mobile"></v-text-field>
               <v-btn :loading="loading" block class="text-none mb-4" color="indigo-darken-3" size="x-large"
                 variant="flat" prepend-icon="mdi-send-circle" type="submit">
