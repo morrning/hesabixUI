@@ -94,7 +94,7 @@
           space:this.space,
           month:this.month
         }).then((response)=>{
-          window.location = 'https://www.zarinpal.com/pg/StartPay/' + response.data.authority;
+          window.location.href = 'https://www.zarinpal.com/pg/StartPay/' + response.data.authority;
         });
       }
     },

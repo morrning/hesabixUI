@@ -16,7 +16,7 @@ export default defineComponent({
   methods:{
     insert(){
       axios.post('/api/plugin/insert/' + this.item.id).then((response)=>{
-        window.location = 'https://www.zarinpal.com/pg/StartPay/' + response.data.authority;
+        window.location.href = 'https://www.zarinpal.com/pg/StartPay/' + response.data.authority;
       }).catch(error => {
         Swal.fire({
           text: 'متاسفانه مشکلی در پردازش درخواست پیش آمد . لطفا مجددا درخواست خود را تکرار نمایید.',

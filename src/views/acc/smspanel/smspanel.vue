@@ -45,10 +45,10 @@ export default defineComponent({
       this.loading=true;
       axios.post('/api/sms/charge',{price:this.smsCharge})
           .then((response)=>{
-            window.location = 'https://www.zarinpal.com/pg/StartPay/' + response.data.authority;
+            window.location.href = 'https://www.zarinpal.com/pg/StartPay/' + response.data.authority;
           })
     },
-    saveSettings(settings){
+    saveSettings(settings:any){
       this.loading = true;
       axios.post('/api/sms/save/settings',{settings})
           .then((response)=>{
