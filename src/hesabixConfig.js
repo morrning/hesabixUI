@@ -15,7 +15,6 @@ export function getSiteName() {
     /*
     When you want to setup new hesabix on server before compile and run { npm run build | dev } fill this function.
     This set for set site name thats apear on interface
-    If this be wrong user interface not functioning probably.
      */
     return 'حسابیکس';
     //return 'sitename';

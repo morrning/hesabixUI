@@ -10,9 +10,9 @@
 
           <v-form :disabled="loading" ref="form" fast-fail @submit.prevent="submit()">
             <v-card-text>
-              <v-text-field class="mb-2" :label="$t('user.email')" :placeholder="$t('user.email_placeholder')"
-                single-line v-model="user.email" type="email" variant="outlined" prepend-inner-icon="mdi-email"
-                :rules="rules.email"></v-text-field>
+              <v-text-field class="mb-2" :label="$t('user.mobile')" :placeholder="$t('user.mobile_placeholder')"
+                single-line v-model="user.mobile" type="tel" variant="outlined" prepend-inner-icon="mdi-phone"
+                :rules="rules.mobile"></v-text-field>
 
               <v-text-field class="mb-2" :label="$t('user.password')" :placeholder="$t('user.password_placeholder')"
                 single-line type="password" variant="outlined" prepend-inner-icon="mdi-lock" :rules="rules.password"
@@ -60,12 +60,14 @@ export default {
       dialog: false,
       errorMsg: self.$t('login.input_fail'),
       user: {
-        email: "",
+        mobile: "",
         password: "",
         standard: true,
       },
       rules: {
-        email: [(value: any) => self.validate(value, "email")],
+        mobile: [
+          (value: any) => self.validate(value, 'mobile'),
+        ],
         password: [(value: any) => self.validate(value, "password")],
       },
     };
@@ -91,7 +93,7 @@ export default {
           .then((response: any) => {
             if (response.data.Success == true) {
               localStorage.setItem("X-AUTH-TOKEN", response.data.data.token);
-              window.location.replace("/");
+              window.location.replace("/profile/business");
             }
             else {
               if (response.data.data.active == false) {
