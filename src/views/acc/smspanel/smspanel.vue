@@ -1,59 +1,63 @@
 <script lang="ts">
-import {defineComponent, ref} from 'vue'
+import { defineComponent, ref } from 'vue'
 import axios from "axios";
 
 export default defineComponent({
   name: "smspanel",
-  data: ()=>{return {
-    settings:{},
-    smsCharge:100000,
-    searchValue: '',
-    loading: ref(true),
-    items:[],
-    headers: [
-      { text: "تاریخ", value: "date" },
-      { text: "کاربر", value: "user"},
-      { text: "توضیحات", value: "des"},
-    ],
-    payssearchValue: '',
-    paysitems:[],
-    paysheaders: [
-      { text: "تاریخ", value: "dateSubmit" },
-      { text: "مبلغ (ریال)", value: "price"},
-      { text: "توضیحات", value: "des"},
-      { text: "وضعیت", value: "status"},
-    ]
-  }},
+  data: () => {
+    return {
+      settings: {},
+      smsCharge: 100000,
+      searchValue: '',
+      loading: ref(true),
+      items: [],
+      headers: [
+        { text: "تاریخ", value: "date" },
+        { text: "کاربر", value: "user" },
+        { text: "توضیحات", value: "des" },
+      ],
+      payssearchValue: '',
+      paysitems: [],
+      paysheaders: [
+        { text: "تاریخ", value: "dateSubmit" },
+        { text: "مبلغ (ریال)", value: "price" },
+        { text: "توضیحات", value: "des" },
+        { text: "وضعیت", value: "status" },
+      ]
+    }
+  },
   methods: {
-    loadData(){
+    loadData() {
       this.loading = true;
-      axios.post('/api/business/logs/' + localStorage.getItem('activeBid'),{type:'sms'})
-          .then((response)=>{
-            this.items = response.data;
-            axios.post('/api/sms/load/settings')
-                .then((response)=>{
-                  this.settings = response.data;
-                  axios.post('/api/sms/load/pays')
-                      .then((response)=>{
-                        this.paysitems = response.data;
-                        this.loading=false;
-                      })
-                });
-          });
+      axios.post('/api/business/logs/' + localStorage.getItem('activeBid'), { type: 'sms' })
+        .then((response) => {
+          this.items = response.data;
+          axios.post('/api/sms/load/settings')
+            .then((response) => {
+              this.settings = response.data;
+              axios.post('/api/sms/load/pays')
+                .then((response) => {
+                  this.paysitems = response.data;
+                  this.loading = false;
+                })
+            });
+        });
     },
-    pay(){
-      this.loading=true;
-      axios.post('/api/sms/charge',{price:this.smsCharge})
-          .then((response)=>{
-            window.location.href = 'https://www.zarinpal.com/pg/StartPay/' + response.data.authority;
-          })
-    },
-    saveSettings(settings:any){
+    pay() {
       this.loading = true;
-      axios.post('/api/sms/save/settings',{settings})
-          .then((response)=>{
-            this.loading=false;
-          })
+      axios.post('/api/sms/charge', { price: this.smsCharge })
+        .then((response) => {
+          if (response.data.Success == true) {
+            window.location.href = response.data.targetURL;
+          }
+        })
+    },
+    saveSettings(settings: any) {
+      this.loading = true;
+      axios.post('/api/sms/save/settings', { settings })
+        .then((response) => {
+          this.loading = false;
+        })
     }
   },
   beforeMount() {
@@ -66,11 +70,13 @@ export default defineComponent({
   <div class="block block-content-full ">
     <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
-        <button @click="this.$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+        <button @click="$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         <i class="fa fa-message"></i>
-        سرویس پیامک و شارژ</h3>
+        سرویس پیامک و شارژ
+      </h3>
       <div class="block-options">
 
       </div>
@@ -79,19 +85,23 @@ export default defineComponent({
       <div class="row">
         <div class="col-sm-12 col-md-12 m-0 p-0">
           <ul class="nav nav-pills flex-column flex-sm-row" id="myTab" role="tablist">
-            <button class="flex-sm-fill text-sm-center nav-link active rounded-0" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+            <button class="flex-sm-fill text-sm-center nav-link active rounded-0" id="home-tab" data-bs-toggle="tab"
+              data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
               <i class="fa fa-plus-circle me-2"></i>
               افزایش اعتبار
             </button>
-            <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+            <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="profile-tab" data-bs-toggle="tab"
+              data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
               <i class="fa fa-cogs me-2"></i>
               تنظیمات
             </button>
-            <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="pays-tab" data-bs-toggle="tab" data-bs-target="#pays" type="button" role="tab" aria-controls="pays" aria-selected="false">
+            <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="pays-tab" data-bs-toggle="tab"
+              data-bs-target="#pays" type="button" role="tab" aria-controls="pays" aria-selected="false">
               <i class="fa fa-list-dots me-2"></i>
               سوابق خرید اعتبار
             </button>
-            <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">
+            <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="contact-tab" data-bs-toggle="tab"
+              data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">
               <i class="fa fa-history me-2"></i>
               تاریخچه
             </button>
@@ -140,28 +150,34 @@ export default defineComponent({
                   در نظر داشته باشید در صورت اتمام اعتبار سرویس پیامک کسب و کار شما، این تنظیمات نادیده گرفته می‌شود.
                   <ul>
                     <li>پیامک‌های ارسالی به شماره ثبت شده در بخش اشخاص (تلفن همراه) ارسال می‌شود.</li>
-                    <li>در صورت ثبت نکردن شماره تلفن در بخش اشخاص پیامک ارسال نمی شود و هزینه ای نیز از حساب شما کسر نخواهد شد.</li>
+                    <li>در صورت ثبت نکردن شماره تلفن در بخش اشخاص پیامک ارسال نمی شود و هزینه ای نیز از حساب شما کسر
+                      نخواهد شد.</li>
                   </ul>
                 </div>
                 <div class="col-sm-12 col-md-6">
                   <div class="mb-2">
                     <div class="space-y-2">
                       <div class="form-check form-switch">
-                        <input v-model="settings.sendAfterSell" @change="saveSettings(settings)" class="form-check-input" type="checkbox">
+                        <input v-model="settings.sendAfterSell" @change="saveSettings(settings)"
+                          class="form-check-input" type="checkbox">
                         <label class="form-check-label">ارسال پیامک به مشتری بعد از صدور فاکتور فروش </label>
                       </div>
                       <div class="form-check form-switch">
-                        <input disabled="disabled" v-model="settings.sendAfterSellPayOnline" @change="saveSettings(settings)" class="form-check-input" type="checkbox">
+                        <input disabled="disabled" v-model="settings.sendAfterSellPayOnline"
+                          @change="saveSettings(settings)" class="form-check-input" type="checkbox">
                         <label class="form-check-label">ارسال پیامک به مشتری جهت پرداخت آنلاین فاکتور فروش </label>
                       </div>
-                      <hr/>
+                      <hr />
                       <div class="form-check form-switch">
-                        <input disabled="disabled" v-model="settings.sendAfterBuy" @change="saveSettings(settings)" class="form-check-input" type="checkbox">
+                        <input disabled="disabled" v-model="settings.sendAfterBuy" @change="saveSettings(settings)"
+                          class="form-check-input" type="checkbox">
                         <label class="form-check-label">ارسال پیامک به تامین کننده بعد از صدور فاکتور خرید </label>
                       </div>
                       <div class="form-check form-switch">
-                        <input disabled="disabled" v-model="settings.sendAfterBuyToUser" @change="saveSettings(settings)" class="form-check-input" type="checkbox">
-                        <label class="form-check-label">ارسال پیامک به تامین کننده بعد از ثبت پرداخت فاکتور خرید </label>
+                        <input disabled="disabled" v-model="settings.sendAfterBuyToUser"
+                          @change="saveSettings(settings)" class="form-check-input" type="checkbox">
+                        <label class="form-check-label">ارسال پیامک به تامین کننده بعد از ثبت پرداخت فاکتور خرید
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -178,19 +194,10 @@ export default defineComponent({
                         <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
                       </div>
                     </div>
-                    <EasyDataTable table-class-name="customize-table"
-                        :headers="paysheaders"
-                        :items="paysitems"
-                        alternating
-                        :search-value="payssearchValue"
-                        theme-color="#1d90ff"
-                        header-text-direction="center"
-                        body-text-direction="center"
-                        rowsPerPageMessage="تعداد سطر"
-                        emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-                        rowsOfPageSeparatorMessage="از"
-                        :loading="loading"
-                    >
+                    <EasyDataTable table-class-name="customize-table" :headers="paysheaders" :items="paysitems"
+                      alternating :search-value="payssearchValue" theme-color="#1d90ff" header-text-direction="center"
+                      body-text-direction="center" rowsPerPageMessage="تعداد سطر"
+                      emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
                       <template #item-status="{ status }">
                         <label class="text-danger" v-if="status == 0">
                           پرداخت نشده
@@ -214,19 +221,11 @@ export default defineComponent({
                         <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
                       </div>
                     </div>
-                    <EasyDataTable table-class-name="customize-table"
-                        :headers="headers"
-                        :items="items"
-                        alternating
-                        :search-value="searchValue"
-                        theme-color="#1d90ff"
-                        header-text-direction="center"
-                        body-text-direction="center"
-                        rowsPerPageMessage="تعداد سطر"
-                        emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-                        rowsOfPageSeparatorMessage="از"
-                        :loading="loading"
-                    />
+                    <EasyDataTable table-class-name="customize-table" :headers="headers" :items="items" alternating
+                      :search-value="searchValue" theme-color="#1d90ff" header-text-direction="center"
+                      body-text-direction="center" rowsPerPageMessage="تعداد سطر"
+                      emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
+                      :loading="loading" />
                   </div>
                 </div>
               </div>
@@ -240,6 +239,4 @@ export default defineComponent({
 
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

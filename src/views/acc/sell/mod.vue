@@ -3,7 +3,7 @@
     <template v-slot:prepend>
       <v-tooltip :text="$t('dialog.back')" location="bottom">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" @click="this.$router.back()" class="d-none d-sm-flex" variant="text"
+          <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text"
             icon="mdi-arrow-right" />
         </template>
       </v-tooltip>
