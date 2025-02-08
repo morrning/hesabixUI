@@ -54,9 +54,9 @@
   </v-toolbar>
   <v-row class="pa-1">
     <v-col cols="12" sm="12" md="12">
-      <v-card>
+      <v-card :loading="loading">
         <v-card-text>
-          <v-row class="pa-1">
+          <v-row class="">
             <v-col cols="12" sm="12" md="12">
               <small class="mb-2">بانک</small>
               <v-cob dir="rtl" :options="objectItems" label="name" v-model="selectedObjectItem"
@@ -93,12 +93,16 @@
       </v-card>
     </v-col>
     <v-col cols="12" sm="12" md="12">
-      <div class="mb-1">
-        <div class="input-group input-group-sm">
-          <span class="input-group-text"><i class="fa fa-search"></i></span>
-          <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
-        </div>
-      </div>
+      <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
+        :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
+        <template v-slot:prepend-inner>
+          <v-tooltip location="bottom" :text="$t('dialog.search')">
+            <template v-slot:activator="{ props }">
+              <v-icon v-bind="props" color="danger" icon="mdi-magnify"></v-icon>
+            </template>
+          </v-tooltip>
+        </template>
+      </v-text-field>
       <EasyDataTable table-class-name="customize-table" show-index alternating v-model:items-selected="itemsSelected"
         :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
         header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
@@ -151,7 +155,9 @@ export default {
       this.loadData();
     },
     loadData() {
+      this.loading = true;
       axios.post('/api/bank/list').then((response) => {
+        this.loading = false;
         this.objectItems = response.data;
         if (this.$route.params.id != '') {
           this.loadObject(this.$route.params.id);
@@ -184,12 +190,14 @@ export default {
     },
     excellOutput(AllItems = true) {
       if (AllItems) {
+        this.loading = true;
         axios({
           method: 'post',
           url: '/api/bank/card/list/excel',
           data: { 'code': this.selectedObjectItem.code },
           responseType: 'arraybuffer',
         }).then((response) => {
+          this.loading = false;
           var FILE = window.URL.createObjectURL(new Blob([response.data]));
           var fileURL = window.URL.createObjectURL(new Blob([response.data]));
           var fileLink = document.createElement('a');
@@ -209,7 +217,7 @@ export default {
           });
         }
         else {
-
+          this.loading = true;
           axios({
             method: 'post',
             url: '/api/bank/card/list/excel',
@@ -219,6 +227,7 @@ export default {
               'items': this.itemsSelected
             }
           }).then((response) => {
+            this.loading = false;
             var FILE = window.URL.createObjectURL(new Blob([response.data]));
             var fileURL = window.URL.createObjectURL(new Blob([response.data]));
             var fileLink = document.createElement('a');
@@ -241,8 +250,10 @@ export default {
       }
       else {
         if (AllItems) {
+          this.loading = true;
           axios.post('/api/bank/card/list/print', { 'code': this.selectedObjectItem.code }).then((response) => {
             this.printID = response.data.id;
+            this.loading = false;
             window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
           })
         }
@@ -255,10 +266,12 @@ export default {
             });
           }
           else {
+            this.loading = true;
             axios.post('/api/bank/card/list/print', {
               'code': this.selectedObjectItem.code,
               'items': this.itemsSelected
             }).then((response) => {
+              this.loading = false;
               this.printID = response.data.id;
               window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
             })
