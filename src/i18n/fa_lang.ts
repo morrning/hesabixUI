@@ -16,6 +16,7 @@ const fa_lang = {
     mb: "مگابایت",
   },
   drawer: {
+    bankaccounts_transactions: "کارت حساب بانک",
     print_queue: "صف چاپ",
     open_balance: "تراز افتتاحیه",
     sell_invoices_long: "فاکتور‌های فروش",
