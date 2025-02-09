@@ -113,6 +113,14 @@
               </v-card-text>
             </v-card>
           </v-col>
+          <v-col cols="12" sm="6" md="6">
+            <v-card variant="outlined" color="primary" prepend-icon="mdi-basket" :title="$t('drawer.sell_chart')"
+              to="/acc/sale/list">
+              <v-card-text>
+                <sale-chart></sale-chart>
+              </v-card-text>
+            </v-card>
+          </v-col>
         </v-row>
       </v-card-text>
     </v-card>
@@ -136,6 +144,8 @@
               v-model="dashboard.buys"></v-switch>
             <v-switch color="primary" hide-details="auto" :label="$t('drawer.sells')" inset
               v-model="dashboard.sells"></v-switch>
+              <v-switch color="primary" hide-details="auto" :label="$t('drawer.sell_chart')" inset
+              v-model="dashboard.sell_chart"></v-switch>
           </v-col>
           <v-col cols="12" sm="6" md="4">
             <v-switch color="primary" hide-details="auto" :label="$t('dialog.commodities')" inset
@@ -157,9 +167,13 @@
 
 <script>
 import axios from "axios";
+import saleChart from "./component/widgets/saleChart.vue";
 
 export default {
   name: "dashboard",
+  components:{
+    saleChart : saleChart,
+  },
   data: () => {
     return {
       loading: false,

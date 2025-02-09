@@ -4,6 +4,7 @@ import router from './router'
 import axios from "axios";
 import "./registerServiceWorker";
 import { vMaska } from "maska/vue"
+import VueApexCharts from "vue3-apexcharts";
 
 //pinia
 import { createPinia } from 'pinia'
@@ -192,6 +193,7 @@ app.use(LoadingPlugin)
 app.use(pinia)
 app.use(i18n)
 app.use(vuetify);
+app.use(VueApexCharts);
 app.directive("maska", vMaska)
 //global methods
 app.config.globalProperties.$filters = {
