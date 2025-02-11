@@ -113,9 +113,8 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="6" md="6">
-            <v-card variant="outlined" color="primary" prepend-icon="mdi-basket" :title="$t('drawer.sell_chart')"
-              to="/acc/sale/list">
+          <v-col cols="12" sm="6" md="6" v-show="permissions.sell && dashboard.sellChart && isPluginActive('accpro')">
+            <v-card variant="outlined" color="primary" prepend-icon="mdi-basket" :title="$t('drawer.sell_chart')">
               <v-card-text>
                 <sale-chart></sale-chart>
               </v-card-text>
@@ -144,16 +143,16 @@
               v-model="dashboard.buys"></v-switch>
             <v-switch color="primary" hide-details="auto" :label="$t('drawer.sells')" inset
               v-model="dashboard.sells"></v-switch>
-              <v-switch color="primary" hide-details="auto" :label="$t('drawer.sell_chart')" inset
-              v-model="dashboard.sell_chart"></v-switch>
+            <v-switch color="primary" hide-details="auto" :label="$t('drawer.sell_chart')" inset
+              v-model="dashboard.sellChart"></v-switch>
           </v-col>
           <v-col cols="12" sm="6" md="4">
             <v-switch color="primary" hide-details="auto" :label="$t('dialog.commodities')" inset
               v-model="dashboard.commodities"></v-switch>
             <v-switch color="primary" hide-details="auto" :label="$t('drawer.accounting_total')" inset
               v-model="dashboard.accounting_total"></v-switch>
-            <v-switch color="primary" hide-details="auto" :label="$t('drawer.notif')" inset
-              v-model="dashboard.notif" :error-messages="$t('dialog.notif_msg')"></v-switch>
+            <v-switch color="primary" hide-details="auto" :label="$t('drawer.notif')" inset v-model="dashboard.notif"
+              :error-messages="$t('dialog.notif_msg')"></v-switch>
           </v-col>
         </v-row>
       </v-card-text>
@@ -171,8 +170,8 @@ import saleChart from "./component/widgets/saleChart.vue";
 
 export default {
   name: "dashboard",
-  components:{
-    saleChart : saleChart,
+  components: {
+    saleChart: saleChart,
   },
   data: () => {
     return {
@@ -181,7 +180,7 @@ export default {
       stat: {},
       statements: [],
       permissions: {},
-      plugins: {},
+      plugins: [],
       wallet: {},
       dashboard: {
         banks: false,
@@ -192,7 +191,8 @@ export default {
         acc_docs: false,
         accounting_total: false,
         persons: false,
-        notif : false,
+        notif: false,
+        sellChart: false,
       }
     }
   },
@@ -203,6 +203,9 @@ export default {
       axios.post('/api/dashboard/settings/save', this.dashboard).then((response) => {
         this.loading = false;
       });
+    },
+    isPluginActive(plugName) {
+      return this.plugins[plugName] !== undefined;
     },
     loadData() {
       this.loading = false;

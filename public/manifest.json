@@ -1,6 +1,6 @@
 {
     "name": "حسابداری آنلاین حسابیکس",
-    "short_name": "حسابیکس",
+    "short_name": "Hesabix",
     "start_url": "/user/login",
     "scope": "/",
     "related_applications": [

@@ -1,39 +1,42 @@
 <template>
   <div>
-    <apexchart width="500" type="bar" :options="options" :series="series"></apexchart>
+    <apexchart ref="chart" type="bar" :options="options" :series="series"></apexchart>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-
 export default {
   name: "saleChart",
-  data: () => {
+  data() {
+    const self = this;
     return {
-      options: {
+      options: {        
         chart: {
-          id: 'vuechart-example'
+          id: 'vuechart-example',
+          fontFamily: "'Vazirmatn FD', Arial, sans-serif",
         },
         xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+          categories: []
         }
       },
       series: [{
-        name: 'series-1',
-        data: [30, 40, 45, 50, 49, 60, 70, 91]
+        name: self.$t('drawer.sell'),
+        data: []
       }]
     }
   },
   mounted() {
-    axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
-
-
-
-    });
+    this.updateChart();
   },
   methods: {
-
+    updateChart() {
+      axios.post('/api/sell/chart/data').then((response) => {
+        this.options.xaxis.categories = response.data.dayNames.reverse();
+        this.series[0].data = response.data.daySells.reverse();
+        this.$refs.chart.refresh();
+      });
+    },
   }
 }
 </script>
