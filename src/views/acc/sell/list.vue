@@ -77,134 +77,130 @@
       </v-card>
     </v-bottom-sheet>
   </v-toolbar>
-  <v-row class="pa-1">
-    <v-col>
-      <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
-        :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
-        <template v-slot:prepend-inner>
-          <v-tooltip location="bottom" :text="$t('dialog.search')">
-            <template v-slot:activator="{ props }">
-              <v-icon v-bind="props" color="danger" icon="mdi-magnify"></v-icon>
+  <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
+    :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
+    <template v-slot:prepend-inner>
+      <v-tooltip location="bottom" :text="$t('dialog.search')">
+        <template v-slot:activator="{ props }">
+          <v-icon v-bind="props" color="danger" icon="mdi-magnify"></v-icon>
+        </template>
+      </v-tooltip>
+    </template>
+    <template v-slot:append-inner>
+      <v-menu :close-on-content-click="false">
+        <template v-slot:activator="{ props }">
+          <v-icon size="sm" v-bind="props" icon="" color="primary">
+            <v-tooltip activator="parent" variant="plain" :text="$t('dialog.filters')" location="bottom" />
+            <v-icon icon="mdi-filter"></v-icon>
+          </v-icon>
+        </template>
+        <v-list>
+          <v-list-subheader color="primary">
+            <v-icon icon="mdi-filter"></v-icon>
+            {{ $t('dialog.filters') }}</v-list-subheader>
+          <v-list-item v-for="(item, index) in types" class="text-dark">
+            <template v-slot:title>
+              <div class="form-check form-check-inline mx-1">
+                <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
+                  type="checkbox">
+                <label class="form-check-label">{{ item.label }}</label>
+              </div>
             </template>
-          </v-tooltip>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </template>
+  </v-text-field>
+  <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
+    v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
+    :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
+    rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
+    :loading="loading">
+    <template #item-operation="{ code, type }">
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
         </template>
-        <template v-slot:append-inner>
-          <v-menu :close-on-content-click="false">
-            <template v-slot:activator="{ props }">
-              <v-icon size="sm" v-bind="props" icon="" color="primary">
-                <v-tooltip activator="parent" variant="plain" :text="$t('dialog.filters')" location="bottom" />
-                <v-icon icon="mdi-filter"></v-icon>
-              </v-icon>
+        <v-list>
+          <v-list-item class="text-dark" :title="$t('dialog.accounting_doc')" :to="'/acc/accounting/view/' + code">
+            <template v-slot:prepend>
+              <v-icon color="green-darken-4" icon="mdi-file"></v-icon>
             </template>
-            <v-list>
-              <v-list-subheader color="primary">
-                <v-icon icon="mdi-filter"></v-icon>
-                {{ $t('dialog.filters') }}</v-list-subheader>
-              <v-list-item v-for="(item, index) in types" class="text-dark">
-                <template v-slot:title>
-                  <div class="form-check form-check-inline mx-1">
-                    <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
-                      type="checkbox">
-                    <label class="form-check-label">{{ item.label }}</label>
-                  </div>
-                </template>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-text-field>
-      <EasyDataTable table-class-name="customize-table ma-1 pa-1" :table-class-name="tableClassName"
-        v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
-        :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
-        body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-        rowsOfPageSeparatorMessage="از" :loading="loading">
-        <template #item-operation="{ code, type }">
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
+          </v-list-item>
+          <v-list-item class="text-dark" :title="$t('dialog.view')" :to="'/acc/sell/view/' + code">
+            <template v-slot:prepend>
+              <v-icon color="green-darken-4" icon="mdi-eye"></v-icon>
             </template>
-            <v-list>
-              <v-list-item class="text-dark" :title="$t('dialog.accounting_doc')" :to="'/acc/accounting/view/' + code">
-                <template v-slot:prepend>
-                  <v-icon color="green-darken-4" icon="mdi-file"></v-icon>
-                </template>
-              </v-list-item>
-              <v-list-item class="text-dark" :title="$t('dialog.view')" :to="'/acc/sell/view/' + code">
-                <template v-slot:prepend>
-                  <v-icon color="green-darken-4" icon="mdi-eye"></v-icon>
-                </template>
-              </v-list-item>
-              <v-list-item class="text-dark" :title="$t('dialog.export_pdf')"
-                @click="printOptions.selectedPrintCode = code; modal = true;">
-                <template v-slot:prepend>
-                  <v-icon icon="mdi-file-pdf-box"></v-icon>
-                </template>
-              </v-list-item>
-              <v-list-item class="text-dark" :title="$t('dialog.edit')" @click="canEditItem(code)">
-                <template v-slot:prepend>
-                  <v-icon icon="mdi-file-edit"></v-icon>
-                </template>
-              </v-list-item>
-              <v-list-item class="text-dark" :title="$t('dialog.delete')" @click="deleteItem(code)">
-                <template v-slot:prepend>
-                  <v-icon color="deep-orange-accent-4" icon="mdi-trash-can"></v-icon>
-                </template>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-        <template #item-label="{ label }">
-          <span v-if="label">
-            <span v-if="label.code == 'payed'" class="text-success">{{ label.label }}</span>
-            <span v-if="label.code == 'returned'" class="text-danger">{{ label.label }}</span>
-            <span v-if="label.code == 'accepted'" class="text-info">{{ label.label }}</span>
-          </span>
-        </template>
-        <template #item-des="{ des }">
-          {{ des.replace("فاکتور فروش:", "") }}
-        </template>
-        <template #item-relatedDocsCount="{ relatedDocsCount, relatedDocsPays }">
-          <span v-if="relatedDocsCount != '0'" class="text-success"><i class="fa fa-money"></i>
-            {{ this.$filters.formatNumber(relatedDocsPays) }}
-          </span>
-        </template>
-        <template #item-amount="{ amount }">
-          <span class="text-dark">
-            {{ this.$filters.formatNumber(amount) }}
-          </span>
-        </template>
-        <template #item-profit="{ profit }">
-          <span v-if="profit >= 0" class="text-dark">
-            {{ this.$filters.formatNumber(profit) }}
-          </span>
-          <span v-else class="text-danger">
-            {{ this.$filters.formatNumber(Math.abs(profit)) }}
-            (زیان)
-          </span>
-        </template>
-        <template #item-transferCost="{ transferCost }">
-          <span class="text-dark">
-            {{ this.$filters.formatNumber(transferCost) }}
-          </span>
-        </template>
-        <template #item-discountAll="{ discountAll }">
-          <span class="text-dark">
-            {{ this.$filters.formatNumber(discountAll) }}
-          </span>
-        </template>
-        <template #item-person="{ person }">
-          <router-link :to="'/acc/persons/card/view/' + person.code">
-            {{ person.nikename }}
-          </router-link>
-        </template>
-        <template #item-code="{ code }">
-          <router-link :to="'/acc/sell/view/' + code">
-            {{ code }}
-          </router-link>
-        </template>
-      </EasyDataTable>
-    </v-col>
-  </v-row>
+          </v-list-item>
+          <v-list-item class="text-dark" :title="$t('dialog.export_pdf')"
+            @click="printOptions.selectedPrintCode = code; modal = true;">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-file-pdf-box"></v-icon>
+            </template>
+          </v-list-item>
+          <v-list-item class="text-dark" :title="$t('dialog.edit')" @click="canEditItem(code)">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-file-edit"></v-icon>
+            </template>
+          </v-list-item>
+          <v-list-item class="text-dark" :title="$t('dialog.delete')" @click="deleteItem(code)">
+            <template v-slot:prepend>
+              <v-icon color="deep-orange-accent-4" icon="mdi-trash-can"></v-icon>
+            </template>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </template>
+    <template #item-label="{ label }">
+      <span v-if="label">
+        <span v-if="label.code == 'payed'" class="text-success">{{ label.label }}</span>
+        <span v-if="label.code == 'returned'" class="text-danger">{{ label.label }}</span>
+        <span v-if="label.code == 'accepted'" class="text-info">{{ label.label }}</span>
+      </span>
+    </template>
+    <template #item-des="{ des }">
+      {{ des.replace("فاکتور فروش:", "") }}
+    </template>
+    <template #item-relatedDocsCount="{ relatedDocsCount, relatedDocsPays }">
+      <span v-if="relatedDocsCount != '0'" class="text-success"><i class="fa fa-money"></i>
+        {{ this.$filters.formatNumber(relatedDocsPays) }}
+      </span>
+    </template>
+    <template #item-amount="{ amount }">
+      <span class="text-dark">
+        {{ this.$filters.formatNumber(amount) }}
+      </span>
+    </template>
+    <template #item-profit="{ profit }">
+      <span v-if="profit >= 0" class="text-dark">
+        {{ this.$filters.formatNumber(profit) }}
+      </span>
+      <span v-else class="text-danger">
+        {{ this.$filters.formatNumber(Math.abs(profit)) }}
+        (زیان)
+      </span>
+    </template>
+    <template #item-transferCost="{ transferCost }">
+      <span class="text-dark">
+        {{ this.$filters.formatNumber(transferCost) }}
+      </span>
+    </template>
+    <template #item-discountAll="{ discountAll }">
+      <span class="text-dark">
+        {{ this.$filters.formatNumber(discountAll) }}
+      </span>
+    </template>
+    <template #item-person="{ person }">
+      <router-link :to="'/acc/persons/card/view/' + person.code">
+        {{ person.nikename }}
+      </router-link>
+    </template>
+    <template #item-code="{ code }">
+      <router-link :to="'/acc/sell/view/' + code">
+        {{ code }}
+      </router-link>
+    </template>
+  </EasyDataTable>
   <!-- Print Modal -->
   <v-dialog v-model="modal" width="auto">
     <v-card :subtitle="$t('dialog.print_info_des')" prepend-icon="mdi-file-pdf-box" :title="$t('dialog.export_pdf')">
@@ -237,29 +233,29 @@
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
-import { ref ,defineComponent } from "vue";
+import { ref, defineComponent } from "vue";
 
-export default defineComponent ({
+export default defineComponent({
   name: "list",
   data() {
     let self = this;
     return {
-      paperSizes : [
+      paperSizes: [
         {
-          title:self.$t('dialog.a4p'),
-          value:'A4'
+          title: self.$t('dialog.a4p'),
+          value: 'A4'
         },
         {
-          title:self.$t('dialog.a4l'),
-          value:'A4-L'
+          title: self.$t('dialog.a4l'),
+          value: 'A4-L'
         },
         {
-          title:self.$t('dialog.a5p'),
-          value:'A5'
+          title: self.$t('dialog.a5p'),
+          value: 'A5'
         },
         {
-          title:self.$t('dialog.a5l'),
-          value:'A5-L'
+          title: self.$t('dialog.a5l'),
+          value: 'A5-L'
         },
       ],
       modal: false,

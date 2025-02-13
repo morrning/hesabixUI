@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router'
 import axios from 'axios';
 import { ref } from 'vue';
-
+import "./assets/site.css";
 export default {
   data: () => {
     return {

@@ -125,7 +125,7 @@ export default {
     <span class="d-flex d-sm-none">{{ business.name }}</span>
     <v-spacer />
   </v-system-bar>
-  <v-navigation-drawer v-model="drawer" :width="280">
+  <v-navigation-drawer v-model="drawer" :width="300">
     <v-card height="64" rounded="0" prepend-icon="mdi-account">
       <template v-slot:title>
         {{ $t('app.name') }}

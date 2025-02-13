@@ -58,9 +58,7 @@
       </v-list>
     </v-menu>
   </v-toolbar>
-  <v-row class="pa-1">
-    <v-col>
-      <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
+  <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
         :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
         <template v-slot:prepend-inner>
           <v-tooltip location="bottom" :text="$t('dialog.search')">
@@ -94,7 +92,7 @@
           </v-menu>
         </template>
       </v-text-field>
-      <EasyDataTable table-class-name="customize-table ma-1 pa-1" :table-class-name="tableClassName"
+      <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
         v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
         :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
         body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
@@ -145,8 +143,6 @@
           <span>{{ this.$filters.formatNumber(balance) }}</span>
         </template>
       </EasyDataTable>
-    </v-col>
-  </v-row>
 </template>
 
 <script>

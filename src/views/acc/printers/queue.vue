@@ -15,45 +15,41 @@
             </template>
         </v-tooltip>
     </v-toolbar>
-    <v-row class="pa-1">
-        <v-col>
-            <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto"
-                density="compact" :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
-                <template v-slot:prepend-inner>
-                    <v-tooltip location="bottom" :text="$t('dialog.search')">
-                        <template v-slot:activator="{ props }">
-                            <v-icon v-bind="props" color="danger" icon="mdi-magnify"></v-icon>
-                        </template>
-                    </v-tooltip>
+    <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
+        :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
+        <template v-slot:prepend-inner>
+            <v-tooltip location="bottom" :text="$t('dialog.search')">
+                <template v-slot:activator="{ props }">
+                    <v-icon v-bind="props" color="danger" icon="mdi-magnify"></v-icon>
                 </template>
-            </v-text-field>
-            <EasyDataTable table-class-name="customize-table ma-1 pa-1" :table-class-name="tableClassName"
-                v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
-                :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
-                body-text-direction="center" rowsPerPageMessage="تعداد سطر"
-                emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
-                <template #item-operation="{ code }">
-                    <v-menu>
-                        <template v-slot:activator="{ props }">
-                            <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
-                        </template>
-                        <v-list>
-                            <v-list-item class="text-dark" :title="$t('dialog.view')" @click="print(code)">
-                                <template v-slot:prepend>
-                                    <v-icon color="green-darken-4" icon="mdi-eye"></v-icon>
-                                </template>
-                            </v-list-item>
-                            <v-list-item class="text-dark" :title="$t('dialog.delete')" @click="deleteItem(code)">
-                                <template v-slot:prepend>
-                                    <v-icon color="deep-orange-accent-4" icon="mdi-trash-can"></v-icon>
-                                </template>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
+            </v-tooltip>
+        </template>
+    </v-text-field>
+    <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
+        v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
+        :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
+        body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
+        rowsOfPageSeparatorMessage="از" :loading="loading">
+        <template #item-operation="{ code }">
+            <v-menu>
+                <template v-slot:activator="{ props }">
+                    <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
                 </template>
-            </EasyDataTable>
-        </v-col>
-    </v-row>
+                <v-list>
+                    <v-list-item class="text-dark" :title="$t('dialog.view')" @click="print(code)">
+                        <template v-slot:prepend>
+                            <v-icon color="green-darken-4" icon="mdi-eye"></v-icon>
+                        </template>
+                    </v-list-item>
+                    <v-list-item class="text-dark" :title="$t('dialog.delete')" @click="deleteItem(code)">
+                        <template v-slot:prepend>
+                            <v-icon color="deep-orange-accent-4" icon="mdi-trash-can"></v-icon>
+                        </template>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+        </template>
+    </EasyDataTable>
 </template>
 
 <script>
@@ -157,7 +153,7 @@ export default {
                 if (result.isConfirmed) {
                     axios.post('/api/printers/queue_doc_delete_all').then((response) => {
                         if (response.data.Success == true) {
-                           this.items = [];
+                            this.items = [];
                             Swal.fire({
                                 text: 'صف چاپ پاکسازی شد.',
                                 icon: 'success',
