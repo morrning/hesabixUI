@@ -53,6 +53,7 @@ const fa_lang = {
     notif: "اطلاعیه‌ها",
     acc_docs: "اسناد حسابداری",
     today: "امروز",
+    clock: "ساعت",
     total: "کل",
     recs_today: "دریافت‌های امروز",
     sends_today: "پرداخت‌های امروز",

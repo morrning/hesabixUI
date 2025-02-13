@@ -9,6 +9,7 @@ import Profile_btn from '@/components/application/buttons/profile_btn.vue';
 import Notifications_btn from '@/components/application/buttons/notifications_btn.vue';
 import Year_cob from '@/components/application/combobox/year_cob.vue';
 import Currency_cob from '@/components/application/combobox/currency_cob.vue';
+import clock from '@/components/application/clock.vue';
 import "/public/dashmix/dashmix.min.css"
 
 export default {
@@ -112,7 +113,8 @@ export default {
     Profile_btn: Profile_btn,
     Notifications_btn: Notifications_btn,
     Year_cob: Year_cob,
-    Currency_cob: Currency_cob
+    Currency_cob: Currency_cob,
+    clock: clock
   }
 }
 </script>
@@ -124,6 +126,7 @@ export default {
     <v-avatar :image="apiUrl + '/front/avatar/file/get/' + business.id" size="20" class="me-2 d-flex d-sm-none" />
     <span class="d-flex d-sm-none">{{ business.name }}</span>
     <v-spacer />
+    <clock />
   </v-system-bar>
   <v-navigation-drawer v-model="drawer" :width="300">
     <v-card height="64" rounded="0" prepend-icon="mdi-account">
