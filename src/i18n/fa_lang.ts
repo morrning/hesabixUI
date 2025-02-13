@@ -134,6 +134,7 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    prelabel: "عنوان",
     clean_queue: "پاک کردن کل صف چاپ",
     date_start: "تاریخ شروع",
     date_end: "تاریخ پایان",

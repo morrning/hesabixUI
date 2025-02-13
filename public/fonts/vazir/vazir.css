@@ -94,6 +94,8 @@ table,
 caption,
 tbody,
 tfoot,
+option,
+.input-wrapper,.node-text
 thead,
 tr,
 th,
@@ -112,5 +114,5 @@ small,
 .form-control,
 .btn,
 input {
-    font-family: 'Vazirmatn FD', sans-serif;
+    font-family: 'Vazirmatn FD', sans-serif !important;
 }

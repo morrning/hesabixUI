@@ -5,7 +5,7 @@
   font-weight: normal;
   font-style:normal;
 }
-body{
+body,option{
   font-family: 'Vazir FD',Tahoma;
   background-color: rgb(255, 255, 255);
 }

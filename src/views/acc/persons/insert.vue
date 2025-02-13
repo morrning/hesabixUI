@@ -61,13 +61,21 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-4">
+                  <div class="form-floating mb-4">
+                    <select class="form-select" v-model="person.prelabel" aria-label="">
+                      <option v-for="prelabel in prelabels" :value="prelabel">{{ prelabel.label }}</option>
+                    </select>
+                    <label for="floatingSelect">{{ $t('dialog.prelabel') }}</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
                   <div class="form-floating mb-4">
                     <input v-model="person.nikename" class="form-control" type="text">
                     <label class="form-label"><span class="text-danger">(لازم)</span> نام مستعار</label>
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-4">
                   <div class="form-floating mb-4">
                     <input v-model="person.company" class="form-control" type="text">
                     <label class="form-label"> شرکت </label>
@@ -274,6 +282,7 @@ export default {
   data: () => {
     return {
       tabs: '',
+      prelabels: [],
       loading: true,
       account: {
         name: '',
@@ -303,6 +312,7 @@ export default {
         code: 0,
         types: [],
         accounts: [],
+        prelabel: '',
       }
     }
   },
@@ -325,6 +335,10 @@ export default {
       this.person.accounts.splice(index, 1);
     },
     loadData(id = '') {
+      axios.post('/api/person/prelabels/list').then((response) => {
+        this.prelabels = response.data;
+      });
+
       if (id != '') {
         //load user info
         this.loading = true;

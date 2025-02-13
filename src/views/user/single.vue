@@ -19,9 +19,11 @@ export default {
     }
   },
   created() {
-    if (localStorage.getItem('isLogedIn') == true) {
-      this.$router.push('/user/dashboard')
-    }
+    axios.post('/api/user/check/login').then((response)=>{
+      if(response.data.Success == true){
+        this.$router.push('/profile/dashboard')
+      }
+    });
   }
 }
 </script>

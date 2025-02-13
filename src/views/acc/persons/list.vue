@@ -3,7 +3,8 @@
     <template v-slot:prepend>
       <v-tooltip :text="$t('dialog.back')" location="bottom">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text" icon="mdi-arrow-right" />
+          <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text"
+            icon="mdi-arrow-right" />
         </template>
       </v-tooltip>
     </template>
@@ -122,9 +123,9 @@
             </v-list>
           </v-menu>
         </template>
-        <template #item-nikename="{ nikename, code }">
+        <template #item-nikename="{ nikename, code, prelabel }">
           <router-link :to="'/acc/persons/card/view/' + code">
-            {{ nikename }}
+            {{ prelabel + ' ' + nikename }}
           </router-link>
         </template>
         <template #item-speedAccess="{ speedAccess }">
@@ -251,7 +252,7 @@ export default {
       this.loading = false;
     },
     loadData() {
-      this.loading= true;
+      this.loading = true;
       axios.get('/api/person/list')
         .then((response) => {
           this.items = response.data;
