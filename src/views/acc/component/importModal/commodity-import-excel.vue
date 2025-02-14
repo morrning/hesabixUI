@@ -57,11 +57,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <!-- Button trigger modal -->
-  <button ref="Close" type="button" class="ms-2 btn btn-sm btn-primary modal-close-btn" title="وارد کردن از اکسل" data-bs-toggle="modal" data-bs-target="#importexcel" >
-    <i class="fa fa-file-import"></i>
-  </button>
-
+  <v-tooltip :text="$t('dialog.import_excel')" location="bottom">
+    <template v-slot:activator="{ props }">
+      <v-btn v-bind="props" icon="mdi-table-arrow-left" color="primary" data-bs-toggle="modal"
+        data-bs-target="#importexcel">
+      </v-btn>
+    </template>
+  </v-tooltip>
   <!-- Modal -->
   <div class="modal modal-lg fade" id="importexcel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="importexcelLabel" aria-hidden="true">
     <div class="modal-dialog">

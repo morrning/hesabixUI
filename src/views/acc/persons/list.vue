@@ -59,90 +59,90 @@
     </v-menu>
   </v-toolbar>
   <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
-        :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
-        <template v-slot:prepend-inner>
-          <v-tooltip location="bottom" :text="$t('dialog.search')">
-            <template v-slot:activator="{ props }">
-              <v-icon v-bind="props" color="danger" icon="mdi-magnify"></v-icon>
+    :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
+    <template v-slot:prepend-inner>
+      <v-tooltip location="bottom" :text="$t('dialog.search')">
+        <template v-slot:activator="{ props }">
+          <v-icon v-bind="props" color="danger" icon="mdi-magnify"></v-icon>
+        </template>
+      </v-tooltip>
+    </template>
+    <template v-slot:append-inner>
+      <v-menu :close-on-content-click="false">
+        <template v-slot:activator="{ props }">
+          <v-icon size="sm" v-bind="props" icon="" color="primary">
+            <v-tooltip activator="parent" variant="plain" :text="$t('dialog.filters')" location="bottom" />
+            <v-icon icon="mdi-filter"></v-icon>
+          </v-icon>
+        </template>
+        <v-list>
+          <v-list-subheader color="primary">
+            <v-icon icon="mdi-filter"></v-icon>
+            {{ $t('dialog.filters') }}</v-list-subheader>
+          <v-list-item v-for="(item, index) in types" class="text-dark">
+            <template v-slot:title>
+              <div class="form-check form-check-inline mx-1">
+                <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
+                  type="checkbox">
+                <label class="form-check-label">{{ item.label }}</label>
+              </div>
             </template>
-          </v-tooltip>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </template>
+  </v-text-field>
+  <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
+    v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
+    :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
+    rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
+    :loading="loading">
+    <template #item-operation="{ code }">
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
         </template>
-        <template v-slot:append-inner>
-          <v-menu :close-on-content-click="false">
-            <template v-slot:activator="{ props }">
-              <v-icon size="sm" v-bind="props" icon="" color="primary">
-                <v-tooltip activator="parent" variant="plain" :text="$t('dialog.filters')" location="bottom" />
-                <v-icon icon="mdi-filter"></v-icon>
-              </v-icon>
+        <v-list>
+          <v-list-item class="text-dark" :title="$t('dialog.view')" :to="'/acc/persons/card/view/' + code">
+            <template v-slot:prepend>
+              <v-icon color="green-darken-4" icon="mdi-eye"></v-icon>
             </template>
-            <v-list>
-              <v-list-subheader color="primary">
-                <v-icon icon="mdi-filter"></v-icon>
-                {{ $t('dialog.filters') }}</v-list-subheader>
-              <v-list-item v-for="(item, index) in types" class="text-dark">
-                <template v-slot:title>
-                  <div class="form-check form-check-inline mx-1">
-                    <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
-                      type="checkbox">
-                    <label class="form-check-label">{{ item.label }}</label>
-                  </div>
-                </template>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-text-field>
-      <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
-        v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
-        :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
-        body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-        rowsOfPageSeparatorMessage="از" :loading="loading">
-        <template #item-operation="{ code }">
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
+          </v-list-item>
+          <v-list-item class="text-dark" :title="$t('dialog.edit')" :to="'/acc/persons/mod/' + code">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-file-edit"></v-icon>
             </template>
-            <v-list>
-              <v-list-item class="text-dark" :title="$t('dialog.view')" :to="'/acc/persons/card/view/' + code">
-                <template v-slot:prepend>
-                  <v-icon color="green-darken-4" icon="mdi-eye"></v-icon>
-                </template>
-              </v-list-item>
-              <v-list-item class="text-dark" :title="$t('dialog.edit')" :to="'/acc/persons/mod/' + code">
-                <template v-slot:prepend>
-                  <v-icon icon="mdi-file-edit"></v-icon>
-                </template>
-              </v-list-item>
-              <v-list-item class="text-dark" :title="$t('dialog.delete')" @click="deleteItem(code)">
-                <template v-slot:prepend>
-                  <v-icon color="deep-orange-accent-4" icon="mdi-trash-can"></v-icon>
-                </template>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-        <template #item-nikename="{ nikename, code, prelabel }">
-          <router-link :to="'/acc/persons/card/view/' + code">
-            {{ prelabel + ' ' + nikename }}
-          </router-link>
-        </template>
-        <template #item-speedAccess="{ speedAccess }">
-          <i v-if="speedAccess" class="fa fa-check text-success"></i>
-        </template>
-        <template #item-status="{ balance }">
-          <span v-if="balance < 0" class="text-danger">بدهکار</span>
-          <span v-if="balance > 0" class="text-success">بستانکار</span>
-        </template>
-        <template #item-bs="{ bs }">
-          <span>{{ this.$filters.formatNumber(bs) }}</span>
-        </template>
-        <template #item-bd="{ bd }">
-          <span>{{ this.$filters.formatNumber(bd) }}</span>
-        </template>
-        <template #item-balance="{ balance }">
-          <span>{{ this.$filters.formatNumber(balance) }}</span>
-        </template>
-      </EasyDataTable>
+          </v-list-item>
+          <v-list-item class="text-dark" :title="$t('dialog.delete')" @click="deleteItem(code)">
+            <template v-slot:prepend>
+              <v-icon color="deep-orange-accent-4" icon="mdi-trash-can"></v-icon>
+            </template>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </template>
+    <template #item-nikename="{ nikename, code, prelabel }">
+      <router-link :to="'/acc/persons/card/view/' + code">
+        {{ prelabel + ' ' + nikename }}
+      </router-link>
+    </template>
+    <template #item-speedAccess="{ speedAccess }">
+      <i v-if="speedAccess" class="fa fa-check text-success"></i>
+    </template>
+    <template #item-status="{ balance }">
+      <span v-if="balance < 0" class="text-danger">بدهکار</span>
+      <span v-if="balance > 0" class="text-success">بستانکار</span>
+    </template>
+    <template #item-bs="{ bs }">
+      <span>{{ this.$filters.formatNumber(bs) }}</span>
+    </template>
+    <template #item-bd="{ bd }">
+      <span>{{ this.$filters.formatNumber(bd) }}</span>
+    </template>
+    <template #item-balance="{ balance }">
+      <span>{{ this.$filters.formatNumber(balance) }}</span>
+    </template>
+  </EasyDataTable>
 </template>
 
 <script>

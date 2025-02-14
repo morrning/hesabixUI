@@ -1,117 +1,143 @@
 <template>
-  <div class="block block-content-full ">
-    <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
-      <h3 class="block-title text-primary-dark">
-        <button @click="$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
-          <i class="fa fw-bold fa-arrow-right"></i>
-        </button>
-        <i class="mx-2 fa fa-list"></i>
-        کالا و خدمات
-      </h3>
-      <div class="block-options">
-        <router-link to="/acc/commodity/mod/" class="btn btn-sm btn-primary ms-1">
-          <span class="fa fa-plus fw-bolder"></span>
-        </router-link>
-        <importExcel :windowsState="this.importWindowsState"></importExcel>
-        <div class="dropdown">
-          <a class="btn btn-sm btn-danger ms-2 dropdown-toggle text-end" href="#" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-file-pdf"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a @click.prevent="print(false)" class="dropdown-item" href="#">انتخاب شده‌ها</a></li>
-            <li><a @click.prevent="print(true)" class="dropdown-item" href="#">همه موارد</a></li>
-          </ul>
-        </div>
-        <div class="dropdown">
-          <a class="btn btn-sm btn-success ms-2 dropdown-toggle text-end" href="#" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-file-excel"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a @click.prevent="excellOutput(false)" class="dropdown-item" href="#">انتخاب شده‌ها</a></li>
-            <li><a @click.prevent="excellOutput(true)" class="dropdown-item" href="#">همه موارد</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="block-content pt-1 pb-3">
-      <div class="row">
-        <div class="col-sm-12 col-md-12 m-0 p-0">
-          <div class="mb-1">
-            <div class="input-group input-group-sm">
-              <span class="input-group-text"><i class="fa fa-search"></i></span>
-              <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
-            </div>
-          </div>
-          <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName" v-model:items-selected="itemsSelected" multi-sort show-index
-            alternating :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
-            header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
-            emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
+  <v-toolbar color="toolbar" :title="$t('drawer.commodity')">
+    <template v-slot:prepend>
+      <v-tooltip :text="$t('dialog.back')" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text"
+            icon="mdi-arrow-right" />
+        </template>
+      </v-tooltip>
+    </template>
+    <v-spacer></v-spacer>
+    <v-tooltip :text="$t('dialog.add_new')" location="bottom">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-package-variant-plus" color="primary" to="/acc/commodity/mod/"></v-btn>
+      </template>
+    </v-tooltip>
+    <changePrice :items="itemsSelected" :windowsState="this.importWindowsState"></changePrice>
+    <importExcel :windowsState="this.importWindowsState"></importExcel>
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="" color="red">
+          <v-tooltip activator="parent" :text="$t('dialog.export_pdf')" location="bottom" />
+          <v-icon icon="mdi-file-pdf-box"></v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-subheader color="primary">{{ $t('dialog.export_pdf') }}</v-list-subheader>
+        <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="print(false)">
+          <template v-slot:prepend>
+            <v-icon color="green-darken-4" icon="mdi-check"></v-icon>
+          </template>
+        </v-list-item>
+        <v-list-item class="text-dark" :title="$t('dialog.selected_all')" @click="print(true)">
+          <template v-slot:prepend>
+            <v-icon color="indigo-darken-4" icon="mdi-expand-all"></v-icon>
+          </template>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="" color="green">
+          <v-tooltip activator="parent" :text="$t('dialog.export_excel')" location="bottom" />
+          <v-icon icon="mdi-file-excel-box"></v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-subheader color="primary">{{ $t('dialog.export_excel') }}</v-list-subheader>
+        <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="excellOutput(false)">
+          <template v-slot:prepend>
+            <v-icon color="green-darken-4" icon="mdi-check"></v-icon>
+          </template>
+        </v-list-item>
+        <v-list-item class="text-dark" :title="$t('dialog.selected_all')" @click="excellOutput(true)">
+          <template v-slot:prepend>
+            <v-icon color="indigo-darken-4" icon="mdi-expand-all"></v-icon>
+          </template>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <v-tooltip :text="$t('dialog.delete')" location="bottom">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-trash-can" color="danger" @click="deleteGroup()"></v-btn>
+      </template>
+    </v-tooltip>
+  </v-toolbar>
+  <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
+    :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text">
+    <template v-slot:prepend-inner>
+      <v-tooltip location="bottom" :text="$t('dialog.search')">
+        <template v-slot:activator="{ props }">
+          <v-icon v-bind="props" color="danger" icon="mdi-magnify"></v-icon>
+        </template>
+      </v-tooltip>
+    </template>
+  </v-text-field>
+  <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
+    v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
+    :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
+    rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
+    :loading="loading">
 
-            <template #item-operation="{ code }">
-              <div class="dropdown-center">
-                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
-                  id="dropdown-align-center-alt-primary" type="button">
-                  <i class="fa-solid fa-ellipsis"></i>
-                </button>
-                <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
-                  style="">
-                  <router-link class="dropdown-item" :to="'/acc/commodity/mod/' + code">
-                    <i class="fa fa-edit pe-2"></i>
-                    ویرایش
-                  </router-link>
-                  <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger"
-                    :to="'/acc/persons/card/view/' + code">
-                    <i class="fa fa-trash pe-2"></i>
-                    حذف
-                  </button>
-                </div>
-              </div>
-            </template>
-            <template #item-speedAccess="{ speedAccess }">
-              <i v-if="speedAccess" class="fa fa-check text-success"></i>
-            </template>
-            <template #item-priceBuy="{ priceBuy }">
-              {{ this.$filters.formatNumber(priceBuy) }}
-            </template>
-            <template #item-priceSell="{ priceSell }">
-              {{ this.$filters.formatNumber(priceSell) }}
-            </template>
-            <template #item-count="{ count, khadamat }">
-              <label v-if="khadamat == false">
-                <span class="text-danger" v-if="count < 0">
-                  <i class="fa fa-arrow-down me-1"></i>
-                  {{ this.$filters.formatNumber(Math.abs(count)) }}
-                  کمبود موجودی
-                </span>
-                <span class="text-success" v-if="count > 0">
-                  <i class="fa fa-arrow-up me-1"></i>
-                  {{ this.$filters.formatNumber(Math.abs(count)) }}
-                </span>
-                <span class="text-dark" v-if="count == 0">
-                  {{ this.$filters.formatNumber(Math.abs(count)) }}
-                </span>
-              </label>
-              <label v-else>آیتم خدماتی</label>
-            </template>
-            <template #item-khadamat="{ khadamat }">
-              <label v-if="khadamat == false">کالا و اقلام فیزیکی</label>
-              <label v-else>خدمات</label>
-            </template>
-            <template #item-withoutTax="{ withoutTax }">
-              <i v-if="withoutTax == false || withoutTax == null" class="fa fa-check text-success"></i>
-              <i v-else class="fa fa-close text-danger"></i>
-            </template>
-            <template #item-commodityCountCheck="{ commodityCountCheck }">
-              <i v-if="commodityCountCheck == true" class="fa fa-check text-success"></i>
-              <i v-else class="fa fa-close text-danger"></i>
-            </template>
-          </EasyDataTable>
+    <template #item-operation="{ code }">
+      <div class="dropdown-center">
+        <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
+          id="dropdown-align-center-alt-primary" type="button">
+          <i class="fa-solid fa-ellipsis"></i>
+        </button>
+        <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end" style="">
+          <router-link class="dropdown-item" :to="'/acc/commodity/mod/' + code">
+            <i class="fa fa-edit pe-2"></i>
+            ویرایش
+          </router-link>
+          <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger"
+            :to="'/acc/persons/card/view/' + code">
+            <i class="fa fa-trash pe-2"></i>
+            حذف
+          </button>
         </div>
       </div>
-    </div>
-  </div>
+    </template>
+    <template #item-speedAccess="{ speedAccess }">
+      <i v-if="speedAccess" class="fa fa-check text-success"></i>
+    </template>
+    <template #item-priceBuy="{ priceBuy }">
+      {{ this.$filters.formatNumber(priceBuy) }}
+    </template>
+    <template #item-priceSell="{ priceSell }">
+      {{ this.$filters.formatNumber(priceSell) }}
+    </template>
+    <template #item-count="{ count, khadamat }">
+      <label v-if="khadamat == false">
+        <span class="text-danger" v-if="count < 0">
+          <i class="fa fa-arrow-down me-1"></i>
+          {{ this.$filters.formatNumber(Math.abs(count)) }}
+          کمبود موجودی
+        </span>
+        <span class="text-success" v-if="count > 0">
+          <i class="fa fa-arrow-up me-1"></i>
+          {{ this.$filters.formatNumber(Math.abs(count)) }}
+        </span>
+        <span class="text-dark" v-if="count == 0">
+          {{ this.$filters.formatNumber(Math.abs(count)) }}
+        </span>
+      </label>
+      <label v-else>آیتم خدماتی</label>
+    </template>
+    <template #item-khadamat="{ khadamat }">
+      <label v-if="khadamat == false">کالا و اقلام فیزیکی</label>
+      <label v-else>خدمات</label>
+    </template>
+    <template #item-withoutTax="{ withoutTax }">
+      <i v-if="withoutTax == false || withoutTax == null" class="fa fa-check text-success"></i>
+      <i v-else class="fa fa-close text-danger"></i>
+    </template>
+    <template #item-commodityCountCheck="{ commodityCountCheck }">
+      <i v-if="commodityCountCheck == true" class="fa fa-check text-success"></i>
+      <i v-else class="fa fa-close text-danger"></i>
+    </template>
+  </EasyDataTable>
 </template>
 
 <script>
@@ -119,11 +145,13 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { ref } from "vue";
 import importExcel from "../component/importModal/commodity-import-excel.vue";
+import ChangePriceGroup from "../component/commodity/changePriceGroup.vue";
 
 export default {
   name: "list",
   components: {
-    importExcel: importExcel
+    importExcel: importExcel,
+    changePrice: ChangePriceGroup
   },
   watch: {
     'importWindowsState.submited'(newValue, oldValue) {
@@ -165,6 +193,7 @@ export default {
   },
   methods: {
     loadData() {
+      this.itemsSelected = [];
       axios.get('/api/commodity/list')
         .then((response) => {
           this.items = response.data;
@@ -274,6 +303,48 @@ export default {
           })
         }
       })
+    },
+    deleteGroup() {
+      if (this.itemsSelected.length == 0) {
+        Swal.fire({
+          text: 'هیچ آیتمی انتخاب نشده است!',
+          icon: 'error',
+          confirmButtonText: 'قبول'
+        });
+      }
+      else {
+        Swal.fire({
+          text: 'آیا برای حذف این موارد مطمئن هستید؟',
+          showCancelButton: true,
+          confirmButtonText: 'بله',
+          cancelButtonText: `خیر`,
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            axios.post('/api/commodity/deletegroup', this.itemsSelected
+            ).then((response) => {
+              if (response.data.data.ignored == false) {
+                Swal.fire({
+                  text: 'کالاها  با موفقیت حذف شدند.',
+                  icon: 'success',
+                  confirmButtonText: 'قبول'
+                });
+              }
+              else {
+                Swal.fire({
+                  text: 'تعدادی از کالا‌های انتخاب شده به دلیل داشتن سند حسابداری یا اسناد انبار مرتبط قابل حذف نیستند.اما موارد بدون سند حذف شدند',
+                  icon: 'success',
+                  confirmButtonText: 'قبول'
+                });
+              }
+
+
+              this.loadData();
+            })
+          }
+        })
+      }
+
     }
   },
   beforeMount() {

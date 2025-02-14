@@ -135,6 +135,12 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    items_changing:'شما در حال ویرایش {msg} قلم کالا‌و‌خدمات هستید.',
+    price_type: 'نوع قیمت',
+    applay_much: 'مقدار تغییرات',
+    applay_percent: 'درصد تغییرات',
+    price_change_type: 'نوع تغییر قیمت',
+    change_price_group: "تغییر گروهی قیمت‌ها",
     prelabel: "عنوان",
     clean_queue: "پاک کردن کل صف چاپ",
     date_start: "تاریخ شروع",
