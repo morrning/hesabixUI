@@ -1,6 +1,6 @@
 {
     "name": "hesabix",
-    "version": "0.43.1",
+    "version": "0.41.7",
     "private": true,
     "scripts": {
         "dev": "vite",
