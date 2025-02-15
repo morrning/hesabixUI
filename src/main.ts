@@ -5,6 +5,7 @@ import axios from "axios";
 import "./registerServiceWorker";
 import { vMaska } from "maska/vue"
 import VueApexCharts from "vue3-apexcharts";
+import Uploader from 'vue-media-upload';
 
 //pinia
 import { createPinia } from 'pinia'
@@ -194,7 +195,8 @@ app.use(pinia)
 app.use(i18n)
 app.use(vuetify);
 app.use(VueApexCharts);
-app.directive("maska", vMaska)
+app.directive("maska", vMaska);
+app.component('Uploader', Uploader);
 //global methods
 app.config.globalProperties.$filters = {
     formatNumber(value: any, moneyLabel: any = false) {

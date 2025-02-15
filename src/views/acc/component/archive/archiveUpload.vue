@@ -113,7 +113,7 @@ export default defineComponent({
 <template>
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-sm btn-outline-success mx-2" data-bs-toggle="modal" data-bs-target="#archiveModal">
-    <span class="badge text-bg-dark me-2">{{this.fileStack.length}}</span>
+    <span class="badge text-bg-dark me-2">{{fileStack.length}}</span>
     <i class="fa fa-file me-1"></i>
     <span class="d-none d-sm-inline-block">آرشیو</span>
   </button>
@@ -131,11 +131,11 @@ export default defineComponent({
           <h5 class="text-primary-dark mt-3 my-0 py-0">افزودن فایل جدید</h5>
           <div>
             <form id="archive-file-upload" @submit.prevent="submitArchive()">
-              <input type="hidden" name="doctype" :value="this.$props.doctype">
-              <input type="hidden" name="docid" :value="this.$props.docid">
-              <input type="hidden" name="cat" :value="this.$props.cat">
+              <input type="hidden" name="doctype" :value="$props.doctype">
+              <input type="hidden" name="docid" :value="$props.docid">
+              <input type="hidden" name="cat" :value="$props.cat">
               <Uploader
-                  :server="this.$filters.getApiUrl() + '/api/archive/file/upload'"
+                  :server="$filters.getApiUrl() + '/api/archive/file/upload'"
                   :media="media.saved"
                   path="/storage/media"
                   @add="addMedia"
@@ -146,7 +146,7 @@ export default defineComponent({
               <div class="container-fluid mt-2">
                 <div class="row">
                   <div class="col-9">
-                    <input class="form-control" type="text" name="des" v-model="this.des" placeholder="توضیحات" aria-label="توضیحات">
+                    <input class="form-control" type="text" name="des" v-model="des" placeholder="توضیحات" aria-label="توضیحات">
                   </div>
                   <div class="col-3">
                     <button type="submit" class="btn btn-success d-flex">
