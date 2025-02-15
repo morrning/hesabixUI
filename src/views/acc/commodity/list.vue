@@ -73,6 +73,30 @@
         </template>
       </v-tooltip>
     </template>
+    <template v-slot:append-inner>
+      <v-menu :close-on-content-click="false">
+        <template v-slot:activator="{ props }">
+          <v-icon size="sm" v-bind="props" icon="" color="primary">
+            <v-tooltip activator="parent" variant="plain" :text="$t('dialog.filters')" location="bottom" />
+            <v-icon icon="mdi-filter"></v-icon>
+          </v-icon>
+        </template>
+        <v-list>
+          <v-list-subheader color="primary">
+            <v-icon icon="mdi-filter"></v-icon>
+            {{ $t('dialog.filters') }}</v-list-subheader>
+          <v-list-item v-for="(item, index) in types" class="text-dark">
+            <template v-slot:title>
+              <div class="form-check form-check-inline mx-1">
+                <input @change="filterTable()" v-model="types[index].checked" checked="" class="form-check-input"
+                  type="checkbox">
+                <label class="form-check-label">{{ item.name }}</label>
+              </div>
+            </template>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </template>
   </v-text-field>
   <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName"
     v-model:items-selected="itemsSelected" multi-sort show-index alternating :search-value="searchValue"
@@ -81,23 +105,23 @@
     :loading="loading">
 
     <template #item-operation="{ code }">
-      <div class="dropdown-center">
-        <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link" data-bs-toggle="dropdown"
-          id="dropdown-align-center-alt-primary" type="button">
-          <i class="fa-solid fa-ellipsis"></i>
-        </button>
-        <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end" style="">
-          <router-link class="dropdown-item" :to="'/acc/commodity/mod/' + code">
-            <i class="fa fa-edit pe-2"></i>
-            ویرایش
-          </router-link>
-          <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger"
-            :to="'/acc/persons/card/view/' + code">
-            <i class="fa fa-trash pe-2"></i>
-            حذف
-          </button>
-        </div>
-      </div>
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
+        </template>
+        <v-list>
+          <v-list-item class="text-dark" :title="$t('dialog.edit')" :to="'/acc/commodity/mod/' + code">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-file-edit"></v-icon>
+            </template>
+          </v-list-item>
+          <v-list-item class="text-dark" :title="$t('dialog.delete')" @click="deleteItem(code)">
+            <template v-slot:prepend>
+              <v-icon color="deep-orange-accent-4" icon="mdi-trash-can"></v-icon>
+            </template>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </template>
     <template #item-speedAccess="{ speedAccess }">
       <i v-if="speedAccess" class="fa fa-check text-success"></i>
@@ -170,6 +194,8 @@ export default {
       searchValue: '',
       loading: ref(true),
       items: [],
+      orgItems: [],
+      types: [],
       tableClassName: 'extable',
       itemsSelected: [],
       headers: [
@@ -192,11 +218,53 @@ export default {
     }
   },
   methods: {
+    filterTable() {
+      this.loading = true;
+      let calcItems = [];
+      let isAll = true;
+      let selectedTypes = [];
+      this.types.forEach((item) => {
+        if (item.checked == true) {
+          isAll = false;
+          selectedTypes.push(item);
+        }
+      });
+      if (isAll) {
+        this.items = this.orgItems;
+      }
+      else {
+        this.orgItems.forEach((item) => {
+          selectedTypes.forEach((st) => {
+            if (st.code == item.catData?.code) {
+              let existBefore = false;
+              calcItems.forEach((ri) => {
+                if (item.catData.code == ri.code) {
+                  existBefore = true;
+                }
+              })
+              if (existBefore == false) {
+                calcItems.push(item);
+              }
+            }
+          });
+        });
+        this.items = calcItems;
+        this.itemsSelected = [];
+      }
+
+      this.loading = false;
+    },
     loadData() {
       this.itemsSelected = [];
+      axios.post('/api/commodity/cat/get/line')
+        .then((response) => {
+          this.types = response.data;
+          this.isLoading = false;
+        });
       axios.get('/api/commodity/list')
         .then((response) => {
           this.items = response.data;
+          this.orgItems = response.data;
           this.loading = false;
         })
     },
