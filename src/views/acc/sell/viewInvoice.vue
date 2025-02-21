@@ -58,6 +58,7 @@ export default defineComponent({
       send_message_label: 'ارسال',
       bid: {
         legal_name: '',
+        shortlinks: false,
       },
       item: {
         doc: {
@@ -66,14 +67,18 @@ export default defineComponent({
           code: null,
           des: '',
           amount: 0,
-          profit: 0
+          profit: 0,
+          shortLink: null,
         },
         relatedDocs: [],
         rows: []
       },
       person: {
         nikename: null,
-        mobile: ''
+        mobile: '',
+        tel: '',
+        addres: '',
+        postalcode: '',
       },
       commoditys: [],
       totalRec: 0,
@@ -101,14 +106,14 @@ export default defineComponent({
       this.commoditys = [];
       axios.post('/api/accounting/doc/get', { 'code': this.$route.params.id }).then((response) => {
         this.item = response.data;
-        if (this.item.doc.shortlink != null) {
-          this.shortlink_url = getApiUrl() + '/sl/sell/' + localStorage.getItem("activeBid") + '/' + this.item.doc.shortlink;
+        if (this.item.doc.shortLink != null) {
+          this.shortlink_url = getApiUrl() + '/sl/sell/' + localStorage.getItem("activeBid") + '/' + this.item.doc.shortLink;
         }
         else {
           this.shortlink_url = getApiUrl() + '/sl/sell/' + localStorage.getItem("activeBid") + '/' + this.item.doc.id;
         }
-        response.data.relatedDocs.forEach(element => {
-          this.totalRec += parseInt(element.amount)
+        response.data.relatedDocs.forEach((rdoc: any) => {
+          this.totalRec += parseInt(rdoc.amount)
         });
       });
 
@@ -117,7 +122,7 @@ export default defineComponent({
         this.discountAll = response.data.discountAll;
         this.transferCost = response.data.transferCost;
         this.item.doc.profit = response.data.profit;
-        response.data.rows.forEach((item) => {
+        response.data.rows.forEach((item: any) => {
           if (item.commodity != null) {
             this.totalTax += parseInt(item.tax);
             this.totalDiscount += parseInt(item.discount);
@@ -138,14 +143,13 @@ export default defineComponent({
           }
 
         });
-        console.log(this.item)
       });
       axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
         this.bid = response.data;
         this.loading = false;
       });
       axios.get("/api/printers/options/info").then((response) => {
-        this.isLoading = false;
+        this.loading = false;
         this.printOptions = response.data.sell;
       })
     },
@@ -192,8 +196,7 @@ export default defineComponent({
         'printers': cloudePrinters,
         'printOptions': this.printOptions
       }).then((response) => {
-        this.printID = response.data.id;
-        window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
+        window.open(this.$API_URL + '/front/print/' + response.data.id, '_blank', 'noreferrer');
       });
     }
   },
@@ -271,29 +274,28 @@ export default defineComponent({
         مشاهده فاکتور
       </h3>
       <div class="block-options">
-        <archive-upload v-if="this.item.doc.id != 0" :docid="this.item.doc.id" doctype="sell"
-          cat="sell"></archive-upload>
+        <archive-upload v-if="item.doc.id != 0" :docid="item.doc.id" doctype="sell" cat="sell"></archive-upload>
         <button type="button" class="btn btn-sm btn-warning text-light me-2" data-bs-toggle="modal"
           data-bs-target="#notesModal">
-          <span class="badge text-bg-dark me-2">{{ this.notes.count }}</span>
+          <span class="badge text-bg-dark me-2">{{ notes.count }}</span>
           <i class="fa-regular fa-note-sticky me-1"></i>
           <span class="d-none d-sm-inline-block">یاداشت‌‌ها</span>
         </button>
-        <notes :stat="notes" :code="this.$route.params.id" typeNote="sell" />
+        <notes :stat="notes" :code="$route.params.id" typeNote="sell" />
         <!-- Button trigger modal -->
-        <button v-show="parseInt(this.item.doc.amount) > parseInt(this.totalRec)" type="button"
-          class="btn btn-sm btn-danger" @click="this.recModal.show()">
+        <button v-show="parseInt(item.doc.amount) > parseInt(totalRec)" type="button" class="btn btn-sm btn-danger"
+          @click="recModal.show()">
           <i class="fas fa-money-bill-1-wave"></i>
           <span class="d-none d-sm-inline-block">ثبت دریافت</span>
         </button>
         <!-- Modal -->
         <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="rec-modal" tabindex="-1"
           aria-labelledby="exampleModalLabel1" aria-hidden="true">
-          <rec ref="submitPay" :windowsState="this.PayWindowsState" :person="this.person.id"
-            :original-doc="this.item.doc.code" :total-amount="parseInt(this.item.doc.amount) - parseInt(this.totalRec)">
+          <rec ref="submitPay" :windowsState="PayWindowsState" :person="person.id" :original-doc="item.doc.code"
+            :total-amount="parseInt(item.doc.amount) - parseInt(totalRec)">
           </rec>
         </div>
-        <button type="button" class="btn btn-sm btn-info ms-2" @click="this.recListModal.show()">
+        <button type="button" class="btn btn-sm btn-info ms-2" @click="recListModal.show()">
           <i class="fas fa-arrow-alt-circle-down"></i>
           <span class="d-none d-sm-inline-block">دریافت‌ها</span>
         </button>
@@ -312,8 +314,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="modal-body">
-                <rec-list ref="recListRef" :windowsState="this.recListWindowsState"
-                  :items="this.item.relatedDocs"></rec-list>
+                <rec-list ref="recListRef" :windowsState="recListWindowsState" :items="item.relatedDocs"></rec-list>
               </div>
               <div class="modal-footer">
                 <button type="button" ref="btnCloseModalRec" class="btn btn-secondary btn-close-modal"
@@ -323,7 +324,7 @@ export default defineComponent({
           </div>
         </div>
         <!-- Button trigger modal -->
-        <button v-show="this.bid.shortlinks" type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal"
+        <button v-show="bid.shortlinks" type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal"
           data-bs-target="#exampleModal">
           <i class="fas fa-share-nodes"></i>
           <span class="d-none d-sm-inline-block">اشتراک گذاری</span>
@@ -350,18 +351,18 @@ export default defineComponent({
                         <i class="fa fa-paperclip me-2"></i>
                         پیوند فاکتور
                       </div>
-                      <input Readonly="Readonly" type="text" class="form-control" v-model="shortlink_url">
-                      <button class="btn btn-outline-success" type="button" @click="copyToCliboard()">{{ this.copy_label
-                        }}</button>
+                      <input :readonly="true" type="text" class="form-control" v-model="shortlink_url">
+                      <button class="btn btn-outline-success" type="button" @click="copyToCliboard()">{{ copy_label
+                      }}</button>
                     </div>
                     <div class="input-group">
                       <div class="input-group-text">
                         <i class="fa fa-message me-2"></i>
                         ارسال پیامک
                       </div>
-                      <input type="text" class="form-control" v-model="this.person.mobile">
-                      <button :disabled="this.loading" class="btn btn-outline-success" type="button"
-                        @click="sendSMS()">{{ this.send_message_label }}</button>
+                      <input type="text" class="form-control" v-model="person.mobile">
+                      <button :disabled="loading" class="btn btn-outline-success" type="button" @click="sendSMS()">{{
+                        send_message_label }}</button>
                     </div>
                   </div>
                   <div class="mt-3">
@@ -369,16 +370,16 @@ export default defineComponent({
                     <label>اشتراک گذاری در شبکه‌های اجتماعی</label>
                   </div>
                   <div class="mt-2">
-                    <a target="_blank" :href="'tg://msg?text=' + this.shortlink_url">
+                    <a target="_blank" :href="'tg://msg?text=' + shortlink_url">
                       <img src="/img/icons/telegram.png" class="m-3" style="max-width: 30px;" />
                     </a>
-                    <a target="_blank" :href="'et://msg_url?url=' + this.shortlink_url">
+                    <a target="_blank" :href="'et://msg_url?url=' + shortlink_url">
                       <img src="/img/icons/eitaa.jpeg" class="m-3" style="max-width: 30px;" />
                     </a>
-                    <a target="_blank" :href="'https://ble.ir/share/url?url=' + this.shortlink_url">
+                    <a target="_blank" :href="'https://ble.ir/share/url?url=' + shortlink_url">
                       <img src="/img/icons/bale-logo.png" class="m-3" style="max-width: 30px;" />
                     </a>
-                    <a target="_blank" :href="'https://ble.ir/share/url?url=' + this.shortlink_url">
+                    <a target="_blank" :href="'https://ble.ir/share/url?url=' + shortlink_url">
                       <img src="/img/icons/robika.png" class="m-3" style="max-width: 30px;" />
                     </a>
                   </div>
@@ -404,21 +405,21 @@ export default defineComponent({
             <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">شماره</span>
-                <input type="text" readonly="readonly" v-model="item.doc.code" class="form-control"
+                <input type="text" :readonly="true" v-model="item.doc.code" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">تاریخ</span>
-                <input type="text" readonly="readonly" v-model="item.doc.date" class="form-control"
+                <input type="text" :readonly="true" v-model="item.doc.date" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
             <div class="col-sm-12 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">شرح</span>
-                <input type="text" readonly="readonly" v-model="item.doc.des" class="form-control"
+                <input type="text" :readonly="true" v-model="item.doc.des" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
@@ -428,35 +429,35 @@ export default defineComponent({
             <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">نام</span>
-                <input type="text" readonly="readonly" v-model="person.nikename" class="form-control"
+                <input type="text" :readonly="true" v-model="person.nikename" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">موبایل</span>
-                <input type="text" readonly="readonly" v-model="person.mobile" class="form-control"
+                <input type="text" :readonly="true" v-model="person.mobile" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">تلفن</span>
-                <input type="text" readonly="readonly" v-model="person.tel" class="form-control"
+                <input type="text" :readonly="true" v-model="person.tel" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
             <div class="col-sm-6 col-md-3">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">کد پستی</span>
-                <input type="text" readonly="readonly" v-model="person.postalcode" class="form-control"
+                <input type="text" :readonly="true" v-model="person.postalcode" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
             <div class="col-sm-12 col-md-9">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">آدرس</span>
-                <input type="text" readonly="readonly" v-model="person.address" class="form-control"
+                <input type="text" :readonly="true" v-model="person.address" class="form-control"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
@@ -467,7 +468,7 @@ export default defineComponent({
             rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
             :loading="loading">
             <template #item-sumTotal="{ sumTotal }">
-              {{ this.$filters.formatNumber(sumTotal) }}
+              {{ $filters.formatNumber(sumTotal) }}
             </template>
             <template #item-count="{ count, commodity }">
               {{ count }} {{ commodity.unit }}
@@ -478,19 +479,19 @@ export default defineComponent({
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     قیمت واحد
                     <span class="badge text-bg-primary rounded-pill">
-                      {{ this.$filters.formatNumber(price) }}
+                      {{ $filters.formatNumber(price) }}
                     </span>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     تخفیف
                     <span class="badge text-bg-primary rounded-pill">
-                      {{ this.$filters.formatNumber(discount) }}
+                      {{ $filters.formatNumber(discount) }}
                     </span>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     مالیات
                     <span class="badge text-bg-primary rounded-pill">
-                      {{ this.$filters.formatNumber(tax) }}
+                      {{ $filters.formatNumber(tax) }}
                     </span>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -505,27 +506,29 @@ export default defineComponent({
             <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">جمع کل</span>
-                <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.item.doc.amount)"
+                <input type="text" :readonly="true" :value="$filters.formatNumber(item.doc.amount)"
                   class="form-control" aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">وضعیت</span>
-                <input v-if="parseInt(this.item.doc.amount) <= parseInt(this.totalRec)" type="text" readonly="readonly"
+                <input v-if="parseInt(item.doc.amount) <= parseInt(totalRec)" type="text" :readonly="true"
                   value="تسویه شده" class="form-control text-success" aria-describedby="inputGroup-sizing-sm">
-                <input v-else type="text" readonly="readonly" value="تسویه نشده" class="form-control text-danger"
+                <input v-else type="text" :readonly="true" value="تسویه نشده" class="form-control text-danger"
                   aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
-              <div v-if="parseInt(this.item.doc.profit) >= 0" class="input-group input-group-sm mb-3">
+              <div v-if="parseInt(item.doc.profit) >= 0" class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">سود فاکتور</span>
-                <input type="text" readonly="readonly" :value="this.$filters.formatNumber(Math.abs(this.item.doc.profit))" class="form-control text-success">
+                <input type="text" :readonly="true" :value="$filters.formatNumber(Math.abs(item.doc.profit))"
+                  class="form-control text-success">
               </div>
               <div v-else class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">زیان فاکتور</span>
-                <input type="text" readonly="readonly" :value="this.$filters.formatNumber(Math.abs(this.item.doc.profit))" class="form-control text-danger">
+                <input type="text" :readonly="true" :value="$filters.formatNumber(Math.abs(item.doc.profit))"
+                  class="form-control text-danger">
               </div>
             </div>
           </div>
@@ -533,22 +536,22 @@ export default defineComponent({
             <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">مالیات</span>
-                <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.totalTax)"
-                  class="form-control" aria-describedby="inputGroup-sizing-sm">
+                <input type="text" :readonly="true" :value="$filters.formatNumber(totalTax)" class="form-control"
+                  aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">تخفیف</span>
-                <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.discountAll)"
-                  class="form-control" aria-describedby="inputGroup-sizing-sm">
+                <input type="text" :readonly="true" :value="$filters.formatNumber(discountAll)" class="form-control"
+                  aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
               <div class="input-group input-group-sm mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-sm">هزینه حمل و نقل</span>
-                <input type="text" readonly="readonly" :value="this.$filters.formatNumber(this.transferCost)"
-                  class="form-control" aria-describedby="inputGroup-sizing-sm">
+                <input type="text" :readonly="true" :value="$filters.formatNumber(transferCost)" class="form-control"
+                  aria-describedby="inputGroup-sizing-sm">
               </div>
             </div>
           </div>
@@ -583,7 +586,7 @@ export default defineComponent({
                       {{ rd.date }}
                     </td>
                     <td class="fw-semibold">
-                      {{ this.$filters.formatNumber(rd.amount) }}
+                      {{ $filters.formatNumber(rd.amount) }}
                     </td>
                   </tr>
                   <tr v-if="item.relatedDocs.length == 0" class="text-center">
