@@ -33,7 +33,7 @@
               {{ commodity.name }}
             </template>
             <template #item-priceSell="{ priceSell }">
-              {{ this.$filters.formatNumber(priceSell) }}
+              {{ $filters.formatNumber(priceSell) }}
             </template>
           </EasyDataTable>
         </div>

@@ -64,7 +64,7 @@
                           </div>
                           <div class="col-12">
                             موجودی:
-                            {{ this.$filters.formatNumber(option.balance) }}
+                            {{ $filters.formatNumber(option.balance) }}
                             <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
                             <span class="text-success" v-if="option.balance > 0">بستانکار</span>
                           </div>
@@ -89,7 +89,7 @@
                           </div>
                           <div class="col-12">
                             موجودی:
-                            {{ this.$filters.formatNumber(option.balance) }}
+                            {{ $filters.formatNumber(option.balance) }}
                             <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
                             <span class="text-success" v-if="option.balance > 0">بستانکار</span>
                           </div>
@@ -113,7 +113,7 @@
                           </div>
                           <div class="col-12">
                             موجودی:
-                            {{ this.$filters.formatNumber(option.balance) }}
+                            {{ $filters.formatNumber(option.balance) }}
                             <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
                             <span class="text-success" v-if="option.balance > 0">بستانکار</span>
                           </div>
@@ -169,7 +169,7 @@
                           </div>
                           <div class="col-12">
                             موجودی:
-                            {{ this.$filters.formatNumber(option.balance) }}
+                            {{ $filters.formatNumber(option.balance) }}
                             <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
                             <span class="text-success" v-if="option.balance > 0">بستانکار</span>
                           </div>
@@ -193,7 +193,7 @@
                           </div>
                           <div class="col-12">
                             موجودی:
-                            {{ this.$filters.formatNumber(option.balance) }}
+                            {{ $filters.formatNumber(option.balance) }}
                             <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
                             <span class="text-success" v-if="option.balance > 0">بستانکار</span>
                           </div>
@@ -217,7 +217,7 @@
                           </div>
                           <div class="col-12">
                             موجودی:
-                            {{ this.$filters.formatNumber(option.balance) }}
+                            {{ $filters.formatNumber(option.balance) }}
                             <span class="text-danger" v-if="option.balance < 0">بدهکار</span>
                             <span class="text-success" v-if="option.balance > 0">بستانکار</span>
                           </div>

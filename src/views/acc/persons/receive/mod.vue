@@ -89,7 +89,7 @@
                                   <div class="col-6">
                                     <i class="fa fa-bars"></i>
                                     تراز:
-                                    {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+                                    {{ $filters.formatNumber(Math.abs(parseInt(option.bs) -
           parseInt(option.bd))) }}
                                     <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                                       بدهکار </span>

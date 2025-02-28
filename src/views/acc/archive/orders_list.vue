@@ -40,7 +40,7 @@
               <span v-else class="text-danger"><i class="fa fa-info me-2"></i>پرداخت نشده</span>
             </template>
             <template #item-price="{ price }">
-              <span class="">{{this.$filters.formatNumber(price)}}</span>
+              <span class="">{{ $filters.formatNumber(price)}}</span>
             </template>
             <template #item-cardPan="{ cardPan }">
               <span style="direction:ltr" class="">{{cardPan}}</span>

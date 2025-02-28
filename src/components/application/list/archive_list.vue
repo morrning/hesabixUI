@@ -30,7 +30,7 @@ export default {
     <v-list-item to="/acc/archive/order/new" class="my-0 py-0">
       <v-list-item-title>
         <v-progress-linear class="my-2"color="primary" :model-value="((parseInt(this.info.used) * 100) / parseInt(this.info.size))" :height="10"></v-progress-linear>
-        <span class="text-danger">{{ this.$filters.formatNumber(this.info.size) }}</span>
+        <span class="text-danger">{{ $filters.formatNumber(this.info.size) }}</span>
         {{ $t('units.mb') }}
       </v-list-item-title>
       <template v-slot:prepend>

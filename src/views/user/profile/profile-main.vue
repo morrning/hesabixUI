@@ -100,6 +100,7 @@ export default defineComponent({
         { text: 'کسب‌و‌کارها', url: '/profile/manager/business/list', icon: 'mdi-home-city', visible: true },
         { text: 'کاربران', url: '/profile/manager/users/list', icon: 'mdi-account-multiple', visible: true },
         { text: 'کاربران آنلاین', url: '/profile/manager/users/onlinelist', icon: 'mdi-account-badge', visible: true },
+        { text: 'افزونه‌ها', url: '/profile/manager/plugins/list', icon: 'mdi-toy-brick', visible: true },
         { text: 'تغییرات', url: '/profile/manager/changes/list', icon: 'mdi-cellphone-arrow-down', visible: true },
         { text: 'تاریخچه سیستم', url: '/profile/manager/logs/list', icon: 'mdi-history', visible: true },
       ],

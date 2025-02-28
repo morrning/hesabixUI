@@ -85,7 +85,7 @@ export default defineComponent({
       <span v-else class="text-success px-1">پرداخت آنلاین</span>
     </template>
     <template #item-amount="{ amount }">
-      <span>{{ this.$filters.formatNumber(amount) }}</span>
+      <span>{{ $filters.formatNumber(amount) }}</span>
     </template>
   </EasyDataTable>
 </template>

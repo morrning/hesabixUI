@@ -135,13 +135,13 @@
       <span v-if="balance > 0" class="text-success">بستانکار</span>
     </template>
     <template #item-bs="{ bs }">
-      <span>{{ this.$filters.formatNumber(bs) }}</span>
+      <span>{{ $filters.formatNumber(bs) }}</span>
     </template>
     <template #item-bd="{ bd }">
-      <span>{{ this.$filters.formatNumber(bd) }}</span>
+      <span>{{ $filters.formatNumber(bd) }}</span>
     </template>
     <template #item-balance="{ balance }">
-      <span>{{ this.$filters.formatNumber(balance) }}</span>
+      <span>{{ $filters.formatNumber(balance) }}</span>
     </template>
   </EasyDataTable>
 </template>

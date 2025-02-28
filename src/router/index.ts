@@ -111,6 +111,14 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: 'manager/plugins/list',
+                    component: () => import('../views/user/manager/settings/plugins.vue'),
+                    meta: {
+                        'title': 'افزونه‌ها',
+                        'login': true
+                    }
+                },
+                {
                     path: 'manager/logs/list',
                     component: () => import('../views/user/manager/log/logs.vue'),
                     meta: {
@@ -213,7 +221,7 @@ const router = createRouter({
                     name: 'acc_balanceSheet_list',
                     component: () =>
                         import('../views/acc/reports/balanceSheet.vue'),
-                }, 
+                },
                 {
                     path: 'reports/acc/explore_accounts',
                     name: 'acc_report_explore_accounts',

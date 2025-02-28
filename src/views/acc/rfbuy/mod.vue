@@ -72,7 +72,7 @@
                           <div class="col-6">
                             <i class="fa fa-bars"></i>
                             تراز:
-                            {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+                            {{ $filters.formatNumber(Math.abs(parseInt(option.bs) -
                               parseInt(option.bd))) }}
                             <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                               بدهکار </span>
@@ -86,7 +86,7 @@
                 </v-cob>
                 <span v-if="selectedPersonWithDet.bs != undefined" class="text-info ms-2">
                   تراز:
-                  {{ this.$filters.formatNumber(Math.abs(parseInt(this.selectedPersonWithDet.bs) -
+                  {{ $filters.formatNumber(Math.abs(parseInt(this.selectedPersonWithDet.bs) -
                     parseInt(this.selectedPersonWithDet.bd))) }}
                   <span class="text-danger"
                     v-if="parseInt(this.selectedPersonWithDet.bs) - parseInt(this.selectedPersonWithDet.bd) < 0">
@@ -362,22 +362,22 @@
                 </button>
               </template>
               <template #item-sumTotal="{ sumTotal }">
-                {{ this.$filters.formatNumber(sumTotal) }}
+                {{ $filters.formatNumber(sumTotal) }}
               </template>
               <template #item-sumWithoutTax="{ sumWithoutTax }">
-                {{ this.$filters.formatNumber(sumWithoutTax) }}
+                {{ $filters.formatNumber(sumWithoutTax) }}
               </template>
               <template #item-price="{ price }">
-                {{ this.$filters.formatNumber(price) }}
+                {{ $filters.formatNumber(price) }}
               </template>
               <template #item-commodity.name="{ commodity }">
                 {{ commodity.code }} - {{ commodity.name }}
               </template>
               <template #item-tax="{ tax }">
-                {{ this.$filters.formatNumber(tax) }}
+                {{ $filters.formatNumber(tax) }}
               </template>
               <template #item-discount="{ discount }">
-                {{ this.$filters.formatNumber(discount) }}
+                {{ $filters.formatNumber(discount) }}
               </template>
               <template #item-count="{ count, commodity }">
                 {{ count }} {{ commodity.unit }}
@@ -435,8 +435,8 @@
                         مالیات:
                       </span>
                       <span class="text-primary">
-                        {{ this.$filters.formatNumber(this.sumTax) }}
-                        {{ this.$filters.getActiveMoney().shortName }}
+                        {{ $filters.formatNumber(this.sumTax) }}
+                        {{ $filters.getActiveMoney().shortName }}
                       </span>
                     </div>
 
@@ -446,8 +446,8 @@
                         جمع مبلغ موارد انتخابی:
                       </span>
                       <span class="text-primary">
-                        {{ this.$filters.formatNumber(this.sumSelected) }}
-                        {{ this.$filters.getActiveMoney().shortName }}
+                        {{ $filters.formatNumber(this.sumSelected) }}
+                        {{ $filters.getActiveMoney().shortName }}
                       </span>
                     </div>
                     <div class="col-sm-12 col-md-3">
@@ -456,8 +456,8 @@
                         جمع کل:
                       </span>
                       <span class="text-primary">
-                        {{ this.$filters.formatNumber(this.sumTotal) }}
-                        {{ this.$filters.getActiveMoney().shortName }}
+                        {{ $filters.formatNumber(this.sumTotal) }}
+                        {{ $filters.getActiveMoney().shortName }}
                       </span>
                     </div>
                   </div>

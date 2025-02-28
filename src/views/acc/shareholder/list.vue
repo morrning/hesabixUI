@@ -59,7 +59,7 @@
               :loading = "loading"
           >
             <template #item-percent="{ percent }">
-              <span>{{this.$filters.formatNumber(percent)}}</span>
+              <span>{{ $filters.formatNumber(percent)}}</span>
             </template>
             <template #item-operation="{ id }">
               <button @click="this.deleteItem(id)" type="button" class="btn btn-link">

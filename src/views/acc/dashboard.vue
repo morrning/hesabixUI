@@ -25,7 +25,7 @@
               to="/acc/wallet/view">
               <v-card-text>
                 {{ $t('static.deposit') }}
-                {{ this.$filters.formatNumber(wallet.deposit) }}
+                {{ $filters.formatNumber(wallet.deposit) }}
                 {{ $t('currency.irr.short') }}
               </v-card-text>
             </v-card>
@@ -35,7 +35,7 @@
               to="/acc/banks/list">
               <v-card-text>
                 {{ $t('static.count') }} :
-                {{ this.$filters.formatNumber(stat.bankCount) }}
+                {{ $filters.formatNumber(stat.bankCount) }}
               </v-card-text>
             </v-card>
           </v-col>
@@ -44,7 +44,7 @@
               :title="$t('drawer.docs')" to="/acc/accounting/list">
               <v-card-text>
                 {{ $t('static.count') }} :
-                {{ this.$filters.formatNumber(stat.docCount) }}
+                {{ $filters.formatNumber(stat.docCount) }}
               </v-card-text>
             </v-card>
           </v-col>
@@ -53,14 +53,14 @@
               :title="$t('drawer.commodity')" to="/acc/commodity/list">
               <v-card-text>
                 {{ $t('static.count') }} :
-                {{ this.$filters.formatNumber(stat.commodity) }}
+                {{ $filters.formatNumber(stat.commodity) }}
               </v-card-text>
             </v-card>
           </v-col>
           <v-col cols="12" sm="6" md="3" v-show="permissions.accounting && dashboard.accounting_total">
             <v-card variant="outlined" color="primary" prepend-icon="mdi-table-refresh" :title="$t('drawer.roller')">
               <v-card-text>
-                {{ this.$filters.formatNumber(stat.income, true) }}
+                {{ $filters.formatNumber(stat.income, true) }}
               </v-card-text>
             </v-card>
           </v-col>
@@ -70,11 +70,11 @@
               <v-card-text>
                 <p>
                   {{ $t('drawer.total') }} :
-                  {{ this.$filters.formatNumber(stat.sells_total, true) }}
+                  {{ $filters.formatNumber(stat.sells_total, true) }}
                 </p>
                 <p>
                   {{ $t('drawer.today') }} :
-                  {{ this.$filters.formatNumber(stat.sells_today, true) }}
+                  {{ $filters.formatNumber(stat.sells_today, true) }}
                 </p>
               </v-card-text>
             </v-card>
@@ -85,11 +85,11 @@
               <v-card-text>
                 <p>
                   {{ $t('drawer.total') }} :
-                  {{ this.$filters.formatNumber(stat.buys_total, true) }}
+                  {{ $filters.formatNumber(stat.buys_total, true) }}
                 </p>
                 <p>
                   {{ $t('drawer.today') }} :
-                  {{ this.$filters.formatNumber(stat.buys_today, true) }}
+                  {{ $filters.formatNumber(stat.buys_today, true) }}
                 </p>
               </v-card-text>
             </v-card>
@@ -100,15 +100,15 @@
               <v-card-text>
                 <p>
                   {{ $t('static.count') }} :
-                  {{ this.$filters.formatNumber(stat.personCount) }}
+                  {{ $filters.formatNumber(stat.personCount) }}
                 </p>
                 <p>
                   {{ $t('drawer.recs_today') }} :
-                  {{ this.$filters.formatNumber(stat.recs_today, true) }}
+                  {{ $filters.formatNumber(stat.recs_today, true) }}
                 </p>
                 <p>
                   {{ $t('drawer.sends_today') }} :
-                  {{ this.$filters.formatNumber(stat.sends_today, true) }}
+                  {{ $filters.formatNumber(stat.sends_today, true) }}
                 </p>
               </v-card-text>
             </v-card>

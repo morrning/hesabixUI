@@ -135,6 +135,13 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    plugin_name: 'نام افزونه',
+    price: 'قیمت (تومان)',
+    time: 'زمان اعتبار(ثانیه)',
+    timeLabel: 'برچسب زمان',
+    default_on: 'پیشفرض فعال',
+    edit_plugin: 'ویرایش افزونه',
+    plugins: 'افزونه‌ها',
     most_des: 'شرح‌های پرتکرار',
     insert_mostdes: 'افزودن شرح پرتکرار',
     input_text: 'متن را وارد کنید',

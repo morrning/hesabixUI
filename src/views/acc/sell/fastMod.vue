@@ -508,10 +508,10 @@ export default defineComponent({
                     class="form-control form-control-sm border-0 text-center" />
                 </template>
                 <template #item-commodity.name="{ commodity }">
-                  <span>{{ this.$filters.formatNumber(commodity.code) + ' - ' + commodity.name }}</span>
+                  <span>{{ $filters.formatNumber(commodity.code) + ' - ' + commodity.name }}</span>
                 </template>
                 <template #item-bs="{ bs }">
-                  <span>{{ this.$filters.formatNumber(bs) }}</span>
+                  <span>{{ $filters.formatNumber(bs) }}</span>
                 </template>
                 <template #item-count="{ unitFormat, arrayIndex }">
                   <money3 v-model="data.items[arrayIndex].count" v-bind="unitFormat"
@@ -534,8 +534,8 @@ export default defineComponent({
                           جمع مبلغ موارد انتخابی:
                         </span>
                         <span class="text-primary">
-                          {{ this.$filters.formatNumber(this.sumSelected) }}
-                          {{ this.$filters.getActiveMoney().shortName }}
+                          {{ $filters.formatNumber(this.sumSelected) }}
+                          {{ $filters.getActiveMoney().shortName }}
                         </span>
                       </div>
                       <div class="col-sm-12 col-md-6">
@@ -544,8 +544,8 @@ export default defineComponent({
                           جمع کل:
                         </span>
                         <span class="text-primary">
-                          {{ this.$filters.formatNumber(this.sumTotal) }}
-                          {{ this.$filters.getActiveMoney().shortName }}
+                          {{ $filters.formatNumber(this.sumTotal) }}
+                          {{ $filters.getActiveMoney().shortName }}
                         </span>
                       </div>
                     </div>

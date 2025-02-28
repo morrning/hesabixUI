@@ -52,13 +52,13 @@
                     <span v-if="balance > 0" class="text-success">بستانکار</span>
                   </template>
                   <template #item-bs="{ bs }">
-                    <span>{{ this.$filters.formatNumber(bs) }}</span>
+                    <span>{{ $filters.formatNumber(bs) }}</span>
                   </template>
                   <template #item-bd="{ bd }">
-                    <span>{{ this.$filters.formatNumber(bd) }}</span>
+                    <span>{{ $filters.formatNumber(bd) }}</span>
                   </template>
                   <template #item-balance="{ balance }">
-                    <span style="direction:ltr;">{{ this.$filters.formatNumber(balance) }}</span>
+                    <span style="direction:ltr;">{{ $filters.formatNumber(balance) }}</span>
                   </template>
                 </EasyDataTable>
                 <div class="container-fluid p-0 mx-0 my-3">
@@ -72,8 +72,8 @@
                             جمع بستانکار :
                           </span>
                           <span class="text-primary">
-                            {{ this.$filters.formatNumber(this.sumTotal) }}
-                            {{ this.$filters.getActiveMoney().shortName }}
+                            {{ $filters.formatNumber(this.sumTotal) }}
+                            {{ $filters.getActiveMoney().shortName }}
                           </span>
                         </div>
 
@@ -83,8 +83,8 @@
                             جمع بستانکاری موارد انتخابی:
                           </span>
                           <span class="text-primary">
-                            {{ this.$filters.formatNumber(this.sumSelected) }}
-                            {{ this.$filters.getActiveMoney().shortName }}
+                            {{ $filters.formatNumber(this.sumSelected) }}
+                            {{ $filters.getActiveMoney().shortName }}
                           </span>
                         </div>
                       </div>

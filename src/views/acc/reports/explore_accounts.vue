@@ -33,16 +33,16 @@
                         block variant="text" :text="account" @click="loadNode(id, type, hasChild)"></v-btn>
                 </template>
                 <template #item-bal_bd="{ bal_bd }">
-                    {{ this.$filters.formatNumber(bal_bd) }}
+                    {{ $filters.formatNumber(bal_bd) }}
                 </template>
                 <template #item-bal_bs="{ bal_bs }">
-                    {{ this.$filters.formatNumber(bal_bs) }}
+                    {{ $filters.formatNumber(bal_bs) }}
                 </template>
                 <template #item-his_bd="{ his_bd }">
-                    {{ this.$filters.formatNumber(his_bd) }}
+                    {{ $filters.formatNumber(his_bd) }}
                 </template>
                 <template #item-his_bs="{ his_bs }">
-                    {{ this.$filters.formatNumber(his_bs) }}
+                    {{ $filters.formatNumber(his_bs) }}
                 </template>
             </EasyDataTable>
         </v-card-text>

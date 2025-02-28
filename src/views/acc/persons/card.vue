@@ -111,7 +111,7 @@
                             <div class="col-6">
                               <i class="fa fa-bars"></i>
                               تراز:
-                              {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+                              {{ $filters.formatNumber(Math.abs(parseInt(option.bs) -
             parseInt(option.bd))) }}
                               <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                                 بدهکار </span>
@@ -188,7 +188,7 @@
               </router-link>
             </template>
             <template #item-code="{ code }">
-              {{ this.$filters.formatNumber(code) }}
+              {{ $filters.formatNumber(code) }}
             </template>
             <template #item-type="{ type,code }">
               <router-link  v-if="type=='sell'"  class="" :to="'/acc/sell/view/' + code">

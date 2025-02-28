@@ -121,7 +121,7 @@ export default defineComponent({
       <v-card-header>
         <v-toolbar class="fixed-top" color="toolbar" :title="$t('dialog.most_des')">
           <template v-slot:append>
-            <v-tooltip :text="$t('dialog.back')" location="bottom">
+            <v-tooltip :text="$t('dialog.close')" location="bottom">
               <template v-slot:activator="{ props }">
                 <v-btn v-bind="props" @click="dialog = false" class="d-none d-sm-flex" variant="text"
                   icon="mdi-close" />
