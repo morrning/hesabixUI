@@ -123,7 +123,8 @@
     </template>
     <template #item-nikename="{ nikename, code, prelabel }">
       <router-link :to="'/acc/persons/card/view/' + code">
-        {{ prelabel + ' ' + nikename }}
+        <span v-if="prelabel != null">{{ prelabel + ' ' + nikename }}</span>
+        <span v-else>{{ nikename }}</span>
       </router-link>
     </template>
     <template #item-speedAccess="{ speedAccess }">

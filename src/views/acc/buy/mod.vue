@@ -107,10 +107,6 @@
                 </h3>
                 <div class="block-options">
                   <mostdes :submitData="desSubmit" type="buy"></mostdes>
-                  <button title="شرح‌های پرتکرار" type="button" class="btn-block-option" data-bs-toggle="modal"
-                    data-bs-target="#mostDesModal">
-                    <i class="fa fa-list"></i>
-                  </button>
                 </div>
               </div>
               <div class="block-content p-0">

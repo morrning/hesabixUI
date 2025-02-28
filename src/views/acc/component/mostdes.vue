@@ -13,7 +13,7 @@ export default defineComponent({
   },
   props: {
     submitData: Object,
-    type: String
+    type: String,
   },
   watch: {
     search: {
@@ -41,7 +41,8 @@ export default defineComponent({
       orgItems: [],
       des: '',
       selected: 0,
-      search: ''
+      search: '',
+      dialog: false,
     }
   },
   methods: {
@@ -56,7 +57,7 @@ export default defineComponent({
         this.loading = false;
       });
     },
-    remove(id) {
+    remove(id: any) {
       this.loading = true;
       axios.post('/api/mostdes/remove/' + id).then((response) => {
         this.loading = false;
@@ -96,13 +97,11 @@ export default defineComponent({
       }
 
     },
-    selectItem(item) {
+    selectItem(item: any) {
       this.selected = item;
       this.$props.submitData.id = item.id;
       this.$props.submitData.des = item.des;
-      var genericModalEl = document.getElementById('mostDesModal');
-      var modal = bootstrap.Modal.getInstance(genericModalEl);
-      modal.hide();
+      this.dialog = false;
     }
   },
   mounted() {
@@ -112,56 +111,52 @@ export default defineComponent({
 </script>
 
 <template>
-  <!-- Modal -->
-  <div class="modal modal-lg fade" id="mostDesModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="mostDesModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header bg-primary-light text-white">
-          <h1 class="modal-title fs-5" id="mostDesModalLabel">شرح‌های تکراری</h1>
-          <div class="block-options">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-        </div>
-        <div class="modal-body">
-          <Loading color="blue" loader="dots" v-model:active="loading" :is-full-page="false" />
-          <div class="input-group mb-1" v-if="orgItems.length > 6">
-            <span class="input-group-text">
-              <i class="fa-solid fa-magnifying-glass"></i>
+  <v-tooltip :text="$t('dialog.most_des')" location="bottom">
+    <template v-slot:activator="{ props }">
+      <v-btn @click="dialog = true;" v-bind="props" size="small" icon="mdi-list-box" variant="plain"></v-btn>
+    </template>
+  </v-tooltip>
+  <v-dialog v-model="dialog">
+    <v-card>
+      <v-card-header>
+        <v-toolbar class="fixed-top" color="toolbar" :title="$t('dialog.most_des')">
+          <template v-slot:append>
+            <v-tooltip :text="$t('dialog.back')" location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" @click="dialog = false" class="d-none d-sm-flex" variant="text"
+                  icon="mdi-close" />
+              </template>
+            </v-tooltip>
+          </template>
+        </v-toolbar>
+      </v-card-header>
+      <v-card-text class="mt-5">
+        <v-text-field class="mb-2" v-model="search" :loading="loading" prepend-inner-icon="mdi-magnify"
+          :label="$t('dialog.search')" variant="outlined" hide-details single-line></v-text-field>
+
+        <ul :disabled="loading" class="list-group">
+          <li v-for="item in items" class="list-group-item d-flex justify-content-between align-items-center">
+            <a title="حذف" @click="remove(item.id)" class="text-danger rounded-pill float-start">
+              <i class="fa fa-trash"></i>
+            </a>
+            <span class="">
+              {{ item.des }}
             </span>
-            <input type="text" v-model="search" class="form-control" placeholder="جست و جو">
-          </div>
+            <span @click="selectItem(item)" class="badge text-bg-primary rounded-pill float-start">
+              <i class="fa fa-arrow-left"></i>
+            </span>
 
-          <ul :disabled="this.loading" class="list-group">
-            <li v-for="item in items" class="list-group-item d-flex justify-content-between align-items-center">
-              <a title="حذف" @click="remove(item.id)" class="text-danger rounded-pill float-start">
-                <i class="fa fa-trash"></i>
-              </a>
-              <span class="">
-                {{ item.des }}
-              </span>
-              <span @click="selectItem(item)" class="badge text-bg-primary rounded-pill float-start">
-                <i class="fa fa-arrow-left"></i>
-              </span>
-
-            </li>
-          </ul>
-          <div v-if="items.length == 0 && loading == false">
-            نتیجه‌ای یافت نشد
-          </div>
+          </li>
+        </ul>
+        <div v-if="items.length == 0 && loading == false">
+          نتیجه‌ای یافت نشد
         </div>
-        <div class="modal-footer">
-          <div class="input-group mb-1">
-            <input v-model="des" type="text" class="form-control" placeholder="افزودن شرح پرتکرار جدید" aria-label="افزودن شرح پرتکرار"
-              aria-describedby="button-addon1">
-            <button :disabled="this.loading" @click="save()" class="btn btn-outline-success" type="button"
-              id="button-addon1">افزودن</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
+        <v-text-field class="mt-2" v-model="des" :loading="loading" append-inner-icon="mdi-content-save" block
+          :label="$t('dialog.insert_mostdes')" variant="outlined" :placeholder="$t('dialog.input_text')" hide-details
+          single-line @click:append-inner="save"></v-text-field>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped></style>

@@ -135,6 +135,9 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    most_des: 'شرح‌های پرتکرار',
+    insert_mostdes: 'افزودن شرح پرتکرار',
+    input_text: 'متن را وارد کنید',
     seal_now: 'مهر کنونی',
     avatar_now: 'نمایه کنونی',
     avatar: 'نمایه کسب‌و‌کار',

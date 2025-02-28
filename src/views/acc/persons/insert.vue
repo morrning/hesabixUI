@@ -62,12 +62,8 @@
               </div>
               <div class="row">
                 <div class="col-sm-12 col-md-4">
-                  <div class="form-floating mb-4">
-                    <select class="form-select" v-model="person.prelabel" aria-label="">
-                      <option v-for="prelabel in prelabels" :value="prelabel">{{ prelabel.label }}</option>
-                    </select>
-                    <label for="floatingSelect">{{ $t('dialog.prelabel') }}</label>
-                  </div>
+                  <v-select class="mb-4" v-model="person.prelabel" clearable :items="prelabels" item-title="label"
+                    item-value="label" :label="$t('dialog.prelabel')" persistent-hint single-line></v-select>
                 </div>
                 <div class="col-sm-12 col-md-4">
                   <div class="form-floating mb-4">
@@ -274,6 +270,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
+import { ref } from "vue";
 export default {
   name: "insert",
   components: {
@@ -312,7 +309,7 @@ export default {
         code: 0,
         types: [],
         accounts: [],
-        prelabel: '',
+        prelabel: ref(null),
       }
     }
   },

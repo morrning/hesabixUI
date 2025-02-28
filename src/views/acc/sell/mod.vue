@@ -123,10 +123,6 @@
                       </h3>
                       <div class="block-options">
                         <mostdes :submitData="desSubmit" type="sell"></mostdes>
-                        <button title="شرح‌های پرتکرار" type="button" class="btn-block-option" data-bs-toggle="modal"
-                          data-bs-target="#mostDesModal">
-                          <i class="fa fa-list"></i>
-                        </button>
                       </div>
                     </div>
                     <div class="block-content p-0">
@@ -536,7 +532,9 @@
                 <tbody>
                   <tr v-for="(item, index) in pair_docs" :key="item.name" class="text-center">
                     <td>{{ index }}</td>
-                    <td><RouterLink :to="'/acc/sell/mod/' + item.code">{{ item.code }}</RouterLink></td>
+                    <td>
+                      <RouterLink :to="'/acc/sell/mod/' + item.code">{{ item.code }}</RouterLink>
+                    </td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.person.nikename }}</td>
                     <td>
@@ -705,7 +703,7 @@
       }
     },
     watch: {
-      
+
       'editItemData.price': function () {
         this.editCalc();
       },
