@@ -1,5 +1,6 @@
 <script>
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default {
   name: "plugins",
@@ -10,7 +11,11 @@ export default {
       selected: {
         id: null,
         name: '',
-        price: ''
+        price: 0,
+        time: 0,
+      },
+      rules: {
+        required: [(v) => !!v || "این فیلد الزامی است"],
       },
       items: [],
       headers: [
@@ -24,12 +29,58 @@ export default {
     }
   },
   methods: {
-    loadData() {
-      axios.get('/api/admin/plugins/list')
-        .then((response) => {
-          this.items = response.data;
-          this.loading = false;
-        })
+    // دریافت لیست افزونه‌ها از سرور
+    async loadData() {
+      try {
+        const response = await axios.get('/api/admin/plugins/list');
+        this.items = response.data.map(item => ({
+          ...item,
+          price: Number(item.price), // تبدیل مقدار قیمت به عدد
+          time: Number(item.time)    // تبدیل مقدار زمان به عدد
+        }));
+        this.loading = false;
+      } catch (error) {
+        Swal.fire({
+          text: "خطا در دریافت لیست افزونه‌ها!",
+          icon: "error",
+          confirmButtonText: "باشه"
+        });
+        this.loading = false;
+      }
+    },
+
+    // ارسال اطلاعات ویرایش شده به سرور
+    async editPlugin() {
+      const { valid } = await this.$refs.form.validate();
+      if (valid) {
+        this.loading = true;
+        try {
+          const response = await axios.post('/api/admin/plugin/update/data', this.selected);
+
+          if (response.data.Success) {
+            Swal.fire({
+              text: this.$t('dialog.save_ok'),
+              icon: 'success',
+              confirmButtonText: this.$t('dialog.ok')
+            });
+            this.loadData();
+          } else {
+            Swal.fire({
+              text: "خطا در به‌روزرسانی افزونه!",
+              icon: "warning",
+              confirmButtonText: "باشه"
+            });
+          }
+        } catch (error) {
+          Swal.fire({
+            text: `خطا در ارتباط با سرور: ${error.response?.data?.message || error.message}`,
+            icon: "error",
+            confirmButtonText: "باشه"
+          });
+        }
+        this.loading = false;
+        this.dialog = false;
+      }
     }
   },
   beforeMount() {
@@ -51,8 +102,8 @@ export default {
               rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
               rowsOfPageSeparatorMessage="از" theme-color="#1d90ff" header-text-direction="center"
               body-text-direction="center" :loading="loading">
-              <template #item-operation="{ id }">
-                <v-btn variant="text" @click="this.dialog = true;" color="success" icon="mdi-file-edit"
+              <template #item-operation="props: any">
+                <v-btn variant="text" @click="selected = props; dialog = true;" color="success" icon="mdi-file-edit"
                   v-bind="props"></v-btn>
               </template>
               <template #item-defaultOn="{ defaultOn }">
@@ -71,14 +122,19 @@ export default {
       </v-card-text>
     </v-card>
   </v-container>
-  <v-dialog v-model="dialog" width="auto">
-    <v-card min-width="400">
-      <template v-slot:actions>
-        <v-btn class="ms-auto" color="success" :text="$t('dialog.save')" @click="dialog = false"></v-btn>
-      </template>
-      <v-card-header>
+  <v-dialog fullscreen v-model="dialog" width="auto">
+    <v-card :loading="loading" min-width="400">
+      <v-form :disabled="loading" ref="form" @submit.prevent="editPlugin">
         <v-toolbar class="fixed-top" color="toolbar" :title="$t('dialog.edit_plugin')">
           <template v-slot:append>
+            <v-tooltip :text="$t('dialog.save')" location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-btn color="success" v-bind="props" type="submit" class="d-none d-sm-flex" variant="text"
+                  icon="mdi-content-save" />
+              </template>
+            </v-tooltip>
+          </template>
+          <template v-slot:prepend>
             <v-tooltip :text="$t('dialog.close')" location="bottom">
               <template v-slot:activator="{ props }">
                 <v-btn v-bind="props" @click="dialog = false" class="d-none d-sm-flex" variant="text"
@@ -87,23 +143,30 @@ export default {
             </v-tooltip>
           </template>
         </v-toolbar>
-      </v-card-header>
-      <v-card-text>
-        <v-row>
-          <v-col cols="12">
-            <v-text-field hide-details v-model="selected.name" :label="$t('dialog.plugin_name')"></v-text-field>
-          </v-col>
-          <v-col cols="12">
-            <v-number-input hide-details reverse control Variant="stacked" v-model="selected.price" :label="$t('dialog.price')" :hideInput="false" inset></v-number-input>
-          </v-col>
-          <v-col cols="12">
-            <v-number-input hide-details reverse control Variant="stacked" v-model="selected.time" :label="$t('dialog.time')" :hideInput="false" inset></v-number-input>
-          </v-col>
-          <v-col cols="12">
-            <v-number-input hide-details reverse control Variant="stacked" v-model="selected.time" :label="$t('dialog.time')" :hideInput="false" inset></v-number-input>
-          </v-col>
-        </v-row>
-      </v-card-text>
+        <v-card-text class="">
+          <v-row>
+            <v-col cols="12">
+              <v-text-field :rules="rules.required" v-model="selected.name"
+                :label="$t('dialog.plugin_name')"></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-number-input :rules="rules.required" control Variant="stacked" v-model="selected.price"
+                :label="$t('dialog.price')" :hideInput="false" inset></v-number-input>
+            </v-col>
+            <v-col cols="12">
+              <v-number-input :rules="rules.required" control Variant="stacked" v-model="selected.time"
+                :label="$t('dialog.time')" :hideInput="false" inset></v-number-input>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field control Variant="stacked" v-model="selected.timeLabel" :rules="rules.required"
+                :label="$t('dialog.timeLabel')" :hideInput="false" inset></v-text-field>
+            </v-col>
+            <v-col cols="12 mb-0">
+              <v-switch color="primary" v-model="selected.defaultOn" :label="$t('dialog.default_on')" inset></v-switch>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
