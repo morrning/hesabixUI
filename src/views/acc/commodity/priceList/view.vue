@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('/api/commodity/pricelist/view/' + this.$route.params.id)
+      axios.post('/api/commodity/pricelist/view/' + this.$route.params.id)
         .then((response) => {
           this.items = response.data;
           this.loading = false;

@@ -32,7 +32,7 @@ export default {
     // دریافت لیست افزونه‌ها از سرور
     async loadData() {
       try {
-        const response = await axios.get('/api/admin/plugins/list');
+        const response = await axios.post('/api/admin/plugins/list');
         this.items = response.data.map(item => ({
           ...item,
           price: Number(item.price), // تبدیل مقدار قیمت به عدد

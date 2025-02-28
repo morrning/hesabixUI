@@ -223,7 +223,7 @@ export default {
       });
     },
     loadData() {
-      axios.get('/api/person/list/search')
+      axios.post('/api/person/list/search')
         .then((response) => {
           this.persons = response.data;
           if (this.persons.length != 0) {
@@ -233,7 +233,7 @@ export default {
           this.loading = false;
         });
 
-      axios.get('/api/year/get')
+      axios.post('/api/year/get')
         .then((response) => {
           this.year = response.data;
           this.loading = false;

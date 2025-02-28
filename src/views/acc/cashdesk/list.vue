@@ -94,7 +94,7 @@ export default {
   }},
   methods: {
     loadData(){
-      axios.get('/api/cashdesk/list')
+      axios.post('/api/cashdesk/list')
           .then((response)=>{
             this.items = response.data;
             this.loading = false;

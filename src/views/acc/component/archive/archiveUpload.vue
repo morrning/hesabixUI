@@ -42,7 +42,7 @@ export default defineComponent({
         this.media.added =[];
         this.fileStack = resp.data;
         this.fileStack.forEach((item)=>{
-          axios.get(this.$filters.getApiUrl() + '/api/archive/file/get/' + item.id, { responseType: "arraybuffer" })
+          axios.post(this.$filters.getApiUrl() + '/api/archive/file/get/' + item.id, { responseType: "arraybuffer" })
               .then((response)=>{
                 const b64 = btoa(String.fromCharCode(...new Uint8Array(response.data)));
                 item.fileBin = "data:" + response.headers['content-type'] + ";base64," + b64;
@@ -73,7 +73,7 @@ export default defineComponent({
       })
     },
     downloadFile(item){
-      axios.get(this.$filters.getApiUrl() + '/api/archive/file/get/' + item.id, { responseType: "arraybuffer" })
+      axios.post(this.$filters.getApiUrl() + '/api/archive/file/get/' + item.id, { responseType: "arraybuffer" })
           .then(response => {
             const blob = new Blob([response.data], {type: item.fileType});
             const link = document.createElement('a');

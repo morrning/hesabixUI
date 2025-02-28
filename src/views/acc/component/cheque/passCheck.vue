@@ -30,7 +30,7 @@ export default defineComponent({
         });
 
         //load year
-      axios.get('/api/year/get').then((response)=>{
+      axios.post('/api/year/get').then((response)=>{
         this.year = response.data;
         this.passDate = response.data.now;
       });

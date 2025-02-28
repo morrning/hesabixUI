@@ -97,13 +97,13 @@ export default {
     methods: {
         loadData() {
             this.loading = true;
-            axios.get('/api/printers/exist/' + this.$route.params.id)
+            axios.post('/api/printers/exist/' + this.$route.params.id)
                 .then((response) => {
                     if (response.data.Success != true) {
                         this.$router.push({ 'name': 'acc_home' })
                     }
                 });
-            axios.get('/api/printers/queue/' + this.$route.params.id)
+            axios.post('/api/printers/queue/' + this.$route.params.id)
                 .then((response) => {
                     if (response.data.Success == true) {
                         this.items = response.data.data;

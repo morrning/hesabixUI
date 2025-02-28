@@ -120,7 +120,7 @@
     }},
     methods: {
       loadData(cat) {
-        axios.get('/api/archive/list/' + cat)
+        axios.post('/api/archive/list/' + cat)
             .then((response) => {
               this.items = response.data;
               this.loading = false;
@@ -149,7 +149,7 @@
         })
       },
       downloadFile(id,filename,fileType) {
-        axios.get(this.$filters.getApiUrl() + '/api/archive/file/get/' + id, {responseType: "arraybuffer"})
+        axios.post(this.$filters.getApiUrl() + '/api/archive/file/get/' + id, {responseType: "arraybuffer"})
             .then(response => {
               const blob = new Blob([response.data], {type: fileType});
               const link = document.createElement('a');

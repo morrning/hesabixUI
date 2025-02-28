@@ -458,7 +458,7 @@ export default {
   async beforeMount() {
     this.loading = true
     //get all money types
-    axios.get("/api/money/get/all").then((response) => {
+    axios.post("/api/money/get/all").then((response) => {
       this.moneys = response.data;
       this.content.arzmain = this.moneys[0];
     })
@@ -470,7 +470,7 @@ export default {
         this.loading = false;
       });
     //get list of banks
-    axios.get('/api/bank/list').then((response) => {
+    axios.post('/api/bank/list').then((response) => {
       this.listBanks = response.data;
     })
 

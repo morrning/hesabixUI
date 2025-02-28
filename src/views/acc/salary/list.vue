@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('/api/salary/list')
+      axios.post('/api/salary/list')
         .then((response) => {
           this.items = response.data;
           this.loading = false;

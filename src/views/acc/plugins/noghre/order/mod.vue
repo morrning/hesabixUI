@@ -66,34 +66,34 @@ export default defineComponent({
     loadData(){
       //load persons
       this.isLoading = true;
-      axios.get('/api/person/list/limit')
+      axios.post('/api/person/list/limit')
           .then((response)=>{
             this.persons = response.data;
             this.isLoading=false;
           });
-      axios.get('/api/plugin/noghre/ghalam/list')
+      axios.post('/api/plugin/noghre/ghalam/list')
           .then((response)=>{
             this.ghalams = response.data;
             this.isLoading=false;
           });
-      axios.get('/api/plugin/noghre/morsa/list')
+      axios.post('/api/plugin/noghre/morsa/list')
           .then((response)=>{
             this.morsas = response.data;
             this.isLoading=false;
           });
-      axios.get('/api/plugin/noghre/hakak/list')
+      axios.post('/api/plugin/noghre/hakak/list')
           .then((response)=>{
             this.hakaks = response.data;
             this.isLoading=false;
           });
-      axios.get('/api/plugin/noghre/tarash/list')
+      axios.post('/api/plugin/noghre/tarash/list')
           .then((response)=>{
             this.tarashs = response.data;
             this.isLoading=false;
           });
       this.isLoading = false
       //load year
-      axios.get('/api/year/get').then((response)=>{
+      axios.post('/api/year/get').then((response)=>{
         this.year = response.data;
         this.order.date = response.data.now;
       })

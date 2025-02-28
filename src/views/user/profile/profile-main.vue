@@ -146,7 +146,7 @@ export default defineComponent({
       this.loading = false;
     });
 
-    axios.get('/api/general/stat').then((response) => {
+    axios.post('/api/general/stat').then((response) => {
       this.hesabix = response.data;
     });
   },

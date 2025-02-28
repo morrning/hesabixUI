@@ -118,13 +118,13 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('/api/avatar/get')
+      axios.post('/api/avatar/get')
         .then((response) => {
           this.loading = false;
           this.lastImg = response.data;
         })
 
-        axios.get('/api/seal/get')
+        axios.post('/api/seal/get')
         .then((response) => {
           this.loading = false;
           this.seal_lastImg = response.data;

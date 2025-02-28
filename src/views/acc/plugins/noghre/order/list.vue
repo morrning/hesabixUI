@@ -23,7 +23,7 @@ export default defineComponent({
   }},
   methods: {
     loadData(){
-      axios.get('/api/plugin/noghre/orders/list')
+      axios.post('/api/plugin/noghre/orders/list')
           .then((response)=>{
             this.items = response.data;
             this.loading = false;

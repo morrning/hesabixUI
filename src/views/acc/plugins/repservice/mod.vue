@@ -298,21 +298,21 @@ export default {
     loadData() {
       //load year
       if (this.$route.params.id == '') {
-        axios.get('/api/year/get').then((response) => {
+        axios.post('/api/year/get').then((response) => {
           this.data.date = response.data.now;
         });
       }
       //load persons
-      axios.get('/api/person/list/search').then((response) => {
+      axios.post('/api/person/list/search').then((response) => {
         this.persons = response.data;
       });
       //load commodities
-      axios.get('/api/commodity/list/search').then((response) => {
+      axios.post('/api/commodity/list/search').then((response) => {
         this.commodity = response.data;
       });
       //load data for edit document
       if (this.$route.params.id != '') {
-        axios.get('/api/repservice/order/info/' + this.$route.params.id).then((response) => {
+        axios.post('/api/repservice/order/info/' + this.$route.params.id).then((response) => {
           this.data = response.data;
         });
       }

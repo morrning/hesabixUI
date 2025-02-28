@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', {
     // state: () => ({ count: 0 })
     actions: {
         refresh(){
-            axios.get('/api2/user/current/info').then((response:any)=>{
+            axios.post('/api2/user/current/info').then((response:any)=>{
                 if(response.data.Success == true){
                     this.userData = response.data.data;
                 }

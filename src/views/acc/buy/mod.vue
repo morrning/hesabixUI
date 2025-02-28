@@ -864,12 +864,12 @@ export default {
     loadData() {
       this.loading = true;
       //load year
-      axios.get('/api/year/get').then((response) => {
+      axios.post('/api/year/get').then((response) => {
         this.year = response.data;
         this.data.date = response.data.now;
       })
       //load business info
-      axios.get('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
+      axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
         this.bid = response.data;
         if (this.bid.maliyatafzode == 0) {
           this.maliyatCheck = false;
@@ -878,11 +878,11 @@ export default {
         this.loading = false;
       })
       //load persons
-      axios.get('/api/person/list/search').then((response) => {
+      axios.post('/api/person/list/search').then((response) => {
         this.persons = response.data;
       });
       //load commodities
-      axios.get('/api/commodity/list/search').then((response) => {
+      axios.post('/api/commodity/list/search').then((response) => {
         this.commodity = response.data;
         if (response.data.length != 0) {
           this.itemData.commodity = response.data[0];
@@ -900,7 +900,7 @@ export default {
         }
       });
       //load commodity units
-      axios.get('/api/commodity/units').then((response) => {
+      axios.post('/api/commodity/units').then((response) => {
         this.units = response.data;
       });
       //get active plugins
@@ -910,7 +910,7 @@ export default {
       //load data for edit document
 
       if (this.$route.params.id != '') {
-        axios.get('/api/buy/get/info/' + this.$route.params.id).then((response) => {
+        axios.post('/api/buy/get/info/' + this.$route.params.id).then((response) => {
           this.data.date = response.data.date;
           this.data.des = response.data.des;
           this.data.person = response.data.person;

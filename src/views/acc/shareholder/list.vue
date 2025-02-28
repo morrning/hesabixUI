@@ -98,13 +98,13 @@ export default {
   methods: {
     loadData(){
       this.loading = true;
-      axios.get('/api/shareholders/list')
+      axios.post('/api/shareholders/list')
           .then((response)=>{
             this.items = response.data;
             this.loading = false;
           });
       //load persons
-      axios.get('/api/person/list/limit').then((response)=>{
+      axios.post('/api/person/list/limit').then((response)=>{
         this.persons = response.data;
       });
     },
@@ -150,7 +150,7 @@ export default {
       }).then((result)=>{
         if (result.isConfirmed) {
           this.loading = true;
-          axios.get('/api/shareholders/remove/' + id)
+          axios.post('/api/shareholders/remove/' + id)
               .then((response)=>{
                 this.loading = false;
                 Swal.fire({

@@ -250,7 +250,7 @@ export default {
     },
     loadData() {
       this.loading = true;
-      axios.get('/api/person/list')
+      axios.post('/api/person/list')
         .then((response) => {
           this.items = response.data;
           this.orgItems = response.data;

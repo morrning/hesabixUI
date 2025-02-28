@@ -150,7 +150,7 @@ export default {
   }},
   methods: {
     loadData(){
-      axios.get('/api/cheque/list')
+      axios.post('/api/cheque/list')
           .then((response)=>{
             this.itemsInput = response.data.input;
             this.itemsInput.forEach((item)=>{
@@ -165,7 +165,7 @@ export default {
     },
     rejectCheque(id){
       this.loading = true;
-      axios.get('/api/cheque/info/' + id).then((response)=>{
+      axios.post('/api/cheque/info/' + id).then((response)=>{
             this.loading = false;
             Swal.fire({
               title: "آیا برای تغییر وضعیت چک به برگشتی مطمئن هستید؟",
@@ -177,7 +177,7 @@ export default {
             }).then((result)=>{
               if(result.isConfirmed){
                 this.loading = true;
-                axios.get('/api/cheque/reject/' + id).then((response)=>{
+                axios.post('/api/cheque/reject/' + id).then((response)=>{
                     this.loading = false;
                     Swal.fire({
                       title: "وضعیت چک تغییر یافت",

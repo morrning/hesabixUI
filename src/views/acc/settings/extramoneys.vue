@@ -116,14 +116,14 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('/api/business/get/info/' + localStorage.getItem('activeBid'))
+      axios.post('/api/business/get/info/' + localStorage.getItem('activeBid'))
         .then((response) => {
           this.loading = false;
           this.moneys = response.data.moneys;
           this.bid = response.data;
           this.selectedMoney = response.data.arzmain;
         });
-      axios.get('/api/money/get/all')
+      axios.post('/api/money/get/all')
         .then((response) => {
           this.moneyAll = response.data.data;
         })

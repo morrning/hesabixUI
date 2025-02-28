@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('/api/commodity/pricelist/list')
+      axios.post('/api/commodity/pricelist/list')
         .then((response) => {
           this.items = response.data;
           this.loading = false;

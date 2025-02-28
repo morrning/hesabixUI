@@ -100,7 +100,7 @@ export default defineComponent({
         });
       });
 
-      axios.get('/api/rfsell/get/info/' + this.$route.params.id).then((response) => {
+      axios.post('/api/rfsell/get/info/' + this.$route.params.id).then((response) => {
         this.loading = false;
         this.person = response.data.person;
         this.discountAll = response.data.discountAll;
@@ -129,7 +129,7 @@ export default defineComponent({
       axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
         this.bid = response.data;
       });
-      axios.get("/api/printers/options/info").then((response) => {
+      axios.post("/api/printers/options/info").then((response) => {
         this.isLoading = false;
         this.printOptions = response.data.sell;
       })

@@ -261,7 +261,7 @@ export default {
           this.types = response.data;
           this.isLoading = false;
         });
-      axios.get('/api/commodity/list')
+      axios.post('/api/commodity/list')
         .then((response) => {
           this.items = response.data;
           this.orgItems = response.data;

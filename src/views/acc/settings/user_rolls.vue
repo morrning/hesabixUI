@@ -136,7 +136,7 @@ export default {
     }
   },
   mounted() {
-    axios.get('/api/user/get/users/of/business/' + localStorage.getItem('activeBid')).then((response)=>{
+    axios.post('/api/user/get/users/of/business/' + localStorage.getItem('activeBid')).then((response)=>{
       this.users = response.data;
     })
   }

@@ -413,7 +413,7 @@ export default {
   },
   async beforeMount() {
     this.loading = true;
-    axios.get("/api/printers/options/info").then((response) => {
+    axios.post("/api/printers/options/info").then((response) => {
       this.loading = false;
       this.settings = response.data;
       if (this.settings.repservice.paper == null || this.settings.repservice.paper == '') {

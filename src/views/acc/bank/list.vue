@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('/api/bank/list')
+      axios.post('/api/bank/list')
         .then((response) => {
           this.items = response.data;
           this.loading = false;

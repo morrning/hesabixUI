@@ -178,7 +178,7 @@ export default {
   beforeMount() {
     //get all money types
     this.loading = true;
-    axios.get("/api/money/get/all").then((response) => {
+    axios.post("/api/money/get/all").then((response) => {
       this.moneys = response.data.data;
       this.content.arzmain = this.moneys[0];
       this.loading = false;

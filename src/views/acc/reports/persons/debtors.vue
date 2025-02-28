@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('/api/person/list/debtors/0')
+      axios.post('/api/person/list/debtors/0')
         .then((response) => {
           this.items = response.data;
           this.items.forEach((item) => {

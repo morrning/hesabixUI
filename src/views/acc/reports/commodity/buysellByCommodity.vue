@@ -216,7 +216,7 @@ export default {
       });
     },
     loadData() {
-      axios.get('/api/commodity/list/search')
+      axios.post('/api/commodity/list/search')
         .then((response) => {
           this.commoditys = response.data;
           if (this.commoditys.length != 0) {
@@ -225,7 +225,7 @@ export default {
           this.selectedType = this.types[4];
           this.loading = false;
         });
-      axios.get('/api/year/get')
+      axios.post('/api/year/get')
         .then((response) => {
           this.year = response.data;
           this.loading = false;

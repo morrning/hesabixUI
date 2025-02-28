@@ -175,7 +175,7 @@ export default defineComponent({
     },
     loadData() {
       //load year
-      axios.get('/api/year/get').then((response) => {
+      axios.post('/api/year/get').then((response) => {
         this.year = response.data;
         this.data.date = response.data.now;
       })
@@ -199,10 +199,10 @@ export default defineComponent({
         this.commodity = response.data;
       });
       //load commodity units
-      axios.get('/api/commodity/units').then((response) => {
+      axios.post('/api/commodity/units').then((response) => {
         this.units = response.data;
       });
-      axios.get("/api/printers/options/info").then((response) => {
+      axios.post("/api/printers/options/info").then((response) => {
         this.loading = false;
         this.canPdf = response.data.fastsell.pdf;
         this.canPrintCashdeskRecp = response.data.fastsell.cashdeskTicket;

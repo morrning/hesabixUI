@@ -89,7 +89,7 @@ export default {
   }},
   methods: {
     loadData(){
-      axios.get('/api/plugin/noghre/employess/list')
+      axios.post('/api/plugin/noghre/employess/list')
           .then((response)=>{
             this.items = response.data;
             this.loading = false;

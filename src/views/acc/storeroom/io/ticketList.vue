@@ -24,17 +24,17 @@ export default defineComponent({
   },
   methods: {
     loadData() {
-      axios.get('/api/storeroom/tickets/list/input')
+      axios.post('/api/storeroom/tickets/list/input')
         .then((response) => {
           this.inputItems = response.data;
           this.loading = false;
         });
-      axios.get('/api/storeroom/tickets/list/output')
+      axios.post('/api/storeroom/tickets/list/output')
         .then((response) => {
           this.outputItems = response.data;
           this.loading = false;
         });
-      axios.get('/api/storeroom/tickets/list/input')
+      axios.post('/api/storeroom/tickets/list/input')
         .then((response) => {
           this.inputItems = response.data;
           this.loading = false;
@@ -50,7 +50,7 @@ export default defineComponent({
       }).then((result) => {
         if (result.isConfirmed) {
           this.loading = true;
-          axios.get('/api/storeroom/ticket/remove/' + code)
+          axios.post('/api/storeroom/ticket/remove/' + code)
             .then((response) => {
               this.loading = false;
               Swal.fire({

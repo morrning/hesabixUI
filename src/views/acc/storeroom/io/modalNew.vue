@@ -47,7 +47,7 @@ export default defineComponent({
   methods: {
     loadData() {
       this.loading = true;
-      axios.get('/api/storeroom/list')
+      axios.post('/api/storeroom/list')
         .then((response) => {
           this.storerooms = response.data.data;
           this.storerooms.forEach((element) => {

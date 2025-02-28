@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('/api/admin/logs/last')
+      axios.post('/api/admin/logs/last')
         .then((response) => {
           this.items = response.data.data;
           this.loading = false;

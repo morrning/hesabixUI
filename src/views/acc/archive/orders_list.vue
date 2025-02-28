@@ -82,7 +82,7 @@ export default {
   methods: {
     loadData(){
       this.loading = true;
-      axios.get('/api/archive/orders/list')
+      axios.post('/api/archive/orders/list')
           .then((response)=>{
             this.items = response.data;
             this.loading = false;

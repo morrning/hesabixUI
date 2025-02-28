@@ -92,7 +92,7 @@ export default defineComponent({
             return this.plugins[plugName] !== undefined;
         },
         refreshPriceList() {
-            axios.get('/api/commodity/pricelist/list').then((response) => {
+            axios.post('/api/commodity/pricelist/list').then((response) => {
                 if (response.data.length == 0) {
                     this.data.prices = [];
                 }

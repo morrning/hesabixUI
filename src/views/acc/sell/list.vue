@@ -366,7 +366,7 @@ export default defineComponent({
       this.loading = false;
     },
     loadData() {
-      axios.get("/api/printers/options/info").then((response) => {
+      axios.post("/api/printers/options/info").then((response) => {
         this.printOptions = response.data.sell;
       });
 

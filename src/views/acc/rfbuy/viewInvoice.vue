@@ -111,7 +111,7 @@ export default defineComponent({
         });
       });
 
-      axios.get('/api/rfbuy/get/info/' + this.$route.params.id).then((response) => {
+      axios.post('/api/rfbuy/get/info/' + this.$route.params.id).then((response) => {
         this.person = response.data.person;
         this.discountAll = response.data.discountAll;
         this.transferCost = response.data.transferCost;
@@ -141,7 +141,7 @@ export default defineComponent({
         this.bid = response.data;
         this.loading = false;
       });
-      axios.get("/api/printers/options/info").then((response) => {
+      axios.post("/api/printers/options/info").then((response) => {
         this.isLoading = false;
         this.printOptions = response.data.rfbuy;
       })
