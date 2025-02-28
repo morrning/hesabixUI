@@ -7,6 +7,11 @@ export default {
     return {
       dialog: false,
       loading: true,
+      selected: {
+        id: null,
+        name: '',
+        price: ''
+      },
       items: [],
       headers: [
         { text: "نام افزونه", value: "name" },
@@ -83,6 +88,22 @@ export default {
           </template>
         </v-toolbar>
       </v-card-header>
+      <v-card-text>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field hide-details v-model="selected.name" :label="$t('dialog.plugin_name')"></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-number-input hide-details reverse control Variant="stacked" v-model="selected.price" :label="$t('dialog.price')" :hideInput="false" inset></v-number-input>
+          </v-col>
+          <v-col cols="12">
+            <v-number-input hide-details reverse control Variant="stacked" v-model="selected.time" :label="$t('dialog.time')" :hideInput="false" inset></v-number-input>
+          </v-col>
+          <v-col cols="12">
+            <v-number-input hide-details reverse control Variant="stacked" v-model="selected.time" :label="$t('dialog.time')" :hideInput="false" inset></v-number-input>
+          </v-col>
+        </v-row>
+      </v-card-text>
     </v-card>
   </v-dialog>
 </template>
