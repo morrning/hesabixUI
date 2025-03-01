@@ -135,6 +135,10 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    confirm: 'قبول',
+    attach_download: 'دریافت فایل ضمیمه',
+    attach_file: 'الصاق فایل',
+    allowed_file_types_hint: 'فرمت های مجاز برای الصاق zip,rar,png,jpg,pdf,excell هستند.',
     plugin_name: 'نام افزونه',
     price: 'قیمت (تومان)',
     time: 'زمان اعتبار(ثانیه)',
@@ -335,6 +339,8 @@ const fa_lang = {
     email_not_valid: "پست الکترونیکی معتبر نیست",
     password_len_lower: "طول کلمه عبور کم است",
     mobile_not_valid: "شماره موبایل معتبر نیست",
+    invalid_file_type: "نوع فایل انتخاب شده مجاز نیست",
+    file_size_limit: 'حجم فایل انتخابی بیش از حد مجاز است.',
   },
   hesabix: {
     banner: "حسابیکس سامانه جامع مدیریت کسب‌و‌کار",
@@ -350,6 +356,11 @@ const fa_lang = {
   },
   pages: {
     support: {
+      send_sms: "ارسال پیامک به کاربر",
+      submit_error: 'خطایی در ثبت درخواست رخ داد.',
+      reply_submitted: 'پاسخ ثبت شد.',
+      download_error: "خطا در دانلود فایل: ",
+      load_error: "خطا در بارگذاری داده‌ها: ",
       new: "درخواست جدید",
       title: "عنوان",
       body: "متن درخواست",
@@ -362,6 +373,7 @@ const fa_lang = {
       new_ticket: "درخواست پشتیبانی جدید",
       replay: "ارسال پاسخ",
       ticket_id: "شناسه درخواست:",
+
     },
     reset_password: {
       form_not_valid: "اطلاعات به درستی وارد نشده است",
