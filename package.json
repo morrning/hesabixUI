@@ -20,6 +20,7 @@
         "@vuelidate/core": "^2.0.0",
         "@vuelidate/validators": "^2.0.0",
         "@vueuse/core": "^12.0.0",
+        "animate.css": "^4.1.1",
         "apexcharts": "^4.4.0",
         "axios": "^1.2.3",
         "downloadjs": "^1.4.7",

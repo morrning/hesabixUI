@@ -61,6 +61,8 @@ const vuetify = createVuetify({
         },
         VTextField: {
             hideDetails: "auto",
+            variant: "outlined",
+            size: "small"
         },
         VTextarea: {
             hideDetails: "auto",

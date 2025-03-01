@@ -1,4 +1,5 @@
 <template>
+  <!-- Toolbar بالای صفحه (همون کد اولیه) -->
   <v-toolbar color="toolbar" :title="$t('drawer.dashboard')">
     <v-tooltip :text="$t('dialog.edit_dashboard')" location="bottom">
       <template v-slot:activator="{ props }">
@@ -6,236 +7,240 @@
       </template>
     </v-tooltip>
   </v-toolbar>
-  <v-container class="pa-0 ma-0">
-    <v-card :loading="loading ? 'red' : null" :disabled="loading">
-      <v-card-text>
-        <v-row v-show="this.statements.length != 0 && dashboard.notif">
-          <v-col>
-            <v-alert type="info" color="primary" variant="tonal" border>
-              <p v-for="statment in this.statements">
-                <b>{{ statment.dateSubmit }}: </b>
-                <span>{{ statment.body }}</span>
-              </p>
-            </v-alert>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.wallet && dashboard.wallet">
-            <v-card variant="flat" color="success" prepend-icon="mdi-wallet" :title="$t('static.wallet')"
-              to="/acc/wallet/view">
-              <v-card-text>
-                {{ $t('static.deposit') }}
-                {{ $filters.formatNumber(wallet.deposit) }}
-                {{ $t('currency.irr.short') }}
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.bank && dashboard.banks">
-            <v-card variant="outlined" color="primary" prepend-icon="mdi-bank" :title="$t('drawer.banks')"
-              to="/acc/banks/list">
-              <v-card-text>
-                {{ $t('static.count') }} :
-                {{ $filters.formatNumber(stat.bankCount) }}
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.accounting && dashboard.acc_docs">
-            <v-card variant="outlined" color="primary" prepend-icon="mdi-book-open-page-variant"
-              :title="$t('drawer.docs')" to="/acc/accounting/list">
-              <v-card-text>
-                {{ $t('static.count') }} :
-                {{ $filters.formatNumber(stat.docCount) }}
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.commodity && dashboard.commodities">
-            <v-card variant="outlined" color="primary" prepend-icon="mdi-package-variant"
-              :title="$t('drawer.commodity')" to="/acc/commodity/list">
-              <v-card-text>
-                {{ $t('static.count') }} :
-                {{ $filters.formatNumber(stat.commodity) }}
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.accounting && dashboard.accounting_total">
-            <v-card variant="outlined" color="primary" prepend-icon="mdi-table-refresh" :title="$t('drawer.roller')">
-              <v-card-text>
-                {{ $filters.formatNumber(stat.income, true) }}
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.sell && dashboard.sells">
-            <v-card variant="outlined" color="primary" prepend-icon="mdi-basket-unfill" :title="$t('drawer.sell')"
-              to="/acc/sell/list">
-              <v-card-text>
-                <p>
-                  {{ $t('drawer.total') }} :
-                  {{ $filters.formatNumber(stat.sells_total, true) }}
-                </p>
-                <p>
-                  {{ $t('drawer.today') }} :
-                  {{ $filters.formatNumber(stat.sells_today, true) }}
-                </p>
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.buy && dashboard.buys">
-            <v-card variant="outlined" color="primary" prepend-icon="mdi-basket-fill" :title="$t('drawer.buy')"
-              to="/acc/buy/list">
-              <v-card-text>
-                <p>
-                  {{ $t('drawer.total') }} :
-                  {{ $filters.formatNumber(stat.buys_total, true) }}
-                </p>
-                <p>
-                  {{ $t('drawer.today') }} :
-                  {{ $filters.formatNumber(stat.buys_today, true) }}
-                </p>
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" sm="6" md="3" v-show="permissions.persons && dashboard.persons">
-            <v-card variant="outlined" color="primary" prepend-icon="mdi-account-multiple" :title="$t('drawer.persons')"
-              to="/acc/persons/list">
-              <v-card-text>
-                <p>
-                  {{ $t('static.count') }} :
-                  {{ $filters.formatNumber(stat.personCount) }}
-                </p>
-                <p>
-                  {{ $t('drawer.recs_today') }} :
-                  {{ $filters.formatNumber(stat.recs_today, true) }}
-                </p>
-                <p>
-                  {{ $t('drawer.sends_today') }} :
-                  {{ $filters.formatNumber(stat.sends_today, true) }}
-                </p>
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" sm="6" md="6" v-show="permissions.sell && dashboard.sellChart && isPluginActive('accpro')">
-            <v-card variant="outlined" color="primary" prepend-icon="mdi-basket" :title="$t('drawer.sell_chart')">
-              <v-card-text>
-                <sale-chart></sale-chart>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-card-text>
-    </v-card>
+
+  <!-- محتوای اصلی -->
+  <v-container fluid class="pa-4">
+    <v-row v-show="statements.length > 0 && dashboard.notif" dense>
+      <v-col cols="12">
+        <v-alert type="info" color="blue-grey" variant="tonal" border class="animate__animated animate__fadeInDown">
+          <v-row dense>
+            <v-col v-for="statment in statements" :key="statment.dateSubmit" cols="12">
+              <span class="font-weight-bold">{{ statment.dateSubmit }}: </span>
+              <span>{{ statment.body }}</span>
+            </v-col>
+          </v-row>
+        </v-alert>
+      </v-col>
+    </v-row>
+
+    <v-row dense>
+      <!-- ردیف اول -->
+      <v-col cols="12" sm="6" md="4" v-show="permissions.wallet && dashboard.wallet">
+        <v-card class="animate__animated animate__zoomIn card-equal-height" color="success-lighten-4" variant="elevated"
+          prepend-icon="mdi-wallet" :title="$t('static.wallet')" to="/acc/wallet/view" hover>
+          <v-card-text class="text-dark">
+            <v-icon left small color="success">mdi-currency-usd</v-icon>
+            {{ $t('static.deposit') }}: {{ $filters.formatNumber(wallet.deposit) || '0' }} {{ $t('currency.irr.short') }}
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="6" md="4" v-show="permissions.persons && dashboard.persons">
+        <v-card class="animate__animated animate__zoomIn card-equal-height" color="indigo-lighten-4" variant="elevated"
+          prepend-icon="mdi-account-multiple" :title="$t('drawer.persons')" to="/acc/persons/list" hover>
+          <v-card-text class="text-dark">
+            <p><v-icon left small color="indigo">mdi-numeric</v-icon>{{ $t('static.count') }}: {{ $filters.formatNumber(stat.personCount) || '0' }}</p>
+            <p><v-icon left small color="indigo">mdi-arrow-down</v-icon>{{ $t('drawer.recs_today') }}: {{ $filters.formatNumber(stat.recs_today, true) || '0' }}</p>
+            <p><v-icon left small color="indigo">mdi-arrow-up</v-icon>{{ $t('drawer.sends_today') }}: {{ $filters.formatNumber(stat.sends_today, true) || '0' }}</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="6" md="4" v-show="permissions.sell && dashboard.sells">
+        <v-card class="animate__animated animate__zoomIn card-equal-height" color="green-lighten-4" variant="elevated"
+          prepend-icon="mdi-basket-unfill" :title="$t('drawer.sell')" to="/acc/sell/list" hover>
+          <v-card-text class="text-dark">
+            <p><v-icon left small color="green">mdi-sigma</v-icon>{{ $t('drawer.total') }}: {{ $filters.formatNumber(stat.sells_total, true) || '0' }}</p>
+            <p><v-icon left small color="green">mdi-calendar-today</v-icon>{{ $t('drawer.today') }}: {{ $filters.formatNumber(stat.sells_today, true) || '0' }}</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <!-- ردیف دوم -->
+      <v-col cols="12" sm="6" md="4" v-show="permissions.buy && dashboard.buys">
+        <v-card class="animate__animated animate__zoomIn card-equal-height" color="red-lighten-4" variant="elevated"
+          prepend-icon="mdi-basket-fill" :title="$t('drawer.buy')" to="/acc/buy/list" hover>
+          <v-card-text class="text-dark">
+            <p><v-icon left small color="red">mdi-sigma</v-icon>{{ $t('drawer.total') }}: {{ $filters.formatNumber(stat.buys_total, true) || '0' }}</p>
+            <p><v-icon left small color="red">mdi-calendar-today</v-icon>{{ $t('drawer.today') }}: {{ $filters.formatNumber(stat.buys_today, true) || '0' }}</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="6" md="4" v-show="permissions.accounting && dashboard.accounting_total">
+        <v-card class="animate__animated animate__zoomIn card-equal-height" color="orange-lighten-4" variant="elevated"
+          prepend-icon="mdi-table-refresh" :title="$t('drawer.roller')" hover>
+          <v-card-text class="text-dark">
+            <v-icon left small color="orange">mdi-currency-usd</v-icon>
+            {{ $filters.formatNumber(stat.income, true) || '0' }}
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="6" md="4" v-show="permissions.bank && dashboard.banks">
+        <v-card class="animate__animated animate__zoomIn card-equal-height" color="blue-lighten-4" variant="elevated"
+          prepend-icon="mdi-bank" :title="$t('drawer.banks')" to="/acc/banks/list" hover>
+          <v-card-text class="text-dark">
+            <v-icon left small color="blue">mdi-numeric</v-icon>
+            {{ $t('static.count') }}: {{ $filters.formatNumber(stat.bankCount) || '0' }}
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <!-- ردیف سوم -->
+      <v-col cols="12" sm="6" md="4" v-show="permissions.accounting && dashboard.acc_docs">
+        <v-card class="animate__animated animate__ progressingzoomIn card-equal-height" color="purple-lighten-4" variant="elevated"
+          prepend-icon="mdi-book-open-page-variant" :title="$t('drawer.docs')" to="/acc/accounting/list" hover>
+          <v-card-text class="text-dark">
+            <v-icon left small color="purple">mdi-numeric</v-icon>
+            {{ $t('static.count') }}: {{ $filters.formatNumber(stat.docCount) || '0' }}
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="6" md="4" v-show="permissions.commodity && dashboard.commodities">
+        <v-card class="animate__animated animate__zoomIn card-equal-height" color="teal-lighten-4" variant="elevated"
+          prepend-icon="mdi-package-variant" :title="$t('drawer.commodity')" to="/acc/commodity/list" hover>
+          <v-card-text class="text-dark">
+            <v-icon left small color="teal">mdi-numeric</v-icon>
+            {{ $t('static.count') }}: {{ $filters.formatNumber(stat.commodity) || '0' }}
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="12" md="4" v-show="permissions.sell && dashboard.sellChart && isPluginActive('accpro')">
+        <v-card class="animate__animated animate__zoomIn card-equal-height" color="blue-grey-lighten-4" variant="elevated"
+          prepend-icon="mdi-basket" :title="$t('drawer.sell_chart')" hover>
+          <v-card-text class="pa-0">
+            <sale-chart></sale-chart>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
+
+  <!-- دیالوگ تنظیمات داشبورد -->
   <v-dialog v-model="dialog">
-    <v-card prepend-icon="mdi-layers-edit" :title="$t('dialog.edit_dashboard')">
-      <v-card-text>
+    <v-card color="grey-lighten-4">
+      <v-toolbar color="primary-dark" dense flat>
+        <v-icon left class="ms-2" color="white">mdi-layers-edit</v-icon>
+        <v-toolbar-title class="text-white text-subtitle-1">{{ $t('dialog.edit_dashboard') }}</v-toolbar-title>
+        <v-spacer />
+        <v-btn icon @click="dialog = false">
+          <v-icon color="white">mdi-close</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-card-text class="pa-2">
         <v-row>
           <v-col cols="12" sm="6" md="4">
-            <v-switch color="primary" hide-details="auto" :label="$t('static.wallet')" inset
-              v-model="dashboard.wallet"></v-switch>
-            <v-switch color="primary" hide-details="auto" :label="$t('drawer.banks')" inset
-              v-model="dashboard.banks"></v-switch>
-            <v-switch color="primary" hide-details="auto" :label="$t('drawer.acc_docs')" inset
-              v-model="dashboard.acc_docs"></v-switch>
+            <v-switch size="small" color="primary" :label="$t('static.wallet')" v-model="dashboard.wallet" dense hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.banks')" v-model="dashboard.banks" dense hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.acc_docs')" v-model="dashboard.acc_docs" dense hide-details inset class="text-caption" />
           </v-col>
           <v-col cols="12" sm="6" md="4">
-            <v-switch color="primary" hide-details="auto" :label="$t('drawer.persons')" inset
-              v-model="dashboard.persons"></v-switch>
-            <v-switch color="primary" hide-details="auto" :label="$t('drawer.buys')" inset
-              v-model="dashboard.buys"></v-switch>
-            <v-switch color="primary" hide-details="auto" :label="$t('drawer.sells')" inset
-              v-model="dashboard.sells"></v-switch>
-            <v-switch color="primary" hide-details="auto" :label="$t('drawer.sell_chart')" inset
-              v-model="dashboard.sellChart"></v-switch>
+            <v-switch color="primary" :label="$t('drawer.persons')" v-model="dashboard.persons" dense hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.buys')" v-model="dashboard.buys" dense hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.sells')" v-model="dashboard.sells" dense hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.sell_chart')" v-model="dashboard.sellChart" dense hide-details inset class="text-caption" />
           </v-col>
           <v-col cols="12" sm="6" md="4">
-            <v-switch color="primary" hide-details="auto" :label="$t('dialog.commodities')" inset
-              v-model="dashboard.commodities"></v-switch>
-            <v-switch color="primary" hide-details="auto" :label="$t('drawer.accounting_total')" inset
-              v-model="dashboard.accounting_total"></v-switch>
-            <v-switch color="primary" hide-details="auto" :label="$t('drawer.notif')" inset v-model="dashboard.notif"
-              :error-messages="$t('dialog.notif_msg')"></v-switch>
+            <v-switch color="primary" :label="$t('dialog.commodities')" v-model="dashboard.commodities" dense hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.accounting_total')" v-model="dashboard.accounting_total" dense hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.notif')" v-model="dashboard.notif" dense :hint="$t('dialog.notif_msg')"
+              persistent-hint inset class="text-caption" />
           </v-col>
         </v-row>
       </v-card-text>
-      <template v-slot:actions>
-        <v-btn class="ms-auto" prepend-icon="mdi-content-save" variant="outlined" color="primary"
-          :text="$t('dialog.save')" @click="save()"></v-btn>
-      </template>
+      <v-card-actions class="pa-2">
+        <v-spacer />
+        <v-btn prepend-icon="mdi-content-save" color="primary" variant="outlined" :text="$t('dialog.save')" @click="save" :loading="loading" />
+      </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <v-overlay :value="loading" contained class="align-center justify-center">
+    <v-progress-circular indeterminate size="64" color="primary" />
+  </v-overlay>
 </template>
 
 <script>
 import axios from "axios";
-import saleChart from "./component/widgets/saleChart.vue";
+import SaleChart from "./component/widgets/saleChart.vue";
 
 export default {
   name: "dashboard",
   components: {
-    saleChart: saleChart,
+    SaleChart,
   },
-  data: () => {
-    return {
-      loading: false,
-      dialog: false,
-      stat: {},
-      statements: [],
-      permissions: {},
-      plugins: [],
-      wallet: {},
-      dashboard: {
-        banks: false,
-        wallet: false,
-        buys: false,
-        sells: false,
-        commodities: false,
-        acc_docs: false,
-        accounting_total: false,
-        persons: false,
-        notif: false,
-        sellChart: false,
-      }
-    }
-  },
+  data: () => ({
+    loading: false,
+    dialog: false,
+    stat: {},
+    statements: [],
+    permissions: {},
+    plugins: [],
+    wallet: {},
+    dashboard: {
+      banks: false,
+      wallet: false,
+      buys: false,
+      sells: false,
+      commodities: false,
+      acc_docs: false,
+      accounting_total: false,
+      persons: false,
+      notif: false,
+      sellChart: false,
+    },
+  }),
   methods: {
-    save() {
+    async save() {
       this.loading = true;
-      this.dialog = false;
-      axios.post('/api/dashboard/settings/save', this.dashboard).then((response) => {
+      try {
+        await axios.post('/api/dashboard/settings/save', this.dashboard);
+        this.dialog = false;
+      } catch (error) {
+        console.error('Save error:', error);
+      } finally {
         this.loading = false;
-      });
+      }
     },
     isPluginActive(plugName) {
       return this.plugins[plugName] !== undefined;
     },
-    loadData() {
-      this.loading = false;
-      axios.post('/api/business/get/user/permissions').then((response) => {
-        this.permissions = response.data;
-      });
-      axios.post('/api/dashboard/settings/load').then((response) => {
-        this.dashboard = response.data.data;
-      });
-      //get active plugins
-      axios.post('/api/plugin/get/actives',).then((response) => {
-        this.plugins = response.data;
-      });
-      axios.post('/api/wallet/info',).then((response) => {
-        this.wallet = response.data;
-      });
-      //get statments
-      axios.post('/api/general/statements',).then((response) => {
-        this.statements = response.data;
-      });
-
-      axios.post('/api/business/stat').then((response) => {
-        this.stat = response.data
-      });
-    }
+    async loadData() {
+      this.loading = true;
+      try {
+        const [permissions, settings, plugins, wallet, statements, stats] = await Promise.all([
+          axios.post('/api/business/get/user/permissions'),
+          axios.post('/api/dashboard/settings/load'),
+          axios.post('/api/plugin/get/actives'),
+          axios.post('/api/wallet/info'),
+          axios.post('/api/general/statements'),
+          axios.post('/api/business/stat'),
+        ]);
+        this.permissions = permissions.data;
+        this.dashboard = settings.data.data;
+        this.plugins = plugins.data;
+        this.wallet = wallet.data;
+        this.statements = statements.data;
+        this.stat = stats.data;
+      } catch (error) {
+        console.error('Load data error:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
   },
   mounted() {
     this.loadData();
-  }
-}
+  },
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+/* تنظیم ارتفاع یکسان کارت‌ها */
+.card-equal-height {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* انیمیشن‌ها */
+@import 'animate.css';
+</style>
