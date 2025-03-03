@@ -30,7 +30,7 @@ export default {
     <router-link class="btn btn-link btn-sm me-1" to="/acc/archive/order/new">
           <i class="fa fa-plus"></i>
     </router-link>
-    <label class=""> فضا: <span class="text-primary-dark">{{ this.$filters.formatNumber(this.info.size) }}</span> مگابایت
+    <label class=""> فضا: <span class="text-primary-dark">{{ $filters.formatNumber(this.info.size) }}</span> مگابایت
     </label>
     <div class="progress mt-1 mx-1" role="progressbar" aria-label="فضای استفاده شده" :aria-valuenow="this.info.remain"
       aria-valuemin="0" :aria-valuemax="this.info.size">

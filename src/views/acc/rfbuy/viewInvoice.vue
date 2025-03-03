@@ -111,7 +111,7 @@ export default defineComponent({
         });
       });
 
-      axios.get('/api/rfbuy/get/info/' + this.$route.params.id).then((response) => {
+      axios.post('/api/rfbuy/get/info/' + this.$route.params.id).then((response) => {
         this.person = response.data.person;
         this.discountAll = response.data.discountAll;
         this.transferCost = response.data.transferCost;
@@ -141,7 +141,7 @@ export default defineComponent({
         this.bid = response.data;
         this.loading = false;
       });
-      axios.get("/api/printers/options/info").then((response) => {
+      axios.post("/api/printers/options/info").then((response) => {
         this.isLoading = false;
         this.printOptions = response.data.rfbuy;
       })
@@ -464,7 +464,7 @@ export default defineComponent({
             rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
             :loading="loading">
             <template #item-sumTotal="{ sumTotal }">
-              {{ this.$filters.formatNumber(sumTotal) }}
+              {{ $filters.formatNumber(sumTotal) }}
             </template>
             <template #item-count="{ count, commodity }">
               {{ count }} {{ commodity.unit }}
@@ -475,19 +475,19 @@ export default defineComponent({
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     قیمت واحد
                     <span class="badge text-bg-primary rounded-pill">
-                      {{ this.$filters.formatNumber(price) }}
+                      {{ $filters.formatNumber(price) }}
                     </span>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     تخفیف
                     <span class="badge text-bg-primary rounded-pill">
-                      {{ this.$filters.formatNumber(discount) }}
+                      {{ $filters.formatNumber(discount) }}
                     </span>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     مالیات
                     <span class="badge text-bg-primary rounded-pill">
-                      {{ this.$filters.formatNumber(tax) }}
+                      {{ $filters.formatNumber(tax) }}
                     </span>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -570,7 +570,7 @@ export default defineComponent({
                       {{ rd.date }}
                     </td>
                     <td class="fw-semibold">
-                      {{ this.$filters.formatNumber(rd.amount) }}
+                      {{ $filters.formatNumber(rd.amount) }}
                     </td>
                   </tr>
                   <tr v-if="item.relatedDocs.length == 0" class="text-center">

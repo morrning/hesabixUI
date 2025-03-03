@@ -40,7 +40,7 @@
               <span v-else class="text-danger"><i class="fa fa-info me-2"></i>پرداخت نشده</span>
             </template>
             <template #item-price="{ price }">
-              <span class="">{{this.$filters.formatNumber(price)}}</span>
+              <span class="">{{ $filters.formatNumber(price)}}</span>
             </template>
             <template #item-cardPan="{ cardPan }">
               <span style="direction:ltr" class="">{{cardPan}}</span>
@@ -82,7 +82,7 @@ export default {
   methods: {
     loadData(){
       this.loading = true;
-      axios.get('/api/archive/orders/list')
+      axios.post('/api/archive/orders/list')
           .then((response)=>{
             this.items = response.data;
             this.loading = false;

@@ -27,7 +27,7 @@ export default defineComponent({
           <i class="fa fa-plus"></i>
     </router-link>
     اعتبار :
-    <span class="text-primary-dark">{{ this.$filters.formatNumber(smsCharge)}}</span>
+    <span class="text-primary-dark">{{ $filters.formatNumber(smsCharge)}}</span>
     ریال
   </div>
 </template>

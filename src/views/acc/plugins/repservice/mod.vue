@@ -119,10 +119,6 @@
                 </h3>
                 <div class="block-options">
                   <mostdes :submitData="desSubmit" type="repservice"></mostdes>
-                  <button title="شرح‌های پرتکرار" type="button" class="btn-block-option" data-bs-toggle="modal"
-                    data-bs-target="#mostDesModal">
-                    <i class="fa fa-list"></i>
-                  </button>
                 </div>
               </div>
               <div class="block-content p-0">
@@ -302,21 +298,21 @@ export default {
     loadData() {
       //load year
       if (this.$route.params.id == '') {
-        axios.get('/api/year/get').then((response) => {
+        axios.post('/api/year/get').then((response) => {
           this.data.date = response.data.now;
         });
       }
       //load persons
-      axios.get('/api/person/list/search').then((response) => {
+      axios.post('/api/person/list/search').then((response) => {
         this.persons = response.data;
       });
       //load commodities
-      axios.get('/api/commodity/list/search').then((response) => {
+      axios.post('/api/commodity/list/search').then((response) => {
         this.commodity = response.data;
       });
       //load data for edit document
       if (this.$route.params.id != '') {
-        axios.get('/api/repservice/order/info/' + this.$route.params.id).then((response) => {
+        axios.post('/api/repservice/order/info/' + this.$route.params.id).then((response) => {
           this.data = response.data;
         });
       }

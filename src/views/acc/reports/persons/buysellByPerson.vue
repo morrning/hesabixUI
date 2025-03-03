@@ -59,7 +59,7 @@
                             <div class="col-6">
                               <i class="fa fa-bars"></i>
                               تراز:
-                              {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+                              {{ $filters.formatNumber(Math.abs(parseInt(option.bs) -
           parseInt(option.bd))) }}
                               <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                                 بدهکار </span>
@@ -141,8 +141,8 @@
                             مبلغ کل:
                           </span>
                           <span class="text-primary">
-                            {{ this.$filters.formatNumber(this.sumTotal) }}
-                            {{ this.$filters.getActiveMoney().shortName }}
+                            {{ $filters.formatNumber(this.sumTotal) }}
+                            {{ $filters.getActiveMoney().shortName }}
                           </span>
                         </div>
 
@@ -152,8 +152,8 @@
                             جمع مبلغ موارد انتخابی:
                           </span>
                           <span class="text-primary">
-                            {{ this.$filters.formatNumber(this.sumSelected) }}
-                            {{ this.$filters.getActiveMoney().shortName }}
+                            {{ $filters.formatNumber(this.sumSelected) }}
+                            {{ $filters.getActiveMoney().shortName }}
                           </span>
                         </div>
                       </div>
@@ -223,7 +223,7 @@ export default {
       });
     },
     loadData() {
-      axios.get('/api/person/list/search')
+      axios.post('/api/person/list/search')
         .then((response) => {
           this.persons = response.data;
           if (this.persons.length != 0) {
@@ -233,7 +233,7 @@ export default {
           this.loading = false;
         });
 
-      axios.get('/api/year/get')
+      axios.post('/api/year/get')
         .then((response) => {
           this.year = response.data;
           this.loading = false;

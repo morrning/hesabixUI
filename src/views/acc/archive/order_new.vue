@@ -85,7 +85,7 @@ export default {
       this.priceTotal = this.$filters.formatNumber(parseInt(this.space) * parseInt(this.priceBase) * parseInt(this.month)) + 'ریال';
     },
     loadData(cat) {
-      axios.get('/api/archive/order/settings')
+      axios.post('/api/archive/order/settings')
         .then((response) => {
           this.priceBase = response.data.priceBase;
           this.loading = false;

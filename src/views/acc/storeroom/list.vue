@@ -78,7 +78,7 @@ export default {
   }},
   methods: {
     loadData(){
-      axios.get('/api/storeroom/list/all')
+      axios.post('/api/storeroom/list/all')
           .then((response)=>{
             this.items = response.data.data;
             this.loading = false;

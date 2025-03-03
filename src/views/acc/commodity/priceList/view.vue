@@ -33,7 +33,7 @@
               {{ commodity.name }}
             </template>
             <template #item-priceSell="{ priceSell }">
-              {{ this.$filters.formatNumber(priceSell) }}
+              {{ $filters.formatNumber(priceSell) }}
             </template>
           </EasyDataTable>
         </div>
@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('/api/commodity/pricelist/view/' + this.$route.params.id)
+      axios.post('/api/commodity/pricelist/view/' + this.$route.params.id)
         .then((response) => {
           this.items = response.data;
           this.loading = false;

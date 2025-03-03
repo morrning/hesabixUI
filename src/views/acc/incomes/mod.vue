@@ -270,7 +270,7 @@
                                   <div class="col-6" v-if="parseInt(option.bs) - parseInt(option.bd) != 0">
                                     <i class="fa fa-bars"></i>
                                     تراز:
-                                    {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+                                    {{ $filters.formatNumber(Math.abs(parseInt(option.bs) -
           parseInt(option.bd))) }}
                                     <span class="" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                                       بدهکار </span>
@@ -559,33 +559,33 @@ export default {
         this.addBank();
         this.addItem();
         //load year
-        axios.get('/api/year/get').then((response) => {
+        axios.post('/api/year/get').then((response) => {
           this.year = response.data;
           this.data.date = response.data.now;
         })
       }
       //get list of items
-      axios.get('/api/accounting/table/childs/income').then((response) => {
+      axios.post('/api/accounting/table/childs/income').then((response) => {
         this.listIncomes = response.data;
       });
 
       //get list of banks
-      axios.get('/api/bank/list').then((response) => {
+      axios.post('/api/bank/list').then((response) => {
         this.listBanks = response.data;
       });
 
       //get list of cashdesks
-      axios.get('/api/cashdesk/list').then((response) => {
+      axios.post('/api/cashdesk/list').then((response) => {
         this.listCashdesks = response.data;
       });
 
       //get list of salarys
-      axios.get('/api/salary/list').then((response) => {
+      axios.post('/api/salary/list').then((response) => {
         this.listSalarys = response.data;
       });
 
        //get list of persons
-       axios.get('/api/person/list/search').then((response) => {
+       axios.post('/api/person/list/search').then((response) => {
         this.listPersons = response.data;
       });
     },

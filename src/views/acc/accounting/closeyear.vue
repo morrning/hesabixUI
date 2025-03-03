@@ -50,13 +50,13 @@
                         <span class="fw-semibold">بانک‌ها</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(YearInfo.banks.bd) }}</span>
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(YearInfo.banks.bd) }}</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(YearInfo.banks.bs) }}</span>
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(YearInfo.banks.bs) }}</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(Math.abs(YearInfo.banks.bs -
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(Math.abs(YearInfo.banks.bs -
         YearInfo.banks.bd)) }}</span>
                       </td>
                       <td>
@@ -73,13 +73,13 @@
                         <span class="fw-semibold">صندوق‌ها</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(YearInfo.cashdesks.bd) }}</span>
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(YearInfo.cashdesks.bd) }}</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(YearInfo.cashdesks.bs) }}</span>
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(YearInfo.cashdesks.bs) }}</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(Math.abs(YearInfo.cashdesks.bd -
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(Math.abs(YearInfo.cashdesks.bd -
         YearInfo.cashdesks.bs)) }}</span>
                       </td>
                       <td>
@@ -96,13 +96,13 @@
                         <span class="fw-semibold">تنخواه گردان‌ها</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(YearInfo.salarys.bd) }}</span>
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(YearInfo.salarys.bd) }}</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(YearInfo.salarys.bs) }}</span>
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(YearInfo.salarys.bs) }}</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(Math.abs(YearInfo.salarys.bd -
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(Math.abs(YearInfo.salarys.bd -
         YearInfo.salarys.bs)) }}</span>
                       </td>
                       <td>
@@ -119,13 +119,13 @@
                         <span class="fw-semibold">بدهکاران</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(YearInfo.persons.bd) }}</span>
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(YearInfo.persons.bd) }}</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(YearInfo.persons.bs) }}</span>
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(YearInfo.persons.bs) }}</span>
                       </td>
                       <td>
-                        <span class="fs-sm text-muted">{{ this.$filters.formatNumber(Math.abs(YearInfo.persons.bs -
+                        <span class="fs-sm text-muted">{{ $filters.formatNumber(Math.abs(YearInfo.persons.bs -
         YearInfo.persons.bd)) }}</span>
                       </td>
                       <td>

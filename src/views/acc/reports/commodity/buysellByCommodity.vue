@@ -135,8 +135,8 @@
                             مبلغ کل:
                           </span>
                           <span class="text-primary">
-                            {{ this.$filters.formatNumber(this.sumMoneyTotal) }}
-                            {{ this.$filters.getActiveMoney().shortName }}
+                            {{ $filters.formatNumber(this.sumMoneyTotal) }}
+                            {{ $filters.getActiveMoney().shortName }}
                           </span>
                         </div>
 
@@ -146,8 +146,8 @@
                             جمع مبلغ موارد انتخابی:
                           </span>
                           <span class="text-primary">
-                            {{ this.$filters.formatNumber(this.sumSelected) }}
-                            {{ this.$filters.getActiveMoney().shortName }}
+                            {{ $filters.formatNumber(this.sumSelected) }}
+                            {{ $filters.getActiveMoney().shortName }}
                           </span>
                         </div>
                       </div>
@@ -216,7 +216,7 @@ export default {
       });
     },
     loadData() {
-      axios.get('/api/commodity/list/search')
+      axios.post('/api/commodity/list/search')
         .then((response) => {
           this.commoditys = response.data;
           if (this.commoditys.length != 0) {
@@ -225,7 +225,7 @@ export default {
           this.selectedType = this.types[4];
           this.loading = false;
         });
-      axios.get('/api/year/get')
+      axios.post('/api/year/get')
         .then((response) => {
           this.year = response.data;
           this.loading = false;

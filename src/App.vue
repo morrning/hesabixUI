@@ -23,7 +23,7 @@ export default {
       window.location.reload();
     },
     gethesabix() {
-      axios.get('/api/general/stat').then((response) => {
+      axios.post('/api/general/stat').then((response) => {
         this.hesabix = response.data;
         let currentVersion = window.localStorage.getItem('hesabixVersion');
 

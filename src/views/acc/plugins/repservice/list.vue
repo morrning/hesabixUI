@@ -351,13 +351,13 @@ export default {
       this.loading = false;
     },
     loadData() {
-      axios.get('/api/plug/repservice/order/list')
+      axios.post('/api/plug/repservice/order/list')
         .then((response) => {
           this.items = response.data;
           this.orgItems = response.data;
           this.loading = false;
         });
-      axios.get('/api/plug/repservice/order/state/list')
+      axios.post('/api/plug/repservice/order/state/list')
         .then((response) => {
           this.orderStates = response.data;
         });
@@ -385,7 +385,7 @@ export default {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          axios.get('/api/repservice/order/remove/' + code).then((response) => {
+          axios.post('/api/repservice/order/remove/' + code).then((response) => {
             if (response.data.result == 1) {
               let index = 0;
               for (let z = 0; z < this.items.length; z++) {

@@ -29,7 +29,7 @@ const serverOptions = ref<ServerOptions>({
 
 const loadFromServer = async () => {
   loading.value = true;
-  axios.get('/api/admin/users/count')
+  axios.post('/api/admin/users/count')
     .then((response) => {
       serverItemsLength.value = response.data.data;
     });

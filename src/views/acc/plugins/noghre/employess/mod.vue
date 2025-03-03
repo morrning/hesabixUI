@@ -82,7 +82,7 @@ export default {
     loadData(id = ''){
       //load persons
       this.isLoading = true;
-      axios.get('/api/person/list/limit')
+      axios.post('/api/person/list/limit')
           .then((response)=>{
             this.persons = response.data;
             if(id != ''){

@@ -139,12 +139,12 @@ export default defineComponent({
         this.ticket.store.des = this.ticket.store.name + ' انباردار : ' + this.ticket.store.manager
       });
       //load year
-      axios.get('/api/year/get').then((response) => {
+      axios.post('/api/year/get').then((response) => {
         this.year = response.data;
         this.ticket.date = response.data.now;
       })
       //load transfer types
-      axios.get('/api/storeroom/transfertype/list').then((response) => {
+      axios.post('/api/storeroom/transfertype/list').then((response) => {
         this.transferTypes = response.data;
         this.ticket.transferType = response.data[0];
       })

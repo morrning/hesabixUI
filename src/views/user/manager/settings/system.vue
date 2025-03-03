@@ -33,7 +33,7 @@ export default defineComponent({
   methods: {
     loadData() {
       this.loading = true;
-      axios.get('/api/admin/settings/system/info')
+      axios.post('/api/admin/settings/system/info')
         .then((response) => {
           this.systemInfo = response.data;
           this.loading = false;

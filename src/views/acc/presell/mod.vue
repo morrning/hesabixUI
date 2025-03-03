@@ -1,6 +1,4 @@
 <template>
-  <mostdes :submitData="desSubmit" type="sell"></mostdes>
-
   <v-toolbar color="toolbar" :title="$t('dialog.presell_invoice')">
     <template v-slot:prepend>
       <v-tooltip :text="$t('dialog.back')" location="bottom">
@@ -75,7 +73,7 @@
                             <div class="col-6">
                               <i class="fa fa-bars"></i>
                               تراز:
-                              {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+                              {{ $filters.formatNumber(Math.abs(parseInt(option.bs) -
                                 parseInt(option.bd))) }}
                               <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                                 بدهکار </span>
@@ -89,7 +87,7 @@
                   </v-cob>
                   <span v-if="selectedPersonWithDet.bs != undefined" class="text-info ms-2">
                     تراز:
-                    {{ this.$filters.formatNumber(Math.abs(parseInt(this.selectedPersonWithDet.bs) -
+                    {{ $filters.formatNumber(Math.abs(parseInt(this.selectedPersonWithDet.bs) -
                       parseInt(this.selectedPersonWithDet.bd))) }}
                     <span class="text-danger"
                       v-if="parseInt(this.selectedPersonWithDet.bs) - parseInt(this.selectedPersonWithDet.bd) < 0">
@@ -110,10 +108,6 @@
                   </h3>
                   <div class="block-options">
                     <mostdes :submitData="desSubmit" type="sell"></mostdes>
-                    <button title="شرح‌های پرتکرار" type="button" class="btn-block-option" data-bs-toggle="modal"
-                      data-bs-target="#mostDesModal">
-                      <i class="fa fa-list"></i>
-                    </button>
                   </div>
                 </div>
                 <div class="block-content p-0">
@@ -374,22 +368,22 @@
                   </button>
                 </template>
                 <template #item-sumTotal="{ sumTotal }">
-                  {{ this.$filters.formatNumber(sumTotal) }}
+                  {{ $filters.formatNumber(sumTotal) }}
                 </template>
                 <template #item-sumWithoutTax="{ sumWithoutTax }">
-                  {{ this.$filters.formatNumber(sumWithoutTax) }}
+                  {{ $filters.formatNumber(sumWithoutTax) }}
                 </template>
                 <template #item-price="{ price }">
-                  {{ this.$filters.formatNumber(price) }}
+                  {{ $filters.formatNumber(price) }}
                 </template>
                 <template #item-commodity.name="{ commodity }">
                   {{ commodity.code }} - {{ commodity.name }}
                 </template>
                 <template #item-tax="{ tax }">
-                  {{ this.$filters.formatNumber(tax) }}
+                  {{ $filters.formatNumber(tax) }}
                 </template>
                 <template #item-discount="{ discount }">
-                  {{ this.$filters.formatNumber(discount) }}
+                  {{ $filters.formatNumber(discount) }}
                 </template>
                 <template #item-count="{ count, commodity }">
                   {{ count }} {{ commodity.unit }}
@@ -447,8 +441,8 @@
                           مالیات:
                         </span>
                         <span class="text-primary">
-                          {{ this.$filters.formatNumber(this.sumTax) }}
-                          {{ this.$filters.getActiveMoney().shortName }}
+                          {{ $filters.formatNumber(this.sumTax) }}
+                          {{ $filters.getActiveMoney().shortName }}
                         </span>
                       </div>
 
@@ -458,8 +452,8 @@
                           جمع مبلغ موارد انتخابی:
                         </span>
                         <span class="text-primary">
-                          {{ this.$filters.formatNumber(this.sumSelected) }}
-                          {{ this.$filters.getActiveMoney().shortName }}
+                          {{ $filters.formatNumber(this.sumSelected) }}
+                          {{ $filters.getActiveMoney().shortName }}
                         </span>
                       </div>
                       <div class="col-sm-12 col-md-3">
@@ -468,8 +462,8 @@
                           جمع کل:
                         </span>
                         <span class="text-primary">
-                          {{ this.$filters.formatNumber(this.sumTotal) }}
-                          {{ this.$filters.getActiveMoney().shortName }}
+                          {{ $filters.formatNumber(this.sumTotal) }}
+                          {{ $filters.getActiveMoney().shortName }}
                         </span>
                       </div>
                     </div>
@@ -913,7 +907,7 @@
       },
       loadData() {
         this.loading = true;
-        axios.get('/api/commodity/pricelist/list')
+        axios.post('/api/commodity/pricelist/list')
           .then((response) => {
             this.priceList = response.data;
             this.priceList.push({
@@ -922,12 +916,12 @@
             });
           });
         //load year
-        axios.get('/api/year/get').then((response) => {
+        axios.post('/api/year/get').then((response) => {
           this.year = response.data;
           this.data.date = response.data.now;
         })
         //load business info
-        axios.get('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
+        axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
           this.bid = response.data;
           if (this.bid.maliyatafzode == 0) {
             this.maliyatCheck = false;
@@ -936,11 +930,11 @@
           this.loading = false;
         })
         //load persons
-        axios.get('/api/person/list/search').then((response) => {
+        axios.post('/api/person/list/search').then((response) => {
           this.persons = response.data;
         });
         //load commodities
-        axios.get('/api/commodity/list/search').then((response) => {
+        axios.post('/api/commodity/list/search').then((response) => {
           this.commodity = response.data;
           if (response.data.length != 0) {
             this.itemData.commodity = response.data[0];
@@ -954,7 +948,7 @@
           }
         });
         //load commodity units
-        axios.get('/api/commodity/units').then((response) => {
+        axios.post('/api/commodity/units').then((response) => {
           this.units = response.data;
         });
 
@@ -965,7 +959,7 @@
           });
 
         if (this.$route.params.id != '') {
-          axios.get('/api/presell/get/info/' + this.$route.params.id).then((response) => {
+          axios.post('/api/presell/get/info/' + this.$route.params.id).then((response) => {
             this.data.date = response.data.date;
             this.data.des = response.data.des;
             this.data.person = response.data.person;

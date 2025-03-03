@@ -123,7 +123,8 @@
     </template>
     <template #item-nikename="{ nikename, code, prelabel }">
       <router-link :to="'/acc/persons/card/view/' + code">
-        {{ prelabel + ' ' + nikename }}
+        <span v-if="prelabel != null">{{ prelabel + ' ' + nikename }}</span>
+        <span v-else>{{ nikename }}</span>
       </router-link>
     </template>
     <template #item-speedAccess="{ speedAccess }">
@@ -134,13 +135,13 @@
       <span v-if="balance > 0" class="text-success">بستانکار</span>
     </template>
     <template #item-bs="{ bs }">
-      <span>{{ this.$filters.formatNumber(bs) }}</span>
+      <span>{{ $filters.formatNumber(bs) }}</span>
     </template>
     <template #item-bd="{ bd }">
-      <span>{{ this.$filters.formatNumber(bd) }}</span>
+      <span>{{ $filters.formatNumber(bd) }}</span>
     </template>
     <template #item-balance="{ balance }">
-      <span>{{ this.$filters.formatNumber(balance) }}</span>
+      <span>{{ $filters.formatNumber(balance) }}</span>
     </template>
   </EasyDataTable>
 </template>
@@ -249,7 +250,7 @@ export default {
     },
     loadData() {
       this.loading = true;
-      axios.get('/api/person/list')
+      axios.post('/api/person/list')
         .then((response) => {
           this.items = response.data;
           this.orgItems = response.data;

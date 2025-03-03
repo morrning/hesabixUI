@@ -100,15 +100,15 @@ export default defineComponent({
               <div class="row items-push text-uppercase">
                 <div class="col-6 col-md-4">
                   <div class="fw-semibold text-dark mb-1">تراکنش‌های موفق</div>
-                  <a class="link-fx fs-3" href="javascript:void(0)">{{this.$filters.formatNumber(this.walletInfo.transactions)}}</a>
+                  <a class="link-fx fs-3" href="javascript:void(0)">{{ $filters.formatNumber(this.walletInfo.transactions)}}</a>
                 </div>
                 <div class="col-6 col-md-4">
                   <div class="fw-semibold text-dark mb-1">موجودی</div>
-                  <a class="link-fx fs-3" href="javascript:void(0)">{{this.$filters.formatNumber(this.walletInfo.deposit)}}  ریال</a>
+                  <a class="link-fx fs-3" href="javascript:void(0)">{{ $filters.formatNumber(this.walletInfo.deposit)}}  ریال</a>
                 </div>
                 <div class="col-6 col-md-4">
                   <div class="fw-semibold text-dark mb-1">گردش مالی</div>
-                  <a class="link-fx fs-3" href="javascript:void(0)">{{this.$filters.formatNumber(this.walletInfo.turnover)}}  ریال</a>
+                  <a class="link-fx fs-3" href="javascript:void(0)">{{ $filters.formatNumber(this.walletInfo.turnover)}}  ریال</a>
                 </div>
               </div>
             </div>
@@ -157,7 +157,7 @@ export default defineComponent({
                   <span v-else class="text-danger"><i class="fa fa-info me-2"></i>پرداخت نشده</span>
                 </template>
                 <template #item-amount="{ amount }">
-                  <span class="">{{this.$filters.formatNumber(amount)}}</span>
+                  <span class="">{{ $filters.formatNumber(amount)}}</span>
                 </template>
                 <template #item-cardPan="{ cardPan }">
                   <span style="direction:ltr" class="">{{cardPan}}</span>
@@ -195,7 +195,7 @@ export default defineComponent({
                   <span v-else class="text-danger"><i class="fa fa-info me-2"></i>پرداخت نشده</span>
                 </template>
                 <template #item-amount="{ amount }">
-                  <span class="">{{this.$filters.formatNumber(amount)}}</span>
+                  <span class="">{{ $filters.formatNumber(amount)}}</span>
                 </template>
                 <template #item-cardPan="{ cardPan }">
                   <span style="direction:ltr" class="">{{cardPan}}</span>

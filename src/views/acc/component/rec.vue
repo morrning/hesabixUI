@@ -157,7 +157,7 @@ export default defineComponent({
         this.listCashdesks = response.data;
       })
       //load year
-      axios.get('/api/year/get').then((response) => {
+      axios.post('/api/year/get').then((response) => {
         this.year = response.data;
         this.date = response.data.now;
       })

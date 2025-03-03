@@ -37,10 +37,6 @@
                 </h3>
                 <div class="block-options">
                   <mostdes :submitData="desSubmit" type="personRecive"></mostdes>
-                  <button title="شرح‌های پرتکرار" type="button" class="btn-block-option" data-bs-toggle="modal"
-                    data-bs-target="#mostDesModal">
-                    <i class="fa fa-list"></i>
-                  </button>
                 </div>
               </div>
               <div class="block-content p-0">
@@ -93,7 +89,7 @@
                                   <div class="col-6">
                                     <i class="fa fa-bars"></i>
                                     تراز:
-                                    {{ this.$filters.formatNumber(Math.abs(parseInt(option.bs) -
+                                    {{ $filters.formatNumber(Math.abs(parseInt(option.bs) -
           parseInt(option.bd))) }}
                                     <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                                       بدهکار </span>
@@ -517,26 +513,26 @@ export default {
         this.addBank();
         this.addPerson();
         //load year
-        axios.get('/api/year/get').then((response) => {
+        axios.post('/api/year/get').then((response) => {
           this.year = response.data;
           this.data.date = response.data.now;
         })
       }
       //get list of persons
-      axios.get('/api/person/list/search').then((response) => {
+      axios.post('/api/person/list/search').then((response) => {
         this.listPersons = response.data;
       });
 
       //get list of banks
-      axios.get('/api/bank/list').then((response) => {
+      axios.post('/api/bank/list').then((response) => {
         this.listBanks = response.data;
       });
       //get list of cashdesks
-      axios.get('/api/cashdesk/list').then((response) => {
+      axios.post('/api/cashdesk/list').then((response) => {
         this.listCashdesks = response.data;
       });
       //get list of salarys
-      axios.get('/api/salary/list').then((response) => {
+      axios.post('/api/salary/list').then((response) => {
         this.listSalarys = response.data;
       })
     },

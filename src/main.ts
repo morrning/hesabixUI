@@ -60,13 +60,16 @@ const vuetify = createVuetify({
 
         },
         VTextField: {
-            hideDetails: "auto"
+            hideDetails: "auto",
+            variant: "outlined",
+            size: "small"
         },
         VTextarea: {
-            hideDetails: "auto"
+            hideDetails: "auto",
         },
         VSelect: {
-            hideDetails: "auto"
+            hideDetails: "auto",
+            variant: "outlined"
         },
         VDialog: {
             VCard: {
@@ -225,13 +228,13 @@ app.config.globalProperties.$filters = {
         };
     },
     async isLogin() {
-        let result = await axios.get('/api/user/check/login');
+        let result = await axios.post('/api/user/check/login');
         return result.status === 200;
     }
 }
 
 app.config.globalProperties.app_isLogin = async () => {
-    let result = await axios.get('/api/user/check/login');
+    let result = await axios.post('/api/user/check/login');
     if (result.status === 200) {
         return result.data.result;
     } else {

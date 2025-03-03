@@ -120,7 +120,7 @@ export default defineComponent({
         this.salarys = response.data;
       });
       //load year
-      axios.get('/api/year/get').then((response)=>{
+      axios.post('/api/year/get').then((response)=>{
         this.year = response.data;
         this.date = response.data.now;
       });
@@ -333,10 +333,10 @@ export default defineComponent({
             <p>مشتری:{{this.customer.nikename}}</p>
           </div>
           <div class="col-sm-12 col-md-3">
-            <p>مبلغ سفارش:{{this.$filters.formatNumber(this.order.doc.amount)}}ریال</p>
+            <p>مبلغ سفارش:{{ $filters.formatNumber(this.order.doc.amount)}}ریال</p>
           </div>
           <div class="col-sm-12 col-md-3">
-            <p>مبلغ پرداختی:{{this.$filters.formatNumber(this.orderPays)}}ریال</p>
+            <p>مبلغ پرداختی:{{ $filters.formatNumber(this.orderPays)}}ریال</p>
           </div>
           <div class="col-sm-12 col-md-3">
             <p v-show="this.orderPays == this.order.doc.amount">وضعیت:
@@ -347,7 +347,7 @@ export default defineComponent({
             </p>
             <p v-show="this.orderPays != 0 && this.orderPays != this.order.doc.amount">
               <span class="text-warning">
-                {{this.$filters.formatNumber(this.order.doc.amount - this.orderPays)}} ریال بدهکار
+                {{ $filters.formatNumber(this.order.doc.amount - this.orderPays)}} ریال بدهکار
               </span>
             </p>
           </div>
@@ -385,7 +385,7 @@ export default defineComponent({
               </a>
             </template>
             <template #item-amount="{ amount }">
-              {{ this.$filters.formatNumber(amount) }}
+              {{ $filters.formatNumber(amount) }}
             </template>
           </EasyDataTable>
         </div>

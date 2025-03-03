@@ -59,7 +59,7 @@ export default {
   }},
   methods: {
     loadData(){
-      axios.get('/api/business/logs/' + localStorage.getItem('activeBid'))
+      axios.post('/api/business/logs/' + localStorage.getItem('activeBid'))
           .then((response)=>{
             this.items = response.data;
             this.loading=false;

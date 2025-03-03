@@ -95,7 +95,7 @@ export default defineComponent({
                 <tr>
                   <th class="text-center" style="width: 60px;">ردیف</th>
                   <th>محصول</th>
-                  <th class="text-end" style="width: 120px;">مبلغ({{ this.$filters.getActiveMoney().shortName }})</th>
+                  <th class="text-end" style="width: 120px;">مبلغ({{ $filters.getActiveMoney().shortName }})</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -190,7 +190,7 @@ export default defineComponent({
                 </tr>
                 <tr>
                   <td class="fw-bold text-uppercase text-end bg-body-light" colspan="1">مبلغ کل :</td>
-                  <td class="fw-bold text-end bg-body-light" colspan="2">{{ $filters.formatNumber(this.order.doc.amount) }}  {{ this.$filters.getActiveMoney().shortName }}</td>
+                  <td class="fw-bold text-end bg-body-light" colspan="2">{{ $filters.formatNumber(this.order.doc.amount) }}  {{ $filters.getActiveMoney().shortName }}</td>
                 </tr>
                 </tbody>
               </table>

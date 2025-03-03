@@ -52,13 +52,13 @@
                     <span v-if="balance > 0" class="text-success">بستانکار</span>
                   </template>
                   <template #item-bs="{ bs }">
-                    <span>{{ this.$filters.formatNumber(bs) }}</span>
+                    <span>{{ $filters.formatNumber(bs) }}</span>
                   </template>
                   <template #item-bd="{ bd }">
-                    <span>{{ this.$filters.formatNumber(bd) }}</span>
+                    <span>{{ $filters.formatNumber(bd) }}</span>
                   </template>
                   <template #item-balance="{ balance }">
-                    <span style="direction:ltr;text-align:left;">{{ this.$filters.formatNumber(balance) }}</span>
+                    <span style="direction:ltr;text-align:left;">{{ $filters.formatNumber(balance) }}</span>
                   </template>
                 </EasyDataTable>
                 <div class="container-fluid p-0 mx-0 my-3">
@@ -72,8 +72,8 @@
                             بدهی کل:
                           </span>
                           <span class="text-primary">
-                            {{ this.$filters.formatNumber(Math.abs(this.sumTotal)) }}
-                            {{ this.$filters.getActiveMoney().shortName }}
+                            {{ $filters.formatNumber(Math.abs(this.sumTotal)) }}
+                            {{ $filters.getActiveMoney().shortName }}
                           </span>
                         </div>
 
@@ -83,8 +83,8 @@
                             جمع بدهی موارد انتخابی:
                           </span>
                           <span class="text-primary">
-                            {{ this.$filters.formatNumber(Math.abs(this.sumSelected)) }}
-                            {{ this.$filters.getActiveMoney().shortName }}
+                            {{ $filters.formatNumber(Math.abs(this.sumSelected)) }}
+                            {{ $filters.getActiveMoney().shortName }}
                           </span>
                         </div>
                       </div>
@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('/api/person/list/debtors/0')
+      axios.post('/api/person/list/debtors/0')
         .then((response) => {
           this.items = response.data;
           this.items.forEach((item) => {

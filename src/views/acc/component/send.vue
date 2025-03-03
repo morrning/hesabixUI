@@ -173,7 +173,7 @@ export default defineComponent({
         this.listChequesForPay = response.data;
       });
       //load year
-      axios.get('/api/year/get').then((response)=>{
+      axios.post('/api/year/get').then((response)=>{
         this.year = response.data;
         this.date = response.data.now;
       })
@@ -314,13 +314,13 @@ export default defineComponent({
       </ul>
       <span class="input-group-text">
         مجموع:
-        {{this.$filters.formatNumber(parseInt(this.totalPays))}}
-        {{ this.$filters.getActiveMoney().shortName }}
+        {{ $filters.formatNumber(parseInt(this.totalPays))}}
+        {{ $filters.getActiveMoney().shortName }}
       </span>
       <span class="input-group-text">
         باقی مانده:
-        {{this.$filters.formatNumber(parseInt(this.$props.totalAmount) - parseInt(this.totalPays))}}
-        {{ this.$filters.getActiveMoney().shortName }}
+        {{ $filters.formatNumber(parseInt(this.$props.totalAmount) - parseInt(this.totalPays))}}
+        {{ $filters.getActiveMoney().shortName }}
       </span>
       <button @click="submit()" class="btn btn-primary" type="button" >
         <i class="fa fa-save me-2"></i>

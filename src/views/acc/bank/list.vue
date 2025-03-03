@@ -54,8 +54,8 @@
               </router-link>
             </template>
             <template #item-balance="{ balance }">
-              <label class="text-success" v-if="balance >= 0">{{ this.$filters.formatNumber(balance) }}</label>
-              <label class="text-danger" v-else>{{ this.$filters.formatNumber(-1 * balance) }} منفی</label>
+              <label class="text-success" v-if="balance >= 0">{{ $filters.formatNumber(balance) }}</label>
+              <label class="text-danger" v-else>{{ $filters.formatNumber(-1 * balance) }} منفی</label>
             </template>
           </EasyDataTable>
         </div>
@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('/api/bank/list')
+      axios.post('/api/bank/list')
         .then((response) => {
           this.items = response.data;
           this.loading = false;

@@ -125,31 +125,31 @@
         </template>
         <template #item-relatedDocsCount="{ relatedDocsCount, relatedDocsPays }">
           <span v-if="relatedDocsCount != '0'" class="text-success"><i class="fa fa-money"></i>
-            {{ this.$filters.formatNumber(relatedDocsPays) }}
+            {{ $filters.formatNumber(relatedDocsPays) }}
           </span>
         </template>
         <template #item-amount="{ amount }">
           <span class="text-dark">
-            {{ this.$filters.formatNumber(amount) }}
+            {{ $filters.formatNumber(amount) }}
           </span>
         </template>
         <template #item-profit="{ profit }">
           <span v-if="profit >= 0" class="text-dark">
-            {{ this.$filters.formatNumber(profit) }}
+            {{ $filters.formatNumber(profit) }}
           </span>
           <span v-else class="text-danger">
-            {{ this.$filters.formatNumber(Math.abs(profit)) }}
+            {{ $filters.formatNumber(Math.abs(profit)) }}
             (زیان)
           </span>
         </template>
         <template #item-transferCost="{ transferCost }">
           <span class="text-dark">
-            {{ this.$filters.formatNumber(transferCost) }}
+            {{ $filters.formatNumber(transferCost) }}
           </span>
         </template>
         <template #item-discountAll="{ discountAll }">
           <span class="text-dark">
-            {{ this.$filters.formatNumber(discountAll) }}
+            {{ $filters.formatNumber(discountAll) }}
           </span>
         </template>
         <template #item-person="{ person }">
@@ -330,7 +330,7 @@ export default defineComponent ({
       this.loading = false;
     },
     loadData() {
-      axios.get("/api/printers/options/info").then((response) => {
+      axios.post("/api/printers/options/info").then((response) => {
         this.printOptions = response.data.sell;
       });
 

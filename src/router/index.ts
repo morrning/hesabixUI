@@ -111,6 +111,14 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: 'manager/plugins/list',
+                    component: () => import('../views/user/manager/settings/plugins.vue'),
+                    meta: {
+                        'title': 'افزونه‌ها',
+                        'login': true
+                    }
+                },
+                {
                     path: 'manager/logs/list',
                     component: () => import('../views/user/manager/log/logs.vue'),
                     meta: {
@@ -213,7 +221,7 @@ const router = createRouter({
                     name: 'acc_balanceSheet_list',
                     component: () =>
                         import('../views/acc/reports/balanceSheet.vue'),
-                }, 
+                },
                 {
                     path: 'reports/acc/explore_accounts',
                     name: 'acc_report_explore_accounts',
@@ -905,11 +913,11 @@ router.beforeEach(async (to, from, next) => {
     }
     //check user is login
     if (to.meta.login) {
-        let result = await axios.get('/api/user/check/login');
+        let result = await axios.post('/api/user/check/login');
         if (result.status == 200 && result.data.Success == true) {
             //check user has role
             if (to.meta.role) {
-                let result = await axios.get('/api/user/has/role/' + to.meta.role);
+                let result = await axios.post('/api/user/has/role/' + to.meta.role);
                 if (result.status == 200 && result.data.result == true) {
                     next();
                     return

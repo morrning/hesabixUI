@@ -66,34 +66,34 @@ export default defineComponent({
     loadData(){
       //load persons
       this.isLoading = true;
-      axios.get('/api/person/list/limit')
+      axios.post('/api/person/list/limit')
           .then((response)=>{
             this.persons = response.data;
             this.isLoading=false;
           });
-      axios.get('/api/plugin/noghre/ghalam/list')
+      axios.post('/api/plugin/noghre/ghalam/list')
           .then((response)=>{
             this.ghalams = response.data;
             this.isLoading=false;
           });
-      axios.get('/api/plugin/noghre/morsa/list')
+      axios.post('/api/plugin/noghre/morsa/list')
           .then((response)=>{
             this.morsas = response.data;
             this.isLoading=false;
           });
-      axios.get('/api/plugin/noghre/hakak/list')
+      axios.post('/api/plugin/noghre/hakak/list')
           .then((response)=>{
             this.hakaks = response.data;
             this.isLoading=false;
           });
-      axios.get('/api/plugin/noghre/tarash/list')
+      axios.post('/api/plugin/noghre/tarash/list')
           .then((response)=>{
             this.tarashs = response.data;
             this.isLoading=false;
           });
       this.isLoading = false
       //load year
-      axios.get('/api/year/get').then((response)=>{
+      axios.post('/api/year/get').then((response)=>{
         this.year = response.data;
         this.order.date = response.data.now;
       })
@@ -244,13 +244,13 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-4">
-                <label>فی هر گرم نقره ({{ this.$filters.getActiveMoney().shortName }})</label>
+                <label>فی هر گرم نقره ({{ $filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 @change="calc()" class="form-control" v-model="order.noghreFee" v-bind="currencyConfig"></money3>
                 </div>
               </div>
               <div class="col-sm-12 col-md-4">
-                <label>مبلغ کل نقره مصرفی ({{ this.$filters.getActiveMoney().shortName }})</label>
+                <label>مبلغ کل نقره مصرفی ({{ $filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 readonly="readonly" class="form-control" v-model="totalNoghre" v-bind="currencyConfig"></money3>
                 </div>
@@ -266,7 +266,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label class="required">هزینه نگین ({{ this.$filters.getActiveMoney().shortName }})</label>
+                <label class="required">هزینه نگین ({{ $filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.neginPrice" v-bind="currencyConfig"></money3>
                 </div>
@@ -291,7 +291,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label class=" required">هزینه تراشکار ({{ this.$filters.getActiveMoney().shortName }})</label>
+                <label class=" required">هزینه تراشکار ({{ $filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.tarashPrice" v-bind="currencyConfig"></money3>
                 </div>
@@ -316,7 +316,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label class=" required">هزینه حکاکی ({{ this.$filters.getActiveMoney().shortName }})</label>
+                <label class=" required">هزینه حکاکی ({{ $filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.hakakPrice" v-bind="currencyConfig"></money3>
                 </div>
@@ -341,7 +341,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label class=" required">هزینه قلم زن ({{ this.$filters.getActiveMoney().shortName }})</label>
+                <label class=" required">هزینه قلم زن ({{ $filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.ghalamPrice" v-bind="currencyConfig"></money3>
                 </div>
@@ -366,7 +366,7 @@ export default defineComponent({
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label class=" required">هزینه مرصع کار ({{ this.$filters.getActiveMoney().shortName }})</label>
+                <label class=" required">هزینه مرصع کار ({{ $filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.morsaPrice" v-bind="currencyConfig"></money3>
                 </div>
@@ -376,13 +376,13 @@ export default defineComponent({
           <div class="col-sm-12 col-md-6 mb-2 border rounded-2">
             <div class="row my-2">
               <div class="col-sm-12 col-md-6">
-                <label class="required">هزینه اجرای مدل ({{ this.$filters.getActiveMoney().shortName }})</label>
+                <label class="required">هزینه اجرای مدل ({{ $filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.modelPrice" v-bind="currencyConfig"></money3>
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
-                <label>سایر هزینه‌ها ({{ this.$filters.getActiveMoney().shortName }})</label>
+                <label>سایر هزینه‌ها ({{ $filters.getActiveMoney().shortName }})</label>
                 <div class="">
                   <money3 class="form-control" v-model="order.etcPrice" v-bind="currencyConfig"></money3>
                 </div>

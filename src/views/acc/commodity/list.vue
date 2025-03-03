@@ -127,24 +127,24 @@
       <i v-if="speedAccess" class="fa fa-check text-success"></i>
     </template>
     <template #item-priceBuy="{ priceBuy }">
-      {{ this.$filters.formatNumber(priceBuy) }}
+      {{ $filters.formatNumber(priceBuy) }}
     </template>
     <template #item-priceSell="{ priceSell }">
-      {{ this.$filters.formatNumber(priceSell) }}
+      {{ $filters.formatNumber(priceSell) }}
     </template>
     <template #item-count="{ count, khadamat }">
       <label v-if="khadamat == false">
         <span class="text-danger" v-if="count < 0">
           <i class="fa fa-arrow-down me-1"></i>
-          {{ this.$filters.formatNumber(Math.abs(count)) }}
+          {{ $filters.formatNumber(Math.abs(count)) }}
           کمبود موجودی
         </span>
         <span class="text-success" v-if="count > 0">
           <i class="fa fa-arrow-up me-1"></i>
-          {{ this.$filters.formatNumber(Math.abs(count)) }}
+          {{ $filters.formatNumber(Math.abs(count)) }}
         </span>
         <span class="text-dark" v-if="count == 0">
-          {{ this.$filters.formatNumber(Math.abs(count)) }}
+          {{ $filters.formatNumber(Math.abs(count)) }}
         </span>
       </label>
       <label v-else>آیتم خدماتی</label>
@@ -261,7 +261,7 @@ export default {
           this.types = response.data;
           this.isLoading = false;
         });
-      axios.get('/api/commodity/list')
+      axios.post('/api/commodity/list')
         .then((response) => {
           this.items = response.data;
           this.orgItems = response.data;

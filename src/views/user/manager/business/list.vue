@@ -30,7 +30,7 @@ const serverOptions = ref<ServerOptions>({
 
 const loadFromServer = async () => {
   loading.value = true;
-  axios.get('/api/admin/business/count')
+  axios.post('/api/admin/business/count')
     .then((response) => {
       serverItemsLength.value = response.data;
     });
