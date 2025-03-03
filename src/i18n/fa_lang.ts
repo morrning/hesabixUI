@@ -12,6 +12,11 @@ const fa_lang = {
       long: "ریال ایران"
     }
   },
+  captcha:{
+    refresh: 'نوسازی تصویر',
+    enter_code:'اعداد در تصویر را وارد کنید',
+    required: 'الزامی است'
+  },
   units: {
     mb: "مگابایت",
   },
