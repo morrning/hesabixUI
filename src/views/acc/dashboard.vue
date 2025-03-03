@@ -1,5 +1,5 @@
 <template>
-  <!-- Toolbar بالای صفحه (همون کد اولیه) -->
+  <!-- Toolbar بالای صفحه -->
   <v-toolbar color="toolbar" :title="$t('drawer.dashboard')">
     <v-tooltip :text="$t('dialog.edit_dashboard')" location="bottom">
       <template v-slot:activator="{ props }">
@@ -24,13 +24,47 @@
     </v-row>
 
     <v-row dense>
-      <!-- ردیف اول -->
+      <v-col cols="12" sm="12" md="6" v-show="permissions.sell && dashboard.sellChart && isPluginActive('accpro')">
+        <v-card class="animate__animated animate__zoomIn card-equal-height_big" color="blue-grey-lighten-4" variant="elevated"
+          prepend-icon="mdi-basket" :title="$t('drawer.sell_chart')" hover>
+          <v-card-text class="pa-0">
+            <sale-chart></sale-chart>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <!-- کارت جدید: کالاهای پرفروش -->
+      <v-col cols="12" sm="12" md="6" v-show="permissions.sell && dashboard.topCommodities">
+        <v-card class="animate__animated animate__zoomIn card-equal-height_big" color="pink-lighten-4" variant="elevated"
+          prepend-icon="mdi-chart-pie" :title="$t('dashboard.topCommodities.title')" hover>
+          <v-card-text class="pa-2">
+            <!-- دکمه‌های انتخاب بازه زمانی و تعداد -->
+            <v-row dense>
+              <v-col cols="6">
+                <v-select v-model="topCommoditiesPeriod" :items="periodOptions"
+                  :label="$t('dashboard.topCommodities.period')" dense density="compact" outlined
+                  @update:modelValue="fetchTopCommodities"></v-select>
+              </v-col>
+              <v-col cols="6">
+                <v-select v-model="topCommoditiesLimit" :items="limitOptions"
+                  :label="$t('dashboard.topCommodities.limit')" dense density="compact" outlined
+                  @update:modelValue="fetchTopCommodities"></v-select>
+              </v-col>
+            </v-row>
+            <!-- نمودارها -->
+            <top-commodities-chart :commodities="topCommodities" v-if="topCommodities.length > 0" />
+            <p v-else class="text-center">{{ $t('dashboard.topCommodities.noData') }}</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <!-- کارت‌های قبلی (بدون تغییر) -->
       <v-col cols="12" sm="6" md="4" v-show="permissions.wallet && dashboard.wallet">
         <v-card class="animate__animated animate__zoomIn card-equal-height" color="success-lighten-4" variant="elevated"
           prepend-icon="mdi-wallet" :title="$t('static.wallet')" to="/acc/wallet/view" hover>
           <v-card-text class="text-dark">
             <v-icon left small color="success">mdi-currency-usd</v-icon>
-            {{ $t('static.deposit') }}: {{ $filters.formatNumber(wallet.deposit) || '0' }} {{ $t('currency.irr.short') }}
+            {{ $t('static.deposit') }}: {{ $filters.formatNumber(wallet.deposit) || '0' }} {{ $t('currency.irr.short')
+            }}
           </v-card-text>
         </v-card>
       </v-col>
@@ -38,9 +72,12 @@
         <v-card class="animate__animated animate__zoomIn card-equal-height" color="indigo-lighten-4" variant="elevated"
           prepend-icon="mdi-account-multiple" :title="$t('drawer.persons')" to="/acc/persons/list" hover>
           <v-card-text class="text-dark">
-            <p><v-icon left small color="indigo">mdi-numeric</v-icon>{{ $t('static.count') }}: {{ $filters.formatNumber(stat.personCount) || '0' }}</p>
-            <p><v-icon left small color="indigo">mdi-arrow-down</v-icon>{{ $t('drawer.recs_today') }}: {{ $filters.formatNumber(stat.recs_today, true) || '0' }}</p>
-            <p><v-icon left small color="indigo">mdi-arrow-up</v-icon>{{ $t('drawer.sends_today') }}: {{ $filters.formatNumber(stat.sends_today, true) || '0' }}</p>
+            <p><v-icon left small color="indigo">mdi-numeric</v-icon>{{ $t('static.count') }}: {{
+              $filters.formatNumber(stat.personCount) || '0' }}</p>
+            <p><v-icon left small color="indigo">mdi-arrow-down</v-icon>{{ $t('drawer.recs_today') }}: {{
+              $filters.formatNumber(stat.recs_today, true) || '0' }}</p>
+            <p><v-icon left small color="indigo">mdi-arrow-up</v-icon>{{ $t('drawer.sends_today') }}: {{
+              $filters.formatNumber(stat.sends_today, true) || '0' }}</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -48,8 +85,10 @@
         <v-card class="animate__animated animate__zoomIn card-equal-height" color="green-lighten-4" variant="elevated"
           prepend-icon="mdi-basket-unfill" :title="$t('drawer.sell')" to="/acc/sell/list" hover>
           <v-card-text class="text-dark">
-            <p><v-icon left small color="green">mdi-sigma</v-icon>{{ $t('drawer.total') }}: {{ $filters.formatNumber(stat.sells_total, true) || '0' }}</p>
-            <p><v-icon left small color="green">mdi-calendar-today</v-icon>{{ $t('drawer.today') }}: {{ $filters.formatNumber(stat.sells_today, true) || '0' }}</p>
+            <p><v-icon left small color="green">mdi-sigma</v-icon>{{ $t('drawer.total') }}: {{
+              $filters.formatNumber(stat.sells_total, true) || '0' }}</p>
+            <p><v-icon left small color="green">mdi-calendar-today</v-icon>{{ $t('drawer.today') }}: {{
+              $filters.formatNumber(stat.sells_today, true) || '0' }}</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -59,8 +98,10 @@
         <v-card class="animate__animated animate__zoomIn card-equal-height" color="red-lighten-4" variant="elevated"
           prepend-icon="mdi-basket-fill" :title="$t('drawer.buy')" to="/acc/buy/list" hover>
           <v-card-text class="text-dark">
-            <p><v-icon left small color="red">mdi-sigma</v-icon>{{ $t('drawer.total') }}: {{ $filters.formatNumber(stat.buys_total, true) || '0' }}</p>
-            <p><v-icon left small color="red">mdi-calendar-today</v-icon>{{ $t('drawer.today') }}: {{ $filters.formatNumber(stat.buys_today, true) || '0' }}</p>
+            <p><v-icon left small color="red">mdi-sigma</v-icon>{{ $t('drawer.total') }}: {{
+              $filters.formatNumber(stat.buys_total, true) || '0' }}</p>
+            <p><v-icon left small color="red">mdi-calendar-today</v-icon>{{ $t('drawer.today') }}: {{
+              $filters.formatNumber(stat.buys_today, true) || '0' }}</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -85,7 +126,7 @@
 
       <!-- ردیف سوم -->
       <v-col cols="12" sm="6" md="4" v-show="permissions.accounting && dashboard.acc_docs">
-        <v-card class="animate__animated animate__ progressingzoomIn card-equal-height" color="purple-lighten-4" variant="elevated"
+        <v-card class="animate__animated animate__zoomIn card-equal-height" color="purple-lighten-4" variant="elevated"
           prepend-icon="mdi-book-open-page-variant" :title="$t('drawer.docs')" to="/acc/accounting/list" hover>
           <v-card-text class="text-dark">
             <v-icon left small color="purple">mdi-numeric</v-icon>
@@ -99,14 +140,6 @@
           <v-card-text class="text-dark">
             <v-icon left small color="teal">mdi-numeric</v-icon>
             {{ $t('static.count') }}: {{ $filters.formatNumber(stat.commodity) || '0' }}
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="12" sm="12" md="4" v-show="permissions.sell && dashboard.sellChart && isPluginActive('accpro')">
-        <v-card class="animate__animated animate__zoomIn card-equal-height" color="blue-grey-lighten-4" variant="elevated"
-          prepend-icon="mdi-basket" :title="$t('drawer.sell_chart')" hover>
-          <v-card-text class="pa-0">
-            <sale-chart></sale-chart>
           </v-card-text>
         </v-card>
       </v-col>
@@ -127,27 +160,40 @@
       <v-card-text class="pa-2">
         <v-row>
           <v-col cols="12" sm="6" md="4">
-            <v-switch size="small" color="primary" :label="$t('static.wallet')" v-model="dashboard.wallet" dense hide-details inset class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.banks')" v-model="dashboard.banks" dense hide-details inset class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.acc_docs')" v-model="dashboard.acc_docs" dense hide-details inset class="text-caption" />
+            <v-switch size="small" color="primary" :label="$t('static.wallet')" v-model="dashboard.wallet" dense
+              hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.banks')" v-model="dashboard.banks" dense hide-details inset
+              class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.acc_docs')" v-model="dashboard.acc_docs" dense hide-details
+              inset class="text-caption" />
+            <v-switch color="primary" label="نمودار کالاهای پرفروش" v-model="dashboard.topCommodities" dense
+              hide-details inset class="text-caption" />
+
           </v-col>
           <v-col cols="12" sm="6" md="4">
-            <v-switch color="primary" :label="$t('drawer.persons')" v-model="dashboard.persons" dense hide-details inset class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.buys')" v-model="dashboard.buys" dense hide-details inset class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.sells')" v-model="dashboard.sells" dense hide-details inset class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.sell_chart')" v-model="dashboard.sellChart" dense hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.persons')" v-model="dashboard.persons" dense hide-details inset
+              class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.buys')" v-model="dashboard.buys" dense hide-details inset
+              class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.sells')" v-model="dashboard.sells" dense hide-details inset
+              class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.sell_chart')" v-model="dashboard.sellChart" dense hide-details
+              inset class="text-caption" />
           </v-col>
           <v-col cols="12" sm="6" md="4">
-            <v-switch color="primary" :label="$t('dialog.commodities')" v-model="dashboard.commodities" dense hide-details inset class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.accounting_total')" v-model="dashboard.accounting_total" dense hide-details inset class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.notif')" v-model="dashboard.notif" dense :hint="$t('dialog.notif_msg')"
-              persistent-hint inset class="text-caption" />
+            <v-switch color="primary" :label="$t('dialog.commodities')" v-model="dashboard.commodities" dense
+              hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.accounting_total')" v-model="dashboard.accounting_total" dense
+              hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.notif')" v-model="dashboard.notif" dense
+              :hint="$t('dialog.notif_msg')" persistent-hint inset class="text-caption" />
           </v-col>
         </v-row>
       </v-card-text>
       <v-card-actions class="pa-2">
         <v-spacer />
-        <v-btn prepend-icon="mdi-content-save" color="primary" variant="outlined" :text="$t('dialog.save')" @click="save" :loading="loading" />
+        <v-btn prepend-icon="mdi-content-save" color="primary" variant="outlined" :text="$t('dialog.save')"
+          @click="save" :loading="loading" />
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -160,33 +206,54 @@
 <script>
 import axios from "axios";
 import SaleChart from "./component/widgets/saleChart.vue";
+import TopCommoditiesChart from '@/components/widgets/TopCommoditiesChart.vue';
 
 export default {
   name: "dashboard",
   components: {
     SaleChart,
+    TopCommoditiesChart,
   },
-  data: () => ({
-    loading: false,
-    dialog: false,
-    stat: {},
-    statements: [],
-    permissions: {},
-    plugins: [],
-    wallet: {},
-    dashboard: {
-      banks: false,
-      wallet: false,
-      buys: false,
-      sells: false,
-      commodities: false,
-      acc_docs: false,
-      accounting_total: false,
-      persons: false,
-      notif: false,
-      sellChart: false,
-    },
-  }),
+  data() {
+    const self = this;
+    return {
+      loading: false,
+      dialog: false,
+      stat: {},
+      statements: [],
+      permissions: {},
+      plugins: [],
+      wallet: {},
+      dashboard: {
+        banks: false,
+        wallet: false,
+        buys: false,
+        sells: false,
+        commodities: false,
+        acc_docs: false,
+        accounting_total: false,
+        persons: false,
+        notif: false,
+        sellChart: false,
+        topCommodities: false,
+      },
+      topCommodities: [],
+      topCommoditiesPeriod: 'year',
+      topCommoditiesLimit: 5,
+      periodOptions: [
+        { title: self.$t('dashboard.period.today'), value: 'today' },
+        { title: self.$t('dashboard.period.week'), value: 'week' },
+        { title: self.$t('dashboard.period.month'), value: 'month' },
+        { title: self.$t('dashboard.period.year'), value: 'year' },
+      ],
+      limitOptions: [
+        { title: '۳', value: 3 },
+        { title: '۵', value: 5 },
+        { title: '۷', value: 7 },
+        { title: '۱۰', value: 10 },
+      ],
+    }
+  },
   methods: {
     async save() {
       this.loading = true;
@@ -219,8 +286,28 @@ export default {
         this.wallet = wallet.data;
         this.statements = statements.data;
         this.stat = stats.data;
+
+        if (this.dashboard.topCommodities) {
+          await this.fetchTopCommodities();
+        }
       } catch (error) {
         console.error('Load data error:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchTopCommodities() {
+      this.loading = true;
+      try {
+        const response = await axios.post('/api/report/top-selling-commodities', {
+          period: this.topCommoditiesPeriod,
+          limit: this.topCommoditiesLimit,
+        });
+        console.log('API response:', response.data); // دیباگ خروجی API
+        this.topCommodities = response.data;
+      } catch (error) {
+        console.error('Fetch top commodities error:', error);
+        this.topCommodities = [];
       } finally {
         this.loading = false;
       }
@@ -233,14 +320,18 @@ export default {
 </script>
 
 <style scoped>
-/* تنظیم ارتفاع یکسان کارت‌ها */
 .card-equal-height {
   height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+.card-equal-height_big {
+  height: 550;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-/* انیمیشن‌ها */
 @import 'animate.css';
 </style>

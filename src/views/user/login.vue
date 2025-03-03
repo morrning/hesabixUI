@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="d-flex justify-center">
       <v-col md="5">
-        <v-card :loading="loading ? 'blue' : null" :disabled="loading" :title="$t('app.name')"
+        <v-card :loading="loading ? 'blue' : undefined" :disabled="loading" :title="$t('app.name')"
           :subtitle="$t('user.login_label')">
           <v-card-text class="text-justify">
             {{ $t("login.des") }}
@@ -18,16 +18,15 @@
                 single-line type="password" variant="outlined" prepend-inner-icon="mdi-lock" :rules="rules.password"
                 v-model="user.password"></v-text-field>
 
-               <!-- بخش کپچا -->
-               <v-row class="mb-2" dense>
+              <!-- بخش کپچا -->
+              <v-row v-if="showCaptcha" class="mb-2" dense>
                 <v-col cols="12" sm="6">
-                  <v-img :src="captchaImage" max-height="50" max-width="150" class="captcha-img"></v-img>
+                  <v-img :src="captchaImage" max-height="50" max-width="150" class="captcha-img" contain></v-img>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-text-field dense :label="$t('captcha.enter_code')" placeholder="کپچا" v-model.number="user.captcha"
                     variant="outlined" type="number" :rules="rules.captcha" required hide-details
-                    prepend-inner-icon="mdi-refresh" @click:prepend-inner="loadCaptcha"
-                    :loading="captchaLoading">
+                    prepend-inner-icon="mdi-refresh" @click:prepend-inner="loadCaptcha" :loading="captchaLoading">
                   </v-text-field>
                 </v-col>
               </v-row>
@@ -67,6 +66,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { onMounted, ref } from "vue";
 
+axios.defaults.withCredentials = true;
+
 export default {
   name: "login",
   data() {
@@ -75,6 +76,7 @@ export default {
       loading: false,
       captchaLoading: false,
       dialog: false,
+      showCaptcha: false,
       errorMsg: self.$t('login.input_fail'),
       captchaImage: '',
       user: {
@@ -99,7 +101,6 @@ export default {
   methods: {
     validate(input: string, type: string) {
       if (type === "mobile") {
-        // حذف فاصله‌ها و تبدیل اعداد فارسی به انگلیسی برای اعتبارسنجی
         const normalizedInput = this.convertPersianToEnglish(input.replace(/\s/g, ''));
         if (/^09\d{9}$/.test(normalizedInput)) return true;
         return this.$t("validator.mobile_not_valid");
@@ -120,8 +121,12 @@ export default {
     async loadCaptcha() {
       this.captchaLoading = true;
       try {
-        const response = await axios.get('/api/captcha/image', { responseType: 'blob' });
-        this.captchaImage = URL.createObjectURL(response.data);
+        const response = await axios.get('/api/captcha/image', {
+          responseType: 'blob',
+          withCredentials: true,
+        });
+        const imageUrl = URL.createObjectURL(response.data);
+        this.captchaImage = imageUrl;
       } catch (error) {
         this.errorMsg = 'خطا در بارگذاری کپچا';
         this.dialog = true;
@@ -130,31 +135,39 @@ export default {
       }
     },
     async submit() {
-      const { valid } = await this.$refs.form.validate();
+      const { valid } = await (this.$refs.form as any).validate();
       if (valid) {
         this.loading = true;
 
-        // تبدیل شماره موبایل به انگلیسی قبل از ارسال
-        const userData = {
+        const userData: { mobile: string; password: string; standard: boolean; captcha_answer?: string } = {
           mobile: this.convertPersianToEnglish(this.user.mobile.replace(/\s/g, '')),
           password: this.user.password,
-          captcha_answer: this.user.captcha, // بک‌اند انتظار captcha_answer داره
           standard: this.user.standard,
         };
 
+        if (this.showCaptcha) {
+          userData.captcha_answer = this.user.captcha.toString();
+        }
+
         try {
-          const response = await axios.post("/api/user/login", userData);
+          const response = await axios.post("/api/user/login", userData, {
+            withCredentials: true,
+          });
           if (response.data.Success === true) {
             localStorage.setItem("X-AUTH-TOKEN", response.data.data.token);
             window.location.replace("/profile/business");
-          } else if (response.data.data.active === false) {
-            this.errorMsg = response.data.message;
-            this.dialog = true;
           }
         } catch (error) {
-          this.errorMsg = error.response?.data?.error || this.$t('login.input_fail');
+          const errorData = (error as any).response?.data || {};
+          this.errorMsg = errorData.error || this.$t('login.input_fail');
           this.dialog = true;
-          await this.loadCaptcha(); // نوسازی کپچا در صورت خطا
+
+          if (errorData.captcha_required) {
+            this.showCaptcha = true;
+            await this.loadCaptcha();
+          } else {
+            this.showCaptcha = false;
+          }
         } finally {
           this.loading = false;
         }
@@ -166,7 +179,14 @@ export default {
     },
   },
   mounted() {
-    this.loadCaptcha(); // بارگذاری اولیه کپچا
+    // کپچا در ابتدا نمایش داده نمی‌شه
   },
 };
 </script>
+
+<style scoped>
+.captcha-img {
+  display: block;
+  margin: 0 auto;
+}
+</style>

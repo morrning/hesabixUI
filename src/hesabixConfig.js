@@ -9,7 +9,7 @@ export function getApiUrl() {
     next.hesabix.ir => testnet database ! do not use for production
      */
     //return 'https://api.hesabix.ir';
-    return 'http://next.hesabix.ir';
+    return 'https://next.hesabix.ir';
     //return 'http://localhost';
 }
 

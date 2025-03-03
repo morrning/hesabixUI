@@ -12,13 +12,29 @@ const fa_lang = {
       long: "ریال ایران"
     }
   },
-  captcha:{
+  captcha: {
     refresh: 'نوسازی تصویر',
-    enter_code:'اعداد در تصویر را وارد کنید',
+    enter_code: 'اعداد در تصویر را وارد کنید',
     required: 'الزامی است'
   },
   units: {
     mb: "مگابایت",
+  },
+  "dashboard": {
+    "topCommodities": {
+      "title": "کالاهای پرفروش",
+      "period": "بازه زمانی",
+      "limit": "تعداد کالاها",
+      "noData": "داده‌ای برای نمایش وجود ندارد",
+      "salesCount": "تعداد فروش",
+      chartToggle: "تغییر نوع نمودار",
+    },
+    "period": {
+      "today": "امروز",
+      "week": "این هفته",
+      "month": "این ماه",
+      "year": "این سال"
+    }
   },
   drawer: {
     sell_chart: "فروش هفته گذشته",
@@ -348,6 +364,7 @@ const fa_lang = {
     input_fail: "شماره تلفن یا کلمه عبور اشتباه است"
   },
   validator: {
+    terms_required: 'موافق با قوانین برای عضویت الزامی است.',
     required: "الزامی است!",
     email_not_valid: "پست الکترونیکی معتبر نیست",
     password_len_lower: "طول کلمه عبور کم است",
