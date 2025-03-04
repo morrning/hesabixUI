@@ -3,7 +3,8 @@
     <template v-slot:prepend>
       <v-tooltip :text="$t('dialog.back')" location="bottom">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text" icon="mdi-arrow-right" />
+          <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text"
+            icon="mdi-arrow-right" />
         </template>
       </v-tooltip>
     </template>
@@ -64,17 +65,8 @@
     </v-tooltip>
   </v-toolbar>
 
-  <v-text-field
-    :loading="loading"
-    color="green"
-    class="mb-0 pt-0 rounded-0"
-    hide-details="auto"
-    density="compact"
-    :placeholder="$t('dialog.search_txt')"
-    v-model="searchQuery"
-    type="text"
-    @input="debouncedSearch"
-  >
+  <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
+    :placeholder="$t('dialog.search_txt')" v-model="searchQuery" type="text" @input="debouncedSearch">
     <template v-slot:prepend-inner>
       <v-tooltip location="bottom" :text="$t('dialog.search')">
         <template v-slot:activator="{ props }">
@@ -97,12 +89,7 @@
           </v-list-subheader>
           <v-list-item v-for="(item, index) in categories" :key="index" class="text-dark">
             <div class="form-check form-check-inline mx-1">
-              <input
-                v-model="item.checked"
-                class="form-check-input"
-                type="checkbox"
-                @change="fetchData"
-              />
+              <input v-model="item.checked" class="form-check-input" type="checkbox" @change="fetchData" />
               <label class="form-check-label">{{ item.name }}</label>
             </div>
           </v-list-item>
@@ -111,25 +98,11 @@
     </template>
   </v-text-field>
 
-  <EasyDataTable
-    table-class-name="customize-table"
-    v-model:items-selected="itemsSelected"
-    multi-sort
-    show-index
-    alternating
-    :headers="headers"
-    :items="items"
-    :loading="loading"
-    :server-items-length="totalItems"
-    v-model:server-options="serverOptions"
-    @update:server-options="fetchData"
-    theme-color="#1d90ff"
-    header-text-direction="center"
-    body-text-direction="center"
-    rows-per-page-message="تعداد سطر"
-    empty-message="اطلاعاتی برای نمایش وجود ندارد"
-    rows-of-page-separator-message="از"
-  >
+  <EasyDataTable table-class-name="customize-table" v-model:items-selected="itemsSelected" multi-sort show-index
+    alternating :headers="headers" :items="items" :loading="loading" :server-items-length="totalItems"
+    v-model:server-options="serverOptions" @update:server-options="fetchData" theme-color="#1d90ff"
+    header-text-direction="center" body-text-direction="center" rows-per-page-message="تعداد سطر"
+    empty-message="اطلاعاتی برای نمایش وجود ندارد" rows-of-page-separator-message="از">
     <template #item-operation="{ code }">
       <v-menu>
         <template v-slot:activator="{ props }">
@@ -197,7 +170,7 @@ import Swal from 'sweetalert2';
 import { debounce } from 'lodash';
 import ImportExcel from '../component/importModal/commodity-import-excel.vue';
 import ChangePriceGroup from '../component/commodity/changePriceGroup.vue';
-import { getApiUrl } from '/src/hesabixConfig'; // وارد کردن تابع از hesabixConfig.js
+import { getApiUrl } from '/src/hesabixConfig';
 
 // تنظیم پایه URL از hesabixConfig برای درخواست‌های axios
 const apiUrl = getApiUrl();
@@ -246,23 +219,26 @@ const fetchData = async () => {
       .map((cat) => cat.id);
 
     const filters = {};
-    if (searchQuery.value) {
-      filters.name = { operator: '%', value: searchQuery.value };
-      filters.code = { operator: '%', value: searchQuery.value };
-      filters.barcodes = { operator: '%', value: searchQuery.value };
+    if (searchQuery.value.trim()) {
+      filters.search = { value: searchQuery.value.trim() };
     }
     if (selectedCategories.length > 0) {
       filters.cat = { operator: '=', value: selectedCategories };
     }
 
-    const response = await axios.post('/api/commodities/search', filters, {
-      params: {
+    const payload = {
+      filters,
+      pagination: {
         page: serverOptions.value.page,
         limit: serverOptions.value.rowsPerPage,
+      },
+      sort: {
         sortBy: serverOptions.value.sortBy,
         sortDesc: serverOptions.value.sortDesc,
       },
-    });
+    };
+
+    const response = await axios.post('/api/commodities/search', payload);
 
     items.value = response.data.results;
     totalItems.value = response.data.pagination.total_items;
