@@ -26,6 +26,7 @@
         "downloadjs": "^1.4.7",
         "file-saver": "^2.0.5",
         "libphonenumber-js": "^1.10.44",
+        "lodash": "^4.17.21",
         "maska": "^3.0.4",
         "maz-ui": "^3.11.4",
         "pinia": "^2.2.6",

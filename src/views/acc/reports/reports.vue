@@ -1,132 +1,85 @@
 <template>
-  <div class="block block-content-full ">
-    <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
-      <h3 class="block-title text-primary-dark"> گزارشات </h3>
-      <div class="block-options">
+  <v-toolbar flat color="grey-lighten-3" class="">
+    <v-toolbar-title class="primary--text">گزارشات</v-toolbar-title>
+  </v-toolbar>
+  <v-container fluid class="">
+    <v-row>
+      <!-- اشخاص -->
+      <v-col cols="12" md="6">
+        <v-card outlined color="grey-lighten-2">
+          <v-card-subtitle class="pb-0">
+            <v-icon small left>mdi-account</v-icon>
+            اشخاص
+          </v-card-subtitle>
+          <v-list dense color="grey-lighten-2">
+            <v-list-item v-for="item in personReports" :key="item.to" :to="item.to">
+              <v-list-item-content>{{ item.text }}</v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
 
-      </div>
-    </div>
-    <div class="block-content pt-1 pb-3">
-      <div class="container-fluid mt-2">
-        <div class="row">
-          <div class="col-sm-12 col-md-6 mb-2">
-            <!-- Bold -->
-            <div class="block block-rounded border border-secondary border-opacity-25">
-              <div class="block-header block-header-default border border-bottom">
-                <h3 class="block-title">
-                  <i class="fa fa-user"></i>
-                  اشخاص
-                </h3>
-              </div>
-              <div class="block-content">
-                <ul>
-                  <li>
-                    <router-link to="/acc/persons/card/view/">کارت حساب</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/acc/reports/persons/debtors">بدهکاران</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/acc/reports/persons/depositors">بستانکاران</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/acc/reports/persons/buysell">خرید و فروش های اشخاص</router-link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <!-- END Bold -->
-          </div>
-          <div class="col-sm-12 col-md-6 mb-2">
-            <!-- Bold -->
-            <div class="block block-rounded border border-secondary border-opacity-25">
-              <div class="block-header block-header-default border border-bottom">
-                <h3 class="block-title">
-                  <i class="fa fa-bank"></i>
-                  بانکداری
-                </h3>
-              </div>
-              <div class="block-content">
-                <ul>
-                  <li>
-                    <router-link to="/acc/banks/card/view/">گردش حساب بانک</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/acc/cashdesk/card/view/">گردش حساب صندوق</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/acc/salary/card/view/">گردش حساب تنخواه گردان</router-link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <!-- END Bold -->
-          </div>
-          <div class="col-sm-12 col-md-6 mb-2">
-            <!-- Bold -->
-            <div class="block block-rounded border border-secondary border-opacity-25">
-              <div class="block-header block-header-default border border-bottom">
-                <h3 class="block-title">
-                  <i class="fa fa-cogs"></i>
-                  گزارشات پایه
-                </h3>
-              </div>
-              <div class="block-content">
-                <ul>
-                  <li>
-                    <router-link to="/acc/business/logs">تاریخچه رویدادها</router-link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <!-- END Bold -->
-          </div>
-          <div class="col-sm-12 col-md-6 mb-2">
-            <!-- Bold -->
-            <div class="block block-rounded border border-secondary border-opacity-25">
-              <div class="block-header block-header-default border border-bottom">
-                <h3 class="block-title">
-                  <i class="fa fa-box"></i>
-                  کالا و خدمات
-                </h3>
-              </div>
-              <div class="block-content">
-                <ul>
-                  <li>
-                    <router-link to="/acc/reports/commodity/buysell">خرید و فروش به تفکیک کالا</router-link>
-                  </li>
+      <!-- بانکداری -->
+      <v-col cols="12" md="6">
+        <v-card outlined color="grey-lighten-2">
+          <v-card-subtitle class="pb-0">
+            <v-icon small left>mdi-bank</v-icon>
+            بانکداری
+          </v-card-subtitle>
+          <v-list dense color="grey-lighten-2">
+            <v-list-item v-for="item in bankReports" :key="item.to" :to="item.to">
+              <v-list-item-content>{{ item.text }}</v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
 
-                </ul>
-              </div>
-            </div>
-            <!-- END Bold -->
-          </div>
-          <div v-if="this.isPluginActive('accpro')" class="col-sm-12 col-md-6 mb-2">
-            <!-- Bold -->
-            <div class="block block-rounded border border-secondary border-opacity-25">
-              <div class="block-header block-header-default border border-bottom">
-                <h3 class="block-title">
-                  <i class="fa fa-list"></i>
-                  حسابداری
-                </h3>
-              </div>
-              <div class="block-content">
-                <ul>
-                  <li>
-                    <router-link to="/acc/reports/acc/balance_sheet">ترازنامه</router-link>
-                  </li>
-                  <li>
-                    <router-link to="/acc/reports/acc/explore_accounts">{{  $t('dialog.explore_accounts') }}</router-link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <!-- END Bold -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+      <!-- گزارشات پایه -->
+      <v-col cols="12" md="6">
+        <v-card outlined color="grey-lighten-2">
+          <v-card-subtitle class="pb-0">
+            <v-icon small left>mdi-cog</v-icon>
+            گزارشات پایه
+          </v-card-subtitle>
+          <v-list dense color="grey-lighten-2">
+            <v-list-item to="/acc/business/logs">
+              <v-list-item-content>تاریخچه رویدادها</v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
+
+      <!-- کالا و خدمات -->
+      <v-col cols="12" md="6">
+        <v-card outlined color="grey-lighten-2">
+          <v-card-subtitle class="pb-0">
+            <v-icon small left>mdi-package-variant</v-icon>
+            کالا و خدمات
+          </v-card-subtitle>
+          <v-list dense color="grey-lighten-2">
+            <v-list-item to="/acc/reports/commodity/buysell">
+              <v-list-item-content>خرید و فروش به تفکیک کالا</v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
+
+      <!-- حسابداری (conditional) -->
+      <v-col v-if="isPluginActive('accpro')" cols="12" md="6">
+        <v-card outlined color="grey-lighten-2">
+          <v-card-subtitle class="pb-0">
+            <v-icon small left>mdi-format-list-bulleted</v-icon>
+            حسابداری
+          </v-card-subtitle>
+          <v-list dense color="grey-lighten-2">
+            <v-list-item v-for="item in accountingReports" :key="item.to" :to="item.to">
+              <v-list-item-content>{{ item.text }}</v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -134,26 +87,47 @@ import axios from 'axios';
 
 export default {
   name: "reports",
-  data(){
+  data() {
     return {
       plugins: [],
+      personReports: [
+        { text: 'کارت حساب', to: '/acc/persons/card/view/' },
+        { text: 'بدهکاران', to: '/acc/reports/persons/debtors' },
+        { text: 'بستانکاران', to: '/acc/reports/persons/depositors' },
+        { text: 'خرید و فروش های اشخاص', to: '/acc/reports/persons/buysell' }
+      ],
+      bankReports: [
+        { text: 'گردش حساب بانک', to: '/acc/banks/card/view/' },
+        { text: 'گردش حساب صندوق', to: '/acc/cashdesk/card/view/' },
+        { text: 'گردش حساب تنخواه گردان', to: '/acc/salary/card/view/' }
+      ],
+      accountingReports: [
+        { text: 'ترازنامه', to: '/acc/reports/acc/balance_sheet' },
+        { text: this.$t('dialog.explore_accounts'), to: '/acc/reports/acc/explore_accounts' }
+      ]
     }
   },
   methods: {
     loadData() {
-      //get active plugins
-      axios.post('/api/plugin/get/actives',).then((response) => {
+      axios.post('/api/plugin/get/actives').then((response) => {
         this.plugins = response.data;
       });
     },
     isPluginActive(plugName) {
       return this.plugins[plugName] !== undefined;
-    },
+    }
   },
-  mounted(){
+  mounted() {
     this.loadData();
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-card {
+  transition: all 0.2s;
+}
+.v-card:hover {
+  filter: brightness(95%);
+}
+</style>

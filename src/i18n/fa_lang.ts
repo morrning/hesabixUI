@@ -20,6 +20,37 @@ const fa_lang = {
   units: {
     mb: "مگابایت",
   },
+  button: {
+    export_excel: "خروجی اکسل", // کلید جدید برای دکمه اکسل
+    back_to_root: "بازگشت به ریشه",
+    close: "بستن", // موجود است، فقط اطمینان حاصل کنید
+  },
+  pagination: {
+    page: "صفحه", // جدید
+    of: "از", // موجود است، فقط اطمینان حاصل کنید
+  },
+  table: {
+    account: "حساب",
+    debit_turnover: "گردش بدهکار",
+    credit_turnover: "گردش بستانکار",
+    debit_balance: "تراز بدهکار",
+    credit_balance: "تراز بستانکار",
+    operations: "عملیات",
+    rows_per_page: "تعداد سطر در هر صفحه",
+    no_data: "اطلاعاتی برای نمایش وجود ندارد",
+    of: "از",
+    date: "تاریخ",
+    number: "شماره",
+    description: "شرح",
+    debit: "بدهکار",
+    credit: "بستانکار",
+    quantity: "تعداد",
+  },
+  error: {
+    fetch_data: "خطا در دریافت داده‌ها: ",
+    initial_load: "خطا در بارگذاری اولیه: ",
+    title: "خطا",
+  },
   "dashboard": {
     "topCommodities": {
       "title": "کالاهای پرفروش",
@@ -156,6 +187,9 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    all: 'همه موارد',
+    explore_accounts: "مرور حساب‌ها",
+    details: "جزئیات",
     "print_settings_info": "برای تغییر تنظیمات پیش‌فرض به بخش تنظیمات چاپ مراجعه کنید.",
     "register_payment": "ثبت دریافت",
     "print_invoice": "چاپ فاکتور",
@@ -192,7 +226,6 @@ const fa_lang = {
     clean_queue: "پاک کردن کل صف چاپ",
     date_start: "تاریخ شروع",
     date_end: "تاریخ پایان",
-    explore_accounts: "مرور حساب‌ها",
     notif_msg: "غیر فعال کردن اطلاعیه‌ها پیشنهاد نمی‌شود.",
     edit_dashboard: "ویرایش آیتم‌های پیشخوان",
     presell_invoice: "پیش فاکتور",
@@ -229,7 +262,6 @@ const fa_lang = {
     delete_labels: "حذف برچسب‌‌ها",
     change_labels: "تغییر برچسب‌ها",
     cancel: "بازگشت",
-    details: "گزارش کل",
     total_price: "جمع کل",
     total_selected: "جمع موارد انتخابی",
     accounting_doc: "سند حسابداری",

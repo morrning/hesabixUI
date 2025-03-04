@@ -1,81 +1,213 @@
 <template>
   <div class="text-center pa-4">
-    <v-btn @click="dialog = true; loadData($props.node, $props.nodeType, $props.isObject, $props.upperID)"
-      color="primary" size="xs" variant="plain" icon="mdi-magnify"></v-btn>
-    <v-dialog v-model="dialog" class="vh-100">
+    <v-btn
+      @click="dialog = true; loadData(1)"
+      color="primary"
+      size="xs"
+      variant="plain"
+      icon="mdi-magnify"
+    ></v-btn>
+    <v-dialog v-model="dialog" fullscreen>
       <v-card :loading="loading">
-        <v-toolbar class="position-sticky" :title="$t('dialog.details')"></v-toolbar>
-        <v-card-text class="p-0 m-0">
-          <EasyDataTable table-class-name="customize-table" :table-class-name="tableClassName" multi-sort show-index
-            alternating :search-value="searchValue" :headers="headers" :items="items" theme-color="#1d90ff"
-            header-text-direction="center" body-text-direction="center" rowsPerPageMessage="تعداد سطر"
-            emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
+        <v-toolbar
+          class="position-sticky top-0"
+          style="z-index: 1000;"
+          flat
+        >
+          <v-btn
+            icon
+            small
+            @click="dialog = false"
+            :title="$t('dialog.close')"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>{{ $t('dialog.details') }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn
+            icon
+            small
+            @click="exportToExcel"
+            :title="$t('button.export_excel')"
+          >
+            <v-icon>mdi-file-excel</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-card-text class="p-0 m-0" style="max-height: 500px; overflow-y: auto;">
+          <EasyDataTable
+            table-class-name="customize-table"
+            multi-sort
+            show-index
+            alternating
+            :search-value="searchValue"
+            :headers="headers"
+            :items="items"
+            theme-color="#1d90ff"
+            header-text-direction="center"
+            body-text-direction="center"
+            :server-items-length="totalItems"
+            v-model:server-options="serverOptions"
+            :loading="loading"
+            :rows-per-page-message="$t('table.rows_per_page')"
+            :empty-message="$t('table.no_data')"
+            :rows-of-page-separator-message="$t('table.of')"
+          >
             <template #item-bs="{ bs }">
-              {{ $filters.formatNumber(bs) }}
+              {{ formatNumber(bs) }}
             </template>
             <template #item-bd="{ bd }">
-              {{ $filters.formatNumber(bd) }}
+              {{ formatNumber(bd) }}
             </template>
             <template #item-doc_code="{ doc_code }">
-              <v-btn color="primary" block variant="plain" :text="$filters.formatNumber(doc_code)"
-                :to="'/acc/accounting/view/' + doc_code"></v-btn>
+              <v-btn
+                color="primary"
+                block
+                variant="plain"
+                :text="formatNumber(doc_code)"
+                :to="'/acc/accounting/view/' + doc_code"
+              ></v-btn>
             </template>
           </EasyDataTable>
         </v-card-text>
-
-        <v-card-actions class="justify-end">
-          <v-btn :text="$t('dialog.close')" @click="dialog = false"></v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
 </template>
 
 <script>
-import { isObject } from "@vueuse/core";
-import axios from "axios";
+import { defineComponent, ref, watch } from 'vue';
+import axios from 'axios';
 
-export default {
-  name: "DetailsBtn",
+export default defineComponent({
+  name: 'DetailsBtn',
   props: {
-    node: Number,
-    nodeType: String,
-    isObject: Boolean,
-    upperID: Number
+    node: {
+      type: Number,
+      required: true,
+    },
+    nodeType: {
+      type: String,
+      required: true,
+    },
+    isObject: {
+      type: Boolean,
+      required: true,
+    },
+    upperId: {
+      type: Number,
+      default: null,
+    },
   },
-  data: () => {
-    return {
-      loading: true,
-      dialog: false,
-      items: [],
-      headers: [
-        { text: "تاریخ", value: "date" },
-        { text: "شماره", value: "doc_code" },
-        { text: "شرح", value: "des" },
-        { text: "بدهکار", value: "bd" },
-        { text: "بستانکار", value: "bs" },
-        { text: "تعداد", value: "commodity_count" },
-      ]
-    }
-  },
-  methods: {
-    loadData(node, type, isObject, upperID) {
-      this.loading = true;
-      axios.post('/api/report/acc/get_details', {
-        node: node,
-        type: type,
-        isObject: isObject,
-        upperID: upperID
-      }).then((response) => {
-        this.items = response.data;
-        this.loading = false;
-      });
-    }
-  },
-  mounted() {
+  setup(props) {
+    const loading = ref(false);
+    const dialog = ref(false);
+    const items = ref([]);
+    const searchValue = ref('');
+    const totalItems = ref(0);
+    const serverOptions = ref({
+      page: 1,
+      rowsPerPage: 10,
+    });
 
-  }
-}
+    const headers = [
+      { text: 'table.date', value: 'date' },
+      { text: 'table.number', value: 'doc_code' },
+      { text: 'table.description', value: 'des' },
+      { text: 'table.debit', value: 'bd' },
+      { text: 'table.credit', value: 'bs' },
+      { text: 'table.quantity', value: 'commodity_count' },
+    ].map(header => ({ ...header, text: header.text }));
+
+    const loadData = async () => {
+      loading.value = true;
+      try {
+        const response = await axios.post('/api/report/acc/get_details', {
+          node: props.node,
+          type: props.nodeType,
+          isObject: props.isObject,
+          upperId: props.upperId,
+          page: serverOptions.value.page,
+          perPage: serverOptions.value.rowsPerPage,
+        });
+        items.value = response.data.items || [];
+        totalItems.value = response.data.pagination.totalItems || 0;
+        serverOptions.value.page = response.data.pagination.currentPage || 1;
+        serverOptions.value.rowsPerPage = response.data.pagination.perPage || 10;
+        console.log('Loaded data:', {
+          node: props.node,
+          type: props.nodeType,
+          isObject: props.isObject,
+          items: items.value.length,
+          totalItems: totalItems.value,
+          page: serverOptions.value.page,
+          rowsPerPage: serverOptions.value.rowsPerPage,
+        });
+      } catch (error) {
+        console.error('Error loading details:', error.response?.data || error);
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    const exportToExcel = async () => {
+      loading.value = true;
+      try {
+        const response = await axios.post(
+          '/api/report/acc/export_details_excel',
+          {
+            node: props.node,
+            type: props.nodeType,
+            isObject: props.isObject,
+            upperId: props.upperId,
+          },
+          { responseType: 'blob' }
+        );
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'details_export.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error('Error exporting to Excel:', error);
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    const formatNumber = (value) => {
+      return value ? Number(value).toLocaleString('fa-IR') : '0';
+    };
+
+    // مشاهده تغییرات serverOptions و بارگذاری داده‌ها
+    watch(serverOptions, () => {
+      loadData();
+    }, { deep: true });
+
+    return {
+      loading,
+      dialog,
+      items,
+      searchValue,
+      totalItems,
+      serverOptions,
+      headers,
+      loadData,
+      exportToExcel,
+      formatNumber,
+    };
+  },
+});
 </script>
 
-<style scoped></style>
+<style scoped>
+.customize-table {
+  font-family: 'Vazir', sans-serif;
+}
+.position-sticky.top-0 {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+</style>
