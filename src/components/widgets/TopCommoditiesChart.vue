@@ -18,10 +18,10 @@
 
     <!-- نمایش نمودار انتخاب‌شده -->
     <v-row dense>
-      <v-col cols="12" md="12" v-if="showBarChart">
+      <v-col cols="12" sm="12" md="12" v-if="showBarChart">
         <apexchart ref="barChart" type="bar" :options="barOptions" :series="[{ name: $t('dashboard.topCommodities.salesCount'), data: series }]" height="400"></apexchart>
       </v-col>
-      <v-col cols="12" md="12" v-else>
+      <v-col cols="12" sm="12" md="12" v-else>
         <apexchart ref="pieChart" type="pie" :options="pieOptions" :series="series" height="400"></apexchart>
       </v-col>
     </v-row>
