@@ -3,7 +3,8 @@
     <template v-slot:prepend>
       <v-tooltip :text="$t('dialog.back')" location="bottom">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text" icon="mdi-arrow-right" />
+          <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text"
+            icon="mdi-arrow-right" />
         </template>
       </v-tooltip>
     </template>
@@ -13,7 +14,7 @@
         <v-btn v-bind="props" icon="mdi-package-variant-plus" color="primary" to="/acc/commodity/mod/" />
       </template>
     </v-tooltip>
-    <change-price :items="itemsSelected" :windows-state="importWindowsState" />
+    <ChangePriceGroup :items="itemsSelected" :windows-state="importWindowsState" />
     <import-excel :windows-state="importWindowsState" />
     <v-menu>
       <template v-slot:activator="{ props }">
@@ -62,19 +63,16 @@
         <v-btn v-bind="props" icon="mdi-trash-can" color="danger" @click="deleteGroup" />
       </template>
     </v-tooltip>
+    <!-- دکمه تنظیمات ستون‌ها -->
+    <v-tooltip :text="$t('dialog.column_settings')" location="bottom">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon="mdi-table-cog" color="primary" @click="dialogVisible = true" />
+      </template>
+    </v-tooltip>
   </v-toolbar>
 
-  <v-text-field
-    :loading="loading"
-    color="green"
-    class="mb-0 pt-0 rounded-0"
-    hide-details="auto"
-    density="compact"
-    :placeholder="$t('dialog.search_txt')"
-    v-model="searchQuery"
-    type="text"
-    @input="debouncedSearch"
-  >
+  <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
+    :placeholder="$t('dialog.search_txt')" v-model="searchQuery" type="text" @input="debouncedSearch">
     <template v-slot:prepend-inner>
       <v-tooltip location="bottom" :text="$t('dialog.search')">
         <template v-slot:activator="{ props }">
@@ -97,12 +95,7 @@
           </v-list-subheader>
           <v-list-item v-for="(item, index) in categories" :key="index" class="text-dark">
             <div class="form-check form-check-inline mx-1">
-              <input
-                v-model="item.checked"
-                class="form-check-input"
-                type="checkbox"
-                @change="fetchData"
-              />
+              <input v-model="item.checked" class="form-check-input" type="checkbox" @change="fetchData" />
               <label class="form-check-label">{{ item.name }}</label>
             </div>
           </v-list-item>
@@ -111,25 +104,11 @@
     </template>
   </v-text-field>
 
-  <EasyDataTable
-    table-class-name="customize-table"
-    v-model:items-selected="itemsSelected"
-    multi-sort
-    show-index
-    alternating
-    :headers="headers"
-    :items="items"
-    :loading="loading"
-    :server-items-length="totalItems"
-    v-model:server-options="serverOptions"
-    @update:server-options="fetchData"
-    theme-color="#1d90ff"
-    header-text-direction="center"
-    body-text-direction="center"
-    rows-per-page-message="تعداد سطر"
-    empty-message="اطلاعاتی برای نمایش وجود ندارد"
-    rows-of-page-separator-message="از"
-  >
+  <EasyDataTable table-class-name="customize-table" v-model:items-selected="itemsSelected" multi-sort show-index
+    alternating :headers="visibleHeaders" :items="items" :loading="loading" :server-items-length="totalItems"
+    v-model:server-options="serverOptions" @update:server-options="fetchData" theme-color="#1d90ff"
+    header-text-direction="center" body-text-direction="center" rows-per-page-message="تعداد سطر"
+    empty-message="اطلاعاتی برای نمایش وجود ندارد" rows-of-page-separator-message="از">
     <template #item-operation="{ code }">
       <v-menu>
         <template v-slot:activator="{ props }">
@@ -188,16 +167,36 @@
       <i v-else class="fa fa-close text-danger" />
     </template>
   </EasyDataTable>
+
+  <!-- دیالوگ تنظیمات ستون‌ها -->
+  <v-dialog v-model="dialogVisible" max-width="500">
+    <v-card>
+      <v-card-title class="text-h6">
+        {{ $t('dialog.column_settings') }}
+      </v-card-title>
+      <v-card-text>
+        <p class="text-body-2 text-grey-darken-1">
+          ستون‌هایی که می‌خواهید در جدول نمایش داده شوند را انتخاب کنید. تغییرات به صورت خودکار ذخیره می‌شوند.
+        </p>
+        <v-checkbox v-for="header in allHeaders" :key="header.value" v-model="header.visible" :label="header.text"
+          @update:modelValue="updateColumnVisibility" color="primary" hide-details />
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn color="primary" text @click="dialogVisible = false">بستن</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { debounce } from 'lodash';
 import ImportExcel from '../component/importModal/commodity-import-excel.vue';
 import ChangePriceGroup from '../component/commodity/changePriceGroup.vue';
-import { getApiUrl } from '/src/hesabixConfig'; // وارد کردن تابع از hesabixConfig.js
+import { getApiUrl } from '/src/hesabixConfig';
 
 // تنظیم پایه URL از hesabixConfig برای درخواست‌های axios
 const apiUrl = getApiUrl();
@@ -211,65 +210,104 @@ const totalItems = ref(0);
 const searchQuery = ref('');
 const categories = ref([]);
 const importWindowsState = ref({ submited: false });
+const dialogVisible = ref(false);
+
+// تعریف همه ستون‌ها
+const allHeaders = ref([
+  { text: 'عملیات', value: 'operation', width: '100', visible: true },
+  { text: 'کد', value: 'code', sortable: true, visible: true },
+  { text: 'کالا / خدمات', value: 'khadamat', sortable: true, width: 150, visible: true },
+  { text: 'نام کالا و خدمات', value: 'name', sortable: true, width: 150, visible: true },
+  { text: 'واحد شمارش', value: 'unit', sortable: true, width: 100, visible: true },
+  { text: 'موجودی', value: 'count', sortable: false, width: 150, visible: true },
+  { text: 'دسترسی سریع', value: 'speedAccess', width: 100, visible: true },
+  { text: 'مالیات', value: 'withoutTax', width: 100, visible: true },
+  { text: 'دسته‌بندی', value: 'cat', sortable: true, width: 100, visible: true },
+  { text: 'قیمت خرید', value: 'priceBuy', sortable: true, width: 100, visible: true },
+  { text: 'قیمت فروش', value: 'priceSell', sortable: true, width: 100, visible: true },
+  { text: 'نقطه سفارش', value: 'orderPoint', width: 100, visible: true },
+  { text: 'حداقل سفارش', value: 'minOrderCount', width: 100, visible: true },
+  { text: 'زمان انتظار', value: 'dayLoading', width: 100, visible: true },
+  { text: 'کنترل موجودی', value: 'commodityCountCheck', width: 100, visible: true },
+]);
+
+// ستون‌های قابل نمایش (فیلتر شده بر اساس visible)
+const visibleHeaders = computed(() => allHeaders.value.filter(header => header.visible));
+
+// کلید منحصربه‌فرد برای localStorage
+const LOCAL_STORAGE_KEY = 'hesabix_commodity_table_columns';
+
+// لود تنظیمات ستون‌ها از localStorage
+const loadColumnSettings = () => {
+  const savedSettings = localStorage.getItem(LOCAL_STORAGE_KEY);
+  if (savedSettings) {
+    const visibleColumns = JSON.parse(savedSettings);
+    allHeaders.value.forEach(header => {
+      header.visible = visibleColumns.includes(header.value);
+    });
+  } else {
+    // اگر تنظیمی وجود نداشت، همه ستون‌ها قابل نمایش باشند
+    allHeaders.value.forEach(header => (header.visible = true));
+  }
+};
+
+// ذخیره تنظیمات ستون‌ها در localStorage
+const saveColumnSettings = () => {
+  const visibleColumns = allHeaders.value
+    .filter(header => header.visible)
+    .map(header => header.value);
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(visibleColumns));
+};
+
+// آپدیت تنظیمات ستون‌ها هنگام تغییر چک‌باکس
+const updateColumnVisibility = () => {
+  saveColumnSettings();
+};
+
+// فچ کردن داده‌ها از سرور
 const serverOptions = ref({
   page: 1,
   rowsPerPage: 10,
   sortBy: 'code',
-  sortDesc: true,
+  sortDesc: true, // مقدار پیش‌فرض بولین
 });
 
-// Headers جدول
-const headers = ref([
-  { text: 'عملیات', value: 'operation', width: '100' },
-  { text: 'کد', value: 'code', sortable: true },
-  { text: 'کالا / خدمات', value: 'khadamat', sortable: true, width: 150 },
-  { text: 'نام کالا و خدمات', value: 'name', sortable: true, width: 150 },
-  { text: 'واحد شمارش', value: 'unit', sortable: true, width: 100 },
-  { text: 'موجودی', value: 'count', sortable: true, width: 150 },
-  { text: 'دسترسی سریع', value: 'speedAccess', width: 100 },
-  { text: 'مالیات', value: 'withoutTax', width: 100 },
-  { text: 'دسته‌بندی', value: 'cat', sortable: true, width: 100 },
-  { text: 'قیمت خرید', value: 'priceBuy', sortable: true, width: 100 },
-  { text: 'قیمت فروش', value: 'priceSell', sortable: true, width: 100 },
-  { text: 'نقطه سفارش', value: 'orderPoint', width: 100 },
-  { text: 'حداقل سفارش', value: 'minOrderCount', width: 100 },
-  { text: 'زمان انتظار', value: 'dayLoading', width: 100 },
-  { text: 'کنترل موجودی', value: 'commodityCountCheck', width: 100 },
-]);
-
-// فچ کردن داده‌ها از سرور
 const fetchData = async () => {
   try {
     loading.value = true;
+
     const selectedCategories = categories.value
       .filter((cat) => cat.checked)
       .map((cat) => cat.id);
 
     const filters = {};
-    if (searchQuery.value) {
-      filters.name = { operator: '%', value: searchQuery.value };
-      filters.code = { operator: '%', value: searchQuery.value };
-      filters.barcodes = { operator: '%', value: searchQuery.value };
+    if (searchQuery.value.trim()) {
+      filters.search = { value: searchQuery.value.trim() };
     }
     if (selectedCategories.length > 0) {
       filters.cat = { operator: '=', value: selectedCategories };
     }
 
-    const response = await axios.post('/api/commodities/search', filters, {
-      params: {
+    const payload = {
+      filters,
+      pagination: {
         page: serverOptions.value.page,
         limit: serverOptions.value.rowsPerPage,
-        sortBy: serverOptions.value.sortBy,
-        sortDesc: serverOptions.value.sortDesc,
       },
-    });
+      sort: {
+        sortBy: serverOptions.value.sortBy,
+        sortDesc: serverOptions.value.sortDesc === undefined ? true : serverOptions.value.sortDesc, // اصلاح مقدار undefined
+      },
+    };
+
+    const response = await axios.post('/api/commodities/search', payload);
 
     items.value = response.data.results;
     totalItems.value = response.data.pagination.total_items;
   } catch (error) {
     console.error('Error fetching data:', error);
     Swal.fire({
-      text: 'خطا در بارگذاری داده‌ها',
+      text: 'خطا در بارگذاری داده‌ها: ' + (error.response?.data?.detail || error.message),
       icon: 'error',
       confirmButtonText: 'قبول',
     });
@@ -292,132 +330,153 @@ const fetchCategories = async () => {
   }
 };
 
-// دیبونس برای جستجو
-const debouncedSearch = debounce(fetchData, 500);
-
-// متدهای خروجی
-const exportExcel = async (allItems = true) => {
+const exportPDF = async (all = false) => {
   try {
-    const data = allItems ? {} : { items: itemsSelected.value };
-    const response = await axios.post('/api/commodity/list/excel', data, {
-      responseType: 'arraybuffer',
-    });
-
-    const fileURL = window.URL.createObjectURL(new Blob([response.data]));
-    const fileLink = document.createElement('a');
-    fileLink.href = fileURL;
-    fileLink.setAttribute('download', 'commodity-list.xlsx');
-    document.body.appendChild(fileLink);
-    fileLink.click();
-  } catch (error) {
-    console.error('Error exporting Excel:', error);
-    Swal.fire({
-      text: 'خطا در خروجی اکسل',
-      icon: 'error',
-      confirmButtonText: 'قبول',
-    });
-  }
-};
-
-const exportPDF = async (allItems = true) => {
-  try {
-    if (!allItems && itemsSelected.value.length === 0) {
+    loading.value = true;
+    if (!all && !itemsSelected.value.length) {
       Swal.fire({
-        text: 'هیچ آیتمی انتخاب نشده است!',
-        icon: 'info',
+        text: 'هیچ آیتمی برای خروجی انتخاب نشده است',
+        icon: 'warning',
         confirmButtonText: 'قبول',
       });
       return;
     }
-
-    const data = allItems ? {} : { items: itemsSelected.value };
-    const response = await axios.post('/api/commodity/list/print', data);
-    const printID = response.data.id;
-
-    // استفاده از getApiUrl برای ساخت URL و هدایت کاربر به صفحه PDF
-    const pdfUrl = `${getApiUrl()}/front/print/${printID}`;
-    window.open(pdfUrl, '_blank', 'noreferrer');
+    const payload = all ? { all: true } : { items: itemsSelected.value };
+    const response = await axios.post('/api/commodity/list/print', payload);
+    const printId = response.data.id;
+    const apiUrl = getApiUrl();
+    window.open(`${apiUrl}/front/print/${printId}`, '_blank');
   } catch (error) {
     console.error('Error exporting PDF:', error);
     Swal.fire({
-      text: 'خطا در خروجی PDF',
+      text: 'خطا در خروجی PDF: ' + (error.response?.data?.detail || error.message),
       icon: 'error',
       confirmButtonText: 'قبول',
     });
+  } finally {
+    loading.value = false;
   }
 };
 
-// متدهای حذف
+const exportExcel = async (all = false) => {
+  try {
+    loading.value = true;
+    if (!all && !itemsSelected.value.length) {
+      Swal.fire({
+        text: 'هیچ آیتمی برای خروجی انتخاب نشده است',
+        icon: 'warning',
+        confirmButtonText: 'قبول',
+      });
+      return;
+    }
+    const payload = all ? { all: true } : { items: itemsSelected.value };
+    const response = await axios.post('/api/commodity/list/excel', payload, { responseType: 'blob' });
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'commodities.xlsx');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error exporting Excel:', error);
+    Swal.fire({
+      text: 'خطا در خروجی Excel: ' + (error.response?.data?.detail || error.message),
+      icon: 'error',
+      confirmButtonText: 'قبول',
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
 const deleteItem = async (code) => {
   const result = await Swal.fire({
-    text: 'آیا برای حذف این مورد مطمئن هستید؟',
+    text: 'آیا از حذف این آیتم اطمینان دارید؟',
+    icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'بله',
     cancelButtonText: 'خیر',
   });
-
   if (result.isConfirmed) {
     try {
-      const response = await axios.post(`/api/commodity/delete/${code}`, { code });
+      loading.value = true;
+      const response = await axios.delete(`/api/commodities/${code}`);
       if (response.data.result === 1) {
         Swal.fire({
-          text: 'کالا با موفقیت حذف شد.',
+          text: 'آیتم با موفقیت حذف شد',
           icon: 'success',
           confirmButtonText: 'قبول',
         });
-        fetchData();
+        fetchData(); // به‌روزرسانی لیست پس از حذف
       } else if (response.data.result === 2) {
         Swal.fire({
-          text: 'کالا به دلیل داشتن سند حسابداری یا انبار مرتبط قابل حذف نیست.',
+          text: 'این کالا در اسناد حسابداری یا انبار استفاده شده و قابل حذف نیست',
           icon: 'error',
           confirmButtonText: 'قبول',
         });
       }
     } catch (error) {
       console.error('Error deleting item:', error);
+      Swal.fire({
+        text: 'خطا در حذف آیتم: ' + (error.response?.data?.detail || error.message),
+        icon: 'error',
+        confirmButtonText: 'قبول',
+      });
+    } finally {
+      loading.value = false;
     }
   }
 };
 
 const deleteGroup = async () => {
-  if (itemsSelected.value.length === 0) {
+  if (!itemsSelected.value.length) {
     Swal.fire({
-      text: 'هیچ آیتمی انتخاب نشده است!',
-      icon: 'error',
+      text: 'هیچ آیتمی برای حذف انتخاب نشده است',
+      icon: 'warning',
       confirmButtonText: 'قبول',
     });
     return;
   }
-
   const result = await Swal.fire({
-    text: 'آیا برای حذف این موارد مطمئن هستید؟',
+    text: 'آیا از حذف آیتم‌های انتخاب‌شده اطمینان دارید؟',
+    icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'بله',
     cancelButtonText: 'خیر',
   });
-
   if (result.isConfirmed) {
     try {
-      const response = await axios.post('/api/commodity/deletegroup', itemsSelected.value);
-      if (!response.data.data.ignored) {
+      loading.value = true;
+      const codes = itemsSelected.value.map(item => item.code);
+      const response = await axios.post('/api/commodity/deletegroup', { codes });
+      if (response.data.Success) {
         Swal.fire({
-          text: 'کالاها با موفقیت حذف شدند.',
-          icon: 'success',
+          text: response.data.result.ignored
+            ? 'برخی آیتم‌ها به دلیل استفاده در اسناد حذف نشدند'
+            : 'آیتم‌ها با موفقیت حذف شدند',
+          icon: response.data.result.ignored ? 'warning' : 'success',
           confirmButtonText: 'قبول',
         });
-      } else {
-        Swal.fire({
-          text: 'تعدادی از کالاها به دلیل داشتن سند حسابداری یا انبار مرتبط حذف نشدند.',
-          icon: 'warning',
-          confirmButtonText: 'قبول',
-        });
+        itemsSelected.value = [];
+        fetchData();
       }
-      fetchData();
     } catch (error) {
       console.error('Error deleting group:', error);
+      Swal.fire({
+        text: 'خطا در حذف گروهی: ' + (error.response?.data?.detail || error.message),
+        icon: 'error',
+        confirmButtonText: 'قبول',
+      });
+    } finally {
+      loading.value = false;
     }
   }
 };
+
+// دیبونس برای جستجو
+const debouncedSearch = debounce(() => fetchData(true), 500);
 
 // Watchers
 watch(
@@ -432,6 +491,7 @@ watch(
 
 // OnMounted
 onMounted(() => {
+  loadColumnSettings(); // لود تنظیمات ستون‌ها هنگام شروع
   fetchCategories();
   fetchData();
 });

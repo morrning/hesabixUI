@@ -187,6 +187,7 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    column_settings:'ستون‌های جدول',
     all: 'همه موارد',
     explore_accounts: "مرور حساب‌ها",
     details: "جزئیات",
