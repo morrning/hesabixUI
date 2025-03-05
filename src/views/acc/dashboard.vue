@@ -320,18 +320,19 @@ export default {
 </script>
 
 <style scoped>
+@import 'animate.css';
+
 .card-equal-height {
   height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+
 .card-equal-height_big {
   height: 550;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-
-@import 'animate.css';
 </style>
