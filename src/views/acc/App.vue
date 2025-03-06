@@ -10,7 +10,6 @@ import Notifications_btn from '@/components/application/buttons/notifications_bt
 import Year_cob from '@/components/application/combobox/year_cob.vue';
 import Currency_cob from '@/components/application/combobox/currency_cob.vue';
 import clock from '@/components/application/clock.vue';
-import "/public/dashmix/dashmix.min.css"
 
 export default {
 

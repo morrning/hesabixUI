@@ -25,7 +25,7 @@
 
     <v-row dense>
       <v-col cols="12" sm="12" md="6" v-show="permissions.sell && dashboard.sellChart && isPluginActive('accpro')">
-        <v-card class="animate__animated animate__zoomIn card-equal-height_big" color="blue-grey-lighten-4" variant="elevated"
+        <v-card class="animate__animated animate__zoomIn card-equal-height_big" variant="outlined"
           prepend-icon="mdi-basket" :title="$t('drawer.sell_chart')" hover>
           <v-card-text class="pa-0">
             <sale-chart></sale-chart>
@@ -35,7 +35,7 @@
 
       <!-- کارت جدید: کالاهای پرفروش -->
       <v-col cols="12" sm="12" md="6" v-show="permissions.sell && dashboard.topCommodities">
-        <v-card class="animate__animated animate__zoomIn card-equal-height_big" color="pink-lighten-4" variant="elevated"
+        <v-card class="animate__animated animate__zoomIn card-equal-height_big" variant="outlined"
           prepend-icon="mdi-chart-pie" :title="$t('dashboard.topCommodities.title')" hover>
           <v-card-text class="pa-2">
             <!-- دکمه‌های انتخاب بازه زمانی و تعداد -->
@@ -320,18 +320,19 @@ export default {
 </script>
 
 <style scoped>
+@import 'animate.css';
+
 .card-equal-height {
   height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+
 .card-equal-height_big {
   height: 550;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-
-@import 'animate.css';
 </style>
