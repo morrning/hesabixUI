@@ -25,7 +25,6 @@
 
         <!-- کارت اطلاعات -->
         <v-card class="mt-1">
-            <v-card-title>{{ $t('updateSoftware.infoTitle') }}</v-card-title>
             <v-card-text>
                 <p>{{ $t('updateSoftware.infoDescription') }}</p>
                 <p>{{ $t('updateSoftware.safetyTips') }}</p>

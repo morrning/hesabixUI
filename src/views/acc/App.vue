@@ -465,9 +465,9 @@ export default {
       </v-list-group>
       <v-list-group v-show="permissions.owner">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-white bg-green-darken-4 rounded-2 ma-2" v-bind="props" :title="$t('drawer.market')">
+          <v-list-item class="bg-blue-grey-lighten-4 ma-2" v-bind="props" :title="$t('drawer.market')">
             <template v-slot:prepend>
-              <v-icon icon="mdi-shopping" color="green-accent-1"></v-icon>
+              <v-icon icon="mdi-shopping" color="green-darken-5"></v-icon>
             </template>
           </v-list-item>
         </template>
