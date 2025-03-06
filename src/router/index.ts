@@ -119,6 +119,14 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: 'manager/update-core',
+                    component: () => import('../views/user/manager/settings/update-core.vue'),
+                    meta: {
+                        'title': 'به روز رسانی هسته',
+                        'login': true
+                    }
+                },
+                {
                     path: 'manager/logs/list',
                     component: () => import('../views/user/manager/log/logs.vue'),
                     meta: {
