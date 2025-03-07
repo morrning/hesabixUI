@@ -324,7 +324,7 @@ export default {
     try {
       const res = await axios.post("/api/user/current/info");
       this.user_email = res.data.email;
-      this.user_fullname = res.data.fullName;
+      this.user_fullname = res.data.fullname;
       this.user_mobile = res.data.mobile;
       this.referralCode = res.data.invateCode || "";
       this.referralLink = this.referralCode

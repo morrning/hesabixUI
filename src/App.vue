@@ -89,4 +89,27 @@ export default {
   --easy-table-header-font-color: #e1e1e1;
   --easy-table-header-background-color: #055bbb;
 }
+
+/* هدف قرار دادن اسکرول‌بار در v-navigation-drawer */
+.v-navigation-drawer ::-webkit-scrollbar {
+  width: 4px;
+  /* عرض اسکرول‌بار را کاهش می‌دهد */
+}
+
+.v-navigation-drawer ::-webkit-scrollbar-track {
+  background: transparent;
+  /* پس‌زمینه اسکرول‌بار شفاف */
+}
+
+.v-navigation-drawer ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  /* رنگ دسته اسکرول‌بار */
+  border-radius: 4px;
+  /* گوشه‌های گرد */
+}
+
+.v-navigation-drawer ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+  /* رنگ هنگام هاور */
+}
 </style>
