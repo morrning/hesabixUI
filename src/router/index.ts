@@ -895,6 +895,11 @@ const router = createRouter({
             ],
         },
         {
+            path: '/ms/:param',
+            name: 'ReferralRedirect',
+            component: () => import('../views/user/ReferralRedirect.vue'),
+        },
+        {
             path: '/install-pwa',
             name: 'install_pwa',
             component: () => import('../views/user/InstallPWA.vue'),

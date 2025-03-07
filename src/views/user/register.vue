@@ -2,8 +2,8 @@
   <v-container>
     <v-row class="d-flex justify-center">
       <v-col md="5">
-        <v-card :loading="loading ? 'blue' : null" :title="$t('app.name')" :subtitle="$t('user.register_label')">
-          <v-card-text>
+        <v-card :loading="loading ? 'blue' : undefined" :title="$t('app.name')" :subtitle="$t('user.register_label')">
+            <v-card-text>
             <v-form ref="form" :disabled="loading" fast-fail @submit.prevent="submit()">
               <v-text-field
                   class="mb-2"
@@ -53,15 +53,16 @@
                   v-model="user.password"
               ></v-text-field>
 
-              <!-- بخش کپچا (همیشه نمایش داده می‌شه) -->
+              <!-- بخش کپچا -->
               <v-row class="mb-2" dense>
                 <v-col cols="12" sm="6">
                   <v-img :src="captchaImage" max-height="50" max-width="150" class="captcha-img" contain></v-img>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field dense :label="$t('captcha.enter_code')" placeholder="کپچا" v-model.number="user.captcha"
-                    variant="outlined" type="number" :rules="rules.captcha" required hide-details
-                    prepend-inner-icon="mdi-refresh" @click:prepend-inner="loadCaptcha" :loading="captchaLoading">
+                  <v-text-field dense :label="$t('captcha.enter_code')" placeholder="$t('captcha.placeholder')"
+                    v-model.number="user.captcha" variant="outlined" type="number" :rules="rules.captcha" required
+                    hide-details prepend-inner-icon="mdi-refresh" @click:prepend-inner="loadCaptcha"
+                    :loading="captchaLoading">
                   </v-text-field>
                 </v-col>
               </v-row>
@@ -70,7 +71,7 @@
               <v-checkbox
                   v-model="termsAccepted"
                   :label="$t('user.register_terms_des')"
-                  :rules="[(v: any) => !!v || $t('validator.terms_required')]"
+                  :rules="[(v) => !!v || $t('validator.terms_required')]"
                   required
                   class="mb-2"
               ></v-checkbox>
@@ -120,7 +121,7 @@ export default defineComponent({
       loading: false,
       captchaLoading: false,
       dialog: false,
-      showCaptcha: true, // همیشه کپچا نمایش داده می‌شه
+      showCaptcha: true,
       termsAccepted: false,
       captchaImage: '',
       user: {
@@ -162,24 +163,24 @@ export default defineComponent({
   },
   methods: {
     validate(input: string, type: string) {
-      if (type == 'fill') {
+      if (type === 'fill') {
         if (input?.length > 0) return true;
         return this.$t('validator.required');
-      } else if (type == 'email') {
+      } else if (type === 'email') {
         if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(input)) return true;
         return this.$t('validator.email_not_valid');
-      } else if (type == 'password') {
+      } else if (type === 'password') {
         if (!input) return false;
         if (input.length > 7) return true;
         return this.$t('validator.password_len_lower');
-      } else if (type == 'mobile') {
+      } else if (type === 'mobile') {
         const regex = new RegExp("^(\\+98|0)?9\\d{9}$");
         if (regex.test(input)) return true;
         return this.$t('validator.mobile_not_valid');
       }
     },
     loadData() {
-      this.loadCaptcha(); // لود اولیه کپچا
+      this.loadCaptcha();
     },
     async loadCaptcha() {
       this.captchaLoading = true;
@@ -191,41 +192,44 @@ export default defineComponent({
         const imageUrl = URL.createObjectURL(response.data);
         this.captchaImage = imageUrl;
       } catch (error) {
-        this.response.message = 'خطا در بارگذاری کپچا';
+        this.response.message = this.$t('captcha.load_error');
         this.dialog = true;
       } finally {
         this.captchaLoading = false;
       }
     },
     async submit() {
-      const { valid } = await this.$refs.form.validate();
+      const { valid } = await (this.$refs.form as any).validate();
       if (valid) {
         this.loading = true;
 
-        const userData: { name: string; email: string; mobile: string; password: string; captcha_answer: string } = {
+        const inviteCode = localStorage.getItem('inviteCode') || '0'; // اگر کد دعوت نبود، 0 ارسال می‌شه
+
+        const userData = {
           name: this.user.name,
           email: this.user.email,
           mobile: this.user.mobile,
           password: this.user.password,
-          captcha_answer: this.user.captcha.toString(), // همیشه کپچا ارسال می‌شه
+          captcha_answer: this.user.captcha.toString(),
+          inviteCode: inviteCode // اضافه کردن کد دعوت به داده‌های ارسالی
         };
 
         axios.post('/api/user/register', userData, {
           withCredentials: true,
         })
-          .then((response: any) => {
-            if (response.data.Success == false) {
+          .then((response) => {
+            if (response.data.Success === false) {
               this.response = response.data;
               this.dialog = true;
-              this.loadCaptcha(); // کپچا رو نوسازی می‌کنیم
+              this.loadCaptcha();
             } else {
               this.$router.push('/user/active-account/' + this.user.mobile);
             }
           })
-          .catch((error: any) => {
-            this.response.message = error.response?.data?.error || 'خطا در ثبت‌نام';
+          .catch((error) => {
+            this.response.message = error.response?.data?.error || this.$t('dialog.error_unknown');
             this.dialog = true;
-            this.loadCaptcha(); // کپچا رو نوسازی می‌کنیم
+            this.loadCaptcha();
           })
           .finally(() => {
             this.loading = false;
