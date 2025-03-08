@@ -21,7 +21,7 @@ export default {
   created() {
     axios.post('/api/user/check/login').then((response)=>{
       if(response.data.Success == true){
-        this.$router.push('/profile/dashboard')
+        this.$router.push('/profile/business')
       }
     });
   }

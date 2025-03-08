@@ -90,7 +90,7 @@
                         :rules="[() => replay.length > 0 || $t('validator.required')]"
                       ></v-textarea>
                     </v-col>
-                    <v-col cols="12" sm="12" md="12">
+                    <v-col cols="12" sm="12" md="6">
                       <v-select
                         v-model="ticketState"
                         :items="states"
@@ -99,7 +99,7 @@
                         :rules="[() => !!ticketState || $t('validator.required')]"
                       ></v-select>
                     </v-col>
-                    <v-col cols="12" sm="12" md="12">
+                    <v-col cols="12" sm="12" md="6">
                       <v-file-input
                         v-model="attachedFile"
                         :label="$t('dialog.attach_file')"
