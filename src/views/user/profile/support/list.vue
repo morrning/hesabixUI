@@ -2,74 +2,133 @@
   <v-toolbar color="toolbar" :title="$t('pages.support.titlebar')">
     <v-spacer></v-spacer>
     <v-tooltip :text="$t('user.ticket_new')" location="bottom">
-      <template v-slot:activator="{ props }">
+      <template #activator="{ props }">
         <v-btn v-bind="props" icon="mdi-chat-plus" color="primary" to="/profile/support-new"></v-btn>
       </template>
     </v-tooltip>
-
   </v-toolbar>
+
   <v-container class="pa-0 ma-0">
     <v-card :loading="loading ? 'red' : null" :disabled="loading">
-      <v-card-text class="pa-0">
-        <v-row>
-          <v-col>
-            <EasyDataTable table-class-name="customize-table" alternating :search-value="searchValue" :headers="headers"
-              :items="items" theme-color="#1d90ff" header-text-direction="center" body-text-direction="center"
-              rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-              rowsOfPageSeparatorMessage="از" :loading="loading">
-              <template #item-operation="{ id }">
-                <v-tooltip :text="$t('dialog.view')" location="bottom">
-                  <template v-slot:activator="{ props }">
-                    <v-btn v-bind="props" color="primary" icon="mdi-eye" size="small" density="comfortable"
-                      variant="flat" :to="'/profile/support-view/' + id" @click="loading = true;" />
-                  </template>
-                </v-tooltip>
-              </template>
-              <template #item-state="{ state }">
-                <span v-if="state == 'پاسخ داده شده'" class="text-success"><i class="fa fa-check-double"></i> پاسخ داده
-                  شده </span>
-                <span v-else class="text-danger"><i class="fa fa-question-circle"></i> در حال پیگیری </span>
-              </template>
-            </EasyDataTable>
-          </v-col>
-        </v-row>
-      </v-card-text>
+      <v-tabs v-model="activeTab" color="primary" grow>
+        <v-tab value="pending" class="flex-grow-1">
+          <v-icon start>mdi-progress-clock</v-icon> در حال پیگیری ({{ pendingItems.length }})
+        </v-tab>
+        <v-tab value="responded" class="flex-grow-1">
+          <v-icon start>mdi-check-circle</v-icon> پاسخ داده شده ({{ respondedItems.length }})
+        </v-tab>
+        <v-tab value="closed" class="flex-grow-1">
+          <v-icon start>mdi-lock</v-icon> خاتمه یافته ({{ closedItems.length }})
+        </v-tab>
+      </v-tabs>
+
+      <v-window v-model="activeTab">
+        <v-window-item value="pending">
+          <v-data-table :headers="headers" :items="pendingItems" :loading="loading" :no-data-text="$t('table.no_data')"
+            class="elevation-1">
+            <template #item.operation="{ item }">
+              <v-tooltip :text="$t('dialog.view')" location="bottom">
+                <template #activator="{ props }">
+                  <v-btn v-bind="props" color="primary" icon="mdi-eye" size="x-small" variant="flat"
+                    :to="'/profile/support-view/' + item.id" @click="loading = true" />
+                </template>
+              </v-tooltip>
+            </template>
+          </v-data-table>
+        </v-window-item>
+
+        <v-window-item value="responded">
+          <v-data-table :headers="headers" :items="respondedItems" :loading="loading"
+            :no-data-text="$t('table.no_data')" class="elevation-1">
+            <template #item.operation="{ item }">
+              <v-tooltip :text="$t('dialog.view')" location="bottom">
+                <template #activator="{ props }">
+                  <v-btn v-bind="props" color="primary" icon="mdi-eye" size="x-small" variant="flat"
+                    :to="'/profile/support-view/' + item.id" @click="loading = true" />
+                </template>
+              </v-tooltip>
+            </template>
+          </v-data-table>
+        </v-window-item>
+
+        <v-window-item value="closed">
+          <v-data-table :headers="headers" :items="closedItems" :loading="loading" :no-data-text="$t('table.no_data')"
+            class="elevation-1">
+            <template #item.operation="{ item }">
+              <v-tooltip :text="$t('dialog.view')" location="bottom">
+                <template #activator="{ props }">
+                  <v-btn v-bind="props" color="primary" icon="mdi-eye" size="x-small" variant="flat"
+                    :to="'/profile/support-view/' + item.id" @click="loading = true" />
+                </template>
+              </v-tooltip>
+            </template>
+          </v-data-table>
+        </v-window-item>
+      </v-window>
     </v-card>
   </v-container>
 </template>
 
 <script>
 import axios from "axios";
-import { ref } from "vue";
 
 export default {
   name: "list",
   data() {
     return {
-      searchValue: '',
       loading: true,
       items: [],
+      activeTab: null,
       headers: [
-        { text: "شناسه", value: "id", sortable: true },
-        { text: "تاریخ", value: "dateSubmit", sortable: true },
-        { text: "عنوان", value: "title", sortable: true },
-        { text: "وضعیت", value: "state", sortable: true },
-        { text: "عملیات", value: "operation" },
-      ]
-    }
+        { title: "", key: "operation", align: "center", sortable: false },
+        { title: "شناسه", key: "id", align: "center", sortable: true },
+        { 
+          title: "کسب‌وکار", 
+          key: "bid.name", // تغییر به bid.name
+          align: "center", 
+          sortable: true,
+          value: item => item.bid ? item.bid.name : 'بدون کسب‌وکار' // مدیریت null
+        },
+        { title: "عنوان", key: "title", align: "center", sortable: true },
+        { title: "تاریخ", key: "dateSubmit", align: "center", sortable: true },
+      ],
+    };
+  },
+  computed: {
+    pendingItems() {
+      return this.items.filter((item) => item.state === "در حال پیگیری");
+    },
+    respondedItems() {
+      return this.items.filter((item) => item.state === "پاسخ داده شده");
+    },
+    closedItems() {
+      return this.items.filter((item) => item.state === "خاتمه یافته");
+    },
   },
   mounted() {
     this.loadData();
   },
   methods: {
     loadData() {
-      axios.post('/api/support/list').then((response) => {
+      axios.post("/api/support/list").then((response) => {
         this.items = response.data;
         this.loading = false;
+        this.activeTab = this.pendingItems.length > 0 ? "pending" : "responded";
+      }).catch((error) => {
+        console.error("Error loading support list:", error);
+        this.loading = false;
       });
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-tabs {
+  width: 100%;
+}
+
+.v-tab {
+  flex: 1;
+}
+</style>

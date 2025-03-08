@@ -1,6 +1,5 @@
 <template>
-  <v-toolbar color="toolbar" :title="$t('pages.support.new')">
-  </v-toolbar>
+  <v-toolbar color="toolbar" :title="$t('pages.support.new')"></v-toolbar>
   <v-container class="pa-0 ma-0">
     <v-row>
       <v-col class="">
@@ -20,7 +19,7 @@
               </v-col>
               <v-col cols="12" sm="12" md="6">
                 <v-select :label="$t('pages.support.bid')" prepend-inner-icon="mdi-domain" :items="bidItems"
-                  item-title="name" return-object v-model="item.bid"></v-select>
+                  item-title="name" return-object v-model="item.bid" clearable></v-select>
               </v-col>
             </v-row>
             <v-row>
@@ -34,7 +33,7 @@
               <v-col cols="12" sm="12" md="12">
                 <v-file-input v-model="attachedFile" :label="$t('dialog.attach_file')"
                   prepend-icon="mdi-paperclip" accept=".png, .jpg, .jpeg, .pdf, .xls, .xlsx, .zip, .rar"
-                  :rules="[validateFileType, validateFileSize]" :hint="$t('dialog.allowed_file_types_hint')"
+                  :rules="[validateFile]" :hint="$t('dialog.allowed_file_types_hint')"
                   persistent-hint></v-file-input>
               </v-col>
             </v-row>
@@ -60,7 +59,7 @@ export default {
       item: {
         title: '',
         body: '',
-        bid: ''
+        bid: null // مقدار پیش‌فرض null برای مدیریت بهتر
       },
       bidItems: [],
       attachedFile: null,
@@ -89,7 +88,7 @@ export default {
             }
           });
         } else {
-          this.item.bid = response.data[0];
+          this.item.bid = null; // پیش‌فرض null، کاربر باید انتخاب کند
         }
       }).catch((error) => {
         this.loading = false;
@@ -100,10 +99,12 @@ export default {
         });
       });
     },
-    validateFileType(value) {
-      if (!value) return true; // فایل اختیاری است
-      const file = Array.isArray(value) && value.length > 0 ? value[0] : value instanceof File ? value : null;
-      if (!file) return this.$t('validator.invalid_file_type');
+    validateFile(value) {
+      if (!value || (Array.isArray(value) && value.length === 0)) return true;
+
+      const file = Array.isArray(value) ? value[0] : value;
+      if (!(file instanceof File)) return this.$t('validator.invalid_file_type');
+
       const allowedTypes = [
         'image/png',
         'image/jpeg',
@@ -114,15 +115,11 @@ export default {
         'application/zip',
         'application/x-rar-compressed'
       ];
-      const isValidType = allowedTypes.includes(file.type);
-      return isValidType || this.$t('validator.invalid_file_type');
-    },
-    validateFileSize(value) {
-      if (!value) return true;
-      const file = Array.isArray(value) && value.length > 0 ? value[0] : value instanceof File ? value : null;
-      if (!file) return this.$t('validator.invalid_file_type');
-      const isValidSize = file.size < 5 * 1024 * 1024; // 5MB
-      return isValidSize || this.$t('validator.file_size_limit');
+      if (!allowedTypes.includes(file.type)) return this.$t('validator.invalid_file_type');
+
+      if (file.size > 5 * 1024 * 1024) return this.$t('validator.file_size_limit');
+
+      return true;
     },
     async submit() {
       const { valid } = await this.$refs.form.validate();
@@ -132,9 +129,10 @@ export default {
         const formData = new FormData();
         formData.append('title', this.item.title);
         formData.append('body', this.item.body);
-        formData.append('bid', this.item.bid ? JSON.stringify(this.item.bid) : '');
+        formData.append('bid', this.item.bid ? this.item.bid.id : ''); // فقط id ارسال می‌شود
+
         const file = Array.isArray(this.attachedFile) && this.attachedFile.length > 0 ? this.attachedFile[0] : this.attachedFile;
-        if (file) {
+        if (file instanceof File) {
           formData.append('files[0]', file);
         }
 
@@ -167,4 +165,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* استایل‌های شما */
+</style>

@@ -42,7 +42,7 @@
                     systemInfo.osVersion }}</p>
                 <p><span class="font-weight-bold primary--text">{{ $t('updateSoftware.osMachine') }}:</span> {{
                     systemInfo.osMachine }}</p>
-                <p><span class="font-weight-bold primary--text">{{ $t('updateSoftware.cpuInfo ') }}:</span> {{
+                <p><span class="font-weight-bold primary--text">{{ $t('updateSoftware.cpuInfo') }}:</span> {{
                     systemInfo.cpuInfo }}</p>
                 <p><span class="font-weight-bold primary--text">{{ $t('updateSoftware.distroName') }}:</span> {{
                     systemInfo.distroName }}</p>

@@ -208,7 +208,7 @@ const fa_lang = {
     "dialogSuccessTitle": "موفقیت",
     "dialogErrorTitle": "خطا",
     "dialogErrorSimpleMessage": "خطایی به وجود اومد، لطفاً لاگ رو بررسی کنید.",
-    "closeDialog": "بستن"
+    "closeDialog": "بستن",
   },
   static: {
     not_found: "صفحه مورد نظر یافت نشد",
