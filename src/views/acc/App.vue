@@ -618,11 +618,13 @@ export default {
             <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/accounting/list') }}</span>
           </v-list-item-title>
           <template v-slot:append>
+            <!--
             <v-tooltip :text="$t('dialog.add_new')" location="end">
               <template v-slot:activator="{ props }">
                 <v-btn v-bind="props" icon="mdi-plus-box" variant="plain" to="/acc/accounting/mod/" />
               </template>
             </v-tooltip>
+            -->
           </template>
         </v-list-item>
         <v-list-item v-if="permissions.accounting" to="/acc/accounting/open_balance">
