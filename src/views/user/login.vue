@@ -2,21 +2,40 @@
   <v-container>
     <v-row class="d-flex justify-center">
       <v-col md="5">
-        <v-card :loading="loading ? 'blue' : undefined" :disabled="loading" :title="$t('app.name')"
-          :subtitle="$t('user.login_label')">
+        <v-card :loading="loading ? 'blue' : undefined" :disabled="loading" :title="$t('app.name')" :subtitle="$t('user.login_label')">
           <v-card-text class="text-justify">
             {{ $t("login.des") }}
           </v-card-text>
 
           <v-form :disabled="loading" ref="form" fast-fail @submit.prevent="submit()">
             <v-card-text>
-              <v-text-field class="mb-2" :label="$t('user.mobile')" :placeholder="$t('user.mobile_placeholder')"
-                single-line v-model="user.mobile" type="tel" variant="outlined" prepend-inner-icon="mdi-phone"
-                :rules="rules.mobile"></v-text-field>
+              <v-text-field
+                class="mb-2"
+                :label="$t('user.mobile')"
+                :placeholder="$t('user.mobile_placeholder')"
+                single-line
+                v-model="user.mobile"
+                type="tel"
+                variant="outlined"
+                prepend-inner-icon="mdi-phone"
+                :rules="rules.mobile"
+                autocomplete="tel"
+                name="mobile"
+              ></v-text-field>
 
-              <v-text-field class="mb-2" :label="$t('user.password')" :placeholder="$t('user.password_placeholder')"
-                single-line type="password" variant="outlined" prepend-inner-icon="mdi-lock" :rules="rules.password"
-                v-model="user.password"></v-text-field>
+              <v-text-field
+                class="mb-2"
+                :label="$t('user.password')"
+                :placeholder="$t('user.password_placeholder')"
+                single-line
+                type="password"
+                variant="outlined"
+                prepend-inner-icon="mdi-lock"
+                :rules="rules.password"
+                v-model="user.password"
+                autocomplete="current-password"
+                name="password"
+              ></v-text-field>
 
               <!-- بخش کپچا -->
               <v-row v-if="showCaptcha" class="mb-2" dense>
@@ -24,22 +43,42 @@
                   <v-img :src="captchaImage" max-height="50" max-width="150" class="captcha-img" contain></v-img>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field dense :label="$t('captcha.enter_code')" placeholder="کپچا" v-model.number="user.captcha"
-                    variant="outlined" type="number" :rules="rules.captcha" required hide-details
-                    prepend-inner-icon="mdi-refresh" @click:prepend-inner="loadCaptcha" :loading="captchaLoading">
-                  </v-text-field>
+                  <v-text-field
+                    dense
+                    :label="$t('captcha.enter_code')"
+                    placeholder="کپچا"
+                    v-model.number="user.captcha"
+                    variant="outlined"
+                    type="number"
+                    :rules="rules.captcha"
+                    required
+                    hide-details
+                    prepend-inner-icon="mdi-refresh"
+                    @click:prepend-inner="loadCaptcha"
+                    :loading="captchaLoading"
+                    autocomplete="off"
+                    name="captcha"
+                  ></v-text-field>
                 </v-col>
               </v-row>
 
-              <v-btn :disabled="loading" :loading="loading" block type="submit" class="text-none mb-4"
-                color="indigo-darken-3" size="x-large" variant="flat" prepend-icon="mdi-login">
+              <v-btn
+                :disabled="loading"
+                :loading="loading"
+                block
+                type="submit"
+                class="text-none mb-4"
+                color="indigo-darken-3"
+                size="x-large"
+                variant="flat"
+                prepend-icon="mdi-login"
+              >
                 {{ $t("user.login") }}
               </v-btn>
             </v-card-text>
           </v-form>
           <div class="d-flex justify-center pb-5">
-            <v-btn :loading="loading" class="text-none" color="primary" variant="tonal" flat
-              @click="goto_pwa_page()">نصب وب اپلیکیشن</v-btn>
+            <v-btn :loading="loading" class="text-none" color="primary" variant="tonal" flat @click="goto_pwa_page()">نصب وب اپلیکیشن</v-btn>
           </div>
         </v-card>
       </v-col>

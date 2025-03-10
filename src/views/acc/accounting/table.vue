@@ -201,7 +201,7 @@ export default {
   setup() {
     const isLoading = ref(true);
     const dialogLoading = ref(false);
-    const isAccproActive = ref(false);
+    const isAccproActive = ref(true);
     const tree = ref({});
     const config = ref({
       roots: [],
