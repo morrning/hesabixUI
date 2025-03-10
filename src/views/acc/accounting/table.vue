@@ -1,10 +1,21 @@
 <template>
-  <v-toolbar flat>
+  <v-container fluid>
+    <v-toolbar flat>
       <v-toolbar-title>
         <v-icon class="mx-2">mdi-table</v-icon>
         جدول حساب‌ها
       </v-toolbar-title>
     </v-toolbar>
+
+    <v-alert
+      v-if="!isAccproActive"
+      type="warning"
+      dense
+      outlined
+      class="mt-3"
+    >
+      برای افزودن، ویرایش یا حذف ردیف‌های حساب، لطفاً پلاگین "accpro" را از بخش بازار تهیه کنید.
+    </v-alert>
 
     <loading
       color="blue"
@@ -48,61 +59,130 @@
     </Tree>
 
     <!-- دیالوگ اضافه کردن زیرمجموعه -->
-    <v-dialog v-model="addDialog" max-width="400">
+    <v-dialog v-model="addDialog" max-width="400" persistent>
       <v-card>
-        <v-card-title>اضافه کردن زیرمجموعه</v-card-title>
-        <v-card-text>
-          <v-text-field v-model="newNodeText" label="نام ردیف حساب جدید"></v-text-field>
-        </v-card-text>
-        <v-card-actions>
+        <v-toolbar flat color="success" dark>
+          <v-toolbar-title>اضافه کردن زیرمجموعه</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn color="grey" text @click="addDialog = false">لغو</v-btn>
-          <v-btn color="success" @click="addNode">ثبت</v-btn>
-        </v-card-actions>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon @click="addDialog = false" v-bind="attrs" v-on="on">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </template>
+            <span>بستن</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                @click="addNode"
+                :loading="dialogLoading"
+                :disabled="!newNodeText.trim()"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-check</v-icon>
+              </v-btn>
+            </template>
+            <span>ثبت</span>
+          </v-tooltip>
+        </v-toolbar>
+        <v-card-text class="pt-4">
+          <v-text-field
+            v-model="newNodeText"
+            label="نام ردیف حساب جدید"
+            :rules="[v => !!v.trim() || 'این فیلد نمی‌تواند خالی باشد']"
+            :disabled="dialogLoading"
+          ></v-text-field>
+        </v-card-text>
       </v-card>
     </v-dialog>
 
     <!-- دیالوگ ویرایش -->
-    <v-dialog v-model="editDialog" max-width="400">
+    <v-dialog v-model="editDialog" max-width="400" persistent>
       <v-card>
-        <v-card-title>ویرایش ردیف حساب</v-card-title>
-        <v-card-text>
-          <v-text-field v-model="editNodeText" label="نام ردیف حساب"></v-text-field>
-        </v-card-text>
-        <v-card-actions>
+        <v-toolbar flat color="primary" dark>
+          <v-toolbar-title>ویرایش ردیف حساب</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn color="grey" text @click="editDialog = false">لغو</v-btn>
-          <v-btn color="primary" @click="saveEditNode">ذخیره</v-btn>
-        </v-card-actions>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon @click="editDialog = false" v-bind="attrs" v-on="on">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </template>
+            <span>بستن</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                @click="saveEditNode"
+                :loading="dialogLoading"
+                :disabled="!editNodeText.trim()"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-check</v-icon>
+              </v-btn>
+            </template>
+            <span>ذخیره</span>
+          </v-tooltip>
+        </v-toolbar>
+        <v-card-text class="pt-4">
+          <v-text-field
+            v-model="editNodeText"
+            label="نام ردیف حساب"
+            :rules="[v => !!v.trim() || 'این فیلد نمی‌تواند خالی باشد']"
+            :disabled="dialogLoading"
+          ></v-text-field>
+        </v-card-text>
       </v-card>
     </v-dialog>
 
     <!-- دیالوگ حذف -->
-    <v-dialog v-model="deleteDialog" max-width="400">
+    <v-dialog v-model="deleteDialog" max-width="400" persistent>
       <v-card>
-        <v-card-title>حذف ردیف حساب</v-card-title>
-        <v-card-text>
+        <v-toolbar flat color="error" dark>
+          <v-toolbar-title>حذف ردیف حساب</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon @click="deleteDialog = false" v-bind="attrs" v-on="on">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </template>
+            <span>بستن</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon @click="confirmDeleteNode" :loading="dialogLoading" v-bind="attrs" v-on="on">
+                <v-icon>mdi-check</v-icon>
+              </v-btn>
+            </template>
+            <span>تأیید حذف</span>
+          </v-tooltip>
+        </v-toolbar>
+        <v-card-text class="pt-4">
           آیا مطمئنی که می‌خوای ردیف حساب "{{ selectedNode?.text }}" رو حذف کنی؟
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="grey" text @click="deleteDialog = false">لغو</v-btn>
-          <v-btn color="error" @click="confirmDeleteNode">حذف</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
 
     <!-- دیالوگ پیام عمومی -->
     <v-dialog v-model="messageDialog" max-width="400">
       <v-card>
-        <v-card-title>{{ messageTitle }}</v-card-title>
-        <v-card-text>{{ messageText }}</v-card-text>
-        <v-card-actions>
+        <v-toolbar flat :color="messageTitle === 'موفقیت' ? 'success' : 'error'" dark>
+          <v-toolbar-title>{{ messageTitle }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="messageDialog = false">بستن</v-btn>
-        </v-card-actions>
+          <v-btn icon @click="messageDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-card-text class="pt-4">{{ messageText }}</v-card-text>
       </v-card>
     </v-dialog>
+  </v-container>
 </template>
 
 <script>
@@ -120,6 +200,7 @@ export default {
   },
   setup() {
     const isLoading = ref(true);
+    const dialogLoading = ref(false);
     const isAccproActive = ref(false);
     const tree = ref({});
     const config = ref({
@@ -150,149 +231,140 @@ export default {
     const editNodeText = ref("");
     const selectedNode = ref(null);
 
-    // چک کردن پلاگین accpro
-    const checkAccproPlugin = () => {
-      axios
-        .post("/api/plugin/get/actives")
-        .then((response) => {
-          isAccproActive.value = !!response.data["accpro"];
-        })
-        .catch((error) => {
-          console.error("خطا در بررسی پلاگین‌ها:", error);
-          isAccproActive.value = false;
-        });
+    const checkAccproPlugin = async () => {
+      try {
+        const response = await axios.post("/api/plugin/get/actives");
+        isAccproActive.value = !!response.data["accpro"];
+      } catch (error) {
+        console.error("خطا در بررسی پلاگین‌ها:", error);
+        isAccproActive.value = false;
+      }
     };
 
-    // بارگذاری داده‌ها
-    const loadData = () => {
-      axios
-        .post("/api/accounting/table/get")
-        .then((response) => {
-          tree.value = response.data;
-          if (tree.value["1"] && tree.value["1"].children) {
-            config.value.roots = tree.value["1"].children;
-          } else {
-            console.warn("ردیف حساب ریشه '1' یا فرزندانش پیدا نشد!");
-            config.value.roots = [];
-          }
-          isLoading.value = false;
-        })
-        .catch((error) => {
-          console.error("خطا در دریافت داده‌ها:", error);
-          isLoading.value = false;
-        });
+    const loadData = async () => {
+      try {
+        const response = await axios.post("/api/accounting/table/get");
+        tree.value = response.data;
+        config.value.roots = tree.value["1"]?.children || [];
+        if (!tree.value["1"]) console.warn("ردیف حساب ریشه '1' پیدا نشد!");
+      } catch (error) {
+        console.error("خطا در دریافت داده‌ها:", error);
+      } finally {
+        isLoading.value = false;
+      }
     };
 
-    // نمایش پیام
     const showMessage = (title, text) => {
       messageTitle.value = title;
       messageText.value = text;
       messageDialog.value = true;
     };
 
-    // اضافه کردن زیرمجموعه
     const openAddDialog = (node) => {
       selectedNode.value = node;
       newNodeText.value = "";
       addDialog.value = true;
     };
 
-    const addNode = () => {
-      axios
-        .post("/api/accounting/table/add", {
+    const addNode = async () => {
+      if (!newNodeText.value.trim()) return; // اگر خالی بود، ادامه نمی‌دهیم
+      dialogLoading.value = true;
+      try {
+        const response = await axios.post("/api/accounting/table/add", {
           text: newNodeText.value,
           parentId: selectedNode.value.id,
-        })
-        .then((response) => {
-          if (response.data.result === 1) {
-            const newNode = response.data.node;
-            tree.value[newNode.id] = newNode;
-            if (!tree.value[selectedNode.value.id].children) {
-              tree.value[selectedNode.value.id].children = [];
-            }
-            tree.value[selectedNode.value.id].children.push(newNode.id);
-            addDialog.value = false;
-            showMessage("موفقیت", "ردیف حساب با موفقیت اضافه شد!");
-          } else {
-            showMessage("خطا", response.data.message || "خطا در افزودن ردیف حساب!");
-          }
-        })
-        .catch((error) => {
-          console.error("خطا در افزودن ردیف حساب:", error);
-          showMessage("خطا", "خطا در افزودن ردیف حساب!");
         });
+        if (response.data.result === 1) {
+          const newNode = response.data.node;
+          tree.value[newNode.id] = newNode;
+          if (!tree.value[selectedNode.value.id].children) {
+            tree.value[selectedNode.value.id].children = [];
+          }
+          tree.value[selectedNode.value.id].children.push(newNode.id);
+          addDialog.value = false;
+          showMessage("موفقیت", "ردیف حساب با موفقیت اضافه شد!");
+        } else {
+          showMessage("خطا", response.data.message || "خطا در افزودن ردیف حساب!");
+        }
+      } catch (error) {
+        console.error("خطا در افزودن ردیف حساب:", error);
+        showMessage("خطا", "خطا در افزودن ردیف حساب!");
+      } finally {
+        dialogLoading.value = false;
+      }
     };
 
-    // ویرایش ردیف حساب
     const openEditDialog = (node) => {
       selectedNode.value = node;
       editNodeText.value = node.text;
       editDialog.value = true;
     };
 
-    const saveEditNode = () => {
-      axios
-        .post("/api/accounting/table/edit", {
+    const saveEditNode = async () => {
+      if (!editNodeText.value.trim()) return; // اگر خالی بود، ادامه نمی‌دهیم
+      dialogLoading.value = true;
+      try {
+        const response = await axios.post("/api/accounting/table/edit", {
           id: selectedNode.value.id,
           text: editNodeText.value,
-        })
-        .then((response) => {
-          console.log("پاسخ سرور برای ویرایش:", response.data);
-          if (response.data.result === 1) {
-            // حفظ ویژگی‌های قبلی نود و فقط آپدیت موارد برگشتی
-            tree.value[selectedNode.value.id] = {
-              ...tree.value[selectedNode.value.id], // نگه داشتن ویژگی‌های قبلی
-              ...response.data.node, // اعمال تغییرات جدید
-            };
-            editDialog.value = false;
-            showMessage("موفقیت", "ردیف حساب با موفقیت ویرایش شد!");
-          } else {
-            showMessage("خطا", response.data.message || "خطا در ویرایش ردیف حساب!");
-          }
-        })
-        .catch((error) => {
-          console.error("خطا در ویرایش ردیف حساب:", error);
-          showMessage("خطا", "خطا در ویرایش ردیف حساب!");
         });
+        if (response.data.result === 1) {
+          tree.value[selectedNode.value.id] = {
+            ...tree.value[selectedNode.value.id],
+            ...response.data.node,
+          };
+          editDialog.value = false;
+          showMessage("موفقیت", "ردیف حساب با موفقیت ویرایش شد!");
+        } else {
+          showMessage("خطا", response.data.message || "خطا در ویرایش ردیف حساب!");
+        }
+      } catch (error) {
+        console.error("خطا در ویرایش ردیف حساب:", error);
+        showMessage("خطا", "خطا در ویرایش ردیف حساب!");
+      } finally {
+        dialogLoading.value = false;
+      }
     };
 
-    // حذف ردیف حساب
     const openDeleteDialog = (node) => {
       selectedNode.value = node;
       deleteDialog.value = true;
     };
 
-    const confirmDeleteNode = () => {
-      axios
-        .post("/api/accounting/table/delete", { id: selectedNode.value.id })
-        .then((response) => {
-          if (response.data.result === 1) {
-            delete tree.value[selectedNode.value.id];
-            Object.values(tree.value).forEach((node) => {
-              if (node.children) {
-                node.children = node.children.filter(
-                  (childId) => childId !== selectedNode.value.id
-                );
-              }
-            });
-            deleteDialog.value = false;
-            showMessage("موفقیت", "ردیف حساب با موفقیت حذف شد!");
-          } else {
-            showMessage("خطا", response.data.message || "خطا در حذف ردیف حساب!");
-          }
-        })
-        .catch((error) => {
-          console.error("خطا در حذف ردیف حساب:", error);
-          showMessage("خطا", "خطا در حذف ردیف حساب!");
+    const confirmDeleteNode = async () => {
+      dialogLoading.value = true;
+      try {
+        const response = await axios.post("/api/accounting/table/delete", {
+          id: selectedNode.value.id,
         });
+        if (response.data.result === 1) {
+          delete tree.value[selectedNode.value.id];
+          Object.values(tree.value).forEach((node) => {
+            if (node.children) {
+              node.children = node.children.filter(
+                (childId) => childId !== selectedNode.value.id
+              );
+            }
+          });
+          deleteDialog.value = false;
+          showMessage("موفقیت", "ردیف حساب با موفقیت حذف شد!");
+        } else {
+          showMessage("خطا", response.data.message || "خطا در حذف ردیف حساب!");
+        }
+      } catch (error) {
+        console.error("خطا در حذف ردیف حساب:", error);
+        showMessage("خطا", "خطا در حذف ردیف حساب!");
+      } finally {
+        dialogLoading.value = false;
+      }
     };
 
-    // اجرای اولیه
     checkAccproPlugin();
     loadData();
 
     return {
       isLoading,
+      dialogLoading,
       isAccproActive,
       tree,
       config,
@@ -305,9 +377,6 @@ export default {
       newNodeText,
       editNodeText,
       selectedNode,
-      checkAccproPlugin,
-      loadData,
-      showMessage,
       openAddDialog,
       addNode,
       openEditDialog,
@@ -339,6 +408,7 @@ export default {
   opacity: 0;
   transition: opacity 0.2s;
 }
+
 :deep(.tree-node:hover) .node-actions {
   opacity: 1;
 }
