@@ -617,6 +617,13 @@ export default {
             {{ $t('drawer.accounting_docs') }}
             <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/accounting/list') }}</span>
           </v-list-item-title>
+          <template v-slot:append>
+            <v-tooltip :text="$t('dialog.add_new')" location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props" icon="mdi-plus-box" variant="plain" to="/acc/accounting/mod/" />
+              </template>
+            </v-tooltip>
+          </template>
         </v-list-item>
         <v-list-item v-if="permissions.accounting" to="/acc/accounting/open_balance">
           <v-list-item-title>
@@ -791,7 +798,7 @@ export default {
       <span class="d-none d-sm-flex">{{ business.name }}</span>
     </v-app-bar-title>
     <v-spacer></v-spacer>
-    <v-btn stacked @click="showShortcutsDialog = true; isEditingShortcuts = false">
+    <v-btn class="d-none d-sm-flex" stacked @click="showShortcutsDialog = true; isEditingShortcuts = false">
       <v-icon>mdi-help-circle</v-icon>
     </v-btn>
     <v-dialog v-model="showShortcutsDialog" max-width="800" scrollable>

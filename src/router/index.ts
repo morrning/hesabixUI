@@ -279,6 +279,12 @@ const router = createRouter({
                         import('../views/acc/incomes/mod.vue'),
                 },
                 {
+                    path: 'accounting/mod/:id?',
+                    name: 'accounting_mod',
+                    component: () =>
+                        import('../views/acc/accounting/mod.vue'),
+                },
+                {
                     path: 'accounting/list',
                     name: 'accounting_list_doc',
                     component: () =>
