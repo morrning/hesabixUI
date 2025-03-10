@@ -1,57 +1,28 @@
 <template>
+  <v-toolbar flat>
+    <v-toolbar-title>
+      <v-icon class="mx-2">mdi-table</v-icon>
+      جدول حساب‌ها
+    </v-toolbar-title>
+  </v-toolbar>
   <v-container fluid>
-    <v-toolbar flat>
-      <v-toolbar-title>
-        <v-icon class="mx-2">mdi-table</v-icon>
-        جدول حساب‌ها
-      </v-toolbar-title>
-    </v-toolbar>
-
-    <v-alert
-      v-if="!isAccproActive"
-      type="warning"
-      dense
-      outlined
-      class="mt-3"
-    >
-      برای افزودن، ویرایش یا حذف ردیف‌های حساب، لطفاً پلاگین "accpro" را از بخش بازار تهیه کنید.
+    <v-alert v-if="!isAccproActive" type="warning" dense outlined class="mt-3">
+      برای افزودن، ویرایش یا حذف ردیف‌های حساب، لطفاً افزونه "حسابداری پیشرفته" را از بخش بازار تهیه کنید.
     </v-alert>
 
-    <loading
-      color="blue"
-      loader="dots"
-      v-model:active="isLoading"
-      :is-full-page="false"
-      class="text-center"
-    />
+    <loading color="blue" loader="dots" v-model:active="isLoading" :is-full-page="false" class="text-center" />
 
     <Tree :nodes="tree" :config="config" class="tree-view-style">
       <template #after-input="{ node }">
         <div class="node-actions" v-if="isAccproActive">
-          <v-icon
-            small
-            color="success"
-            class="mx-1"
-            @click.stop="openAddDialog(node)"
-          >
+          <v-icon small color="success" class="mx-1" @click.stop="openAddDialog(node)">
             mdi-plus
           </v-icon>
-          <v-icon
-            v-if="!node.is_public"
-            small
-            color="primary"
-            class="mx-1"
-            @click.stop="openEditDialog(node)"
-          >
+          <v-icon v-if="!node.is_public" small color="primary" class="mx-1" @click.stop="openEditDialog(node)">
             mdi-pencil
           </v-icon>
-          <v-icon
-            v-if="!node.is_public && (!node.children || node.children.length === 0)"
-            small
-            color="error"
-            class="mx-1"
-            @click.stop="openDeleteDialog(node)"
-          >
+          <v-icon v-if="!node.is_public && (!node.children || node.children.length === 0)" small color="error"
+            class="mx-1" @click.stop="openDeleteDialog(node)">
             mdi-delete
           </v-icon>
         </div>
@@ -74,14 +45,8 @@
           </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                icon
-                @click="addNode"
-                :loading="dialogLoading"
-                :disabled="!newNodeText.trim()"
-                v-bind="attrs"
-                v-on="on"
-              >
+              <v-btn icon @click="addNode" :loading="dialogLoading" :disabled="!newNodeText.trim()" v-bind="attrs"
+                v-on="on">
                 <v-icon>mdi-check</v-icon>
               </v-btn>
             </template>
@@ -89,12 +54,8 @@
           </v-tooltip>
         </v-toolbar>
         <v-card-text class="pt-4">
-          <v-text-field
-            v-model="newNodeText"
-            label="نام ردیف حساب جدید"
-            :rules="[v => !!v.trim() || 'این فیلد نمی‌تواند خالی باشد']"
-            :disabled="dialogLoading"
-          ></v-text-field>
+          <v-text-field v-model="newNodeText" label="نام ردیف حساب جدید"
+            :rules="[v => !!v.trim() || 'این فیلد نمی‌تواند خالی باشد']" :disabled="dialogLoading"></v-text-field>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -115,14 +76,8 @@
           </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                icon
-                @click="saveEditNode"
-                :loading="dialogLoading"
-                :disabled="!editNodeText.trim()"
-                v-bind="attrs"
-                v-on="on"
-              >
+              <v-btn icon @click="saveEditNode" :loading="dialogLoading" :disabled="!editNodeText.trim()" v-bind="attrs"
+                v-on="on">
                 <v-icon>mdi-check</v-icon>
               </v-btn>
             </template>
@@ -130,12 +85,8 @@
           </v-tooltip>
         </v-toolbar>
         <v-card-text class="pt-4">
-          <v-text-field
-            v-model="editNodeText"
-            label="نام ردیف حساب"
-            :rules="[v => !!v.trim() || 'این فیلد نمی‌تواند خالی باشد']"
-            :disabled="dialogLoading"
-          ></v-text-field>
+          <v-text-field v-model="editNodeText" label="نام ردیف حساب"
+            :rules="[v => !!v.trim() || 'این فیلد نمی‌تواند خالی باشد']" :disabled="dialogLoading"></v-text-field>
         </v-card-text>
       </v-card>
     </v-dialog>
