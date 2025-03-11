@@ -18,7 +18,8 @@
             <v-card class="mx-auto mb-3" border flat>
               <v-list-item class="px-6" height="88">
                 <template v-slot:prepend>
-                  <v-avatar color="surface-light" size="55" :image="apiurl + '/front/avatar/file/get/' + item.id" :alt="item.name" />
+                  <v-avatar color="surface-light" size="55" :image="apiurl + '/front/avatar/file/get/' + item.id"
+                    :alt="item.name" />
                 </template>
                 <template v-slot:title>
                   {{ item.name }}
@@ -26,16 +27,17 @@
                 <template v-slot:subtitle>
                   {{ item.owner }}
                 </template>
-
                 <template v-slot:append>
-                  <v-btn @click="runBid(item.id)" class="text-none" color="primary" :text="$t('pages.dashboard.login')" append-icon="mdi-arrow-left" slim></v-btn>
+                  <v-btn @click="runBid(item.id, item.name)" class="text-none" color="primary"
+                    :text="$t('pages.dashboard.login')" append-icon="mdi-arrow-left" slim></v-btn>
                 </template>
               </v-list-item>
               <v-card-text class="text-medium-emphasis pa-1 px-3">
                 <v-row>
                   <v-col cols="12" sm="12" md="12" class="mb-0">
                     <v-select density="comfortable" prepend-inner-icon="mdi-cash" v-model="item.selectedMoney"
-                    :label="$t('pages.dashboard.money')" variant="solo-filled" :items="item.moneys" item-title="label"></v-select>
+                      :label="$t('pages.dashboard.money')" variant="solo-filled" :items="item.moneys"
+                      item-title="label"></v-select>
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -44,6 +46,20 @@
         </v-row>
       </v-card-text>
     </v-card>
+
+    <!-- دیالوگ زیباتر شده -->
+    <v-dialog v-model="showProgress" persistent max-width="700px">
+      <v-card class="pa-4" elevation="8" rounded="lg">
+        <v-card-title class="text-h6 font-weight-bold text-center primary--text">
+          <v-icon left>mdi-loading</v-icon> در حال آماده‌سازی...
+        </v-card-title>
+        <v-card-text class="pt-4">
+          <v-progress-linear v-model="progress" color="primary" height="12" rounded striped
+            class="progress-bar"></v-progress-linear>
+          <div class="mt-6 text-center text-subtitle-1" v-html="currentMessage"></div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -64,7 +80,10 @@ export default {
       selectedMoney: {
         name: '',
         label: ''
-      }
+      },
+      showProgress: false,
+      progress: 0,
+      currentMessage: '',
     }
   },
   methods: {
@@ -74,11 +93,41 @@ export default {
         this.contents = response.data;
         this.contents.forEach((bid) => {
           bid.selectedMoney = bid.arzmain;
-        })
+        });
         this.loading = false;
       });
     },
-    async runBid(id) {
+    randomDelay(min = 500, max = 1500) {
+      return new Promise(resolve => {
+        const delay = Math.floor(Math.random() * (max - min + 1)) + min;
+        setTimeout(resolve, delay);
+      });
+    },
+    async showLoadingProgress(businessName) {
+      this.showProgress = true;
+      this.progress = 0;
+
+      const steps = [
+        { message: "در حال دریافت اطلاعات کسب و کار", progress: 20 },
+        { message: "در حال بارگزاری داده‌های پایه", progress: 40 },
+        { message: "تطبیق و ارزیابی داده‌ها", progress: 60 },
+        { message: "بررسی مجوزها و دسترسی‌ها", progress: 80 },
+        { message: `در حال انتقال به داشبورد کسب‌وکار "${businessName}"`, progress: 95 },
+        { message: "<strong>تصور کن حساب‌هایت همیشه دقیق باشد – این‌جا حسابیکس است!</strong>", progress: 100, delay: 5000 }, // افزایش به 5 ثانیه
+      ];
+
+      for (let i = 0; i < steps.length; i++) {
+        this.currentMessage = steps[i].message;
+        this.progress = steps[i].progress;
+        const delay = steps[i].delay || await this.randomDelay();
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+
+      this.showProgress = false;
+    },
+    async runBid(id, businessName) {
+      await this.showLoadingProgress(businessName);
+
       await localStorage.setItem('activeBid', id);
       this.contents.forEach((item) => {
         if (item.id == id) {
@@ -87,7 +136,8 @@ export default {
           localStorage.setItem('activeMoneyShortName', item.selectedMoney.shortName);
           localStorage.setItem('activeMoneyLabel', item.selectedMoney.label);
         }
-      })
+      });
+
       await axios.post('/api/year/list', {}, {
         headers: {
           activeBid: id
@@ -99,7 +149,7 @@ export default {
           }
         });
         window.location.href = '/acc/dashboard';
-      })
+      });
     }
   },
   beforeMount() {
@@ -108,4 +158,28 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+/* استایل برای دیالوگ و پراگرس بار */
+.progress-bar {
+  transition: width 0.3s ease-in-out;
+}
+
+.text-center {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* انیمیشن برای آیکون لودینگ */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.mdi-loading {
+  animation: spin 1s linear infinite;
+}
+</style>
