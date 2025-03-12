@@ -217,7 +217,7 @@ export default defineComponent({
           confirmButtonText: 'بازگشت',
         });
       }
-      else if (this.person == null || this.person == undefined ) {
+      else if (this.person == null || this.person == undefined) {
         Swal.fire({
           text: 'مشتری انتخاب نشده است.',
           icon: 'error',
@@ -263,58 +263,74 @@ export default defineComponent({
             rows: outItems,
             update: ''
           }).then((response) => {
-            this.update = response.data.doc.code;
             this.loading = false;
-            if (this.canPrint || this.canPrintCashdeskRecp) {
-              axios.post('/api/sell/posprinter/invoice', {
-                code: this.update,
-                pdf: this.canPdf,
-                posPrint: this.canPrint,
-                posPrintRecp: this.canPrintCashdeskRecp
-              }).then((response) => {
-                if (this.canPdf) {
-                  this.printID = response.data.id;
-                  window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
-                }
-              })
+            if (response.data.result == '1') {
+              this.update = response.data.doc.code;
+              if (this.canPrint || this.canPrintCashdeskRecp) {
+                axios.post('/api/sell/posprinter/invoice', {
+                  code: this.update,
+                  pdf: this.canPdf,
+                  posPrint: this.canPrint,
+                  posPrintRecp: this.canPrintCashdeskRecp
+                }).then((response) => {
+                  if (this.canPdf) {
+                    this.printID = response.data.id;
+                    window.open(this.$API_URL + '/front/print/' + this.printID, '_blank', 'noreferrer');
+                  }
+                })
+              }
+              if (this.canSubmitRecpDoc) {
+                outItems = [];
+                outItems.push({
+                  bs: bd,
+                  bd: 0,
+                  type: 'person',
+                  id: this.person.id,
+                  des: 'دریافت وجه فاکتور',
+                  table: 3
+                });
+                outItems.push({
+                  bs: 0,
+                  bd: bd,
+                  type: 'cashdesk',
+                  id: this.cashdesk.id,
+                  des: 'دریافت وجه فاکتور',
+                  table: 121
+                });
+                this.tempID = response.data.doc.code;
+                axios.post('/api/accounting/insert', {
+                  type: 'sell_receive',
+                  date: this.data.date,
+                  des: 'دریافت وجه فاکتور',
+                  rows: outItems,
+                  update: '',
+                  related: response.data.doc.code
+                }).then((response) => {
+                  if (response.data.result == '4') {
+                    Swal.fire({
+                      text: response.data.msg,
+                      icon: 'error',
+                      confirmButtonText: 'قبول'
+                    });
+                  }
+                });
+              }
+              Swal.fire({
+                text: 'فاکتور ثبت شد.',
+                icon: 'success',
+                confirmButtonText: 'قبول'
+              }).then(() => {
+                this.newPage(false);
+              });
             }
-            if (this.canSubmitRecpDoc) {
-              outItems = [];
-              outItems.push({
-                bs: bd,
-                bd: 0,
-                type: 'person',
-                id: this.person.id,
-                des: 'دریافت وجه فاکتور',
-                table: 3
+            else if (response.data.result == '4') {
+              Swal.fire({
+                text: response.data.msg,
+                icon: 'error',
+                confirmButtonText: 'قبول'
               });
-              outItems.push({
-                bs: 0,
-                bd: bd,
-                type: 'cashdesk',
-                id: this.cashdesk.id,
-                des: 'دریافت وجه فاکتور',
-                table: 121
-              });
-              this.tempID = response.data.doc.code;
-              axios.post('/api/accounting/insert', {
-                type: 'sell_receive',
-                date: this.data.date,
-                des: 'دریافت وجه فاکتور',
-                rows: outItems,
-                update: '',
-                related: response.data.doc.code
-              }).then((response) => {
+            }
 
-              });
-            }
-            Swal.fire({
-              text: 'فاکتور ثبت شد.',
-              icon: 'success',
-              confirmButtonText: 'قبول'
-            }).then(() => {
-              this.newPage(false);
-            });
           })
         }
         else {
@@ -434,12 +450,12 @@ export default defineComponent({
                   </div>
                 </div>
                 <div class="card-body p-0">
-                  <v-text-field :loading="loading" v-model="barcodeSearch" @input="onInput" clearable :label="$t('dialog.barcode')"
-                     color="primary" class="pa-2" density="comfortable" variant="outlined" >
-                    <template v-slot:append-inner="{props}">
+                  <v-text-field :loading="loading" v-model="barcodeSearch" @input="onInput" clearable
+                    :label="$t('dialog.barcode')" color="primary" class="pa-2" density="comfortable" variant="outlined">
+                    <template v-slot:append-inner="{ props }">
                       <v-icon color="danger" icon="mdi-barcode-scan"></v-icon>
                     </template>
-                    </v-text-field>
+                  </v-text-field>
                   <v-cob dir="rtl" @search="searchCommodity" :filterable="false" :options="commodity" label="name"
                     v-model="selectedCommodity" class="rounded-0 m-1 cobcom" :placeholder="$t('dialog.search')">
                     <template #no-options="{ search, searching, loading }">

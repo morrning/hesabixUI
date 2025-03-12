@@ -678,6 +678,13 @@ export default {
               }
             });
           }
+          else if (response.data.result == '4') {
+            Swal.fire({
+              text: response.data.msg,
+              icon: 'error',
+              confirmButtonText: 'قبول'
+            });
+          }
         })
       }
 

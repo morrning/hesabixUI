@@ -257,14 +257,23 @@ export default defineComponent({
           rows: rows,
           related: this.$props.originalDoc
         }).then((response) => {
-          Swal.fire({
-            text: 'سند با موفقیت ثبت شد.',
-            icon: 'success',
-            confirmButtonText: 'قبول'
-          }).then((result) => {
-            this.submitedDoc = response.data.doc;
-            this.$props.windowsState.submited = true;
-          });
+          if (response.data.result == '1') {
+            Swal.fire({
+              text: 'سند با موفقیت ثبت شد.',
+              icon: 'success',
+              confirmButtonText: 'قبول'
+            }).then((result) => {
+              this.submitedDoc = response.data.doc;
+              this.$props.windowsState.submited = true;
+            });
+          }
+          else if (response.data.result == '4') {
+            Swal.fire({
+              text: response.data.msg,
+              icon: 'error',
+              confirmButtonText: 'قبول'
+            });
+          }
         })
       }
     }
@@ -323,7 +332,7 @@ export default defineComponent({
           <div class="col">
             <p class="mb-1">دریافت‌ها:</p>
             <div v-show="items.length === 0" class="alert alert-warning"><i class="fa fa-info pe-3"></i>
-                تاکنون سند دریافتی ثبت نشده است.
+              تاکنون سند دریافتی ثبت نشده است.
             </div>
           </div>
         </div>
@@ -378,7 +387,7 @@ export default defineComponent({
                       </div>
                       <div v-if="pay.type == 'cheque'" class="col-sm-12 col-md-6">
                         <div class="mb-1">
-                          <label class="form-label"> 
+                          <label class="form-label">
                             <small class="text-danger">*</small>
                             شماره صیاد
                           </label>

@@ -2,7 +2,8 @@
   <div class="block block-content-full ">
     <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
       <h3 class="block-title text-primary-dark">
-        <button @click="$router.back()" type="button" class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
+        <button @click="$router.back()" type="button"
+          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
           <i class="fa fw-bold fa-arrow-right"></i>
         </button>
         دریافت از اشخاص
@@ -90,7 +91,7 @@
                                     <i class="fa fa-bars"></i>
                                     تراز:
                                     {{ $filters.formatNumber(Math.abs(parseInt(option.bs) -
-          parseInt(option.bd))) }}
+                                    parseInt(option.bd))) }}
                                     <span class="text-danger" v-if="parseInt(option.bs) - parseInt(option.bd) < 0">
                                       بدهکار </span>
                                     <span class="text-success" v-if="parseInt(option.bs) - parseInt(option.bd) > 0">
@@ -595,7 +596,6 @@ export default {
             type: 'person',
             table: 3
           });
-          this.data.des = this.data.des + ' ' + item.id.nikename + ','
         })
         this.banks.forEach((item) => {
           if (item.des == '') item.des = 'دریافت از اشخاص'
@@ -649,6 +649,13 @@ export default {
               if (result.isConfirmed) {
                 this.$router.push('/acc/persons/receive/list');
               }
+            });
+          }
+          else if (response.data.result == 4) {
+            Swal.fire({
+              text: response.data.msg,
+              icon: 'error',
+              confirmButtonText: 'قبول'
             });
           }
         })

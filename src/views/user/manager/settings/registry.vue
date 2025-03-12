@@ -186,7 +186,7 @@ export default defineComponent({
           <v-col cols="12" sm="6">
             <v-text-field
               v-model="settings.giftCredit"
-              label="اعتبار هدیه به کاربران جدید (ریال)"
+              label="اعتبار هدیه به کسب‌و‌کار جدید (ریال)"
               type="text"
               @input="handleInput('giftCredit', $event.target.value)"
               prefix="₽"

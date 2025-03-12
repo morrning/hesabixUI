@@ -595,7 +595,6 @@ export default {
             type: 'person',
             table: 3
           });
-          this.data.des = this.data.des + ' ' + item.id.nikename + ','
         })
         this.banks.forEach((item) => {
           if (item.des == '') item.des = 'پرداخت به اشخاص'
@@ -649,6 +648,13 @@ export default {
               if (result.isConfirmed) {
                 this.$router.push('/acc/persons/send/list');
               }
+            });
+          }
+          else if (response.data.result == 4) {
+            Swal.fire({
+              text: response.data.msg,
+              icon: 'error',
+              confirmButtonText: 'قبول'
             });
           }
         })
