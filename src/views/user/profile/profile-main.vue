@@ -108,6 +108,7 @@ export default defineComponent({
       adminSettings: [
         { text: 'پیامک', url: '/profile/manager/system/sms/settings', icon: 'mdi-message-alert', visible: true },
         { text: 'سیستم', url: '/profile/manager/system/mod', icon: 'mdi-desktop-classic', visible: true },
+        { text: 'رجیستری', url: '/profile/manager/registry/mod', icon: 'mdi-table-cog', visible: true },
         { text: 'بانک اطلاعاتی', url: '/profile/manager/database/info', icon: 'mdi-database-cog', visible: true },
       ],
     }

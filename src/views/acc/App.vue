@@ -27,7 +27,8 @@ export default {
       defaultShortcuts: [],
       isCtrlShiftPressed: false,
       duplicateKeyDialog: false,
-      duplicateKeyMessage: ''
+      duplicateKeyMessage: '',
+      canFreeAccounting: true,
     };
   },
   mounted() {
@@ -46,6 +47,16 @@ export default {
     axios.post('/api/general/get/time').then((response) => {
       this.timeNow = response.data.timeNow;
     });
+    // درخواست برای گرفتن canFreeAccounting
+    axios.post('/api/settings/get/can-free-accounting')
+      .then((response) => {
+        // بررسی مقدار بازگشتی که "1" یا "0" هست
+        this.canFreeAccounting = response.data.value == "1";
+      })
+      .catch((error) => {
+        console.error('Error fetching canFreeAccounting:', error);
+        this.canFreeAccounting = true; // در صورت خطا، منو مخفی می‌مونه
+      });
     this.apiUrl = getApiUrl();
 
     this.initializeShortcuts();
@@ -198,7 +209,7 @@ export default {
       this.showShortcutsDialog = false;
     },
     checkDuplicateKeys(newKey, currentIndex) {
-      return this.shortcuts.some((shortcut, index) => 
+      return this.shortcuts.some((shortcut, index) =>
         shortcut.key.toUpperCase() === newKey.toUpperCase() && index !== currentIndex
       );
     },
@@ -296,7 +307,8 @@ export default {
       <v-list-subheader color="primary">{{ $t('drawer.basic_tools') }}</v-list-subheader>
       <v-list-group v-show="permissions.getpay || permissions.persons">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-account-multiple" :title="$t('drawer.persons')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-account-multiple"
+            :title="$t('drawer.persons')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.persons" to="/acc/persons/list">
           <v-list-item-title>
@@ -314,7 +326,8 @@ export default {
         <v-list-item v-if="permissions.getpay" to="/acc/persons/receive/list">
           <v-list-item-title>
             {{ $t('drawer.gets') }}
-            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/persons/receive/list') }}</span>
+            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/persons/receive/list')
+            }}</span>
           </v-list-item-title>
           <template v-slot:append>
             <v-tooltip :text="$t('dialog.add_new')" location="end">
@@ -346,7 +359,8 @@ export default {
       </v-list-group>
       <v-list-group v-show="permissions.commodity">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-package-variant" :title="$t('drawer.commodity')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-package-variant"
+            :title="$t('drawer.commodity')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.commodity" to="/acc/commodity/list">
           <v-list-item-title>
@@ -364,7 +378,8 @@ export default {
         <v-list-item v-if="permissions.commodity && this.isPluginActive('accpro')" to="/acc/commodity/pricelist/list">
           <v-list-item-title>
             {{ $t('drawer.price_lists') }}
-            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/commodity/pricelist/list') }}</span>
+            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/commodity/pricelist/list')
+            }}</span>
           </v-list-item-title>
           <template v-slot:append>
             <v-tooltip :text="$t('dialog.add_new')" location="end">
@@ -394,9 +409,11 @@ export default {
           </template>
         </v-list-item>
       </v-list-group>
-      <v-list-group v-show="permissions.bank || permissions.wallet || permissions.cashdesk || permissions.salary || permissions.cheque || permissions.bankTransfer">
+      <v-list-group
+        v-show="permissions.bank || permissions.wallet || permissions.cashdesk || permissions.salary || permissions.cheque || permissions.bankTransfer">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-bank" :title="$t('drawer.bank_label')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-bank"
+            :title="$t('drawer.bank_label')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.bank" to="/acc/banks/list">
           <v-list-item-title>
@@ -466,7 +483,8 @@ export default {
       <v-list-subheader color="primary">{{ $t('drawer.acc_store_tools') }}</v-list-subheader>
       <v-list-group v-show="permissions.store">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-store" :title="$t('drawer.storeroom_title')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-store"
+            :title="$t('drawer.storeroom_title')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.store" to="/acc/storeroom/list">
           <v-list-item-title>
@@ -484,7 +502,8 @@ export default {
         <v-list-item v-if="permissions.store" to="/acc/storeroom/tickets/list">
           <v-list-item-title>
             {{ $t('drawer.storeroom_ticket') }}
-            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/storeroom/tickets/list') }}</span>
+            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/storeroom/tickets/list')
+            }}</span>
           </v-list-item-title>
           <template v-slot:append>
             <v-tooltip :text="$t('dialog.add_new')" location="end">
@@ -497,13 +516,16 @@ export default {
         <v-list-item v-if="permissions.store" to="/acc/storeroom/commodity/check/exist">
           <v-list-item-title>
             {{ $t('drawer.commodity_exist_count') }}
-            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/storeroom/commodity/check/exist') }}</span>
+            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{
+              getShortcutKey('/acc/storeroom/commodity/check/exist')
+            }}</span>
           </v-list-item-title>
         </v-list-item>
       </v-list-group>
       <v-list-group v-show="permissions.buy || permissions.cost || permissions.plugAccproRfbuy">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-cash-fast" :title="$t('drawer.buy_cost')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-cash-fast"
+            :title="$t('drawer.buy_cost')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.buy" to="/acc/buy/list">
           <v-list-item-title>
@@ -547,7 +569,8 @@ export default {
       </v-list-group>
       <v-list-group v-show="permissions.sell || permissions.income || permissions.plugAccproRfsell">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-cart-arrow-down" :title="$t('drawer.sell_income')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-cart-arrow-down"
+            :title="$t('drawer.sell_income')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.sell" to="/acc/sell/fast-mod">
           <v-list-item-title>
@@ -610,7 +633,8 @@ export default {
       </v-list-group>
       <v-list-group v-show="permissions.accounting || permissions.plugAccproCloseYear">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-file-document-multiple" :title="$t('drawer.accounting')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-file-document-multiple"
+            :title="$t('drawer.accounting')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.accounting" to="/acc/accounting/list">
           <v-list-item-title>
@@ -623,14 +647,15 @@ export default {
               <template v-slot:activator="{ props }">
                 <v-btn v-bind="props" icon="mdi-plus-box" variant="plain" to="/acc/accounting/mod/" />
               </template>
-            </v-tooltip>
-            -->
+      </v-tooltip>
+      -->
           </template>
         </v-list-item>
         <v-list-item v-if="permissions.accounting" to="/acc/accounting/open_balance">
           <v-list-item-title>
             {{ $t('drawer.open_balance') }}
-            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/accounting/open_balance') }}</span>
+            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/accounting/open_balance')
+            }}</span>
           </v-list-item-title>
         </v-list-item>
         <v-list-item v-if="permissions.accounting" to="/acc/accounting/table">
@@ -639,10 +664,12 @@ export default {
             <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/accounting/table') }}</span>
           </v-list-item-title>
         </v-list-item>
-        <v-list-item v-if="permissions.plugAccproCloseYear && this.isPluginActive('accpro')" to="/acc/accounting/close_year">
+        <v-list-item v-if="permissions.plugAccproCloseYear && this.isPluginActive('accpro')"
+          to="/acc/accounting/close_year">
           <v-list-item-title>
             {{ $t('drawer.close_year') }}
-            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/accounting/close_year') }}</span>
+            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/accounting/close_year')
+            }}</span>
           </v-list-item-title>
         </v-list-item>
       </v-list-group>
@@ -656,7 +683,8 @@ export default {
       <v-list-subheader color="primary">{{ $t('drawer.settings') }}</v-list-subheader>
       <v-list-group v-show="permissions.settings || permissions.log || permissions.permission">
         <template v-slot:activator="{ props }">
-          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-cogs" :title="$t('drawer.settings')"></v-list-item>
+          <v-list-item class="text-dark" v-bind="props" prepend-icon="mdi-cogs"
+            :title="$t('drawer.settings')"></v-list-item>
         </template>
         <v-list-item v-if="permissions.settings" to="/acc/business/settings">
           <v-list-item-title>
@@ -667,7 +695,8 @@ export default {
         <v-list-item v-if="permissions.settings" to="/acc/business/printoptions">
           <v-list-item-title>
             {{ $t('drawer.print_settings') }}
-            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/business/printoptions') }}</span>
+            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/business/printoptions')
+            }}</span>
           </v-list-item-title>
         </v-list-item>
         <v-list-item v-if="permissions.settings && this.isPluginActive('accpro')" to="/acc/business/avatar">
@@ -691,7 +720,8 @@ export default {
         <v-list-item v-if="permissions.settings && this.isPluginActive('accpro')" to="/acc/business/extramoneys">
           <v-list-item-title>
             {{ $t('drawer.extra_moneys') }}
-            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/business/extramoneys') }}</span>
+            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/business/extramoneys')
+            }}</span>
           </v-list-item-title>
         </v-list-item>
         <v-list-item v-if="permissions.log" to="/acc/business/logs">
@@ -700,7 +730,8 @@ export default {
             <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/business/logs') }}</span>
           </v-list-item-title>
         </v-list-item>
-        <v-list-item class="text-danger" v-if="permissions.owner" @click="deleteBusiness()" :title="$t('drawer.bid_delete')">
+        <v-list-item class="text-danger" v-if="permissions.owner" @click="deleteBusiness()"
+          :title="$t('drawer.bid_delete')">
         </v-list-item>
       </v-list-group>
       <v-list-subheader color="primary">{{ $t('drawer.services') }}</v-list-subheader>
@@ -713,7 +744,8 @@ export default {
         <v-list-item v-if="permissions.plugRepservice" to="/acc/plugin/repservice/order/list">
           <v-list-item-title>
             {{ $t('drawer.repservice_reqs') }}
-            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/plugin/repservice/order/list') }}</span>
+            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/plugin/repservice/order/list')
+            }}</span>
           </v-list-item-title>
           <template v-slot:append>
             <v-tooltip :text="$t('dialog.add_new')" location="end">
@@ -738,13 +770,15 @@ export default {
           <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/printers/list') }}</span>
         </v-list-item-title>
       </v-list-item>
-      <v-list-group v-show="permissions.owner || permissions.archiveUpload || permissions.archiveMod || permissions.archiveDelete">
+      <v-list-group
+        v-show="permissions.owner || permissions.archiveUpload || permissions.archiveMod || permissions.archiveDelete">
         <template v-slot:activator="{ props }">
           <v-list-item class="text-dark" v-bind="props" :title="$t('drawer.archive_panel')">
             <template v-slot:prepend><v-icon icon="mdi-file-cloud" color="primary"></v-icon></template>
           </v-list-item>
         </template>
-        <v-list-item v-if="permissions.archiveUpload || permissions.archiveMod || permissions.archiveDelete" to="/acc/archive/list">
+        <v-list-item v-if="permissions.archiveUpload || permissions.archiveMod || permissions.archiveDelete"
+          to="/acc/archive/list">
           <v-list-item-title>
             {{ $t('drawer.archive_files') }}
             <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/archive/list') }}</span>
@@ -760,6 +794,23 @@ export default {
           <v-list-item-title>
             {{ $t('drawer.archive_log') }}
             <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/archive/order/list') }}</span>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list-group>
+      <v-list-group v-show="permissions.owner && !canFreeAccounting">
+        <template v-slot:activator="{ props }">
+          <v-list-item class="text-dark" v-bind="props" :title="$t('drawer.ultimate_package')">
+            <template v-slot:prepend><v-icon icon="mdi-package" color="primary"></v-icon></template>
+          </v-list-item>
+        </template>
+        <v-list-item v-if="permissions.owner" to="/acc/package/order/new">
+          <v-list-item-title>
+            {{ $t('drawer.archive_order') }}
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item v-if="permissions.owner" to="/acc/package/order/list">
+          <v-list-item-title>
+            {{ $t('drawer.archive_log') }}
           </v-list-item-title>
         </v-list-item>
       </v-list-group>
@@ -784,11 +835,13 @@ export default {
         <v-list-item v-if="permissions.owner" to="/acc/plugin-center/invoice">
           <v-list-item-title>
             {{ $t('drawer.plugins_invoices') }}
-            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/plugin-center/invoice') }}</span>
+            <span v-if="isCtrlShiftPressed" class="shortcut-key">{{ getShortcutKey('/acc/plugin-center/invoice')
+            }}</span>
           </v-list-item-title>
         </v-list-item>
       </v-list-group>
-      <v-list-item class="text-dark bg-red-darken-3 ma-2 rounded-2" v-if="permissions.owner == false" @click="exitBusiness()">
+      <v-list-item class="text-dark bg-red-darken-3 ma-2 rounded-2" v-if="permissions.owner == false"
+        @click="exitBusiness()">
         <template v-slot:prepend><v-icon color="white" icon="mdi-logout"></v-icon></template>
         <v-list-item-title class="text-white" v-text="$t('drawer.exit_bus')" />
       </v-list-item>
@@ -817,16 +870,8 @@ export default {
                     <span v-if="!isEditingShortcuts" class="font-weight-bold shortcut-display">
                       Ctrl+Shift+{{ shortcut.key }}
                     </span>
-                    <v-text-field
-                      v-else
-                      v-model="shortcut.key"
-                      @input="updateShortcut(index, $event)"
-                      :label="کلید"
-                      maxlength="1"
-                      dense
-                      hide-details
-                      class="shortcut-input"
-                    />
+                    <v-text-field v-else v-model="shortcut.key" @input="updateShortcut(index, $event)" :label="کلید"
+                      maxlength="1" dense hide-details class="shortcut-input" />
                   </v-col>
                   <v-col cols="12" class="text-right">
                     <span>{{ shortcut.label }}</span>
@@ -867,11 +912,16 @@ export default {
       <template v-slot:activator="{ props }">
         <v-btn stacked v-bind="props"><v-icon>mdi-cog</v-icon></v-btn>
       </template>
-      <v-card :subtitle="$t('dialog.fiscal_settings_info')" prepend-icon="mdi-cog" :title="$t('dialog.fiscal_settings')">
+      <v-card :subtitle="$t('dialog.fiscal_settings_info')" prepend-icon="mdi-cog"
+        :title="$t('dialog.fiscal_settings')">
         <v-card-text>
           <v-row class="text-center">
-            <v-col cols="12" sm="12" md="6"><Year_cob /></v-col>
-            <v-col cols="12" sm="12" md="6"><Currency_cob /></v-col>
+            <v-col cols="12" sm="12" md="6">
+              <Year_cob />
+            </v-col>
+            <v-col cols="12" sm="12" md="6">
+              <Currency_cob />
+            </v-col>
           </v-row>
         </v-card-text>
       </v-card>
@@ -880,7 +930,9 @@ export default {
     <Profile_btn />
   </v-app-bar>
   <v-main>
-    <div class="position-relative"><RouterView /></div>
+    <div class="position-relative">
+      <RouterView />
+    </div>
   </v-main>
 </template>
 
@@ -890,18 +942,22 @@ export default {
   color: #888;
   margin-right: 4px;
 }
+
 .shortcut-hint {
   z-index: 1000;
 }
+
 .shortcut-item {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   background-color: #fafafa;
 }
+
 .shortcut-display {
   font-size: 0.9rem;
   color: #555;
 }
+
 .shortcut-input {
   max-width: 60px;
 }

@@ -167,6 +167,14 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: 'manager/registry/mod',
+                    component: () => import('../views/user/manager/settings/registry.vue'),
+                    meta: {
+                        'title': 'تنظیمات رجیستری',
+                        'login': true
+                    }
+                },
+                {
                     path: 'manager/system/sms/settings',
                     component: () => import('../views/user/manager/settings/sms/smsSettings.vue'),
                     meta: {
@@ -845,6 +853,18 @@ const router = createRouter({
                     name: 'order_list',
                     component: () =>
                         import('../views/acc/archive/orders_list.vue'),
+                },
+                {
+                    path: 'package/order/new',
+                    name: 'package_new',
+                    component: () =>
+                        import('../views/acc/ultimatepackage/new.vue'),
+                },
+                {
+                    path: 'package/order/list',
+                    name: 'package_list',
+                    component: () =>
+                        import('../views/acc/ultimatepackage/list.vue'),
                 },
                 {
                     path: 'shareholders/list',

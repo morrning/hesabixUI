@@ -1,31 +1,185 @@
+<template>
+  <v-container fluid class="pa-0">
+    <v-card>
+      <v-toolbar 
+        color="grey-lighten-4" 
+        flat 
+        title="سرویس پیامک و افزایش اعتبار"
+        class="text-primary-dark"
+      >
+      <template v-slot:prepend>
+      <v-tooltip :text="$t('dialog.back')" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text"
+            icon="mdi-arrow-right" />
+        </template>
+      </v-tooltip>
+    </template>
+      </v-toolbar>
+
+      <v-tabs v-model="activeTab" bg-color="primary" align-tabs="center" grow>
+        <v-tab value="home">
+          <v-icon start>mdi-plus-circle</v-icon>
+          افزایش اعتبار
+        </v-tab>
+        <v-tab value="profile">
+          <v-icon start>mdi-cogs</v-icon>
+          تنظیمات
+        </v-tab>
+        <v-tab value="pays">
+          <v-icon start>mdi-list-status</v-icon>
+          سوابق خرید اعتبار
+        </v-tab>
+        <v-tab value="contact">
+          <v-icon start>mdi-history</v-icon>
+          تاریخچه
+        </v-tab>
+      </v-tabs>
+
+      <v-window v-model="activeTab">
+        <v-window-item value="home" class="pa-4">
+          <v-row>
+            <v-col cols="12">
+              <h4 class="mb-3">مبلغ اعتبار</h4>
+              <v-alert type="info" variant="tonal" class="mb-4">
+                به مبالغ زیر ۱۰ درصد مالیات بر ارزش افزوده اضافه می‌گردد.
+              </v-alert>
+              <v-radio-group v-model="smsCharge" inline>
+                <v-radio label="100,000 ریال" value="100000"></v-radio>
+                <v-radio label="500,000 ریال" value="500000"></v-radio>
+                <v-radio label="1,000,000 ریال" value="1000000"></v-radio>
+                <v-radio label="2,000,000 ریال" value="2000000"></v-radio>
+              </v-radio-group>
+            </v-col>
+          </v-row>
+          <v-btn 
+            color="primary" 
+            :loading="loading" 
+            class="mt-4" 
+            @click="pay"
+          >
+            <v-icon start>mdi-credit-card-outline</v-icon>
+            پرداخت آنلاین
+          </v-btn>
+        </v-window-item>
+
+        <v-window-item value="profile" class="pa-4">
+          <h4 class="mb-3">تنظیمات سرویس پیامک</h4>
+          <v-alert type="info" variant="tonal" class="mb-4">
+            در نظر داشته باشید در صورت اتمام اعتبار سرویس پیامک کسب و کار شما، این تنظیمات نادیده گرفته می‌شود.
+            <ul>
+              <li>پیامک‌های ارسالی به شماره ثبت شده در بخش اشخاص (تلفن همراه) ارسال می‌شود.</li>
+              <li>در صورت ثبت نکردن شماره تلفن در بخش اشخاص پیامک ارسال نمی شود و هزینه ای نیز از حساب شما کسر نخواهد شد.</li>
+            </ul>
+          </v-alert>
+          <v-col cols="12" md="6">
+            <v-checkbox
+              v-model="settings.sendAfterSell"
+              @change="saveSettings(settings)"
+              label="ارسال پیامک به مشتری بعد از صدور فاکتور فروش"
+            ></v-checkbox>
+            <v-checkbox
+              v-model="settings.sendAfterSellPayOnline"
+              @change="saveSettings(settings)"
+              label="ارسال پیامک به مشتری جهت پرداخت آنلاین فاکتور فروش"
+              disabled
+            ></v-checkbox>
+            <v-divider class="my-2"></v-divider>
+            <v-checkbox
+              v-model="settings.sendAfterBuy"
+              @change="saveSettings(settings)"
+              label="ارسال پیامک به تامین کننده بعد از صدور فاکتور خرید"
+              disabled
+            ></v-checkbox>
+            <v-checkbox
+              v-model="settings.sendAfterBuyToUser"
+              @change="saveSettings(settings)"
+              label="ارسال پیامک به تامین کننده بعد از ثبت پرداخت فاکتور خرید"
+              disabled
+            ></v-checkbox>
+          </v-col>
+        </v-window-item>
+
+        <v-window-item value="pays" class="pa-4">
+          <v-text-field
+            v-model="payssearchValue"
+            prepend-inner-icon="mdi-magnify"
+            placeholder="جست و جو ..."
+            variant="outlined"
+            class="mb-4"
+            density="compact"
+          ></v-text-field>
+          <v-data-table
+            :headers="paysheaders"
+            :items="paysitems"
+            :search="payssearchValue"
+            :loading="loading"
+            loading-text="در حال بارگذاری..."
+            no-data-text="اطلاعاتی برای نمایش وجود ندارد"
+          >
+            <template v-slot:item.status="{ item }">
+              <span :class="item.status === 0 ? 'text-danger' : 'text-success'">
+                {{ item.status === 0 ? 'پرداخت نشده' : 'پرداخت شده' }}
+              </span>
+            </template>
+          </v-data-table>
+        </v-window-item>
+
+        <v-window-item value="contact" class="pa-4">
+          <v-text-field
+            v-model="searchValue"
+            prepend-inner-icon="mdi-magnify"
+            placeholder="جست و جو ..."
+            variant="outlined"
+            class="mb-4"
+            density="compact"
+          ></v-text-field>
+          <v-data-table
+            :headers="headers"
+            :items="items"
+            :search="searchValue"
+            :loading="loading"
+            loading-text="در حال بارگذاری..."
+            no-data-text="اطلاعاتی برای نمایش وجود ندارد"
+          ></v-data-table>
+        </v-window-item>
+      </v-window>
+    </v-card>
+  </v-container>
+</template>
+
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import axios from "axios";
 
 export default defineComponent({
   name: "smspanel",
-  data: () => {
-    return {
-      settings: {},
-      smsCharge: 100000,
-      searchValue: '',
-      loading: ref(true),
-      items: [],
-      headers: [
-        { text: "تاریخ", value: "date" },
-        { text: "کاربر", value: "user" },
-        { text: "توضیحات", value: "des" },
-      ],
-      payssearchValue: '',
-      paysitems: [],
-      paysheaders: [
-        { text: "تاریخ", value: "dateSubmit" },
-        { text: "مبلغ (ریال)", value: "price" },
-        { text: "توضیحات", value: "des" },
-        { text: "وضعیت", value: "status" },
-      ]
-    }
-  },
+  data: () => ({
+    activeTab: 'home',
+    settings: {
+      sendAfterSell: false,
+      sendAfterSellPayOnline: false,
+      sendAfterBuy: false,
+      sendAfterBuyToUser: false,
+    },
+    smsCharge: 100000,
+    searchValue: '',
+    loading: true,
+    items: [],
+    headers: [
+      { title: "تاریخ", key: "date" },
+      { title: "کاربر", key: "user" },
+      { title: "توضیحات", key: "des" },
+    ],
+    payssearchValue: '',
+    paysitems: [] as Array<{ dateSubmit: string; price: number; des: string; status: number }>,
+    paysheaders: [
+      { title: "تاریخ", key: "dateSubmit" },
+      { title: "مبلغ (ریال)", key: "price" },
+      { title: "توضیحات", key: "des" },
+      { title: "وضعیت", key: "status" },
+    ]
+  }),
   methods: {
     loadData() {
       this.loading = true;
@@ -47,15 +201,15 @@ export default defineComponent({
       this.loading = true;
       axios.post('/api/sms/charge', { price: this.smsCharge })
         .then((response) => {
-          if (response.data.Success == true) {
+          if (response.data.Success === true) {
             window.location.href = response.data.targetURL;
           }
         })
     },
-    saveSettings(settings: any) {
+    saveSettings(settings: { sendAfterSell: boolean; sendAfterSellPayOnline: boolean; sendAfterBuy: boolean; sendAfterBuyToUser: boolean; }) {
       this.loading = true;
       axios.post('/api/sms/save/settings', { settings })
-        .then((response) => {
+        .then(() => {
           this.loading = false;
         })
     }
@@ -66,177 +220,6 @@ export default defineComponent({
 })
 </script>
 
-<template>
-  <div class="block block-content-full ">
-    <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
-      <h3 class="block-title text-primary-dark">
-        <button @click="$router.back()" type="button"
-          class="float-start d-none d-sm-none d-md-block btn btn-sm btn-link text-warning">
-          <i class="fa fw-bold fa-arrow-right"></i>
-        </button>
-        <i class="fa fa-message"></i>
-        سرویس پیامک و شارژ
-      </h3>
-      <div class="block-options">
-
-      </div>
-    </div>
-    <div class="block-content py-0 my-0">
-      <div class="row">
-        <div class="col-sm-12 col-md-12 m-0 p-0">
-          <ul class="nav nav-pills flex-column flex-sm-row" id="myTab" role="tablist">
-            <button class="flex-sm-fill text-sm-center nav-link active rounded-0" id="home-tab" data-bs-toggle="tab"
-              data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
-              <i class="fa fa-plus-circle me-2"></i>
-              افزایش اعتبار
-            </button>
-            <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="profile-tab" data-bs-toggle="tab"
-              data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
-              <i class="fa fa-cogs me-2"></i>
-              تنظیمات
-            </button>
-            <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="pays-tab" data-bs-toggle="tab"
-              data-bs-target="#pays" type="button" role="tab" aria-controls="pays" aria-selected="false">
-              <i class="fa fa-list-dots me-2"></i>
-              سوابق خرید اعتبار
-            </button>
-            <button class="flex-sm-fill text-sm-center nav-link rounded-0" id="contact-tab" data-bs-toggle="tab"
-              data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">
-              <i class="fa fa-history me-2"></i>
-              تاریخچه
-            </button>
-          </ul>
-          <div class="tab-content px-3" id="myTabContent">
-            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-              <div class="p-md-3">
-                <div class="row">
-                  <div class="col-sm-12 col-md-8">
-                    <h4>مبلغ اعتبار</h4>
-                    <div class="alert alert-light">
-                      به مبالغ زیر ۹ درصد مالیات بر ارزش افزوده اضافه می‌گردد.
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" checked="checked" type="radio" value="100000" v-model="smsCharge">
-                      <label class="form-check-label">100,000 ریال</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" value="500000" v-model="smsCharge">
-                      <label class="form-check-label">500,000 ریال</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" value="1000000" v-model="smsCharge">
-                      <label class="form-check-label">1,000,000 ریال</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" value="2000000" v-model="smsCharge">
-                      <label class="form-check-label">2,000,000 ریال</label>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-4">
-                    <img class="img" src="/img/zarinpal-logo-min.png" />
-                  </div>
-                </div>
-              </div>
-              <button :disabled="loading" class="btn btn-primary m-3" @click="pay()">
-                <i class="fa fa-credit-card-alt"></i>
-                پرداخت آنلاین
-              </button>
-            </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-              <div class="m-md-3">
-                <h4>تنظیمات سرویس پیامک</h4>
-                <div class="alert alert-info">
-                  <i class="fa fa-info-circle me-3"></i>
-                  در نظر داشته باشید در صورت اتمام اعتبار سرویس پیامک کسب و کار شما، این تنظیمات نادیده گرفته می‌شود.
-                  <ul>
-                    <li>پیامک‌های ارسالی به شماره ثبت شده در بخش اشخاص (تلفن همراه) ارسال می‌شود.</li>
-                    <li>در صورت ثبت نکردن شماره تلفن در بخش اشخاص پیامک ارسال نمی شود و هزینه ای نیز از حساب شما کسر
-                      نخواهد شد.</li>
-                  </ul>
-                </div>
-                <div class="col-sm-12 col-md-6">
-                  <div class="mb-2">
-                    <div class="space-y-2">
-                      <div class="form-check form-switch">
-                        <input v-model="settings.sendAfterSell" @change="saveSettings(settings)"
-                          class="form-check-input" type="checkbox">
-                        <label class="form-check-label">ارسال پیامک به مشتری بعد از صدور فاکتور فروش </label>
-                      </div>
-                      <div class="form-check form-switch">
-                        <input disabled="disabled" v-model="settings.sendAfterSellPayOnline"
-                          @change="saveSettings(settings)" class="form-check-input" type="checkbox">
-                        <label class="form-check-label">ارسال پیامک به مشتری جهت پرداخت آنلاین فاکتور فروش </label>
-                      </div>
-                      <hr />
-                      <div class="form-check form-switch">
-                        <input disabled="disabled" v-model="settings.sendAfterBuy" @change="saveSettings(settings)"
-                          class="form-check-input" type="checkbox">
-                        <label class="form-check-label">ارسال پیامک به تامین کننده بعد از صدور فاکتور خرید </label>
-                      </div>
-                      <div class="form-check form-switch">
-                        <input disabled="disabled" v-model="settings.sendAfterBuyToUser"
-                          @change="saveSettings(settings)" class="form-check-input" type="checkbox">
-                        <label class="form-check-label">ارسال پیامک به تامین کننده بعد از ثبت پرداخت فاکتور خرید
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="pays" role="tabpanel" aria-labelledby="pays-tab">
-              <div class="">
-                <div class="row">
-                  <div class="col-sm-12 col-md-12 px-0">
-                    <div class="my-2">
-                      <div class="input-group input-group-sm">
-                        <span class="input-group-text"><i class="fa fa-search"></i></span>
-                        <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
-                      </div>
-                    </div>
-                    <EasyDataTable table-class-name="customize-table" :headers="paysheaders" :items="paysitems"
-                      alternating :search-value="payssearchValue" theme-color="#1d90ff" header-text-direction="center"
-                      body-text-direction="center" rowsPerPageMessage="تعداد سطر"
-                      emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از" :loading="loading">
-                      <template #item-status="{ status }">
-                        <label class="text-danger" v-if="status == 0">
-                          پرداخت نشده
-                        </label>
-                        <label class="text-success" v-else>
-                          پرداخت شده
-                        </label>
-                      </template>
-                    </EasyDataTable>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-              <div class="">
-                <div class="row">
-                  <div class="col-sm-12 col-md-12 px-0">
-                    <div class="my-2">
-                      <div class="input-group input-group-sm">
-                        <span class="input-group-text"><i class="fa fa-search"></i></span>
-                        <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
-                      </div>
-                    </div>
-                    <EasyDataTable table-class-name="customize-table" :headers="headers" :items="items" alternating
-                      :search-value="searchValue" theme-color="#1d90ff" header-text-direction="center"
-                      body-text-direction="center" rowsPerPageMessage="تعداد سطر"
-                      emptyMessage="اطلاعاتی برای نمایش وجود ندارد" rowsOfPageSeparatorMessage="از"
-                      :loading="loading" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-</template>
-
-<style scoped></style>
+<style scoped>
+/* استایل‌های دلخواهت رو اینجا بذار */
+</style>

@@ -71,6 +71,7 @@ const fa_lang = {
     }
   },
   drawer: {
+    ultimate_package:'بسته‌های نامحدود',
     sell_chart: "فروش هفته گذشته",
     bankaccounts_transactions: "کارت حساب بانک",
     print_queue: "صف چاپ",
@@ -226,6 +227,7 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
+    warning:'هشدار',
     column_settings: 'ستون‌های جدول',
     all: 'همه موارد',
     explore_accounts: "مرور حساب‌ها",
@@ -585,6 +587,7 @@ const fa_lang = {
       no_business_alert: "فعلا هیچ کسب وکاری ایجاد نکرده اید یا توسط شخصی در کسب و کاری عضو نشده اید. برای ایجاد کسب و کار جدید از دکمه ایجاد کسب و کار استتفاده نمایید.",
     },
     manager: {
+      system_settings_registry: 'تنظیمات رجیستر‌ها',
       system_settings_sms: "تنظیمات پیامک",
       sms_settings_operator: "اپراتور پیامک",
       sms_settings_username: "نام کاربری",
