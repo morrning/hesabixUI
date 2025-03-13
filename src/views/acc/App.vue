@@ -936,7 +936,7 @@ export default {
   </v-main>
 </template>
 
-<style scoped>
+<style global>
 .shortcut-key {
   font-size: 0.75rem;
   color: #888;
@@ -960,5 +960,18 @@ export default {
 
 .shortcut-input {
   max-width: 60px;
+}
+.v-data-table {
+  overflow-x: auto;
+}
+
+.expanded-row {
+  background-color: #f5f5f5 !important;
+  padding: 8px;
+}
+
+.custom-header {
+  background-color: #213e8b !important;
+  color: #ffffff !important;
 }
 </style>

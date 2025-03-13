@@ -504,9 +504,5 @@ onMounted(() => {
 </script>
 
 <style>
-.custom-header th {
-  background-color: #213e8b !important;
-  color: #ffffff !important;
-  font-weight: bold;
-}
+
 </style>
