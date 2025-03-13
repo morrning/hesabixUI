@@ -116,7 +116,6 @@
           this.initialLoading = true
           const response = await axios.post('/api/settings/get/can-free-accounting')
           const { value } = response.data
-          console.log('checkFreeAccounting response:', value) // برای دیباگ
           if (value === 1 || value === '1') {
             this.showFreePackageDialog = true
           } else if (value === 0 || value === '0') {

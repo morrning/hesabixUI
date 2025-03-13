@@ -303,7 +303,6 @@ export default {
           period: this.topCommoditiesPeriod,
           limit: this.topCommoditiesLimit,
         });
-        console.log('API response:', response.data); // دیباگ خروجی API
         this.topCommodities = response.data;
       } catch (error) {
         console.error('Fetch top commodities error:', error);

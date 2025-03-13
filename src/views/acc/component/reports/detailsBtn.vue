@@ -133,15 +133,7 @@ export default defineComponent({
         totalItems.value = response.data.pagination.totalItems || 0;
         serverOptions.value.page = response.data.pagination.currentPage || 1;
         serverOptions.value.rowsPerPage = response.data.pagination.perPage || 10;
-        console.log('Loaded data:', {
-          node: props.node,
-          type: props.nodeType,
-          isObject: props.isObject,
-          items: items.value.length,
-          totalItems: totalItems.value,
-          page: serverOptions.value.page,
-          rowsPerPage: serverOptions.value.rowsPerPage,
-        });
+        
       } catch (error) {
         console.error('Error loading details:', error.response?.data || error);
       } finally {

@@ -177,7 +177,6 @@ export default {
     seal_save() {
       this.loading = true;
       const formData = new FormData();
-      console.log(this.seal_file)
       formData.append('bytes', this.seal_file);
       axios.post('/api/seal/post',
         formData,

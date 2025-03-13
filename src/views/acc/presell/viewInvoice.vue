@@ -138,7 +138,6 @@ export default defineComponent({
           }
 
         });
-        console.log(this.item)
       });
       axios.post('/api/business/get/info/' + localStorage.getItem('activeBid')).then((response) => {
         this.bid = response.data;

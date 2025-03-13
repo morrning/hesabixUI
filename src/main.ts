@@ -211,7 +211,6 @@ app.config.globalProperties.$filters = {
         return result;
     },
     onlyNumber($event: any) {
-        //console.log($event.keyCode); //keyCodes value
         let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
         if ((keyCode < 48 || keyCode > 57)) { // 46 is dot
             $event.preventDefault();

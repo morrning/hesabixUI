@@ -122,7 +122,6 @@ export default {
     commodities: {
       immediate: true,
       handler(newVal) {
-        console.log('Commodities received:', newVal);
         this.updateCharts(newVal);
       },
     },

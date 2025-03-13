@@ -331,7 +331,6 @@ export default {
         axios.post('/api/commodity/info/' + id).then((response) => {
           this.data = response.data;
           if (this.data.prices.length == 0) {
-            console.log(this.priceList);
             this.data.prices = this.priceList;
           }
         });

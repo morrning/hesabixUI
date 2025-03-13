@@ -503,7 +503,7 @@
                 chips closable-chips multiple :label="$t('dialog.search_invoice')" v-model="data.pair_docs"
                 :items="buyDocs" item-title="code" item-value="code">
                 <template v-slot:item="{ props, item }">
-                  <v-list-item v-bind="props" @click="console.log(data.pair_docs)" :title="item.title"></v-list-item>
+                  <v-list-item v-bind="props" :title="item.title"></v-list-item>
                 </template>
               </v-autocomplete>
               <v-table density="compact" class="border">
