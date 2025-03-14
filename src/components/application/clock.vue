@@ -1,41 +1,46 @@
 <script lang="ts">
-import axios from 'axios';
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: "clock",
   data() {
-    const self = this;
     return {
-      dateNow: '...',
-      ts: 0,
+      dateNow: '',
       clock: {
-        h: 0,
-        m: 0
+        h: '00',
+        m: '00'
       },
-      interval: 0,
-    }
+      interval: 0, // بدون نیاز به تایپ NodeJS.Timeout
+    };
   },
   mounted() {
-    axios.post('/api/general/get/time', { format: 'l Y/n/j' }).then((response) => {
-      this.dateNow = response.data.timeNow;
-      this.ts = response.data.ts;
-      this.startTimer();
-    });
+    this.updateTime();
+    this.startTimer();
+  },
+  beforeUnmount() {
+    clearInterval(this.interval);
   },
   methods: {
     startTimer() {
       this.interval = setInterval(() => {
-        var date = new Date(this.ts * 1000);
-        // Hours part from the timestamp
-        this.clock.h = date.getHours();
-        // Minutes part from the timestamp
-        this.clock.m = date.getMinutes();
-        this.ts++;
+        this.updateTime();
       }, 1000);
+    },
+    updateTime() {
+      const now = new Date();
+      this.dateNow = now.toLocaleDateString('fa-IR', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric'
+      });
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      this.clock.h = hours < 10 ? '0' + hours : String(hours);
+      this.clock.m = minutes < 10 ? '0' + minutes : String(minutes);
     }
   }
-})
+});
 </script>
 
 <template>
@@ -46,7 +51,6 @@ export default defineComponent({
     {{ $t('drawer.clock') }}
     <span class="text-primary">{{ clock.h + ':' + clock.m }}</span>
   </div>
-
 </template>
 
 <style scoped></style>

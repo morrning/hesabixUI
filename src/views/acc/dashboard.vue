@@ -24,7 +24,7 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12" sm="12" md="6" v-show="permissions.sell && dashboard.sellChart && isPluginActive('accpro')">
+      <v-col cols="12" sm="12" md="12" v-show="permissions.sell && dashboard.sellChart && isPluginActive('accpro')">
         <v-card class="animate__animated animate__zoomIn card-equal-height_big" variant="outlined"
           prepend-icon="mdi-basket" :title="$t('drawer.sell_chart')" hover>
           <v-card-text class="pa-0">
@@ -34,7 +34,7 @@
       </v-col>
 
       <!-- کارت جدید: کالاهای پرفروش -->
-      <v-col cols="12" sm="12" md="6" v-show="permissions.sell && dashboard.topCommodities">
+      <v-col cols="12" sm="12" md="12" v-show="permissions.sell && dashboard.topCommodities">
         <v-card class="animate__animated animate__zoomIn card-equal-height_big" variant="outlined"
           prepend-icon="mdi-chart-pie" :title="$t('dashboard.topCommodities.title')" hover>
           <v-card-text class="pa-2">
@@ -57,11 +57,21 @@
           </v-card-text>
         </v-card>
       </v-col>
+
       <v-col cols="12" sm="12" md="6" v-show="permissions.cost && dashboard.topCostCenters">
         <v-card class="animate__animated animate__zoomIn" variant="outlined" prepend-icon="mdi-chart-pie"
           title="مراکز هزینه" hover>
           <v-card-text class="pa-2">
             <top-cost-centers-chart />
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <!-- کارت جدید: مراکز درآمد -->
+      <v-col cols="12" sm="12" md="6" v-show="permissions.income && dashboard.topIncomeCenters">
+        <v-card class="animate__animated animate__zoomIn" variant="outlined" prepend-icon="mdi-chart-pie"
+          title="مراکز درآمد" hover>
+          <v-card-text class="pa-2">
+            <top-income-centers-chart />
           </v-card-text>
         </v-card>
       </v-col>
@@ -107,6 +117,27 @@
             <p class="my-0 py-1"><v-icon left small color="red">mdi-calendar-range</v-icon>{{ $t('dashboard.costs.year')
             }}: {{
                 $filters.formatNumber(costData.year) || '0' }}</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <!-- کارت جدید: درآمد -->
+      <v-col cols="12" sm="6" md="4" v-show="permissions.income && dashboard.incomes">
+        <v-card class="animate__animated animate__zoomIn card-equal-height" color="green-lighten-4" variant="elevated"
+          prepend-icon="mdi-cash-plus" :title="$t('dashboard.incomes.title')" hover>
+          <v-card-text class="text-dark">
+            <p class="my-0 py-1">
+              <v-icon left small color="green">mdi-calendar-today</v-icon>{{ $t('dashboard.incomes.today') }}: {{
+                $filters.formatNumber(incomeData.today) || '0' }}
+            </p>
+            <p class="my-0 py-1"><v-icon left small color="green">mdi-calendar-week</v-icon>{{
+              $t('dashboard.incomes.week') }}: {{
+                $filters.formatNumber(incomeData.week) || '0' }}</p>
+            <p class="my-0 py-1"><v-icon left small color="green">mdi-calendar-month</v-icon>{{
+              $t('dashboard.incomes.month') }}: {{
+                $filters.formatNumber(incomeData.month) || '0' }}</p>
+            <p class="my-0 py-1"><v-icon left small color="green">mdi-calendar-range</v-icon>{{
+              $t('dashboard.incomes.year') }}: {{
+                $filters.formatNumber(incomeData.year) || '0' }}</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -197,6 +228,10 @@
               class="text-caption" />
             <v-switch color="primary" label="نمودار کالاهای پرفروش" v-model="dashboard.topCommodities" hide-details
               inset class="text-caption" />
+            <v-switch color="primary" :label="$t('dashboard.incomes.title')" v-model="dashboard.incomes" hide-details
+              inset class="text-caption" />
+            <v-switch color="primary" :label="$t('dashboard.incomes.centers')" v-model="dashboard.topIncomeCenters"
+              hide-details inset class="text-caption" />
 
           </v-col>
           <v-col cols="12" sm="6" md="4">
@@ -214,8 +249,8 @@
               inset class="text-caption" />
             <v-switch color="primary" :label="$t('dashboard.costs.title')" v-model="dashboard.costs" hide-details inset
               class="text-caption" />
-            <v-switch color="primary" label="مراکز هزینه برتر" v-model="dashboard.topCostCenters" density="compact"
-              hide-details inset class="text-caption" />
+            <v-switch color="primary" :label="$t('dashboard.costs.centers')" v-model="dashboard.topCostCenters"
+              density="compact" hide-details inset class="text-caption" />
             <v-switch color="primary" :label="$t('drawer.accounting_total')" v-model="dashboard.accounting_total"
               hide-details inset class="text-caption" />
             <v-switch color="primary" :label="$t('drawer.notif')" v-model="dashboard.notif"
@@ -240,14 +275,16 @@
 import axios from "axios";
 import SaleChart from "./component/widgets/saleChart.vue";
 import TopCommoditiesChart from '@/components/widgets/TopCommoditiesChart.vue';
-import TopCostCentersChart from '@/components/widgets/TopCostCentersChart.vue'; // اضافه کردن کامپوننت جدید
+import TopCostCentersChart from '@/components/widgets/TopCostCentersChart.vue';
+import TopIncomeCentersChart from '@/components/widgets/TopIncomeCentersChart.vue';
 
 export default {
   name: "dashboard",
   components: {
     SaleChart,
     TopCommoditiesChart,
-    TopCostCentersChart, // ثبت کامپوننت
+    TopCostCentersChart,
+    TopIncomeCentersChart,
   },
   data() {
     const self = this;
@@ -260,6 +297,7 @@ export default {
       plugins: [],
       wallet: {},
       costData: { today: 0, week: 0, month: 0, year: 0 },
+      incomeData: { today: 0, week: 0, month: 0, year: 0 },
       dashboard: {
         banks: false,
         wallet: false,
@@ -273,7 +311,9 @@ export default {
         sellChart: false,
         topCommodities: false,
         costs: false,
-        topCostCenters: false, // اضافه کردن گزینه جدید
+        topCostCenters: false,
+        incomes: false,
+        topIncomeCenters: false,
       },
       topCommodities: [],
       topCommoditiesPeriod: 'year',
@@ -319,6 +359,18 @@ export default {
         this.loading = false;
       }
     },
+    async fetchIncomeData() { // متد جدید برای گرفتن داده‌های درآمد
+      this.loading = true;
+      try {
+        const response = await axios.get('/api/income/dashboard/data');
+        this.incomeData = response.data;
+      } catch (error) {
+        console.error('Fetch income data error:', error);
+        this.incomeData = { today: 0, week: 0, month: 0, year: 0 };
+      } finally {
+        this.loading = false;
+      }
+    },
     async loadData() {
       this.loading = true;
       try {
@@ -342,6 +394,9 @@ export default {
         }
         if (this.dashboard.costs && this.permissions.cost) {
           await this.fetchCostData();
+        }
+        if (this.dashboard.incomes && this.permissions.income) { // بارگذاری داده‌های درآمد
+          await this.fetchIncomeData();
         }
         // نیازی به بارگذاری داده‌های نمودار اینجا نیست، کامپوننت خودش داده را می‌گیرد
       } catch (error) {

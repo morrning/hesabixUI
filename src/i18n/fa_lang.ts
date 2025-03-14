@@ -60,7 +60,16 @@ const fa_lang = {
       "today": "امروز",
       "week": "این هفته",
       "month": "این ماه",
-      "year": "سال مالی"
+      "year": "سال مالی",
+      "centers": "نمودار هزینه‌‌ها"
+    },
+    "incomes": {
+      "title": "درآمد",
+      "today": "امروز",
+      "week": "این هفته",
+      "month": "این ماه",
+      "year": "سال مالی",
+      "centers": "مراکز درآمد"
     },
     "topCommodities": {
       "title": "کالاهای پرفروش",

@@ -7,8 +7,7 @@
           v-model="showBarChart"
           :label="$t('dashboard.topCommodities.chartToggle')"
           color="primary"
-          inset
-          dense
+          size="small"
           density="compact"
           hide-details
         ></v-switch>
@@ -18,10 +17,10 @@
     <!-- نمایش نمودار انتخاب‌شده -->
     <v-row dense>
       <v-col cols="12" sm="12" md="12" v-if="showBarChart">
-        <apexchart ref="barChart" type="bar" :options="barOptions" :series="[{ name: $t('dashboard.topCommodities.salesCount'), data: series }]" height="400"></apexchart>
+        <apexchart ref="barChart" type="bar" height="200rem" :options="barOptions" :series="[{ name: $t('dashboard.topCommodities.salesCount'), data: series }]" ></apexchart>
       </v-col>
       <v-col cols="12" sm="12" md="12" v-else>
-        <apexchart ref="pieChart" type="pie" :options="pieOptions" :series="series" height="400"></apexchart>
+        <apexchart ref="pieChart" type="pie" height="200rem" :options="pieOptions" :series="series"></apexchart>
       </v-col>
     </v-row>
   </v-container>

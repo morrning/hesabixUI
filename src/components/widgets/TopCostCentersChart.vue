@@ -1,8 +1,8 @@
 <!-- src/components/widgets/TopCostCentersChart.vue -->
 <template>
-    <v-container fluid>
-      <v-row dense justify="end">
-        <v-col cols="auto">
+    <v-container fluid class="pt-0">
+      <v-row justify="end">
+        <v-col cols="12" sm="6" md="6">
           <v-select
             v-model="period"
             :items="periodOptions"
@@ -12,7 +12,7 @@
             @update:modelValue="fetchData"
           />
         </v-col>
-        <v-col cols="auto">
+        <v-col cols="12" sm="6" md="6">
           <v-select
             v-model="limit"
             :items="limitOptions"
@@ -44,6 +44,8 @@
         chartOptions: {
           chart: {
             type: 'pie',
+            id: 'top-commodities-pie',
+            fontFamily: "'Vazirmatn FD', Arial, sans-serif",
           },
           labels: [],
           responsive: [{
