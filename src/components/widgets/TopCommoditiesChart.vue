@@ -10,7 +10,6 @@
           inset
           dense
           density="compact"
-          size="small"
           hide-details
         ></v-switch>
       </v-col>

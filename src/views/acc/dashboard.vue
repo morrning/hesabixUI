@@ -10,10 +10,10 @@
 
   <!-- محتوای اصلی -->
   <v-container fluid class="pa-4">
-    <v-row v-show="statements.length > 0 && dashboard.notif" dense>
+    <v-row v-show="statements.length > 0 && dashboard.notif">
       <v-col cols="12">
         <v-alert type="info" color="blue-grey" variant="tonal" border class="animate__animated animate__fadeInDown">
-          <v-row dense>
+          <v-row>
             <v-col v-for="statment in statements" :key="statment.dateSubmit" cols="12">
               <span class="font-weight-bold">{{ statment.dateSubmit }}: </span>
               <span>{{ statment.body }}</span>
@@ -23,7 +23,7 @@
       </v-col>
     </v-row>
 
-    <v-row dense>
+    <v-row>
       <v-col cols="12" sm="12" md="6" v-show="permissions.sell && dashboard.sellChart && isPluginActive('accpro')">
         <v-card class="animate__animated animate__zoomIn card-equal-height_big" variant="outlined"
           prepend-icon="mdi-basket" :title="$t('drawer.sell_chart')" hover>
@@ -39,21 +39,29 @@
           prepend-icon="mdi-chart-pie" :title="$t('dashboard.topCommodities.title')" hover>
           <v-card-text class="pa-2">
             <!-- دکمه‌های انتخاب بازه زمانی و تعداد -->
-            <v-row dense>
+            <v-row>
               <v-col cols="6">
                 <v-select v-model="topCommoditiesPeriod" :items="periodOptions"
-                  :label="$t('dashboard.topCommodities.period')" dense density="compact" outlined
+                  :label="$t('dashboard.topCommodities.period')" density="compact" outlined
                   @update:modelValue="fetchTopCommodities"></v-select>
               </v-col>
               <v-col cols="6">
                 <v-select v-model="topCommoditiesLimit" :items="limitOptions"
-                  :label="$t('dashboard.topCommodities.limit')" dense density="compact" outlined
+                  :label="$t('dashboard.topCommodities.limit')" density="compact" outlined
                   @update:modelValue="fetchTopCommodities"></v-select>
               </v-col>
             </v-row>
             <!-- نمودارها -->
             <top-commodities-chart :commodities="topCommodities" v-if="topCommodities.length > 0" />
             <p v-else class="text-center">{{ $t('dashboard.topCommodities.noData') }}</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="12" md="6" v-show="permissions.cost && dashboard.topCostCenters">
+        <v-card class="animate__animated animate__zoomIn" variant="outlined" prepend-icon="mdi-chart-pie"
+          title="مراکز هزینه" hover>
+          <v-card-text class="pa-2">
+            <top-cost-centers-chart />
           </v-card-text>
         </v-card>
       </v-col>
@@ -78,6 +86,27 @@
               $filters.formatNumber(stat.recs_today, true) || '0' }}</p>
             <p><v-icon left small color="indigo">mdi-arrow-up</v-icon>{{ $t('drawer.sends_today') }}: {{
               $filters.formatNumber(stat.sends_today, true) || '0' }}</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="6" md="4" v-show="permissions.cost && dashboard.costs">
+        <v-card class="animate__animated animate__zoomIn card-equal-height" color="red-lighten-4" variant="elevated"
+          prepend-icon="mdi-cash-minus" :title="$t('dashboard.costs.title')" hover>
+          <v-card-text class="text-dark">
+            <p class="my-0 py-1">
+              <v-icon left small color="red">mdi-calendar-today</v-icon>{{ $t('dashboard.costs.today') }}: {{
+                $filters.formatNumber(costData.today) || '0' }}
+            </p>
+            <p class="my-0 py-1"><v-icon left small color="red">mdi-calendar-week</v-icon>{{ $t('dashboard.costs.week')
+            }}: {{
+                $filters.formatNumber(costData.week) || '0' }}</p>
+            <p class="my-0 py-1"><v-icon left small color="red">mdi-calendar-month</v-icon>{{
+              $t('dashboard.costs.month')
+            }}: {{
+                $filters.formatNumber(costData.month) || '0' }}</p>
+            <p class="my-0 py-1"><v-icon left small color="red">mdi-calendar-range</v-icon>{{ $t('dashboard.costs.year')
+            }}: {{
+                $filters.formatNumber(costData.year) || '0' }}</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -149,7 +178,7 @@
   <!-- دیالوگ تنظیمات داشبورد -->
   <v-dialog v-model="dialog">
     <v-card color="grey-lighten-4">
-      <v-toolbar color="primary-dark" dense flat>
+      <v-toolbar color="primary-dark" flat>
         <v-icon left class="ms-2" color="white">mdi-layers-edit</v-icon>
         <v-toolbar-title class="text-white text-subtitle-1">{{ $t('dialog.edit_dashboard') }}</v-toolbar-title>
         <v-spacer />
@@ -160,32 +189,36 @@
       <v-card-text class="pa-2">
         <v-row>
           <v-col cols="12" sm="6" md="4">
-            <v-switch size="small" color="primary" :label="$t('static.wallet')" v-model="dashboard.wallet" dense
+            <v-switch density="compact" color="primary" :label="$t('static.wallet')" v-model="dashboard.wallet"
               hide-details inset class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.banks')" v-model="dashboard.banks" dense hide-details inset
+            <v-switch color="primary" :label="$t('drawer.banks')" v-model="dashboard.banks" hide-details inset
               class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.acc_docs')" v-model="dashboard.acc_docs" dense hide-details
+            <v-switch color="primary" :label="$t('drawer.acc_docs')" v-model="dashboard.acc_docs" hide-details inset
+              class="text-caption" />
+            <v-switch color="primary" label="نمودار کالاهای پرفروش" v-model="dashboard.topCommodities" hide-details
               inset class="text-caption" />
-            <v-switch color="primary" label="نمودار کالاهای پرفروش" v-model="dashboard.topCommodities" dense
-              hide-details inset class="text-caption" />
 
           </v-col>
           <v-col cols="12" sm="6" md="4">
-            <v-switch color="primary" :label="$t('drawer.persons')" v-model="dashboard.persons" dense hide-details inset
+            <v-switch color="primary" :label="$t('drawer.persons')" v-model="dashboard.persons" hide-details inset
               class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.buys')" v-model="dashboard.buys" dense hide-details inset
+            <v-switch color="primary" :label="$t('drawer.buys')" v-model="dashboard.buys" hide-details inset
               class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.sells')" v-model="dashboard.sells" dense hide-details inset
+            <v-switch color="primary" :label="$t('drawer.sells')" v-model="dashboard.sells" hide-details inset
               class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.sell_chart')" v-model="dashboard.sellChart" dense hide-details
-              inset class="text-caption" />
+            <v-switch color="primary" :label="$t('drawer.sell_chart')" v-model="dashboard.sellChart" hide-details inset
+              class="text-caption" />
           </v-col>
           <v-col cols="12" sm="6" md="4">
-            <v-switch color="primary" :label="$t('dialog.commodities')" v-model="dashboard.commodities" dense
+            <v-switch color="primary" :label="$t('dialog.commodities')" v-model="dashboard.commodities" hide-details
+              inset class="text-caption" />
+            <v-switch color="primary" :label="$t('dashboard.costs.title')" v-model="dashboard.costs" hide-details inset
+              class="text-caption" />
+            <v-switch color="primary" label="مراکز هزینه برتر" v-model="dashboard.topCostCenters" density="compact"
               hide-details inset class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.accounting_total')" v-model="dashboard.accounting_total" dense
+            <v-switch color="primary" :label="$t('drawer.accounting_total')" v-model="dashboard.accounting_total"
               hide-details inset class="text-caption" />
-            <v-switch color="primary" :label="$t('drawer.notif')" v-model="dashboard.notif" dense
+            <v-switch color="primary" :label="$t('drawer.notif')" v-model="dashboard.notif"
               :hint="$t('dialog.notif_msg')" persistent-hint inset class="text-caption" />
           </v-col>
         </v-row>
@@ -207,12 +240,14 @@
 import axios from "axios";
 import SaleChart from "./component/widgets/saleChart.vue";
 import TopCommoditiesChart from '@/components/widgets/TopCommoditiesChart.vue';
+import TopCostCentersChart from '@/components/widgets/TopCostCentersChart.vue'; // اضافه کردن کامپوننت جدید
 
 export default {
   name: "dashboard",
   components: {
     SaleChart,
     TopCommoditiesChart,
+    TopCostCentersChart, // ثبت کامپوننت
   },
   data() {
     const self = this;
@@ -224,6 +259,7 @@ export default {
       permissions: {},
       plugins: [],
       wallet: {},
+      costData: { today: 0, week: 0, month: 0, year: 0 },
       dashboard: {
         banks: false,
         wallet: false,
@@ -236,6 +272,8 @@ export default {
         notif: false,
         sellChart: false,
         topCommodities: false,
+        costs: false,
+        topCostCenters: false, // اضافه کردن گزینه جدید
       },
       topCommodities: [],
       topCommoditiesPeriod: 'year',
@@ -252,7 +290,7 @@ export default {
         { title: '۷', value: 7 },
         { title: '۱۰', value: 10 },
       ],
-    }
+    };
   },
   methods: {
     async save() {
@@ -268,6 +306,18 @@ export default {
     },
     isPluginActive(plugName) {
       return this.plugins[plugName] !== undefined;
+    },
+    async fetchCostData() {
+      this.loading = true;
+      try {
+        const response = await axios.get('/api/cost/dashboard/data');
+        this.costData = response.data;
+      } catch (error) {
+        console.error('Fetch cost data error:', error);
+        this.costData = { today: 0, week: 0, month: 0, year: 0 };
+      } finally {
+        this.loading = false;
+      }
     },
     async loadData() {
       this.loading = true;
@@ -290,6 +340,10 @@ export default {
         if (this.dashboard.topCommodities) {
           await this.fetchTopCommodities();
         }
+        if (this.dashboard.costs && this.permissions.cost) {
+          await this.fetchCostData();
+        }
+        // نیازی به بارگذاری داده‌های نمودار اینجا نیست، کامپوننت خودش داده را می‌گیرد
       } catch (error) {
         console.error('Load data error:', error);
       } finally {

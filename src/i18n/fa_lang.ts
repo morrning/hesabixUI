@@ -55,6 +55,13 @@ const fa_lang = {
     title: "خطا",
   },
   "dashboard": {
+    "costs": {
+      "title": "هزینه‌ها",
+      "today": "امروز",
+      "week": "این هفته",
+      "month": "این ماه",
+      "year": "سال مالی"
+    },
     "topCommodities": {
       "title": "کالاهای پرفروش",
       "period": "بازه زمانی",
@@ -71,7 +78,7 @@ const fa_lang = {
     }
   },
   drawer: {
-    ultimate_package:'بسته‌های نامحدود',
+    ultimate_package: 'بسته‌های نامحدود',
     sell_chart: "فروش هفته گذشته",
     bankaccounts_transactions: "کارت حساب بانک",
     print_queue: "صف چاپ",
@@ -227,7 +234,7 @@ const fa_lang = {
     count: "تعداد",
   },
   dialog: {
-    warning:'هشدار',
+    warning: 'هشدار',
     column_settings: 'ستون‌های جدول',
     all: 'همه موارد',
     explore_accounts: "مرور حساب‌ها",
