@@ -20,6 +20,7 @@ export default defineComponent({
       smsAlertMobile: '',
       autoUpdateTicketsEnabled: false,
       autoUpdateTicketsInterval: 24,
+      sponsorMessage: '',
     },
     dialogVisible: false,
     dialogMessage: '',
@@ -198,7 +199,7 @@ export default defineComponent({
                   color="primary"
                 ></v-switch>
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   v-model="settings.giftCredit"
                   label="اعتبار هدیه به کسب‌و‌کار جدید (ریال)"
@@ -206,6 +207,16 @@ export default defineComponent({
                   @input="handleInput('giftCredit', $event.target.value)"
                   prefix="₽"
                 ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="12" md="12">
+                <v-textarea
+                  v-model="settings.sponsorMessage"
+                  label="پیام اسپانسر (نمایش در صفحه ورود به کسب و کار)"
+                  hint="این پیام در صفحه لودینگ ورود به کسب و کار نمایش داده می‌شود"
+                  persistent-hint
+                  rows="4"
+                  class="mt-4"
+                ></v-textarea>
               </v-col>
             </v-row>
           </v-card-text>
@@ -276,53 +287,64 @@ export default defineComponent({
         <v-window-item value="automation">
           <v-card-text>
             <v-row>
-              <v-col cols="12" sm="6">
-                <v-row align="center">
-                  <v-col cols="4">
-                    <v-switch
-                      v-model="settings.smsAlertEnabled"
-                      label="هشدار پیامکی"
-                      color="primary"
-                    ></v-switch>
-                  </v-col>
-                  <v-col cols="8">
-                    <v-text-field
-                      v-model="settings.smsAlertMobile"
-                      label="شماره موبایل پشتیبانی"
-                      :disabled="!settings.smsAlertEnabled"
-                      type="tel"
-                      placeholder="09180000000"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
+              <v-col cols="12" sm="12" md="6">
+                <v-card variant="outlined" class="pa-4 mb-4">
+                  <v-row>
+                    <v-col cols="12" sm="4">
+                      <v-switch
+                        v-model="settings.smsAlertEnabled"
+                        label="هشدار پیامکی"
+                        color="primary"
+                        density="comfortable"
+                      ></v-switch>
+                    </v-col>
+                    <v-col cols="12" sm="8">
+                      <v-text-field
+                        v-model="settings.smsAlertMobile"
+                        label="شماره موبایل پشتیبانی"
+                        :disabled="!settings.smsAlertEnabled"
+                        type="tel"
+                        placeholder="09180000000"
+                        density="comfortable"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-card>
               </v-col>
-              <v-col cols="12" sm="6">
-                <v-row align="center">
-                  <v-col cols="6">
-                    <v-switch
-                      v-model="settings.autoUpdateTicketsEnabled"
-                      label="به‌روزرسانی خودکار تیکت‌ها"
-                      color="primary"
-                    ></v-switch>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                      v-model.number="settings.autoUpdateTicketsInterval"
-                      label="فاصله زمانی (ساعت)"
-                      type="number"
-                      min="1"
-                      @input="validateInterval"
-                      :disabled="!settings.autoUpdateTicketsEnabled"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
+
+              <v-col cols="12" sm="12" md="6">
+                <v-card variant="outlined" class="pa-4 mb-4">
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <v-switch
+                        v-model="settings.autoUpdateTicketsEnabled"
+                        label="به‌روزرسانی خودکار تیکت‌ها"
+                        color="primary"
+                        density="comfortable"
+                      ></v-switch>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field
+                        v-model.number="settings.autoUpdateTicketsInterval"
+                        label="فاصله زمانی (ساعت)"
+                        type="number"
+                        min="1"
+                        @input="validateInterval"
+                        :disabled="!settings.autoUpdateTicketsEnabled"
+                        density="comfortable"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-card>
               </v-col>
-              <v-col cols="12">
+
+              <v-col cols="12" class="text-center">
                 <v-btn
                   @click="runTicketUpdate()"
                   color="secondary"
                   prepend-icon="mdi-refresh"
                   :loading="dialogLoading"
+                  class="mt-4"
                 >
                   بررسی فوری تیکت‌ها
                 </v-btn>
@@ -354,5 +376,15 @@ export default defineComponent({
 <style scoped>
 .v-text-field {
   margin-bottom: 16px;
+}
+
+.v-switch {
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .v-card {
+    margin-bottom: 16px;
+  }
 }
 </style>

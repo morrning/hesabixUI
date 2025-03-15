@@ -84,18 +84,36 @@ export default {
       showProgress: false,
       progress: 0,
       currentMessage: '',
+      sponsorMessage: '',
     }
   },
   methods: {
-    loadData() {
+    async loadData() {
       this.apiurl = getApiUrl();
-      axios.post('/api/business/list').then((response) => {
-        this.contents = response.data;
+      
+      // دریافت همزمان اطلاعات کسب‌وکارها و پیام اسپانسر
+      try {
+        const [businessResponse, sponsorResponse] = await Promise.all([
+          axios.post('/api/business/list'),
+          axios.get('/api/general/sponsors')
+        ]);
+        
+        this.contents = businessResponse.data;
         this.contents.forEach((bid) => {
           bid.selectedMoney = bid.arzmain;
         });
+        
+        // ذخیره پیام اسپانسر
+        if (sponsorResponse.data && sponsorResponse.data.result) {
+          this.sponsorMessage = sponsorResponse.data.result;
+        }
+        
+      } catch (error) {
+        console.error('خطا در دریافت اطلاعات:', error);
+        this.sponsorMessage = '';
+      } finally {
         this.loading = false;
-      });
+      }
     },
     randomDelay(min = 500, max = 1500) {
       return new Promise(resolve => {
@@ -113,7 +131,11 @@ export default {
         { message: "تطبیق و ارزیابی داده‌ها", progress: 60 },
         { message: "بررسی مجوزها و دسترسی‌ها", progress: 80 },
         { message: `در حال انتقال به داشبورد کسب‌وکار "${businessName}"`, progress: 95 },
-        { message: "<strong>تصور کن حساب‌هایت همیشه دقیق باشد – این‌جا حسابیکس است!</strong>", progress: 100, delay: 5000 }, // افزایش به 5 ثانیه
+        { 
+            message: this.sponsorMessage || `در حال انتقال به داشبورد کسب‌وکار "${businessName}"`, 
+            progress: 100, 
+            delay: 5000 
+        }
       ];
 
       for (let i = 0; i < steps.length; i++) {

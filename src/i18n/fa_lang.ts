@@ -24,13 +24,13 @@ const fa_lang = {
     mb: "مگابایت",
   },
   button: {
-    export_excel: "خروجی اکسل", // کلید جدید برای دکمه اکسل
+    export_excel: "خروجی اکسل",
     back_to_root: "بازگشت به ریشه",
-    close: "بستن", // موجود است، فقط اطمینان حاصل کنید
+    close: "بستن",
   },
   pagination: {
-    page: "صفحه", // جدید
-    of: "از", // موجود است، فقط اطمینان حاصل کنید
+    page: "صفحه",
+    of: "از",
   },
   table: {
     account: "حساب",
@@ -48,6 +48,9 @@ const fa_lang = {
     debit: "بدهکار",
     credit: "بستانکار",
     quantity: "تعداد",
+    loading: "در حال بارگذاری...",
+    select_all: "انتخاب همه",
+    customize_columns: "شخصی‌سازی ستون‌ها",
   },
   error: {
     fetch_data: "خطا در دریافت داده‌ها: ",
@@ -195,6 +198,7 @@ const fa_lang = {
     bitcoin: "بیت کوین",
   },
   "updateSoftware": {
+    changingEnvMessage: "در حال تغییر حالت سیستم...",
     "title": "به‌روزرسانی نرم‌افزار",
     "infoTitle": "اطلاعات به‌روزرسانی",
     "infoDescription": "این فرآیند نرم‌افزار را به آخرین نسخه موجود در مخزن GitHub به‌روزرسانی می‌کند. این شامل کشیدن تغییرات ، نصب وابستگی‌ها، پاک کردن کش، و به‌روزرسانی پایگاه داده است.",
@@ -212,8 +216,8 @@ const fa_lang = {
     "successMessage": "به‌روزرسانی با موفقیت تکمیل شد!",
     "errorPrefix": "خطا: ",
     "copyButton": "کپی به کلیپ‌بورد",
-    "copySuccess": "لاگ با موفقیت به کلیپ‌بورد کپی شد!",
-    "copyFailed": "کپی کردن لاگ به کلیپ‌بورد ناموفق بود。",
+    "copySuccess": "لاگ‌ها با موفقیت در کلیپ‌بورد کپی شدند",
+    "copyFailed": "خطا در کپی کردن لاگ‌ها",
     "systemInfoTitle": "اطلاعات سیستم",
     "osName": "نام سیستم‌عامل",
     "osRelease": "نسخه کرنل",
@@ -229,6 +233,26 @@ const fa_lang = {
     "dialogErrorTitle": "خطا",
     "dialogErrorSimpleMessage": "خطایی به وجود اومد، لطفاً لاگ رو بررسی کنید.",
     "closeDialog": "بستن",
+    "updateTab": "به‌روزرسانی",
+    "infoTab": "اطلاعات سیستم",
+    "logsTab": "لاگ‌های سیستم",
+    "clearCacheButton": "پاک کردن کش",
+    "changeEnvButton": "تغییر محیط",
+    "streamError": "خطا در دریافت جریان داده",
+    "clearingCacheMessage": "در حال پاک کردن کش...",
+    "cacheClearedMessage": "کش با موفقیت پاک شد",
+    "currentEnv": "محیط فعلی",
+    "refreshLogs": "بازخوانی لاگ‌ها",
+    "clearLogs": "پاک کردن لاگ‌ها",
+    "logsCleared": "لاگ‌ها با موفقیت پاک شدند",
+    "clearLogsError": "خطا در پاک کردن لاگ‌ها",
+    "changeEnvTitle": "تغییر حالت سیستم",
+    "envLabel": "حالت سیستم",
+    "envInvalid": "لطفاً یک حالت معتبر (dev یا prod) انتخاب کنید",
+    "envChangeError": "خطایی در تغییر حالت رخ داد",
+    "fetchError": "خطا در دریافت",
+    "cancel": "لغو",
+    "confirm": "تأیید",
   },
   static: {
     not_found: "صفحه مورد نظر یافت نشد",
@@ -404,6 +428,8 @@ const fa_lang = {
     "success": "موفقیت",
     "error_unknown": "خطای ناشناخته‌ای رخ داد",
     "manage_columns": "مدیریت ستون‌ها",
+    customize_columns: "شخصی‌سازی ستون‌ها",
+    close_dialog: "بستن",
   },
   app: {
     name: "حسابیکس",
@@ -454,7 +480,22 @@ const fa_lang = {
     "referral_link": "لینک دعوت از دیگران",
     "link_copied": "لینک با موفقیت کپی شد!",
     "referral_not_available": "لینک عضویت در دسترس نیست",
-    "copy_failed": "کپی کردن لینک با خطا مواجه شد"
+    "copy_failed": "کپی کردن لینک با خطا مواجه شد",
+    receive: {
+      list: {
+        title: "دریافت‌ها",
+        code: "کد",
+        persons: "اشخاص",
+        date: "تاریخ",
+        description: "شرح",
+        amount: "مبلغ",
+        total_amount: "مبلغ کل",
+        selected_amount: "جمع مبلغ موارد انتخابی",
+        delete_confirm: "آیا برای این سند مطمئن هستید؟",
+        delete_success: "سند با موفقیت حذف شد.",
+        no_items_selected: "هیچ آیتمی انتخاب نشده است.",
+      }
+    }
   },
   login: {
     des: "برای ورود به حسابیکس شماره تلفن و کلمه عبور خود را وارد کنید.در صورتی که هنوز عضو نیستید با کلیک بر روی دکمه عضویت و برای بازیابی کلمه عبور از دکمه فراموشی کلمه عبور استفاده نمایید.",
@@ -679,6 +720,24 @@ const fa_lang = {
       "save_error": "خطا در ذخیره اطلاعات: "
     }
 
+  },
+  filters: {
+    date: {
+      all: "همه",
+      today: "امروز",
+      this_week: "این هفته",
+      this_month: "این ماه"
+    }
+  },
+  reports: {
+    details: {
+      date: "تاریخ",
+      doc_code: "شماره سند",
+      description: "شرح",
+      debit: "بدهکار",
+      credit: "بستانکار",
+      quantity: "تعداد"
+    }
   }
 };
 export default fa_lang

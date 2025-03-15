@@ -23,7 +23,20 @@
           />
         </v-col>
       </v-row>
-      <apexchart type="pie" :options="chartOptions" :series="series" />
+      <!-- نمایش لودینگ -->
+      <div v-if="isLoading" class="d-flex justify-center align-center empty-state">
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        ></v-progress-circular>
+      </div>
+      <!-- نمایش پیام خالی بودن -->
+      <div v-else-if="!hasData" class="d-flex justify-center align-center empty-state">
+        <v-icon icon="mdi-chart-pie" size="large" color="grey-lighten-1" class="mb-2"></v-icon>
+        <div class="text-grey-darken-1">اطلاعاتی برای نمایش یافت نشد</div>
+      </div>
+      <!-- نمایش چارت در صورت وجود داده -->
+      <apexchart v-else type="pie" :options="chartOptions" :series="series" />
     </v-container>
 </template>
 
@@ -38,8 +51,9 @@ export default {
   },
   data() {
     return {
-      period: 'today',
+      period: 'month',
       limit: 10,
+      isLoading: false,
       series: [],
       chartOptions: {
         chart: {
@@ -73,18 +87,31 @@ export default {
       ],
     };
   },
+  computed: {
+    hasData() {
+      return this.series && this.series.length > 0;
+    }
+  },
   methods: {
     async fetchData() {
+      this.isLoading = true;
       try {
         const response = await axios.get('/api/income/top-centers', {
           params: { period: this.period, limit: this.limit },
         });
-        this.series = response.data.series;
-        this.chartOptions = { ...this.chartOptions, labels: response.data.labels };
+        if (response.data.series && response.data.series.length > 0) {
+          this.series = response.data.series;
+          this.chartOptions = { ...this.chartOptions, labels: response.data.labels };
+        } else {
+          this.series = [];
+          this.chartOptions.labels = [];
+        }
       } catch (error) {
         console.error('Error fetching top income centers:', error);
         this.series = [];
         this.chartOptions.labels = [];
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -93,3 +120,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.empty-state {
+  height: 200px;
+  flex-direction: column;
+  text-align: center;
+}
+</style>

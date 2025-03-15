@@ -77,6 +77,7 @@
 <script>
 import { defineComponent, ref, watch } from 'vue';
 import axios from 'axios';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'DetailsBtn',
@@ -99,6 +100,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const { t } = useI18n();
     const loading = ref(false);
     const dialog = ref(false);
     const items = ref([]);
@@ -110,13 +112,13 @@ export default defineComponent({
     });
 
     const headers = [
-      { text: 'table.date', value: 'date' },
-      { text: 'table.number', value: 'doc_code' },
-      { text: 'table.description', value: 'des' },
-      { text: 'table.debit', value: 'bd' },
-      { text: 'table.credit', value: 'bs' },
-      { text: 'table.quantity', value: 'commodity_count' },
-    ].map(header => ({ ...header, text: header.text }));
+      { text: t('reports.details.date'), value: 'date' },
+      { text: t('reports.details.doc_code'), value: 'doc_code' },
+      { text: t('reports.details.description'), value: 'des' },
+      { text: t('reports.details.debit'), value: 'bd' },
+      { text: t('reports.details.credit'), value: 'bs' },
+      { text: t('reports.details.quantity'), value: 'commodity_count' },
+    ];
 
     const loadData = async () => {
       loading.value = true;

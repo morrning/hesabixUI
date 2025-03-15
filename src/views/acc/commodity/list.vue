@@ -9,66 +9,89 @@
       </v-tooltip>
     </template>
     <v-spacer />
-    <v-tooltip :text="$t('dialog.add_new')" location="bottom">
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" icon="mdi-package-variant-plus" color="primary" to="/acc/commodity/mod/" />
-      </template>
-    </v-tooltip>
-    <ChangePriceGroup :items="itemsSelected" :windows-state="importWindowsState" />
-    <import-excel :windows-state="importWindowsState" />
-    <v-menu>
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" icon="" color="red">
-          <v-tooltip activator="parent" :text="$t('dialog.export_pdf')" location="bottom" />
-          <v-icon icon="mdi-file-pdf-box" />
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-subheader color="primary">{{ $t('dialog.export_pdf') }}</v-list-subheader>
-        <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="exportPDF(false)">
-          <template v-slot:prepend>
-            <v-icon color="green-darken-4" icon="mdi-check" />
+    
+    <!-- اضافه کردن v-slide-group برای اسکرول افقی -->
+    <v-slide-group show-arrows>
+      <v-slide-group-item>
+        <v-tooltip :text="$t('dialog.add_new')" location="bottom">
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" icon="mdi-package-variant-plus" color="primary" to="/acc/commodity/mod/" />
           </template>
-        </v-list-item>
-        <v-list-item class="text-dark" :title="$t('dialog.all')" @click="exportPDF(true)">
-          <template v-slot:prepend>
-            <v-icon color="indigo-darken-4" icon="mdi-expand-all" />
+        </v-tooltip>
+      </v-slide-group-item>
+
+      <v-slide-group-item>
+        <ChangePriceGroup :items="itemsSelected" :windows-state="importWindowsState" />
+      </v-slide-group-item>
+
+      <v-slide-group-item>
+        <import-excel :windows-state="importWindowsState" />
+      </v-slide-group-item>
+
+      <v-slide-group-item>
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" icon="" color="red">
+              <v-tooltip activator="parent" :text="$t('dialog.export_pdf')" location="bottom" />
+              <v-icon icon="mdi-file-pdf-box" />
+            </v-btn>
           </template>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-    <v-menu>
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" icon="" color="green">
-          <v-tooltip activator="parent" :text="$t('dialog.export_excel')" location="bottom" />
-          <v-icon icon="mdi-file-excel-box" />
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-subheader color="primary">{{ $t('dialog.export_excel') }}</v-list-subheader>
-        <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="exportExcel(false)">
-          <template v-slot:prepend>
-            <v-icon color="green-darken-4" icon="mdi-check" />
+          <v-list>
+            <v-list-subheader color="primary">{{ $t('dialog.export_pdf') }}</v-list-subheader>
+            <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="exportPDF(false)">
+              <template v-slot:prepend>
+                <v-icon color="green-darken-4" icon="mdi-check" />
+              </template>
+            </v-list-item>
+            <v-list-item class="text-dark" :title="$t('dialog.all')" @click="exportPDF(true)">
+              <template v-slot:prepend>
+                <v-icon color="indigo-darken-4" icon="mdi-expand-all" />
+              </template>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-slide-group-item>
+
+      <v-slide-group-item>
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" icon="" color="green">
+              <v-tooltip activator="parent" :text="$t('dialog.export_excel')" location="bottom" />
+              <v-icon icon="mdi-file-excel-box" />
+            </v-btn>
           </template>
-        </v-list-item>
-        <v-list-item class="text-dark" :title="$t('dialog.all')" @click="exportExcel(true)">
-          <template v-slot:prepend>
-            <v-icon color="indigo-darken-4" icon="mdi-expand-all" />
+          <v-list>
+            <v-list-subheader color="primary">{{ $t('dialog.export_excel') }}</v-list-subheader>
+            <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="exportExcel(false)">
+              <template v-slot:prepend>
+                <v-icon color="green-darken-4" icon="mdi-check" />
+              </template>
+            </v-list-item>
+            <v-list-item class="text-dark" :title="$t('dialog.all')" @click="exportExcel(true)">
+              <template v-slot:prepend>
+                <v-icon color="indigo-darken-4" icon="mdi-expand-all" />
+              </template>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-slide-group-item>
+
+      <v-slide-group-item>
+        <v-tooltip :text="$t('dialog.delete')" location="bottom">
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" icon="mdi-trash-can" color="danger" @click="deleteGroup" />
           </template>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-    <v-tooltip :text="$t('dialog.delete')" location="bottom">
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" icon="mdi-trash-can" color="danger" @click="deleteGroup" />
-      </template>
-    </v-tooltip>
-    <!-- دکمه تنظیمات ستون‌ها -->
-    <v-tooltip :text="$t('dialog.column_settings')" location="bottom">
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" icon="mdi-table-cog" color="primary" @click="dialogVisible = true" />
-      </template>
-    </v-tooltip>
+        </v-tooltip>
+      </v-slide-group-item>
+
+      <v-slide-group-item>
+        <v-tooltip :text="$t('dialog.column_settings')" location="bottom">
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" icon="mdi-table-cog" color="primary" @click="dialogVisible = true" />
+          </template>
+        </v-tooltip>
+      </v-slide-group-item>
+    </v-slide-group>
   </v-toolbar>
 
   <v-text-field :loading="loading" color="green" class="mb-0 pt-0 rounded-0" hide-details="auto" density="compact"
