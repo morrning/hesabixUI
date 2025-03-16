@@ -90,13 +90,18 @@
     <v-data-table-server v-model:items-per-page="serverOptions.rowsPerPage" v-model:page="serverOptions.page"
       :headers="visibleHeaders" :items="items" :items-length="total" :loading="loading"
       :no-data-text="$t('table.no_data')" v-model="itemsSelected" v-model:expanded="expanded"
-      @update:options="updateServerOptions" show-select multi-sort class="elevation-1" item-value="code" fixed-header
+      @update:options="updateServerOptions" show-select class="elevation-1 data-table-wrapper" item-value="code"
       :max-height="tableHeight" :header-props="{ class: 'custom-header' }" @update:expanded="onExpandedUpdate">
 
       <template v-slot:item.expand="{ item }">
         <v-btn variant="text" size="small" color="primary"
           :icon="expanded.includes(item.code) ? 'mdi-chevron-up' : 'mdi-chevron-down'"
           @click.stop="toggleExpand(item.code)" />
+      </template>
+      <template v-slot:item.receivedAmount="{ item }">
+        <span class="text-dark">
+          {{ $filters.formatNumber(item.receivedAmount) }}
+        </span>
       </template>
       <template v-slot:item.operation="{ item }">
         <v-menu>
@@ -295,18 +300,18 @@ export default defineComponent({
         rowsPerPage: 10,
       }),
       allHeaders: [
-        { title: "جزئیات", value: "expand", sortable: false, visible: true },
-        { title: "عملیات", value: "operation", sortable: false, visible: true },
-        { title: "فاکتور", value: "code", sortable: true, visible: true },
-        { title: "تاریخ", value: "date", sortable: true, visible: true },
-        { title: "خریدار", value: "person", sortable: true, visible: true },
-        { title: "تخفیف", value: "discountAll", sortable: true, visible: true },
-        { title: "حمل و نقل", value: "transferCost", sortable: true, visible: true },
-        { title: "مبلغ", value: "amount", sortable: true, visible: true },
-        { title: "سود فاکتور", value: "profit", sortable: true, visible: true },
-        { title: "پرداختی", value: "relatedDocsCount", sortable: true, visible: true },
-        { title: "برچسب", value: "label", width: 100, sortable: true, visible: true },
-        { title: "شرح", value: "des", sortable: true, visible: true },
+        { title: "جزئیات", value: "expand", sortable: false, visible: true, width: 80 },
+        { title: "عملیات", value: "operation", sortable: false, visible: true, width: 100 },
+        { title: "فاکتور", value: "code", sortable: true, visible: true, width: 120 },
+        { title: "تاریخ", value: "date", sortable: true, visible: true, width: 120 },
+        { title: "خریدار", value: "person", sortable: true, visible: true, width: 150 },
+        { title: "تخفیف", value: "discountAll", sortable: true, visible: true, width: 120 },
+        { title: "حمل و نقل", value: "transferCost", sortable: true, visible: true, width: 120 },
+        { title: "مبلغ", value: "amount", sortable: true, visible: true, width: 150 },
+        { title: "سود فاکتور", value: "profit", sortable: true, visible: true, width: 150 },
+        { title: "پرداختی", value: "receivedAmount", sortable: true, visible: true, width: 150 },
+        { title: "برچسب", value: "label", sortable: true, visible: true, width: 120 },
+        { title: "شرح", value: "des", sortable: true, visible: true, minWidth: 200 }
       ],
       showColumnDialog: false,
       dateFilter: 'all',
@@ -628,17 +633,5 @@ export default defineComponent({
 </script>
 
 <style>
-.v-data-table {
-  overflow-x: auto;
-}
 
-.expanded-row {
-  background-color: #f5f5f5 !important;
-  padding: 8px;
-}
-
-.custom-header {
-  background-color: #213e8b !important;
-  color: #ffffff !important;
-}
 </style>

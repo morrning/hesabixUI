@@ -1,177 +1,400 @@
 <template>
-  <div class="block block-content-full ">
-    <div id="fixed-header" class="block-header block-header-default bg-gray-light pt-2 pb-1">
-      <h3 class="block-title text-primary-dark">
-        <i class="mx-2 fa fa-money-bill-wheat"></i>
-        هزینه‌ها
-      </h3>
-      <div class="block-options">
-        <router-link to="/acc/costs/mod/" class="block-options-item">
-          <span class="fa fa-plus fw-bolder"></span>
-        </router-link>
-      </div>
-    </div>
-    <div class="block-content pt-1 pb-3">
-      <div class="row">
-        <div class="col-sm-12 col-md-12 m-0 p-0">
-          <div class="mb-1">
-            <div class="input-group input-group-sm">
-              <span class="input-group-text"><i class="fa fa-search"></i></span>
-              <input v-model="searchValue" class="form-control" type="text" placeholder="جست و جو ...">
-            </div>
-          </div>
-          <EasyDataTable table-class-name="customize-table" v-model:items-selected="itemsSelected" show-index alternating :search-value="searchValue"
-            :headers="headers" :items="items" theme-color="#1d90ff" header-text-direction="center"
-            body-text-direction="center" rowsPerPageMessage="تعداد سطر" emptyMessage="اطلاعاتی برای نمایش وجود ندارد"
-            rowsOfPageSeparatorMessage="از" :loading="loading">
-            <template #item-operation="{ code }">
-              <div class="dropdown-center">
-                <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-link"
-                  data-bs-toggle="dropdown" id="dropdown-align-center-alt-primary" type="button">
-                  <i class="fa-solid fa-ellipsis"></i>
-                </button>
-                <div aria-labelledby="dropdown-align-center-outline-primary" class="dropdown-menu dropdown-menu-end"
-                  style="">
-                  <router-link class="dropdown-item" :to="'/acc/accounting/view/' + code">
-                    <i class="fa fa-file pe-2 text-primary"></i>
-                    سند حسابداری
-                  </router-link>
-                  <router-link class="dropdown-item" :to="{ name: 'costs_mod', params: { id: code } }">
-                    <i class="fa fa-eye pe-2 text-success"></i>
-                    مشاهده
-                  </router-link>
-                  <router-link class="dropdown-item" :to="{ name: 'costs_mod', params: { id: code } }">
-                    <i class="fa fa-edit pe-2"></i>
-                    ویرایش
-                  </router-link>
-                  <button type="button" @click="deleteItem(code)" class="dropdown-item text-danger">
-                    <i class="fa fa-trash pe-2"></i>
-                    حذف
-                  </button>
-                </div>
-              </div>
+  <v-toolbar color="toolbar" :title="$t('drawer.costs')">
+    <template v-slot:prepend>
+      <v-tooltip :text="$t('dialog.back')" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text" icon="mdi-arrow-right" />
+        </template>
+      </v-tooltip>
+    </template>
+    <v-spacer />
+    
+    <v-slide-group show-arrows>
+      <v-slide-group-item>
+        <v-tooltip :text="$t('dialog.add_new')" location="bottom">
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" icon="mdi-plus" color="primary" to="/acc/costs/mod/" />
+          </template>
+        </v-tooltip>
+      </v-slide-group-item>
+
+      <v-slide-group-item>
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" icon="" color="red">
+              <v-tooltip activator="parent" :text="$t('dialog.export_pdf')" location="bottom" />
+              <v-icon icon="mdi-file-pdf-box" />
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-subheader color="primary">{{ $t('dialog.export_pdf') }}</v-list-subheader>
+            <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="exportPDF(false)">
+              <template v-slot:prepend>
+                <v-icon color="green-darken-4" icon="mdi-check" />
+              </template>
+            </v-list-item>
+            <v-list-item class="text-dark" :title="$t('dialog.all')" @click="exportPDF(true)">
+              <template v-slot:prepend>
+                <v-icon color="indigo-darken-4" icon="mdi-expand-all" />
+              </template>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-slide-group-item>
+
+      <v-slide-group-item>
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" icon="" color="green">
+              <v-tooltip activator="parent" :text="$t('dialog.export_excel')" location="bottom" />
+              <v-icon icon="mdi-file-excel-box" />
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-subheader color="primary">{{ $t('dialog.export_excel') }}</v-list-subheader>
+            <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="exportExcel(false)">
+              <template v-slot:prepend>
+                <v-icon color="green-darken-4" icon="mdi-check" />
+              </template>
+            </v-list-item>
+            <v-list-item class="text-dark" :title="$t('dialog.all')" @click="exportExcel(true)">
+              <template v-slot:prepend>
+                <v-icon color="indigo-darken-4" icon="mdi-expand-all" />
+              </template>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-slide-group-item>
+
+      <v-slide-group-item>
+        <v-tooltip :text="$t('dialog.delete')" location="bottom">
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" icon="mdi-trash-can" color="danger" @click="deleteGroup" />
+          </template>
+        </v-tooltip>
+      </v-slide-group-item>
+    </v-slide-group>
+  </v-toolbar>
+
+  <v-text-field
+    :loading="loading"
+    color="green"
+    class="mb-0 pt-0 rounded-0"
+    hide-details="auto"
+    density="compact"
+    :placeholder="$t('dialog.search_txt')"
+    v-model="searchQuery"
+    type="text"
+    @input="debouncedSearch"
+  >
+    <template v-slot:prepend-inner>
+      <v-tooltip location="bottom" :text="$t('dialog.search')">
+        <template v-slot:activator="{ props }">
+          <v-icon v-bind="props" color="danger" icon="mdi-magnify" />
+        </template>
+      </v-tooltip>
             </template>
-          </EasyDataTable>
-          <div class="container-fluid p-0 mx-0 my-3">
-            <a class="block block-rounded block-link-shadow border-start border-success border-3"
-              href="javascript:void(0)">
-              <div class="block-content block-content-full block-content-sm bg-body-light">
-                <div class="row">
-                  <div class="col-sm-6 com-md-6">
-                    <span class="text-dark">
-                      <i class="fa fa-list-dots"></i>
-                      مبلغ کل:
-                    </span>
-                    <span class="text-primary">
-                      {{ $filters.formatNumber(this.sumTotal) }}
-                      {{ $filters.getActiveMoney().shortName }}
-                    </span>
-                  </div>
+  </v-text-field>
 
-                  <div class="col-sm-6 com-md-6">
-                    <span class="text-dark">
-                      <i class="fa fa-list-check"></i>
-                      جمع مبلغ موارد انتخابی:
-                    </span>
-                    <span class="text-primary">
-                      {{ $filters.formatNumber(this.sumSelected) }}
-                      {{ $filters.getActiveMoney().shortName }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-data-table-server
+    v-model:items-selected="itemsSelected"
+    :headers="headers"
+    :items="items"
+    :loading="loading"
+    :items-length="totalItems"
+    v-model:options="serverOptions"
+    @update:options="fetchData"
+    class="elevation-1"
+    item-value="code"
+  >
+    <template #item.operation="{ item }">
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
+        </template>
+        <v-list>
+          <v-list-item class="text-dark" :title="$t('dialog.view')" :to="'/acc/accounting/view/' + item.code">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-file" color="primary" />
+            </template>
+          </v-list-item>
+          <v-list-item class="text-dark" :title="$t('dialog.edit')" :to="'/acc/costs/mod/' + item.code">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-pencil" />
+            </template>
+          </v-list-item>
+          <v-list-item class="text-dark" :title="$t('dialog.delete')" @click="deleteItem(item.code)">
+            <template v-slot:prepend>
+              <v-icon color="deep-orange-accent-4" icon="mdi-trash-can" />
+            </template>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </template>
+    <template #item.amount="{ item }">
+      {{ $filters.formatNumber(item.amount) }}
+    </template>
+  </v-data-table-server>
 </template>
-<script>
-import { ref } from "vue";
-import axios from "axios";
-import Swal from "sweetalert2";
 
-export default {
-  name: "list",
-  data: () => {
-    return {
-      sumSelected: 0,
-      sumTotal: 0,
-      itemsSelected: [],
-      searchValue: '',
-      loading: ref(true),
-      items: [],
-      headers: [
-        { text: "عملیات", value: "operation", width: "120" },
-        { text: "کد", value: "code", width: "80" },
-        { text: "تاریخ", value: "date" },
-        { text: "شرح", value: "des" },
-        { text: "مبلغ", value: "amount" },
-      ]
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import { debounce } from 'lodash';
+import { getApiUrl } from '/src/hesabixConfig';
+
+// تنظیم پایه URL از hesabixConfig
+const apiUrl = getApiUrl();
+axios.defaults.baseURL = apiUrl;
+
+// Refs
+const loading = ref(false);
+const items = ref([]);
+const itemsSelected = ref([]);
+const totalItems = ref(0);
+const searchQuery = ref('');
+
+// تعریف ستون‌های جدول
+const headers = ref([
+  { title: 'ردیف', key: 'index', align: 'center', sortable: false, width: '70' },
+  { title: 'عملیات', key: 'operation', align: 'center', sortable: false, width: '100' },
+  { title: 'کد', key: 'code', align: 'center', sortable: true },
+  { title: 'تاریخ', key: 'date', align: 'center', sortable: true },
+  { title: 'شرح', key: 'des', align: 'center', sortable: true },
+  { title: 'مبلغ', key: 'amount', align: 'center', sortable: true },
+]);
+
+// تنظیمات سرور
+const serverOptions = ref({
+  page: 1,
+  itemsPerPage: 10,
+  sortBy: [],
+  sortDesc: [],
+});
+
+// فچ کردن داده‌ها از سرور
+const fetchData = async () => {
+  try {
+    loading.value = true;
+
+    const filters = {};
+    if (searchQuery.value.trim()) {
+      filters.search = { value: searchQuery.value.trim() };
     }
-  },
-  methods: {
-    loadData() {
-      axios.post('/api/accounting/search', {
-        type: 'cost'
-      })
-        .then((response) => {
-          this.items = response.data;
-          this.items.forEach((item) => {
-            item.amount = this.$filters.formatNumber(item.amount);
-            this.sumTotal += parseInt(item.amount.replaceAll(",", ''));
-          })
-          this.loading = false;
-        })
-    },
-    deleteItem(code) {
+
+    const sortBy = serverOptions.value.sortBy?.[0] || 'code';
+    const sortDesc = serverOptions.value.sortDesc?.[0] ?? true;
+
+    const payload = {
+      filters,
+      pagination: {
+        page: serverOptions.value.page,
+        limit: serverOptions.value.itemsPerPage,
+      },
+      sort: {
+        sortBy,
+        sortDesc,
+      },
+    };
+
+    const response = await axios.post('/api/cost/list/search', {
+      type: 'cost',
+      ...payload
+    });
+
+    if (response.data?.items) {
+      // اضافه کردن شماره ردیف به هر آیتم
+      const startIndex = (serverOptions.value.page - 1) * serverOptions.value.itemsPerPage;
+      items.value = response.data.items.map((item, index) => ({
+        ...item,
+        index: startIndex + index + 1
+      }));
+      totalItems.value = response.data.total; // استفاده از total از پاسخ سرور
+    } else {
+      items.value = [];
+      totalItems.value = 0;
+    }
+
+  } catch (error) {
+    console.error('Error fetching data:', error);
       Swal.fire({
-        text: 'آیا برای این سند مطمئن هستید؟',
+      text: 'خطا در بارگذاری داده‌ها: ' + (error.response?.data?.detail || error.message),
+      icon: 'error',
+      confirmButtonText: 'قبول',
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+// دیبونس برای جستجو
+const debouncedSearch = debounce(() => fetchData(), 500);
+
+// حذف یک آیتم
+const deleteItem = async (code) => {
+  const result = await Swal.fire({
+    text: 'آیا از حذف این آیتم اطمینان دارید؟',
+    icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'بله',
-        cancelButtonText: `خیر`,
-      }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
+    cancelButtonText: 'خیر',
+  });
+
         if (result.isConfirmed) {
-          axios.post('/api/accounting/remove', {
-            'code': code
-          }
-          ).then((response) => {
-            if (response.data.result == 1) {
-              let index = 0;
-              for (let z = 0; z < this.items.length; z++) {
-                index++;
-                if (this.items[z]['code'] == code) {
-                  this.items.splice(index - 1, 1);
-                }
-              }
-              Swal.fire({
-                text: 'سند با موفقیت حذف شد.',
-                icon: 'success',
-                confirmButtonText: 'قبول'
-              });
-            }
-          })
-        }
-      })
-    }
-  },
-  beforeMount() {
-    this.loadData();
-  },
-  watch: {
-    itemsSelected: {
-      handler: function (val, oldVal) {
-        this.sumSelected = 0;
-        this.itemsSelected.forEach((item) => {
-          this.sumSelected += parseInt(item.amount.replaceAll(",", ""))
+    try {
+      loading.value = true;
+      const response = await axios.post('/api/accounting/remove', { code });
+      if (response.data.result === 1) {
+        Swal.fire({
+          text: 'آیتم با موفقیت حذف شد',
+          icon: 'success',
+          confirmButtonText: 'قبول',
         });
-      },
-      deep: true
+        fetchData();
+      }
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      Swal.fire({
+        text: 'خطا در حذف آیتم: ' + (error.response?.data?.detail || error.message),
+        icon: 'error',
+        confirmButtonText: 'قبول',
+      });
+    } finally {
+      loading.value = false;
     }
   }
-}
+};
+
+// حذف گروهی
+const deleteGroup = async () => {
+  if (!itemsSelected.value.length) {
+    Swal.fire({
+      text: 'هیچ آیتمی برای حذف انتخاب نشده است',
+      icon: 'warning',
+      confirmButtonText: 'قبول',
+    });
+    return;
+  }
+
+  const result = await Swal.fire({
+    text: 'آیا از حذف آیتم‌های انتخاب‌شده اطمینان دارید؟',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'بله',
+    cancelButtonText: 'خیر',
+  });
+
+  if (result.isConfirmed) {
+    try {
+      loading.value = true;
+      const codes = itemsSelected.value.map(item => item.code);
+      const promises = codes.map(code => 
+        axios.post('/api/accounting/remove', { code })
+      );
+      
+      await Promise.all(promises);
+      
+              Swal.fire({
+        text: 'آیتم‌ها با موفقیت حذف شدند',
+                icon: 'success',
+        confirmButtonText: 'قبول',
+      });
+      
+      itemsSelected.value = [];
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting group:', error);
+      Swal.fire({
+        text: 'خطا در حذف گروهی: ' + (error.response?.data?.detail || error.message),
+        icon: 'error',
+        confirmButtonText: 'قبول',
+      });
+    } finally {
+      loading.value = false;
+    }
+  }
+};
+
+// خروجی PDF
+const exportPDF = async (all = false) => {
+  try {
+    loading.value = true;
+    if (!all && !itemsSelected.value.length) {
+      Swal.fire({
+        text: 'هیچ آیتمی برای خروجی انتخاب نشده است',
+        icon: 'warning',
+        confirmButtonText: 'قبول',
+      });
+      return;
+    }
+    const payload = all ? { all: true } : { items: itemsSelected.value };
+    const response = await axios.post('/api/costs/list/print', payload);
+    const printId = response.data.id;
+    window.open(`${apiUrl}/front/print/${printId}`, '_blank');
+  } catch (error) {
+    console.error('Error exporting PDF:', error);
+    Swal.fire({
+      text: 'خطا در خروجی PDF: ' + (error.response?.data?.detail || error.message),
+      icon: 'error',
+      confirmButtonText: 'قبول',
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+// خروجی Excel
+const exportExcel = async (all = false) => {
+  try {
+    loading.value = true;
+    if (!all && !itemsSelected.value.length) {
+      Swal.fire({
+        text: 'هیچ آیتمی برای خروجی انتخاب نشده است',
+        icon: 'warning',
+        confirmButtonText: 'قبول',
+      });
+      return;
+    }
+    const payload = all ? { all: true } : { items: itemsSelected.value };
+    const response = await axios.post('/api/costs/list/excel', payload, { responseType: 'blob' });
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'costs.xlsx');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error exporting Excel:', error);
+    Swal.fire({
+      text: 'خطا در خروجی Excel: ' + (error.response?.data?.detail || error.message),
+      icon: 'error',
+      confirmButtonText: 'قبول',
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+// OnMounted
+onMounted(() => {
+  fetchData();
+});
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-data-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+:deep(.v-data-table-header th) {
+  text-align: center !important;
+}
+
+:deep(.v-data-table__wrapper table td) {
+  text-align: center !important;
+}
+</style>

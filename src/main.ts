@@ -240,4 +240,8 @@ app.config.globalProperties.app_isLogin = async () => {
         return false;
     }
 }
+
+app.config.compilerOptions.isCustomElement = (tag) => {
+    return ['transition'].includes(tag)
+}
 app.mount('#page-container')
