@@ -104,8 +104,9 @@
     :items-length="totalItems"
     v-model:options="serverOptions"
     @update:options="fetchData"
-    class="elevation-1"
     item-value="code"
+    class="elevation-1 data-table-wrapper"
+    :header-props="{ class: 'custom-header' }"
   >
     <template #item.operation="{ item }">
       <v-menu>
@@ -385,16 +386,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.v-data-table {
-  width: 100%;
-  overflow-x: auto;
-}
 
-:deep(.v-data-table-header th) {
-  text-align: center !important;
-}
-
-:deep(.v-data-table__wrapper table td) {
-  text-align: center !important;
-}
 </style>

@@ -4,8 +4,7 @@
       <template v-slot:prepend>
         <v-tooltip :text="$t('dialog.back')" location="bottom">
           <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text"
-              icon="mdi-arrow-right" />
+            <v-btn v-bind="props" @click="$router.back()" class="d-none d-sm-flex" variant="text" icon="mdi-arrow-right" />
           </template>
         </v-tooltip>
       </template>
@@ -29,8 +28,7 @@
         </template>
         <v-list>
           <v-list-subheader color="primary">{{ $t('dialog.change_labels') }}</v-list-subheader>
-          <v-list-item v-for="item in types" class="text-dark" :title="$t('dialog.change_to') + ' ' + item.label"
-            @click="changeLabel(item)">
+          <v-list-item v-for="item in types" class="text-dark" :title="$t('dialog.change_to') + ' ' + item.label" @click="changeLabel(item)">
             <template v-slot:prepend>
               <v-icon color="green-darken-4" icon="mdi-label"></v-icon>
             </template>
@@ -49,8 +47,7 @@
         </template>
       </v-tooltip>
     </v-toolbar>
-    <v-text-field hide-details color="green" class="pt-0 rounded-0 mb-0" density="compact"
-      :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
+    <v-text-field hide-details color="green" class="pt-0 rounded-0 mb-0" density="compact" :placeholder="$t('dialog.search_txt')" v-model="searchValue" type="text" clearable>
       <template v-slot:prepend-inner>
         <v-tooltip location="bottom" :text="$t('dialog.search')">
           <template v-slot:activator="{ props }">
@@ -80,23 +77,33 @@
               </template>
             </v-list-item>
             <v-list-item>
-              <v-select class="py-2 my-2" v-model="dateFilter" :items="dateFilterOptions" label="فیلتر تاریخ"
-                @update:model-value="filterTable" dense />
+              <v-select class="py-2 my-2" v-model="dateFilter" :items="dateFilterOptions" label="فیلتر تاریخ" @update:model-value="filterTable" dense />
             </v-list-item>
           </v-list>
         </v-menu>
       </template>
     </v-text-field>
-    <v-data-table-server v-model:items-per-page="serverOptions.rowsPerPage" v-model:page="serverOptions.page"
-      :headers="visibleHeaders" :items="items" :items-length="total" :loading="loading"
-      :no-data-text="$t('table.no_data')" v-model="itemsSelected" v-model:expanded="expanded"
-      @update:options="updateServerOptions" show-select class="elevation-1 data-table-wrapper" item-value="code"
-      :max-height="tableHeight" :header-props="{ class: 'custom-header' }" @update:expanded="onExpandedUpdate">
-
+    <v-data-table-server
+      v-model:items-per-page="serverOptions.rowsPerPage"
+      v-model:page="serverOptions.page"
+      :headers="visibleHeaders"
+      :items="items"
+      :items-length="total"
+      :loading="loading"
+      :no-data-text="$t('table.no_data')"
+      v-model="itemsSelected"
+      v-model:expanded="expanded"
+      @update:options="updateServerOptions"
+      show-select
+      class="elevation-1 data-table-wrapper"
+      item-value="code"
+      :max-height="tableHeight"
+      :header-props="{ class: 'custom-header' }"
+      @update:expanded="onExpandedUpdate"
+      multi-sort
+    >
       <template v-slot:item.expand="{ item }">
-        <v-btn variant="text" size="small" color="primary"
-          :icon="expanded.includes(item.code) ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-          @click.stop="toggleExpand(item.code)" />
+        <v-btn variant="text" size="small" color="primary" :icon="expanded.includes(item.code) ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click.stop="toggleExpand(item.code)" />
       </template>
       <template v-slot:item.receivedAmount="{ item }">
         <span class="text-dark">
@@ -109,8 +116,7 @@
             <v-btn variant="text" size="small" color="error" icon="mdi-menu" v-bind="props" />
           </template>
           <v-list>
-            <v-list-item class="text-dark" :title="$t('dialog.accounting_doc')"
-              :to="'/acc/accounting/view/' + item.code">
+            <v-list-item class="text-dark" :title="$t('dialog.accounting_doc')" :to="'/acc/accounting/view/' + item.code">
               <template v-slot:prepend>
                 <v-icon color="green-darken-4" icon="mdi-file"></v-icon>
               </template>
@@ -120,8 +126,7 @@
                 <v-icon color="green-darken-4" icon="mdi-eye"></v-icon>
               </template>
             </v-list-item>
-            <v-list-item class="text-dark" :title="$t('dialog.export_pdf')"
-              @click="printOptions.selectedPrintCode = item.code; modal = true;">
+            <v-list-item class="text-dark" :title="$t('dialog.export_pdf')" @click="printOptions.selectedPrintCode = item.code; modal = true;">
               <template v-slot:prepend>
                 <v-icon icon="mdi-file-pdf-box"></v-icon>
               </template>
@@ -192,8 +197,7 @@
       <template v-slot:expanded-row="{ item }">
         <tr>
           <td :colspan="visibleHeaders.length" class="expanded-row">
-            <v-progress-circular v-if="loading && expanded.includes(item.code)" indeterminate color="primary"
-              class="my-2" />
+            <v-progress-circular v-if="loading && expanded.includes(item.code)" indeterminate color="primary" class="my-2" />
             <v-list v-else dense class="expanded-list">
               <v-list-item v-for="row in item.rows" :key="row.id">
                 <v-list-item-subtitle>
@@ -224,8 +228,7 @@
         <v-card-text>
           <v-row>
             <v-col v-for="header in allHeaders" :key="header.value" cols="12" sm="4" class="my-0 py-0">
-              <v-checkbox v-model="header.visible" :label="header.title" @update:model-value="updateColumnVisibility"
-                hide-details="auto" />
+              <v-checkbox v-model="header.visible" :label="header.title" @update:model-value="updateColumnVisibility" hide-details="auto" />
             </v-col>
           </v-row>
         </v-card-text>
@@ -237,22 +240,15 @@
         <template v-slot:text>
           <v-select class="mb-2" v-model="printOptions.paper" :items="paperSizes" :label="$t('dialog.paper_size')">
           </v-select>
-          <v-switch inset v-model="printOptions.bidInfo" color="primary" :label="$t('dialog.bid_info_label')"
-            hide-details></v-switch>
-          <v-switch inset v-model="printOptions.pays" color="primary" :label="$t('dialog.invoice_pays')"
-            hide-details></v-switch>
-          <v-switch inset v-model="printOptions.note" color="primary" :label="$t('dialog.invoice_footer_note')"
-            hide-details></v-switch>
-          <v-switch inset v-model="printOptions.taxInfo" color="primary" :label="$t('dialog.tax_dexpo')"
-            hide-details></v-switch>
-          <v-switch inset v-model="printOptions.discountInfo" color="primary" :label="$t('dialog.discount_dexpo')"
-            hide-details></v-switch>
+          <v-switch inset v-model="printOptions.bidInfo" color="primary" :label="$t('dialog.bid_info_label')" hide-details></v-switch>
+          <v-switch inset v-model="printOptions.pays" color="primary" :label="$t('dialog.invoice_pays')" hide-details></v-switch>
+          <v-switch inset v-model="printOptions.note" color="primary" :label="$t('dialog.invoice_footer_note')" hide-details></v-switch>
+          <v-switch inset v-model="printOptions.taxInfo" color="primary" :label="$t('dialog.tax_dexpo')" hide-details></v-switch>
+          <v-switch inset v-model="printOptions.discountInfo" color="primary" :label="$t('dialog.discount_dexpo')" hide-details></v-switch>
         </template>
         <template v-slot:actions>
-          <v-btn variant="tonal" prepend-icon="mdi-printer" color="primary" :text="$t('dialog.print')"
-            @click="modal = false; printInvoice()"></v-btn>
-          <v-btn variant="tonal" prepend-icon="mdi-undo" color="secondary" :text="$t('dialog.cancel')"
-            @click="modal = false"></v-btn>
+          <v-btn variant="tonal" prepend-icon="mdi-printer" color="primary" :text="$t('dialog.print')" @click="modal = false; printInvoice()"></v-btn>
+          <v-btn variant="tonal" prepend-icon="mdi-undo" color="secondary" :text="$t('dialog.cancel')" @click="modal = false"></v-btn>
         </template>
       </v-card>
     </v-dialog>
@@ -298,6 +294,7 @@ export default defineComponent({
       serverOptions: reactive({
         page: 1,
         rowsPerPage: 10,
+        sortBy: [], // برای پشتیبانی از Multi-Sort
       }),
       allHeaders: [
         { title: "جزئیات", value: "expand", sortable: false, visible: true, width: 80 },
@@ -393,9 +390,13 @@ export default defineComponent({
           perPage: this.serverOptions.rowsPerPage,
           types: this.types.filter(t => t.checked).map(t => t.code),
           dateFilter: this.dateFilter,
+          sortBy: this.serverOptions.sortBy, // ارسال اطلاعات مرتب‌سازی
         });
 
-        this.items = (response.data.items || []).filter(item => item.code && typeof item.code !== 'undefined');
+        this.items = (response.data.items || []).map(item => ({
+          ...item,
+          receivedAmount: item.relatedDocsPays || 0, // نگاشت به receivedAmount
+        })).filter(item => item.code && typeof item.code !== 'undefined');
         this.total = Number(response.data.total) || 0;
         this.sumTotal = this.items.reduce((sum, item) => sum + parseInt(item.amount || 0), 0);
       } catch (error) {
@@ -531,6 +532,7 @@ export default defineComponent({
     updateServerOptions(options) {
       this.serverOptions.page = options.page;
       this.serverOptions.rowsPerPage = options.itemsPerPage;
+      this.serverOptions.sortBy = options.sortBy || []; // مدیریت Multi-Sort
       this.loadData();
     },
     debouncedLoadData: debounce(function () {
@@ -633,5 +635,4 @@ export default defineComponent({
 </script>
 
 <style>
-
 </style>
