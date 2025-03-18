@@ -21,14 +21,18 @@
       <v-slide-group-item>
         <v-menu>
           <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" icon="" color="red">
+            <v-btn 
+              v-bind="props" 
+              icon="" 
+              color="red"
+            >
               <v-tooltip activator="parent" :text="$t('dialog.export_pdf')" location="bottom" />
               <v-icon icon="mdi-file-pdf-box" />
             </v-btn>
           </template>
           <v-list>
             <v-list-subheader color="primary">{{ $t('dialog.export_pdf') }}</v-list-subheader>
-            <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="exportPDF(false)">
+            <v-list-item :disabled="!hasSelected" class="text-dark" :title="$t('dialog.selected')" @click="exportPDF(false)">
               <template v-slot:prepend>
                 <v-icon color="green-darken-4" icon="mdi-check" />
               </template>
@@ -45,14 +49,18 @@
       <v-slide-group-item>
         <v-menu>
           <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" icon="" color="green">
+            <v-btn 
+              v-bind="props" 
+              icon="" 
+              color="green"
+            >
               <v-tooltip activator="parent" :text="$t('dialog.export_excel')" location="bottom" />
               <v-icon icon="mdi-file-excel-box" />
             </v-btn>
           </template>
           <v-list>
             <v-list-subheader color="primary">{{ $t('dialog.export_excel') }}</v-list-subheader>
-            <v-list-item class="text-dark" :title="$t('dialog.selected')" @click="exportExcel(false)">
+            <v-list-item :disabled="!hasSelected" class="text-dark" :title="$t('dialog.selected')" @click="exportExcel(false)">
               <template v-slot:prepend>
                 <v-icon color="green-darken-4" icon="mdi-check" />
               </template>
@@ -69,7 +77,13 @@
       <v-slide-group-item>
         <v-tooltip :text="$t('dialog.delete')" location="bottom">
           <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" icon="mdi-trash-can" color="danger" @click="deleteGroup" />
+            <v-btn 
+              v-bind="props" 
+              icon="mdi-trash-can" 
+              color="danger" 
+              @click="deleteGroup"
+              :disabled="!hasSelected"
+            />
           </template>
         </v-tooltip>
       </v-slide-group-item>
@@ -97,7 +111,6 @@
   </v-text-field>
 
   <v-data-table-server
-    v-model:items-selected="itemsSelected"
     :headers="headers"
     :items="items"
     :loading="loading"
@@ -108,6 +121,24 @@
     class="elevation-1 data-table-wrapper"
     :header-props="{ class: 'custom-header' }"
   >
+    <template #header.checkbox>
+      <v-checkbox
+        :model-value="isAllSelected"
+        @change="toggleSelectAll"
+        hide-details
+        density="compact"
+      />
+    </template>
+
+    <template #item.checkbox="{ item }">
+      <v-checkbox
+        :model-value="selectedItems.has(item.code)"
+        @change="toggleSelection(item.code)"
+        hide-details
+        density="compact"
+      />
+            </template>
+
     <template #item.operation="{ item }">
       <v-menu>
         <template v-slot:activator="{ props }">
@@ -139,7 +170,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { debounce } from 'lodash';
@@ -152,13 +183,26 @@ axios.defaults.baseURL = apiUrl;
 // Refs
 const loading = ref(false);
 const items = ref([]);
-const itemsSelected = ref([]);
+const selectedItems = ref(new Set());
 const totalItems = ref(0);
 const searchQuery = ref('');
 
 // تعریف ستون‌های جدول
 const headers = ref([
-  { title: 'ردیف', key: 'index', align: 'center', sortable: false, width: '70' },
+  { 
+    title: '', 
+    key: 'checkbox',
+    sortable: false,
+    width: '50',
+    align: 'center'
+  },
+  { 
+    title: 'ردیف', 
+    key: 'index', 
+    align: 'center', 
+    sortable: false, 
+    width: '70' 
+  },
   { title: 'عملیات', key: 'operation', align: 'center', sortable: false, width: '100' },
   { title: 'کد', key: 'code', align: 'center', sortable: true },
   { title: 'تاریخ', key: 'date', align: 'center', sortable: true },
@@ -173,6 +217,10 @@ const serverOptions = ref({
   sortBy: [],
   sortDesc: [],
 });
+
+// اضافه کردن computed property برای کنترل وضعیت دکمه‌های عملیات
+const hasSelected = computed(() => selectedItems.value.size > 0);
+const isAllSelected = computed(() => selectedItems.value.size === items.value.length);
 
 // فچ کردن داده‌ها از سرور
 const fetchData = async () => {
@@ -267,61 +315,34 @@ const deleteItem = async (code) => {
   }
 };
 
-// حذف گروهی
-const deleteGroup = async () => {
-  if (!itemsSelected.value.length) {
-    Swal.fire({
-      text: 'هیچ آیتمی برای حذف انتخاب نشده است',
-      icon: 'warning',
-      confirmButtonText: 'قبول',
-    });
-    return;
-  }
-
-  const result = await Swal.fire({
-    text: 'آیا از حذف آیتم‌های انتخاب‌شده اطمینان دارید؟',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'بله',
-    cancelButtonText: 'خیر',
-  });
-
-  if (result.isConfirmed) {
-    try {
-      loading.value = true;
-      const codes = itemsSelected.value.map(item => item.code);
-      const promises = codes.map(code => 
-        axios.post('/api/accounting/remove', { code })
-      );
-      
-      await Promise.all(promises);
-      
-              Swal.fire({
-        text: 'آیتم‌ها با موفقیت حذف شدند',
-                icon: 'success',
-        confirmButtonText: 'قبول',
-      });
-      
-      itemsSelected.value = [];
-      fetchData();
-    } catch (error) {
-      console.error('Error deleting group:', error);
-      Swal.fire({
-        text: 'خطا در حذف گروهی: ' + (error.response?.data?.detail || error.message),
-        icon: 'error',
-        confirmButtonText: 'قبول',
-      });
-    } finally {
-      loading.value = false;
-    }
+// تابع toggleSelection را به این صورت تغییر می‌دهیم
+const toggleSelection = (code) => {
+  const item = items.value.find(i => i.code === code);
+  if (!item) return;
+  
+  if (selectedItems.value.has(code)) {
+    selectedItems.value.delete(code);
+  } else {
+    selectedItems.value.add(code);
   }
 };
 
-// خروجی PDF
+// تابع toggleSelectAll را به این صورت تغییر می‌دهیم
+const toggleSelectAll = () => {
+  if (selectedItems.value.size === items.value.length) {
+    selectedItems.value.clear();
+  } else {
+    items.value.forEach(item => {
+      selectedItems.value.add(item.code);
+    });
+  }
+};
+
+// تغییر توابع export
 const exportPDF = async (all = false) => {
   try {
     loading.value = true;
-    if (!all && !itemsSelected.value.length) {
+    if (!all && selectedItems.value.size === 0) {
       Swal.fire({
         text: 'هیچ آیتمی برای خروجی انتخاب نشده است',
         icon: 'warning',
@@ -329,7 +350,13 @@ const exportPDF = async (all = false) => {
       });
       return;
     }
-    const payload = all ? { all: true } : { items: itemsSelected.value };
+
+    // ایجاد آرایه‌ای از آیتم‌های انتخاب شده
+    const selectedItemsArray = all 
+      ? items.value 
+      : items.value.filter(item => selectedItems.value.has(item.code));
+
+    const payload = all ? { all: true } : { items: selectedItemsArray };
     const response = await axios.post('/api/costs/list/print', payload);
     const printId = response.data.id;
     window.open(`${apiUrl}/front/print/${printId}`, '_blank');
@@ -345,11 +372,10 @@ const exportPDF = async (all = false) => {
   }
 };
 
-// خروجی Excel
 const exportExcel = async (all = false) => {
   try {
     loading.value = true;
-    if (!all && !itemsSelected.value.length) {
+    if (!all && selectedItems.value.size === 0) {
       Swal.fire({
         text: 'هیچ آیتمی برای خروجی انتخاب نشده است',
         icon: 'warning',
@@ -357,9 +383,20 @@ const exportExcel = async (all = false) => {
       });
       return;
     }
-    const payload = all ? { all: true } : { items: itemsSelected.value };
-    const response = await axios.post('/api/costs/list/excel', payload, { responseType: 'blob' });
-    const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+
+    // ایجاد آرایه‌ای از آیتم‌های انتخاب شده
+    const selectedItemsArray = all 
+      ? items.value 
+      : items.value.filter(item => selectedItems.value.has(item.code));
+
+    const payload = all ? { all: true } : { items: selectedItemsArray };
+    const response = await axios.post('/api/costs/list/excel', payload, { 
+      responseType: 'blob' 
+    });
+    
+    const url = window.URL.createObjectURL(new Blob([response.data], { 
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+    }));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'costs.xlsx');
@@ -379,6 +416,61 @@ const exportExcel = async (all = false) => {
   }
 };
 
+// تغییر تابع deleteGroup
+const deleteGroup = async () => {
+  if (selectedItems.value.size === 0) {
+    Swal.fire({
+      text: 'هیچ آیتمی برای حذف انتخاب نشده است',
+      icon: 'warning',
+      confirmButtonText: 'قبول',
+    });
+    return;
+  }
+
+  const result = await Swal.fire({
+    text: 'آیا از حذف آیتم‌های انتخاب‌شده اطمینان دارید؟',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'بله',
+    cancelButtonText: 'خیر',
+  });
+
+  if (result.isConfirmed) {
+    try {
+      loading.value = true;
+      const selectedCodes = Array.from(selectedItems.value);
+      const promises = selectedCodes.map(code => 
+        axios.post('/api/accounting/remove', { code })
+      );
+      
+      await Promise.all(promises);
+      
+      Swal.fire({
+        text: 'آیتم‌ها با موفقیت حذف شدند',
+        icon: 'success',
+        confirmButtonText: 'قبول',
+      });
+      
+      selectedItems.value.clear();
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting group:', error);
+      Swal.fire({
+        text: 'خطا در حذف گروهی: ' + (error.response?.data?.detail || error.message),
+        icon: 'error',
+        confirmButtonText: 'قبول',
+      });
+    } finally {
+      loading.value = false;
+    }
+  }
+};
+
+// اضافه کردن watch برای پاک کردن انتخاب‌ها هنگام تغییر صفحه
+watch(() => serverOptions.value.page, () => {
+  selectedItems.value.clear();
+});
+
 // OnMounted
 onMounted(() => {
   fetchData();
@@ -386,5 +478,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
+.v-data-table ::v-deep .v-data-table__checkbox {
+  margin-right: 0;
+  margin-left: 0;
+}
 </style>

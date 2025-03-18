@@ -21,6 +21,8 @@ export default defineComponent({
       autoUpdateTicketsEnabled: false,
       autoUpdateTicketsInterval: 24,
       sponsorMessage: '',
+      footerLeft: '',
+      footerRight: '',
     },
     dialogVisible: false,
     dialogMessage: '',
@@ -217,6 +219,20 @@ export default defineComponent({
                   rows="4"
                   class="mt-4"
                 ></v-textarea>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="settings.footerLeft"
+                  label="پاورقی سمت چپ اسناد چاپی"
+                  type="text"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="settings.footerRight"
+                  label="پاورقی سمت راست اسناد چاپی"
+                  type="text"
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-card-text>
