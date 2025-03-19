@@ -201,7 +201,7 @@ export default defineComponent({
         if (input.length > 7) return true;
         return this.$t('validator.password_len_lower');
       } else if (type === 'mobile') {
-        const regex = new RegExp("^(\\+98|0)?9\\d{9}$");
+        const regex = new RegExp("^09\\d{9}$");
         if (regex.test(input)) return true;
         return this.$t('validator.mobile_not_valid');
       }

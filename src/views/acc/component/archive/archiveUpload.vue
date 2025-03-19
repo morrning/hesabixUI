@@ -151,7 +151,7 @@ export default defineComponent({
                   <div class="col-3">
                     <button type="submit" class="btn btn-success d-flex">
                       <i class="fa fa-save me-2"></i>
-                      بارگزاری فایل‌ها
+                      بارگذاری فایل‌ها
                     </button>
                   </div>
                 </div>

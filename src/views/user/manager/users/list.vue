@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import axios from "axios";
 import Swal from "sweetalert2";
+import ChangePasswordDialog from '@/components/ChangePasswordDialog.vue';
 
 interface User {
   id: number;
@@ -35,6 +36,9 @@ const options = ref({
   itemsPerPage: 25,
   sortBy: [{ key: 'id', order: 'desc' }],
 });
+
+const showChangePasswordDialog = ref(false);
+const selectedUserId = ref<number>(0);
 
 const loadFromServer = async () => {
   try {
@@ -81,6 +85,11 @@ const loadFromServer = async () => {
 watch([options, searchValue], () => {
   loadFromServer();
 }, { deep: true });
+
+const openChangePasswordDialog = (userId: number) => {
+  selectedUserId.value = userId;
+  showChangePasswordDialog.value = true;
+};
 
 // اجرای اولیه
 loadFromServer();
@@ -134,7 +143,7 @@ loadFromServer();
                   <v-list>
                     <v-list-item
                       class="text-dark"
-                      :to="'/profile/manager/user/change-password/' + item.id"
+                      @click="openChangePasswordDialog(item.id)"
                       :title="$t('dialog.change_password')"
                       prepend-icon="mdi-lock-reset"
                     />
@@ -165,6 +174,12 @@ loadFromServer();
       </v-card-text>
     </v-card>
   </v-container>
+
+  <ChangePasswordDialog
+    :userId="selectedUserId"
+    v-model:dialog="showChangePasswordDialog"
+    v-if="selectedUserId !== null"
+  />
 </template>
 
 <style scoped>

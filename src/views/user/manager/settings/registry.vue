@@ -23,6 +23,8 @@ export default defineComponent({
       sponsorMessage: '',
       footerLeft: '',
       footerRight: '',
+      appName: '',
+      appUrl: '',
     },
     dialogVisible: false,
     dialogMessage: '',
@@ -43,6 +45,7 @@ export default defineComponent({
             unlimitedPrice: this.formatNumber(data.unlimitedPrice),
             accountingDocPrice: this.formatNumber(data.accountingDocPrice),
             giftCredit: this.formatNumber(data.giftCredit),
+            appUrl: data.appUrl || '',
           };
           this.checkFreeAccounting();
         }
@@ -70,6 +73,7 @@ export default defineComponent({
         unlimitedPrice: this.parseNumber(this.settings.unlimitedPrice),
         accountingDocPrice: this.parseNumber(this.settings.accountingDocPrice),
         giftCredit: this.parseNumber(this.settings.giftCredit),
+        appUrl: this.settings.appUrl,
       };
 
       try {
@@ -201,7 +205,26 @@ export default defineComponent({
                   color="primary"
                 ></v-switch>
               </v-col>
-              <v-col cols="12" sm="6" md="6">
+              <v-row>
+              <v-col cols="12" sm="12" md="4">
+                <v-text-field
+                  v-model="settings.appName"
+                  label="اسم برنامه"
+                  hint="این نام در بخش‌های مختلف نرم‌افزار مانند هدر و نمایش فاکتور برای مشتریان و ... نمایش داده می‌شود"
+                  persistent-hint
+                  type="text"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="12" md="4">
+                <v-text-field
+                  v-model="settings.appUrl"
+                  label="آدرس برنامه"
+                  hint="آدرس URL برنامه"
+                  persistent-hint
+                  type="url"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="12" md="4">
                 <v-text-field
                   v-model="settings.giftCredit"
                   label="اعتبار هدیه به کسب‌و‌کار جدید (ریال)"
@@ -210,6 +233,7 @@ export default defineComponent({
                   prefix="₽"
                 ></v-text-field>
               </v-col>
+            </v-row>
               <v-col cols="12" sm="12" md="12">
                 <v-textarea
                   v-model="settings.sponsorMessage"
