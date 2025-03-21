@@ -25,6 +25,8 @@ export default defineComponent({
       footerRight: '',
       appName: '',
       appUrl: '',
+      appSlogan: '',
+      verifyMobileViaSms: false,
     },
     dialogVisible: false,
     dialogMessage: '',
@@ -46,6 +48,8 @@ export default defineComponent({
             accountingDocPrice: this.formatNumber(data.accountingDocPrice),
             giftCredit: this.formatNumber(data.giftCredit),
             appUrl: data.appUrl || '',
+            appSlogan: data.appSlogan || '',
+            verifyMobileViaSms: data.verifyMobileViaSms || false,
           };
           this.checkFreeAccounting();
         }
@@ -74,6 +78,8 @@ export default defineComponent({
         accountingDocPrice: this.parseNumber(this.settings.accountingDocPrice),
         giftCredit: this.parseNumber(this.settings.giftCredit),
         appUrl: this.settings.appUrl,
+        appSlogan: this.settings.appSlogan,
+        verifyMobileViaSms: this.settings.verifyMobileViaSms,
       };
 
       try {
@@ -191,14 +197,21 @@ export default defineComponent({
         <v-window-item value="general">
           <v-card-text>
             <v-row>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" sm="12" md="4">
                 <v-switch
                   v-model="settings.canRegister"
                   label="فعال بودن ثبت‌نام کاربران جدید"
                   color="primary"
                 ></v-switch>
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" sm="12" md="4">
+                <v-switch
+                  v-model="settings.verifyMobileViaSms"
+                  label="تایید شماره موبایل از طریق پیامک"
+                  color="primary"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" sm="12" md="4">
                 <v-switch
                   v-model="settings.canFreeAccounting"
                   label="فعال بودن ثبت رایگان سند حسابداری"
@@ -234,6 +247,15 @@ export default defineComponent({
                 ></v-text-field>
               </v-col>
             </v-row>
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field
+                  v-model="settings.appSlogan"
+                  label="شعار برنامه"
+                  hint="این شعار در بخش‌های مختلف نرم‌افزار نمایش داده می‌شود"
+                  persistent-hint
+                  type="text"
+                ></v-text-field>
+              </v-col>
               <v-col cols="12" sm="12" md="12">
                 <v-textarea
                   v-model="settings.sponsorMessage"

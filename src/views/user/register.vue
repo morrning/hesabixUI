@@ -108,13 +108,13 @@
     </v-row>
   </v-container>
 
-  <!-- دیالوگ خطا یا غیرفعال بودن عضویت -->
+  <!-- دیالوگ خطا یا موفقیت -->
   <div v-if="dialog" class="text-center">
     <v-dialog v-model="dialog" max-width="500" persistent>
       <v-card
-        :color="canRegister ? 'dangerLight' : 'warning'"
-        :prepend-icon="canRegister ? 'mdi-close-octagon' : 'mdi-alert'"
-        :title="canRegister ? $t('dialog.error') : $t('dialog.warning')"
+        :color="dialogColor"
+        :prepend-icon="dialogIcon"
+        :title="dialogTitle"
         :text="dialogMessage"
       >
         <template v-slot:actions>
@@ -123,7 +123,7 @@
             color="primary"
             :text="$t('dialog.ok')"
             variant="flat"
-            @click="dialog = false; if (!canRegister) $router.push('/user/login')"
+            @click="handleDialogClose"
           />
         </template>
       </v-card>
@@ -145,11 +145,14 @@ export default defineComponent({
       loading: false,
       captchaLoading: false,
       dialog: false,
+      dialogColor: 'dangerLight',
+      dialogIcon: 'mdi-close-octagon',
+      dialogTitle: '',
+      dialogMessage: '',
       showCaptcha: true,
       termsAccepted: false,
       captchaImage: '',
-      canRegister: true, // وضعیت عضویت
-      dialogMessage: '',
+      canRegister: true,
       user: {
         name: '',
         email: '',
@@ -158,30 +161,12 @@ export default defineComponent({
         captcha: '',
       },
       rules: {
-        name: [
-          (value: any) => self.validate(value, 'fill'),
-        ],
-        email: [
-          (value: any) => self.validate(value, 'email'),
-        ],
-        mobile: [
-          (value: any) => self.validate(value, 'mobile'),
-        ],
-        password: [
-          (value: any) => self.validate(value, 'password'),
-        ],
-        captcha: [
-          (value: any) => !!value || self.$t("captcha.required"),
-        ],
+        name: [(value: any) => self.validate(value, 'fill')],
+        email: [(value: any) => self.validate(value, 'email')],
+        mobile: [(value: any) => self.validate(value, 'mobile')],
+        password: [(value: any) => self.validate(value, 'password')],
+        captcha: [(value: any) => !!value || self.$t("captcha.required")],
       },
-      response: {
-        code: '',
-        message: '',
-        Success: false,
-        data: {
-          id: ''
-        }
-      }
     };
   },
   mounted() {
@@ -210,21 +195,23 @@ export default defineComponent({
       this.loadCaptcha();
     },
     async loadCaptcha() {
-        this.captchaLoading = true;
-        try {
-            const timestamp = new Date().getTime(); // پارامتر تصادفی
-            const response = await axios.get(`/api/captcha/image?t=${timestamp}`, {
-                responseType: 'blob',
-                withCredentials: true,
-            });
-            const imageUrl = URL.createObjectURL(response.data);
-            this.captchaImage = imageUrl;
-        } catch (error) {
-            this.dialogMessage = this.$t('captcha.load_error');
-            this.dialog = true;
-        } finally {
-            this.captchaLoading = false;
-        }
+      this.captchaLoading = true;
+      try {
+        const timestamp = new Date().getTime();
+        const response = await axios.get(`/api/captcha/image?t=${timestamp}`, {
+          responseType: 'blob',
+          withCredentials: true,
+        });
+        this.captchaImage = URL.createObjectURL(response.data);
+      } catch (error) {
+        this.dialogMessage = this.$t('captcha.load_error');
+        this.dialogColor = 'dangerLight';
+        this.dialogIcon = 'mdi-close-octagon';
+        this.dialogTitle = this.$t('dialog.error');
+        this.dialog = true;
+      } finally {
+        this.captchaLoading = false;
+      }
     },
     async checkRegisterStatus() {
       try {
@@ -233,17 +220,26 @@ export default defineComponent({
           this.canRegister = response.data.canRegister;
           if (!this.canRegister) {
             this.dialogMessage = 'عضویت کاربران جدید توسط مدیر سیستم غیرفعال شده است.';
+            this.dialogColor = 'warning';
+            this.dialogIcon = 'mdi-alert';
+            this.dialogTitle = this.$t('dialog.warning');
             this.dialog = true;
           }
         }
       } catch (error) {
         this.dialogMessage = 'خطا در بررسی وضعیت عضویت. لطفاً دوباره تلاش کنید.';
+        this.dialogColor = 'dangerLight';
+        this.dialogIcon = 'mdi-close-octagon';
+        this.dialogTitle = this.$t('dialog.error');
         this.dialog = true;
       }
     },
     async submit() {
       if (!this.canRegister) {
         this.dialogMessage = 'عضویت کاربران جدید غیرفعال است.';
+        this.dialogColor = 'dangerLight';
+        this.dialogIcon = 'mdi-close-octagon';
+        this.dialogTitle = this.$t('dialog.error');
         this.dialog = true;
         return;
       }
@@ -253,31 +249,56 @@ export default defineComponent({
         this.loading = true;
 
         const inviteCode = localStorage.getItem('inviteCode') || '0';
-
         const userData = {
           name: this.user.name,
           email: this.user.email,
           mobile: this.user.mobile,
           password: this.user.password,
           captcha_answer: this.user.captcha.toString(),
-          inviteCode: inviteCode
+          inviteCode: inviteCode,
         };
 
-        axios.post('/api/user/register', userData, {
-          withCredentials: true,
-        })
+        axios.post('/api/user/register', userData, { withCredentials: true })
           .then((response) => {
+            
             if (response.data.Success === false) {
-              this.response = response.data;
-              this.dialogMessage = this.response.message;
+              // خطا در ثبت‌نام
+              this.dialogMessage = response.data.message;
+              this.dialogColor = 'dangerLight';
+              this.dialogIcon = 'mdi-close-octagon';
+              this.dialogTitle = this.$t('dialog.error');
               this.dialog = true;
               this.loadCaptcha();
             } else {
-              this.$router.push('/user/active-account/' + this.user.mobile);
+              // موفقیت در ثبت‌نام
+              const responseData = response.data.data; // دسترسی به شیء data داخلی
+              this.dialogMessage = responseData.message;
+              this.dialogColor = 'success';
+              this.dialogIcon = 'mdi-check-circle';
+              this.dialogTitle = this.$t('dialog.success');
+              this.dialog = true;
+
+              // بررسی وجود redirect در پاسخ بک‌اند
+              if (responseData.redirect) {
+                // اگر ریدایرکت وجود دارد (اولین کاربر یا verifyMobileViaSms غیرفعال)
+                setTimeout(() => {
+                  this.dialog = false;
+                  this.$router.push(responseData.redirect); // هدایت به صفحه لاگین
+                }, 2000);
+              } else {
+                // اگر ریدایرکت وجود ندارد، به صفحه تأیید کد هدایت می‌شود
+                setTimeout(() => {
+                  this.dialog = false;
+                  this.$router.push('/user/active-account/' + this.user.mobile);
+                }, 3000);
+              }
             }
           })
           .catch((error) => {
-            this.dialogMessage = error.response?.data?.error || this.$t('dialog.error_unknown');
+            this.dialogMessage = error.response?.data?.message || this.$t('dialog.error_unknown');
+            this.dialogColor = 'dangerLight';
+            this.dialogIcon = 'mdi-close-octagon';
+            this.dialogTitle = this.$t('dialog.error');
             this.dialog = true;
             this.loadCaptcha();
           })
@@ -285,8 +306,14 @@ export default defineComponent({
             this.loading = false;
           });
       }
-    }
-  }
+    },
+    handleDialogClose() {
+      this.dialog = false;
+      if (this.dialogColor === 'warning' && !this.canRegister) {
+        this.$router.push('/user/login');
+      }
+    },
+  },
 });
 </script>
 
